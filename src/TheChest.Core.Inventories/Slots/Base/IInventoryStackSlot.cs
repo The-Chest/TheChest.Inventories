@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Slots.Interfaces;
+﻿using TheChest.Core.Inventories.Slots.Enums;
+using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Core.Inventories.Slots.Base
 {
@@ -6,6 +7,7 @@ namespace TheChest.Core.Inventories.Slots.Base
     /// Interface with methods for a basic Inventory Stackable Slot 
     /// </summary>
     /// <typeparam name="T">Item the Slot Accept</typeparam>
+    [Obsolete("Contract not fully defined")]
     public interface IInventoryStackSlot<T> : IStackSlot<T>, IInventorySlot<T>
     {
         /// <summary>
@@ -31,11 +33,6 @@ namespace TheChest.Core.Inventories.Slots.Base
         /// <returns>Returns an array of the old item</returns>
         T[] Replace(T item, int amount);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
         T[] Replace(T[] items);
 
         /// <summary>
@@ -51,4 +48,6 @@ namespace TheChest.Core.Inventories.Slots.Base
         /// <returns>Returns all item from slot</returns>
         T[] GetAll();
     }
+
+    public delegate void StackInventorySlotChangeEvent<T>(IInventorySlot<T> slot, InventorySlotEventType eventType, T? item, int amount = 0);
 }
