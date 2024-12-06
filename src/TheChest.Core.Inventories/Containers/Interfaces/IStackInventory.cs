@@ -11,7 +11,7 @@ namespace TheChest.Core.Inventories.Containers.Interfaces
     /// <typeparam name="T">An item type</typeparam>
     public interface IStackInventory<T> : IStackContainer<T>
     {
-        #region ISlot
+        #region IStackInventory
         /// <summary>
         /// Gets an <see cref="item"/> inside a slot
         /// </summary>
@@ -63,7 +63,7 @@ namespace TheChest.Core.Inventories.Containers.Interfaces
         void Add(T item);
         #endregion
 
-        #region IStack
+        #region IInventory
         /// <summary>
         /// Returns an amount of items inside the Inventory Slot
         /// </summary>
