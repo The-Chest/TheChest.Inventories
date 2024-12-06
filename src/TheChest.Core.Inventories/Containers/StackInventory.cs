@@ -17,6 +17,13 @@ namespace TheChest.Core.Inventories.Containers
             this.slots = slots;
         }
 
+        /// <summary>
+        /// <inheritdoc/>.
+        /// This method can be changed, use <see cref="StackInventory{T}.Add(T[])"/>
+        /// </summary>
+        /// <param name="item"><inheritdoc/></param>
+        /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
+        [Obsolete("The return value can change or this method can be removed")]
         public virtual void Add(T item)
         {
             if (item == null)
@@ -48,7 +55,7 @@ namespace TheChest.Core.Inventories.Containers
             return Array.Empty<T>();
         }
 
-        public virtual T[] Add(T[] items)
+        public virtual T[] Add(params T[] items)
         {
             for (var i = 0; i < this.Size; i++)
             {
