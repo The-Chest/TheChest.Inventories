@@ -19,12 +19,11 @@ namespace TheChest.Core.Inventories.Containers
 
         /// <summary>
         /// <inheritdoc/>.
-        /// This method can be changed, use <see cref="StackInventory{T}.Add(T[])"/>
         /// </summary>
         /// <param name="item"><inheritdoc/></param>
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
-        [Obsolete("The return value can change or this method can be removed")]
-        public virtual void Add(T item)
+        /// <returns>true if is possible to add the items</returns>
+        public virtual bool Add(T item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -34,9 +33,11 @@ namespace TheChest.Core.Inventories.Containers
                 if (this.slots[i].CanAdd(item))
                 {
                     this.slots[i].Add(ref item);
-                    break; 
+                    return true; 
                 }
             }
+
+            return false;
         }
 
         public virtual T[] AddAt(T item, int index, bool replace = true)

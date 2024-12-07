@@ -49,18 +49,18 @@ namespace TheChest.Core.Inventories.Containers.Interfaces
         int GetCount(T item);
 
         /// <summary>
-        /// Adds and array of item in a avaliable <see cref="ISlot{T}"/> 
+        /// Adds and array of item in a avaliable slot
         /// </summary>
-        /// <param name="items">Array of items to be added to any avaliable <see cref="ISlot{T}"/> founded</param>
+        /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns></returns>
         T[] Add(T[] items);
 
         /// <summary>
-        /// Adds an item in a avaliable <see cref="ISlot{T}"/> 
+        /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>returns true if the item could be added</returns>
-        void Add(T item);
+        bool Add(T item);
         #endregion
 
         #region IInventory
