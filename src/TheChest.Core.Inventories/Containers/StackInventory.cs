@@ -4,6 +4,10 @@ using TheChest.Core.Inventories.Slots.Interfaces;
 
 namespace TheChest.Core.Inventories.Containers
 {
+    /// <summary>
+    /// Generic Inventory with <see cref="IStackInventory{T}"/> implementation
+    /// </summary>
+    /// <typeparam name="T">An item type</typeparam>
     public class StackInventory<T> : StackContainer<T>, IStackInventory<T>
     {
         protected readonly IInventoryStackSlot<T>[] slots;
@@ -12,6 +16,10 @@ namespace TheChest.Core.Inventories.Containers
 
         public override IInventoryStackSlot<T>[] Slots => this.slots.ToArray();
 
+        /// <summary>
+        /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
+        /// </summary>
+        /// <param name="slots">An array of <see cref="IInventoryStackSlot{T}"/></param>
         public StackInventory(IInventoryStackSlot<T>[] slots) : base(slots) 
         {
             this.slots = slots;
@@ -40,6 +48,14 @@ namespace TheChest.Core.Inventories.Containers
             return false;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="item"><inheritdoc/></param>
+        /// <param name="index"><inheritdoc/></param>
+        /// <param name="replace"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public virtual T[] AddAt(T item, int index, bool replace = true)
         {
             if (index > this.Size || index <= 0)
@@ -56,8 +72,17 @@ namespace TheChest.Core.Inventories.Containers
             return Array.Empty<T>();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="items"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        /// <exception cref="ArgumentException">When the param array is empty</exception>
         public virtual T[] Add(params T[] items)
         {
+            if(items.Length == 0) 
+                throw new ArgumentException("No items to add", nameof(items));
+
             for (var i = 0; i < this.Size; i++)
             {
                 var slot = this.slots[i];
@@ -110,6 +135,9 @@ namespace TheChest.Core.Inventories.Containers
 
         public virtual T[] GetAll(T item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
             var items = new List<T>();
 
             for (int i = 0; i < this.Size; i++)
@@ -125,7 +153,7 @@ namespace TheChest.Core.Inventories.Containers
 
         public virtual T? Get(int index)
         {
-            if (index > this.Size || index <= 0)
+            if (index > this.Size || index < 0)
                 throw new IndexOutOfRangeException();
             
             return this.slots[index].Get();
@@ -133,6 +161,9 @@ namespace TheChest.Core.Inventories.Containers
 
         public virtual T? Get(T item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
             for (int i = 0; i < this.Size; i++)
             {
                 if (this.slots[i].Contains(item))
@@ -170,7 +201,7 @@ namespace TheChest.Core.Inventories.Containers
 
         public virtual T[] Get(int index, int amount)
         {
-            if (index > this.Size || index <= 0)
+            if (index > this.Size || index < 0)
                 throw new IndexOutOfRangeException();
 
             if (amount <= 0)
@@ -181,6 +212,9 @@ namespace TheChest.Core.Inventories.Containers
 
         public virtual int GetCount(T item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
             var amount = 0;
             for (int i = 0; i < this.Size; i++)
             {
