@@ -23,7 +23,7 @@ namespace TheChest.Core.Inventories.Containers.Interfaces
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
-        /// <returns>Returns the first item founded</returns>
+        /// <returns>Returns the first item found or null</returns>
         T? Get(T item);
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace TheChest.Core.Inventories.Containers.Interfaces
         /// <param name="items">Array of item of the same type wich will be added to inventory</param>
         /// <param name="index">Wich slot the items will be added</param>
         /// <param name="replace">Defines if the current Slot item will be replaced by the <see cref="items"/> param</param>
-        /// <returns>Returns a array of items replaced or could'nt be added</returns>
+        /// <returns>Returns a array of items replaced or couldn't be added</returns>
         T[] AddAt(T[] items, int index, bool replace = true);
         #endregion
 
@@ -107,7 +107,7 @@ namespace TheChest.Core.Inventories.Containers.Interfaces
         void Move(int origin, int target);
 
         /// <summary>
-        /// Returns every item from inventory
+        /// Returns every item from the inventory
         /// </summary>
         /// <returns>Returns an Array of <see cref="{T}"/></returns>
         T[] Clear();
