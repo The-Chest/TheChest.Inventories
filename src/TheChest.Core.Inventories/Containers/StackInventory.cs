@@ -99,8 +99,10 @@ namespace TheChest.Core.Inventories.Containers
         }
 
         /// <summary>
-        /// <inheritdoc/>.
+        /// <inheritdoc/>
+        /// <para>
         /// If <paramref name="replace"/> is true, it replaces the item from <paramref name="index"/>
+        /// </para>
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
         /// <param name="index"><inheritdoc/></param>
@@ -109,7 +111,10 @@ namespace TheChest.Core.Inventories.Containers
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T[] AddAt(T[] items, int index, bool replace = true)
         {
-            if (index > this.Size || index <= 0)
+            if(items.Length == 0)
+                throw new ArgumentException("No items to be added", nameof(items));
+
+            if (index <= 0 || index > this.Size)
                 throw new IndexOutOfRangeException();
 
             var slot = this.slots[index];
@@ -117,7 +122,7 @@ namespace TheChest.Core.Inventories.Containers
             if (slot.CanAdd(items))
                 slot.Add(ref items);
 
-            if (slot.CanReplace(items) && replace)
+            if (replace && slot.CanReplace(items))
                 return slot.Replace(ref items);
 
             return items;
