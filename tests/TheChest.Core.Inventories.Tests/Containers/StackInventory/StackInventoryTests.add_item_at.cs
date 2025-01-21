@@ -1,13 +1,12 @@
 ﻿namespace TheChest.Core.Inventories.Tests.Containers
 {
-    //TODO: find a way to create a complex inventory
-    //MAYBE USE A FULL INVENTORY
-
+    //TODO: find a way to create a complex inventory for this test 
+    // with multiple items in each slot
     public partial class StackInventoryTests<T>
     {
         [TestCase(-1)]
         [TestCase(100)]
-        public void AddItemAt_InvalidIndex_Throw(int index)
+        public void AddItemAt_InvalidIndex_ThrowsArgumentException(int index)
         {
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.EmptyContainer(20);
@@ -16,7 +15,7 @@
         }
 
         [Test]
-        public void AddItemAt_InvalidItem_Throw()
+        public void AddItemAt_InvalidItem_ThrowsArgumentException()
         {
             var inventory = this.containerFactory.EmptyContainer(20);
 
