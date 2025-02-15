@@ -238,9 +238,7 @@ namespace TheChest.Core.Inventories.Containers
                     items.AddRange(slotItems);
                     remainingAmount -= slotItems.Length;
                     if (remainingAmount <= 0)
-                    {
                         break;
-                    }
                 }
 
             }
