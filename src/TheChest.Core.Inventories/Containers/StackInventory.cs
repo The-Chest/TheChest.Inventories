@@ -301,6 +301,9 @@ namespace TheChest.Core.Inventories.Containers
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
 
+            if(origin == target)
+                return;
+
             var items = this.slots[origin].GetAll();
             var oldItems = this.slots[target].Replace(ref items);
             this.slots[origin].Replace(ref oldItems);
