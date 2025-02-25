@@ -4,11 +4,11 @@
     {
         [TestCase(-1)]
         [TestCase(0)]
-        public void GetAmount_InvalidAmount_ThrowsIndexOutOfRangeException(int amount)
+        public void GetAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var item = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.Get(item, amount), Throws.InstanceOf<IndexOutOfRangeException>());
+            Assert.That(() => inventory.Get(item, amount), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
