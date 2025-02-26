@@ -203,7 +203,7 @@
             var items = this.itemFactory.CreateMany(10);
             var result = inventory.AddAt(items, index, replace);
 
-            Assert.That(result, Is.Not.Empty.And.Contains(items));
+            Assert.That(result, Is.Not.Empty.And.EqualTo(items));
         }
     }
 }
