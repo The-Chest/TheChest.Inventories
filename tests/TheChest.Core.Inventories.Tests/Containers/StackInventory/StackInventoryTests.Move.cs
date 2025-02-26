@@ -6,7 +6,7 @@
     {
         [TestCase(-1)]
         [TestCase(100)]
-        public void Replace_InvalidOriginIndex_ThrowsArgumentOutOfRangeException(int origin)
+        public void Move_InvalidOriginIndex_ThrowsArgumentOutOfRangeException(int origin)
         {
             var inventory = this.containerFactory.EmptyContainer();
 
@@ -15,7 +15,7 @@
 
         [TestCase(-1)]
         [TestCase(100)]
-        public void Replace_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)
+        public void Move_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)
         {
             var inventory = this.containerFactory.EmptyContainer();
 
@@ -24,7 +24,7 @@
 
         [Test]
         [Ignore("This test is not working due Inventory creation")]
-        public void Replace_EmptyOrigin_TargetWithItems_MovesItem()
+        public void Move_EmptyOrigin_TargetWithItems_MovesItem()
         {
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
@@ -49,7 +49,7 @@
 
         [Test]
         [Ignore("This test is not working due Inventory creation")]
-        public void Replace_OriginWithItems_EmptyTarget_MovesItem()
+        public void Move_OriginWithItems_EmptyTarget_MovesItem()
         {
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
@@ -74,7 +74,7 @@
 
         [Test]
         [Ignore("This test is not working due Inventory creation")]
-        public void Replace_OriginAndTargetWithSameItems_MovesItemToOrigin()
+        public void Move_OriginAndTargetWithSameItems_MovesItemToOrigin()
         {
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
@@ -100,7 +100,7 @@
 
         [Test]
         [Ignore("This test is not working due Inventory creation")]
-        public void Replace_OriginAndTargetWithDifferentItems_MovesItemToOrigin()
+        public void Move_OriginAndTargetWithDifferentItems_MovesItemToOrigin()
         {
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
