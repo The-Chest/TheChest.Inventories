@@ -8,7 +8,12 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
     public class StackInventoryFactory<T, Y> : StackContainerFactory<T, Y>, IStackInventoryFactory<Y>
         where T : StackInventory<Y>
     {
-        public StackInventoryFactory(IStackSlotFactory<Y> slotFactory) : base(slotFactory) { }
+        protected new readonly IInventoryStackSlotFactory<Y> slotFactory;
+
+        public StackInventoryFactory(IInventoryStackSlotFactory<Y> slotFactory) : base(slotFactory)
+        {
+            this.slotFactory = slotFactory;
+        }
 
         private static Type GetInventoryType()
         {
@@ -74,7 +79,8 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             Array slots = Array.CreateInstance(slotType, size);
             for (int i = 0; i < size; i++)
             {
-                slots.SetValue(slotFactory.FullSlot(item), i);
+                var slot = slotFactory.WithItem(item, stackSize, stackSize);
+                slots.SetValue(slot, i);
             }
 
             var container = Activator.CreateInstance(containerType, slots);
@@ -84,7 +90,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
 
         public override IStackInventory<Y> ShuffledItemsContainer(int size, int stackSize, params Y[] items)
         {
-            if (items.Length > size)
+            if (items.Length > size * stackSize)
             {
                 throw new ArgumentException($"Item amount ({items.Length}) cannot be bigger than the container size ({size})");
             }
@@ -99,7 +105,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
                 if (index < items.Length)
                 {
                     slots.SetValue(
-                        slotFactory.FullSlot(items[index]),
+                        slotFactory.FullSlot(items[index], stackSize),
                         index
                     );
                 }
