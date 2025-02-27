@@ -19,7 +19,7 @@
         {
             var inventory = this.containerFactory.EmptyContainer(20);
 
-            Assert.That(() => inventory.AddAt((T)default!, 0), Throws.ArgumentException);
+            Assert.That(() => inventory.AddAt((T)default!, 0), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -64,14 +64,12 @@
         public void AddItemAt_SlotWithDifferentItem_ReplaceDisabled_ReturnsItem()
         {
             var index = this.random.Next(0, 20);
-            var items = this.itemFactory.CreateManyRandom(20);
-            //TODO: find a way to create a complex inventory
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, 5, items);
+            var inventory = this.containerFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
 
             var item = this.itemFactory.CreateDefault();
             var result = inventory.AddAt(item, index, replace: false);
 
-            Assert.That(result, Has.One.AnyOf(item));
+            Assert.That(result, Is.Not.Empty.And.Contains(item));
         }
 
         [Test]
@@ -84,7 +82,7 @@
             var item = this.itemFactory.CreateDefault();
             var result = inventory.AddAt(item, index, replace: true);
 
-            Assert.That(result, Has.One.AnyOf(slotItem));
+            Assert.That(result, Has.One.AnyOf(item));
         }
 
         [Test]
@@ -107,6 +105,7 @@
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            inventory.Get(index);
 
             var stackSize = inventory[index].StackAmount;
             var item = this.itemFactory.CreateDefault();
@@ -137,6 +136,7 @@
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            inventory.Get(index);
 
             var stackSize = inventory[index].StackAmount;
             var item = this.itemFactory.CreateDefault();
