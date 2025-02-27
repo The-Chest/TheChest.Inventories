@@ -37,15 +37,17 @@ namespace TheChest.Core.Inventories.Tests.Slots.Factories
             return (IInventoryStackSlot<Item>)slot!;
         }
 
-        public override IInventoryStackSlot<Item> FullSlot(Item item)
+        public virtual IInventoryStackSlot<Item> FullSlot(Item item, int maxAmount = 10)
         {
+            if(maxAmount < 1)
+                throw new ArgumentOutOfRangeException(nameof(maxAmount), "Max amount must be greater than 0");
+
             var type = typeof(Slot);
 
-            var size = new Random().Next(1, 10);
-            var items = new Item[size];
+            var items = new Item[maxAmount];
             Array.Fill(items, item);
 
-            var slot = Activator.CreateInstance(type, items, size);
+            var slot = Activator.CreateInstance(type, items, maxAmount);
             return (IInventoryStackSlot<Item>)slot!;
         }
 
