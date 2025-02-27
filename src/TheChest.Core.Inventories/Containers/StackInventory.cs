@@ -59,16 +59,23 @@ namespace TheChest.Core.Inventories.Containers
         /// <exception cref="IndexOutOfRangeException"></exception>
         public virtual T[] AddAt(T item, int index, bool replace = true)
         {
-            if (index > this.Size || index <= 0)
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            if (index > this.Size || index < 0)
                 throw new IndexOutOfRangeException();
             
             var slot = this.Slots[index];
 
-            if (slot.CanAdd(item))
-                slot.Add(ref item);
+            if (!slot.CanAdd(item))
+            {
+                if (slot.CanReplace(item) && replace)
+                    return slot.Replace(ref item);
 
-            if (slot.CanReplace(item) && replace)
-                return slot.Replace(ref item);
+                return new T[1] { item };
+            }
+
+            slot.Add(ref item);
 
             return Array.Empty<T>();
         }
@@ -114,7 +121,7 @@ namespace TheChest.Core.Inventories.Containers
             if(items.Length == 0)
                 throw new ArgumentException("No items to be added", nameof(items));
 
-            if (index <= 0 || index > this.Size)
+            if (index < 0 || index > this.Size)
                 throw new IndexOutOfRangeException();
 
             var slot = this.slots[index];
