@@ -43,18 +43,19 @@
         public void Add_InventoryWithSameItem_AddsToSlotWithItem()
         {
             var item = this.itemFactory.CreateDefault();
-            var items = this.itemFactory.CreateManyRandom(10)
+            var items = this.itemFactory.CreateManyRandom(19)
                 .Append(this.itemFactory.CreateDefault())
                 .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, 10, items);
-            var slot = inventory.Slots.First(x => x.Content?.Contains(item) ?? false);
+            var slotIndex = Array.IndexOf(inventory.Slots, inventory.Slots.First(x => x.Content?.Contains(item) ?? false));
+            inventory.Get(slotIndex, 9);
 
             inventory.Add(item);
 
             Assert.Multiple(() =>
             {
-                Assert.That(slot.Content, Has.One.EqualTo(item));
-                Assert.That(slot.StackAmount, Is.EqualTo(2));
+                Assert.That(inventory.Slots[slotIndex].Content, Has.All.EqualTo(item));
+                Assert.That(inventory.Slots[slotIndex].StackAmount, Is.EqualTo(2));
             });
         }
 
