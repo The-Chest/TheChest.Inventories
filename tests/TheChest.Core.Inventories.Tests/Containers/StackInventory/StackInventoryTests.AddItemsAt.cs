@@ -26,7 +26,7 @@
             var index = this.random.Next(0, 20);
             var inventory = this.containerFactory.EmptyContainer(20);
 
-            var items = this.itemFactory.CreateMany(20);
+            var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index, replace: true);
 
             Assert.That(inventory[index].Content, Is.EqualTo(items));
@@ -38,7 +38,7 @@
             var index = this.random.Next(0, 20);
             var inventory = this.containerFactory.EmptyContainer(20);
 
-            var items = this.itemFactory.CreateMany(20);
+            var items = this.itemFactory.CreateMany(10);
             var result = inventory.AddAt(items, index, replace: true);
 
             Assert.That(result, Is.Empty);
@@ -59,7 +59,7 @@
         }
 
         [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ReplaceDisabled_ReturnsItemsFromSlot()
+        public void AddItemsAt_SlotWithDifferentItem_ReplaceDisabled_ReturnsItemsFromParams()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateRandom();
@@ -69,7 +69,7 @@
             var items = this.itemFactory.CreateMany(amount);
             var result = inventory.AddAt(items, index, replace: false);
 
-            Assert.That(result, Has.All.EqualTo(slotItem));
+            Assert.That(result, Is.EqualTo(items));
         }
 
         [Test]
@@ -108,7 +108,7 @@
 
             var amount = this.random.Next(5, 10);
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index, amount - 2); 
+            inventory.Get(index, 2); 
 
             var items = this.itemFactory.CreateMany(2);
             inventory.AddAt(items, index, replace: true);
@@ -117,24 +117,23 @@
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content[..^2], Is.EqualTo(items));
+                Assert.That(inventory[index].Content[^2..], Is.EqualTo(items));
             });
         }
 
         [Test]
-        public void AddItemsAt_SlotWithSameItem_ReplaceEnabled_ReturnsEmptyArray()
+        public void AddItemsAt_FullSlotSlotWithSameItem_ReplaceEnabled_ReturnsParamItems()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
             var amount = this.random.Next(1, 10);
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index);
 
             var items = this.itemFactory.CreateMany(amount);
             var result = inventory.AddAt(items, index, replace: true);
 
-            Assert.That(result, Is.Empty);
+            Assert.That(result, Is.EqualTo(items));
         }
 
         [Test]
@@ -145,7 +144,7 @@
 
             var amount = this.random.Next(5, 10);
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index, amount - 2);
+            inventory.Get(index, 2);
 
             var items = this.itemFactory.CreateMany(2);
             inventory.AddAt(items, index, replace: false);
@@ -154,24 +153,23 @@
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content[..^2], Is.EqualTo(items));
+                Assert.That(inventory[index].Content[^2..], Is.EqualTo(items));
             });
         }
 
         [Test]
-        public void AddItemsAt_SlotWithSameItem_ReplaceDisabled_ReturnsEmptyArray()
+        public void AddItemsAt_FullSlotWithSameItem_ReplaceDisabled_ReturnsParamItems()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
             var amount = this.random.Next(1, 10);
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index);
 
             var items = this.itemFactory.CreateMany(10);
             var result = inventory.AddAt(items, index, replace: false);
 
-            Assert.That(result, Is.Empty);
+            Assert.That(result, Is.EqualTo(items));
         }
 
         [TestCase(true)]

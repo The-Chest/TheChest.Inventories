@@ -12,7 +12,7 @@
             Assert.That(
                 () => inventory.Add(items), 
                 Throws.ArgumentException.
-                With.Message.EqualTo("No items to add")
+                With.Message.EqualTo("No items to add (Parameter 'items')")
             );
         }
 
