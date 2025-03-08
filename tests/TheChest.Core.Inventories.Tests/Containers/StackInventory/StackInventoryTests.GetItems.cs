@@ -49,36 +49,34 @@
         }
 
         [Test]
-        public void GetItems_AmoutBiggerThanItemsInInventory_ReturnsAllItemsFound()
+        public void GetItems_ItemsFound_RemovesItems()
         {
-            var amount = 10;
             var stackSize = this.random.Next(1, 20);
-            var items = this.itemFactory.CreateManyRandom(amount);
-            var inventoryItems = this.itemFactory.CreateManyRandom(10).ToList();
-            inventoryItems.AddRange(items);
-
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(10)
+                .Append(item)
+                .ToList();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
 
-            var expectedItem = items[0];
-            var result = inventory.Get(expectedItem, 20);
+            inventory.Get(item, stackSize);
 
-            Assert.That(result, Has.Length.EqualTo(amount));
-            Assert.That(result, Has.All.EqualTo(expectedItem));
+            Assert.That(inventory.Slots.Any(x => x.Content?.Contains(item) ?? false), Is.False);
         }
 
         [Test]
-        public void GetItems_ItemsFound_RemovesItems()
+        public void GetItems_AmoutBiggerThanItemsInInventory_ReturnsAllItemsFound()
         {
-            var amount = 10;
             var stackSize = this.random.Next(1, 20);
-            var items = this.itemFactory.CreateManyRandom(amount);
-            var inventoryItems = this.itemFactory.CreateManyRandom(10).ToList();
-            inventoryItems.AddRange(items);
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(10)
+                .Append(item)
+                .ToList();
+
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
+            var result = inventory.Get(item, 100);
 
-            inventory.Get(items[0], amount);
-
-            Assert.That(inventory.Slots.Any(x => x.Content?.Contains(items[0]) ?? false), Is.False);
+            Assert.That(result, Has.Length.EqualTo(stackSize));
+            Assert.That(result, Has.All.EqualTo(item));
         }
     }
 }
