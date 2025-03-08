@@ -155,7 +155,7 @@ namespace TheChest.Core.Inventories.Containers
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
         public virtual T[] GetAll(int index)
         {
-            if (index > this.Size || index <= 0)
+            if (index > this.Size || index < 0)
                 throw new IndexOutOfRangeException();
 
             return this.slots[index].GetAll();

@@ -23,17 +23,19 @@
         {
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
-            var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);
-            var inventoryItems = slotItems.Concat(randomItems).ToArray();
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(inventorySize / 2)
+                .Append(item)
+                .Append(item)
+                .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
-            var items = inventory.GetAll(slotItems[0]);
+            var items = inventory.GetAll(item);
 
             Assert.Multiple(() =>
             {
-                Assert.That(items, Has.Length.EqualTo(stackSize));
-                Assert.That(items, Is.EqualTo(slotItems));
+                Assert.That(items, Has.Length.EqualTo(stackSize * 2));
+                Assert.That(items, Has.All.EqualTo(item));
             });
         }
 
