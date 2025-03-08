@@ -62,14 +62,15 @@
         }
 
         [Test]
-        public void GetAmount_InventoryWithItems_RemovesItemsFromMultipleSlotInOrder()
+        public void GetAmount_InventoryWithItems_RemovesItemsFromMultipleSlotsInOrder()
         {
             var inventorySize = this.random.Next(10, 20);
-            var stackSize = this.random.Next(1, 20);
+            var stackSize = this.random.Next(2, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
 
             inventory.Get(slotItem, stackSize + (stackSize - 2));
+            
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(0));
