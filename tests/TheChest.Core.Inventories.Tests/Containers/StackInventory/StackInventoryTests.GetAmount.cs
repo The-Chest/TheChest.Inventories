@@ -12,10 +12,10 @@
         }
 
         [Test]
-        public void GetAmount_InvalidItem_ThrowsIndexOutOfRangeException()
+        public void GetAmount_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.Get(default(T)!, 10), Throws.InstanceOf<IndexOutOfRangeException>());
+            Assert.That(() => inventory.Get(default(T)!, 10), Throws.InstanceOf<ArgumentNullException>());
         }
 
         [Test]
@@ -32,17 +32,19 @@
         {
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
-            var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);
-            var inventoryItems = slotItems.Concat(randomItems).ToArray();
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(inventorySize / 2)
+                .Append(item)
+                .Append(item)
+                .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
-            var items = inventory.Get(slotItems[0], stackSize);
+            var items = inventory.Get(item, stackSize);
 
             Assert.Multiple(() =>
             {
                 Assert.That(items, Has.Length.EqualTo(stackSize));
-                Assert.That(items, Is.EqualTo(slotItems));
+                Assert.That(items, Has.All.EqualTo(item));
             });
         }
 
@@ -54,7 +56,7 @@
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
 
-            inventory.Get(stackSize, stackSize);
+            inventory.Get(slotItem, stackSize);
 
             Assert.That(inventory[0].IsEmpty, Is.True);
         }
@@ -67,7 +69,7 @@
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
 
-            inventory.Get(stackSize, stackSize + (stackSize - 2));
+            inventory.Get(slotItem, stackSize + (stackSize - 2));
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(0));

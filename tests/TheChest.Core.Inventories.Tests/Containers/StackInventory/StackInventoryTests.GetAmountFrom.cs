@@ -49,9 +49,10 @@
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
 
-            inventory.Get(index, 10);
+            var removeAmount = this.random.Next(1, stackSize);
+            inventory.Get(index, removeAmount);
 
-            Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize - 10));
+            Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize - removeAmount));
         }
 
         [Test]
@@ -62,9 +63,9 @@
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
 
-            var items = inventory.Get(index, 20);
+            var items = inventory.Get(index, 100);
 
-            Assert.That(items.Count, Is.EqualTo(10));
+            Assert.That(items.Count, Is.EqualTo(stackSize));
         }
 
         [Test]
