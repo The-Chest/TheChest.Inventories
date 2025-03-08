@@ -24,17 +24,18 @@
         [Test]
         public void GetCount_InventoryWithItems_ReturnsItemCount()
         {
-            var amount = 10;
             var stackSize = this.random.Next(1, 20);
-            var items = this.itemFactory.CreateMany(amount);
-            var inventoryItems = this.itemFactory.CreateManyRandom(10).ToList();
-            inventoryItems.AddRange(items);
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(10)
+                .Append(item)
+                .Append(item)
+                .ToList();
 
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
 
-            var count = inventory.GetCount(items[0]);
+            var count = inventory.GetCount(item);
 
-            Assert.That(count, Is.EqualTo(amount));
+            Assert.That(count, Is.EqualTo(stackSize * 2));
         }
     }
 }
