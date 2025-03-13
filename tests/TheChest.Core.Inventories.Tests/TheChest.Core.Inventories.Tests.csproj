@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TheChest.Core.Inventories\TheChest.Core.Inventories.csproj" />
-    <ProjectReference Include="..\TheChest.Core.Tests\TheChest.Core.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

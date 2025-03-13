@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TheChest.Core\TheChest.Core.csproj" />
-  </ItemGroup>
-
 </Project>
