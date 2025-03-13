@@ -1,16 +1,16 @@
 ﻿using TheChest.Core.Inventories.Containers;
 using TheChest.Core.Inventories.Containers.Interfaces;
 using TheChest.Core.Inventories.Slots.Interfaces;
-using TheChest.Core.Tests.Containers.Factories;
+using TheChest.Core.Inventories.Tests.Extensions;
 
 namespace TheChest.Core.Inventories.Tests.Containers.Factories
 {
-    public class StackInventoryFactory<T, Y> : StackContainerFactory<T, Y>, IStackInventoryFactory<Y>
+    public class StackInventoryFactory<T, Y> : IStackInventoryFactory<Y>
         where T : StackInventory<Y>
     {
-        protected new readonly IInventoryStackSlotFactory<Y> slotFactory;
+        protected readonly IInventoryStackSlotFactory<Y> slotFactory;
 
-        public StackInventoryFactory(IInventoryStackSlotFactory<Y> slotFactory) : base(slotFactory)
+        public StackInventoryFactory(IInventoryStackSlotFactory<Y> slotFactory) 
         {
             this.slotFactory = slotFactory;
         }
@@ -53,7 +53,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return slotType;
         }
 
-        public override IStackInventory<Y> EmptyContainer(int size)
+        public virtual IStackInventory<Y> EmptyContainer(int size)
         {
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
@@ -71,7 +71,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return (IStackInventory<Y>)container!;
         }
 
-        public override IStackInventory<Y> FullContainer(int size, int stackSize, Y item)
+        public virtual IStackInventory<Y> FullContainer(int size, int stackSize, Y item)
         {
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
@@ -88,7 +88,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return (IStackInventory<Y>)container!;
         }
 
-        public override IStackInventory<Y> ShuffledItemsContainer(int size, int stackSize, params Y[] items)
+        public virtual IStackInventory<Y> ShuffledItemsContainer(int size, int stackSize, params Y[] items)
         {
             if (items.Length > size * stackSize)
             {
@@ -117,7 +117,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
                     );
                 }
             }
-            ShuffleItems(slots);
+            slots.ShuffleItems();
 
             var container = Activator.CreateInstance(containerType, slots);
 
