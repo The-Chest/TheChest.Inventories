@@ -1,14 +1,14 @@
-﻿using TheChest.Core.Tests.Slots;
-
-namespace TheChest.Core.Inventories.Tests.Slots
+﻿namespace TheChest.Core.Inventories.Tests.Slots
 {
-    public abstract partial class IInventoryStackSlotTests<T> : IStackSlotTests<T>
+    public abstract partial class IInventoryStackSlotTests<T>
     {
-        protected new readonly IInventoryStackSlotFactory<T> slotFactory;
+        protected readonly IInventoryStackSlotFactory<T> slotFactory;
+        protected readonly ISlotItemFactory<T> itemFactory;
 
-        public IInventoryStackSlotTests(IInventoryStackSlotFactory<T> slotFactory, ISlotItemFactory<T> itemFactory) : base(slotFactory, itemFactory)
+        public IInventoryStackSlotTests(IInventoryStackSlotFactory<T> slotFactory, ISlotItemFactory<T> itemFactory)
         {
             this.slotFactory = slotFactory;
+            this.itemFactory = itemFactory;
         }
     }
 }
