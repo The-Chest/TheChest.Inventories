@@ -9,11 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.47.0" />
+    <PackageReference Include="TheChest.Core" Version="0.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TheChest.Core.Inventories\TheChest.Core.Inventories.csproj" />
-    <ProjectReference Include="..\..\src\TheChest.Core\TheChest.Core.csproj" />
   </ItemGroup>
 
 </Project>

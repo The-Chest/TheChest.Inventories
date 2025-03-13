@@ -1,20 +1,19 @@
-﻿using TheChest.Core.Tests.Slots.Factories;
-using TheChest.Core.Inventories.Slots.Interfaces;
+﻿using TheChest.Core.Inventories.Slots.Interfaces;
 using TheChest.Core.Inventories.Slots;
 
 namespace TheChest.Core.Inventories.Tests.Slots.Factories
 {
-    public class InventoryStackSlotFactory<Slot, Item> : StackSlotFactory<Slot, Item>, IInventoryStackSlotFactory<Item>
+    public class InventoryStackSlotFactory<Slot, Item> : IInventoryStackSlotFactory<Item>
         where Slot : InventoryStackSlot<Item>
     {
-        public IInventoryStackSlot<Item> EmptySlot(int maxAmount = 10)
+        public virtual IInventoryStackSlot<Item> EmptySlot(int maxAmount = 10)
         {
             var type = typeof(Slot);
             var slot = Activator.CreateInstance(type, Array.Empty<Item>(), maxAmount);
             return (IInventoryStackSlot<Item>)slot!;
         }
 
-        public IInventoryStackSlot<Item> FullSlot(Item[] items)
+        public virtual IInventoryStackSlot<Item> FullSlot(Item[] items)
         {
             var type = typeof(Slot);
 
@@ -22,7 +21,7 @@ namespace TheChest.Core.Inventories.Tests.Slots.Factories
             return (IInventoryStackSlot<Item>)slot!;
         }
 
-        public IInventoryStackSlot<Item> WithItems(Item[] items, int maxAmount = 10)
+        public virtual IInventoryStackSlot<Item> WithItems(Item[] items, int maxAmount = 10)
         {
             var type = typeof(Slot);
 
@@ -30,7 +29,7 @@ namespace TheChest.Core.Inventories.Tests.Slots.Factories
             return (IInventoryStackSlot<Item>)slot!;
         }
 
-        public override IInventoryStackSlot<Item> EmptySlot()
+        public virtual IInventoryStackSlot<Item> EmptySlot()
         {
             var type = typeof(Slot);
             var slot = Activator.CreateInstance(type, Array.Empty<Item>(), 10);
@@ -51,7 +50,7 @@ namespace TheChest.Core.Inventories.Tests.Slots.Factories
             return (IInventoryStackSlot<Item>)slot!;
         }
 
-        public override IInventoryStackSlot<Item> WithItem(Item item, int amount, int maxAmount)
+        public virtual IInventoryStackSlot<Item> WithItem(Item item, int amount, int maxAmount)
         {
             var type = typeof(Slot);
             var items = new Item[amount];

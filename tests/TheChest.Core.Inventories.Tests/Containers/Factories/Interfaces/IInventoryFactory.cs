@@ -2,11 +2,11 @@
 
 namespace TheChest.Core.Inventories.Tests.Containers.Factories.Interfaces
 {
-    public interface IInventoryFactory<T> : IContainerFactory<T>
+    public interface IInventoryFactory<T>
     {
-        new IInventory<T> EmptyContainer(int size = 20);
-        new IInventory<T> FullContainer(int size, T item);
-        new IInventory<T> ShuffledItemContainer(int size, T item);
-        new IInventory<T> ShuffledItemsContainer(int size, params T[] items);
+        IInventory<T> EmptyContainer(int size = 20);
+        IInventory<T> FullContainer(int size, T item);
+        IInventory<T> ShuffledItemContainer(int size, T item);
+        IInventory<T> ShuffledItemsContainer(int size, params T[] items);
     }
 }

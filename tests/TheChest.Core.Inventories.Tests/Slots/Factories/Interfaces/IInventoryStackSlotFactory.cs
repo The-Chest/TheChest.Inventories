@@ -2,11 +2,11 @@
 
 namespace TheChest.Core.Inventories.Tests.Slots.Factories.Interfaces
 {
-    public interface IInventoryStackSlotFactory<T> : IStackSlotFactory<T>
+    public interface IInventoryStackSlotFactory<T>
     {
-        new IInventoryStackSlot<T> EmptySlot();
+        IInventoryStackSlot<T> EmptySlot();
         IInventoryStackSlot<T> EmptySlot(int maxAmount = 10);
-        new IInventoryStackSlot<T> WithItem(T item, int amount = 1, int maxAmount = 10);
+        IInventoryStackSlot<T> WithItem(T item, int amount = 1, int maxAmount = 10);
         IInventoryStackSlot<T> WithItems(T[] items, int maxAmount = 10);
         /// <summary>
         /// Creates an <see cref="IInventoryStackSlot{T}"/> with the max supported amount of items inside it

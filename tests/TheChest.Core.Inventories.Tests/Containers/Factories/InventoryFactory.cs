@@ -1,15 +1,18 @@
 ﻿using TheChest.Core.Inventories.Containers;
 using TheChest.Core.Inventories.Containers.Interfaces;
 using TheChest.Core.Inventories.Slots.Interfaces;
+using TheChest.Core.Inventories.Tests.Extensions;
 using TheChest.Core.Slots.Interfaces;
-using TheChest.Core.Tests.Containers.Factories;
 
 namespace TheChest.Core.Inventories.Tests.Containers.Factories
 {
-    public class InventoryFactory<T, Y> : ContainerFactory<T, Y>, IInventoryFactory<Y>
+    public class InventoryFactory<T, Y> : IInventoryFactory<Y>
         where T : Inventory<Y>
     {
-        public InventoryFactory(ISlotFactory<Y> slotFactory) : base(slotFactory) { }
+        private readonly IInventorySlotFactory<Y> slotFactory;
+        public InventoryFactory(IInventorySlotFactory<Y> slotFactory) {
+            this.slotFactory = slotFactory;
+        }
 
         private static Type GetInventoryType()
         {
@@ -49,7 +52,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return slotType;
         }
 
-        public override IInventory<Y> EmptyContainer(int size = 20)
+        public virtual IInventory<Y> EmptyContainer(int size = 20)
         {
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
@@ -67,7 +70,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return (IInventory<Y>)container!;
         }
 
-        public override IInventory<Y> FullContainer(int size, Y item)
+        public virtual IInventory<Y> FullContainer(int size, Y item)
         {
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
@@ -83,7 +86,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return (IInventory<Y>)container!;
         }
 
-        public override IInventory<Y> ShuffledItemContainer(int size, Y item)
+        public virtual IInventory<Y> ShuffledItemContainer(int size, Y item)
         {
             if (item is null)
             {
@@ -116,7 +119,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
             return (IInventory<Y>)container!;
         }
 
-        public override IInventory<Y> ShuffledItemsContainer(int size, params Y[] items)
+        public virtual IInventory<Y> ShuffledItemsContainer(int size, params Y[] items)
         {
             if (items.Length > size)
             {
@@ -127,7 +130,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
 
             var slotType = GetSlotTypeFromConstructor();
 
-            Array slots = Array.CreateInstance(slotType, size);
+            var slots = Array.CreateInstance(slotType, size);
             for (int i = 0; i < size; i++)
             {
                 ISlot<Y> slot;
@@ -142,7 +145,7 @@ namespace TheChest.Core.Inventories.Tests.Containers.Factories
 
                 slots.SetValue(slot, i);
             }
-            ShuffleItems(slots);
+            slots.ShuffleItems();
 
             var container = Activator.CreateInstance(containerType, slots);
 
