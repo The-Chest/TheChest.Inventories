@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup Label="Package">
+		<Title>The Chest Inventories</Title>
+		<Description>Provides generic collections to inventory management systems.</Description>
+		<Authors>The Chest</Authors>
+		<RepositoryUrl>https://github.com/The-Chest/TheChest.Inventories</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Compiler">
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="TheChest.Core" Version="0.4.0" />
+	</ItemGroup>
+
+</Project>
