@@ -1,5 +1,5 @@
 ﻿using TheChest.ConsoleApp.Items;
-using TheChest.Core.Inventories.Slots;
+using TheChest.Inventories.Slots;
 
 namespace TheChest.ConsoleApp.Inventories.Stack
 {
