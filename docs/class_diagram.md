@@ -3,11 +3,10 @@
 This document contains class diagrams for the components of TheChest.Inventory project.
 
 ## Inventories
-Inventories are the facade classes that will be interacted and 
 
 
 ### Inventory Diagram
-The `Inventory` diagram represents a container that holds and manages items in slots.
+The `Inventory` class is a container that holds and manages items in slots.
 
 ```mermaid
 ---
@@ -69,8 +68,8 @@ Inventory~T~ ..|> IInventory~T~
 Inventory~T~ ..|> IInventorySlot~T~
 ```
 
-### IStackInventory Diagram
-The `IStackInventory` diagram represents a generic container that holds and manages items in slots that can hold more than one amount of it.
+### Stack Inventory Diagram
+The `StackInventory` class is a generic container that holds and manages items in slots that can hold more than one amount of the same type.
 
 ```mermaid
 ---
@@ -146,3 +145,48 @@ direction TB
     IInventoryStackSlot --* StackInventory
 ```
 ## Slots
+
+### InventorySlot Diagram
+
+```mermaid
+---
+config:
+  theme: mc
+  look: classic
+  class:
+    hideEmptyMembersBox: true
+---
+classDiagram
+direction TB
+
+namespace TheChest.Core {
+    class Slot~T~ {
+    }
+}
+<<abstract>> Slot
+
+namespace TheChest.Inventories {
+    class IInventorySlot~T~ {
+        + bool Add(T item)
+        + T? Get()
+        + bool Contains(T item)
+        + T Replace(T item)
+    }
+    class InventorySlot~T~ {
+        + T? Content
+        + bool IsEmpty
+        + bool IsFull
+        + Slot(T? currentItem = default)
+        + InventorySlot(T? currentItem = default)
+        + bool Add(T item)
+        + bool Contains(T item)
+        + T? Get()
+        + T? Replace(T item)
+    }
+}
+
+<<interface>> IInventorySlot
+
+InventorySlot~T~ --|> Slot~T~ 
+InventorySlot~T~ ..|> IInventorySlot~T~
+```
