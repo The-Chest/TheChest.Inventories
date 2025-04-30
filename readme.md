@@ -3,7 +3,8 @@
 TheChest.Inventories is a library designed to manage inventories and slots for generic item collections. It provides a flexible and extensible framework for handling inventory systems, including support for stacked items, slot-based management.
 
 ## How does it work
-//TODO
+
+The library provides a robust framework for managing inventories and slots in a generic and extensible way. It is designed to handle various inventory operations, such as adding, removing, moving, and retrieving items, while supporting both single-item slots and stackable items.
 
 ### Features
 
@@ -116,6 +117,7 @@ public class MyStackInventory : StackInventory<int>
     }
 }
 ```
+
 ### Implementing a custom Inventory
 If you need more control, you can implement the interfaces directly.
 #### Inventory
@@ -176,3 +178,7 @@ public class MyStackInventory : StackInventory<int>{
     /// all other methods will need to be implemented too
 }
 ```
+
+## Future Plans
+
+The plans for future versions of the project are in this [GitHub Project Board](https://github.com/orgs/The-Chest/projects/19/views/2).
