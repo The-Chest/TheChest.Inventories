@@ -13,6 +13,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
+    - name: Add NuGet source
+      run: dotnet nuget add source https://nuget.pkg.github.com/The-Chest/index.json --name github --username The-Chest --password "${{ secrets.NUGET_APIKEY }}" --store-password-in-clear-text 
     - name: Write release version
       run: |
         VERSION=${GITHUB_REF_NAME#v}
@@ -47,6 +49,8 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           path: 'src/TheChest.Inventories/bin/Release'
+      - name: Add NuGet source
+        run: dotnet nuget add source https://nuget.pkg.github.com/The-Chest/index.json --name github --username The-Chest --password "${{ secrets.NUGET_APIKEY }}" --store-password-in-clear-text 
       - name: Restore dependencies
         run: dotnet restore src/TheChest.Inventories
       - name: Pack library
