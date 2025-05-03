@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Slots
             if (this.IsFull)
                 return false;
 
-            if (amount <= 0 || amount > this.MaxStackAmount)
+            if (amount <= 0)
                 return false;
 
             if (!this.IsEmpty)
@@ -83,7 +83,13 @@ namespace TheChest.Inventories.Slots
 
         public virtual bool CanReplace(T item, int amount = 1)
         {
-            throw new NotImplementedException();
+            if (item is null)
+                return false;
+
+            if (amount <= 0 || amount > this.MaxStackAmount)
+                return false;
+
+            return true;
         }
 
         public virtual bool Contains(T item)
