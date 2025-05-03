@@ -33,9 +33,35 @@ namespace TheChest.Inventories.Slots
             this.MaxStackAmount = maxStackAmount;
         }
 
+        protected void SetContent(T? item, int amount)
+        {
+            this.content = item;
+            this.StackAmount = amount;
+        }
+
         public virtual int Add(T item, int amount = 1)
         {
-            throw new NotImplementedException();
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (this.IsFull)
+                return amount;
+            if (!this.IsEmpty && !this.content!.Equals(item))
+                return amount;
+
+            var leftAmount = 0;
+            if(this.StackAmount + amount > this.MaxStackAmount)
+            {
+                leftAmount = this.StackAmount + amount - this.MaxStackAmount;
+                this.SetContent(this.content, this.MaxStackAmount);
+            }
+            else
+            {
+                this.SetContent(this.content, this.StackAmount + amount);
+            }
+
+            return leftAmount;
         }
 
         public virtual bool CanAdd(T item, int amount = 1)
