@@ -93,7 +93,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="items">Array of item of the same type wich will be added to inventory</param>
         /// <param name="index">Wich slot the items will be added</param>
-        /// <param name="replace">Defines if the current Slot item will be replaced by the <see cref="items"/> param</param>
+        /// <param name="replace">Defines if the current Slot item will be replaced by the <paramref name="items"/> param</param>
         /// <returns>Returns a array of items replaced or couldn't be added</returns>
         T[] AddAt(T[] items, int index, bool replace = true);
         #endregion
