@@ -40,7 +40,19 @@ namespace TheChest.Inventories.Slots
 
         public virtual bool CanAdd(T item, int amount = 1)
         {
-            throw new NotImplementedException();
+            if(item is null)
+                return false;
+
+            if (this.IsFull)
+                return false;
+
+            if (amount <= 0 || amount > this.MaxStackAmount)
+                return false;
+
+            if (!this.IsEmpty)
+                return this.content!.Equals(item);
+
+            return true;
         }
 
         public virtual bool CanReplace(T item, int amount = 1)
