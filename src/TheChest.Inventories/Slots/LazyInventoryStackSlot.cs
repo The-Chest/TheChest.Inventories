@@ -212,7 +212,12 @@ namespace TheChest.Inventories.Slots
                 return Array.Empty<T>();
 
             if(this.StackAmount < amount)
-                amount = this.StackAmount;
+            {
+                var items = this.Content;
+                this.Clear();
+                return items;
+            }
+            this.SetContent(this.content, this.StackAmount - amount);
 
             return Enumerable.Repeat(this.content!, amount).ToArray();
         }
