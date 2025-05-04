@@ -1,37 +1,26 @@
-﻿using TheChest.Inventories.Slots.Interfaces;
+﻿using TheChest.Core.Slots;
+using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
 {
     /// <summary>
     /// Class with methods for a basic Inventory Stackable Slot with lazy behavior
     /// <para>
-    /// Warning: this class doesn't inherit from <see cref="StackSlot{T}"/> yet because of StackSlot not being lazy/fixed.
+    /// Warning: this class has some properties that will soon be moved to <see cref="LazyStackSlot{T}"/> because of LazyStackSlot not being lazyyet.
     /// </para>
     /// </summary>    
     /// <typeparam name="T">Item the Slot Accept</typeparam>
-    public class LazyInventoryStackSlot<T> : ILazyInventoryStackSlot<T>
+    public class LazyInventoryStackSlot<T> : LazyStackSlot<T>, ILazyInventoryStackSlot<T>
     {
-        protected T? content;
-        public virtual T[] Content =>
+        protected new T? content;
+        public override T[] Content =>
             this.content is null ?
             Array.Empty<T>() :
             Enumerable.Repeat(this.content, this.StackAmount).ToArray();
 
-        public virtual int StackAmount
-        {
-            get;
-            protected set;
-        }
+        public override bool IsFull => this.content is not null && this.StackAmount == this.MaxStackAmount;
 
-        public virtual int MaxStackAmount
-        {
-            get;
-            protected set;
-        }
-
-        public bool IsFull => this.content is not null && this.StackAmount == this.MaxStackAmount;
-
-        public bool IsEmpty => this.content is null || this.StackAmount == 0;
+        public override bool IsEmpty => this.content is null || this.StackAmount == 0;
 
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
@@ -39,7 +28,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="content">default item inside the slot</param>
         /// <param name="amount">amount of </param>
         /// <param name="maxStackAmount"></param>
-        public LazyInventoryStackSlot(T? content, int amount, int maxStackAmount)
+        public LazyInventoryStackSlot(T? content, int amount, int maxStackAmount) : base(content, amount, maxStackAmount)
         {
             this.content = content;
             this.StackAmount = amount;
