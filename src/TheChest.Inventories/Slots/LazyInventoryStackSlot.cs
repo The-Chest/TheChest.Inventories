@@ -94,17 +94,35 @@ namespace TheChest.Inventories.Slots
 
         public virtual bool Contains(T item)
         {
-            throw new NotImplementedException();
+            if (this.IsEmpty)
+                return false;
+
+            return this.content?.Equals(item) ?? false;
         }
 
         public virtual T[] Get(int amount = 1)
         {
-            throw new NotImplementedException();
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            if (this.IsEmpty)
+                return Array.Empty<T>();
+
+            if(this.StackAmount < amount)
+                amount = this.StackAmount;
+
+            return Enumerable.Repeat(this.content!, amount).ToArray();
         }
 
         public virtual T[] GetAll()
         {
-            throw new NotImplementedException();
+            if (this.IsEmpty)
+                return Array.Empty<T>();
+
+            var items = this.Content;
+            this.content = default;
+            this.StackAmount = 0;
+            return items;
         }
 
         public virtual T[] Replace(T item, int amount = 1)
