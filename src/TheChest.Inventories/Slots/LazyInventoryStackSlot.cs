@@ -45,11 +45,11 @@ namespace TheChest.Inventories.Slots
             if (this.StackAmount + amount > this.MaxStackAmount)
             {
                 leftAmount = this.StackAmount + amount - this.MaxStackAmount;
-                this.SetContent(this.content, this.MaxStackAmount);
+                this.SetContent(item, this.MaxStackAmount);
             }
             else
             {
-                this.SetContent(this.content, this.StackAmount + amount);
+                this.SetContent(item, this.StackAmount + amount);
             }
 
             return leftAmount;
