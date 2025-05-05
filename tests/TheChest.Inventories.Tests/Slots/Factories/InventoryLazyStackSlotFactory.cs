@@ -30,9 +30,8 @@ namespace TheChest.Inventories.Tests.Slots.Factories
         public virtual IInventoryStackSlot<Item> FullSlot(params Item[] items)
         {
             if(items.Length != 1)
-            {
                 throw new ArgumentException("InventoryLazyStackSlot only accepts one item", nameof(items));
-            }
+
             const int maxAmount = 10;
             var type = typeof(Slot);
             var slot = Activator.CreateInstance(type, items[0], maxAmount, maxAmount);
@@ -49,9 +48,8 @@ namespace TheChest.Inventories.Tests.Slots.Factories
         public virtual IInventoryStackSlot<Item> WithItems(Item[] items, int maxAmount = 10)
         {
             if (items.Length != 1)
-            {
                 throw new ArgumentException("InventoryLazyStackSlot only accepts one item", nameof(items));
-            }
+
             var amount = 10;
             var type = typeof(Slot);
             var slot = Activator.CreateInstance(type, items[0], amount, maxAmount);
