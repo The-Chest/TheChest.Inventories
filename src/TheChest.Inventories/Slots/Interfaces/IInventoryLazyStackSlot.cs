@@ -6,7 +6,7 @@ namespace TheChest.Inventories.Slots.Interfaces
     /// Interface with methods for a basic Inventory Stackable Slot with lazy behavior
     /// </summary>
     /// <typeparam name="T">Item the Slot Accept</typeparam>
-    public interface ILazyInventoryStackSlot<T> : IStackSlot<T>
+    public interface IInventoryLazyStackSlot<T> : IStackSlot<T>
     {
         /// <summary>
         /// Checks if the slot can add an amount of items

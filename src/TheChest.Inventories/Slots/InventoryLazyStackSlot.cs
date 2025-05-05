@@ -10,7 +10,7 @@ namespace TheChest.Inventories.Slots
     /// </para>
     /// </summary>    
     /// <typeparam name="T">Item the Slot Accept</typeparam>
-    public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, ILazyInventoryStackSlot<T>
+    public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
         protected new T? content;
         public override T[] Content =>
