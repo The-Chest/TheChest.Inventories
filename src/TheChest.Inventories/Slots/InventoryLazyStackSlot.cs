@@ -10,7 +10,7 @@ namespace TheChest.Inventories.Slots
     /// </para>
     /// </summary>    
     /// <typeparam name="T">Item the Slot Accept</typeparam>
-    public class LazyInventoryStackSlot<T> : LazyStackSlot<T>, ILazyInventoryStackSlot<T>
+    public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, ILazyInventoryStackSlot<T>
     {
         protected new T? content;
         public override T[] Content =>
@@ -28,7 +28,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="content">default item inside the slot</param>
         /// <param name="amount">amount of </param>
         /// <param name="maxStackAmount"></param>
-        public LazyInventoryStackSlot(T? content, int amount, int maxStackAmount) : base(content, amount, maxStackAmount)
+        public InventoryLazyStackSlot(T? content, int amount, int maxStackAmount) : base(content, amount, maxStackAmount)
         {
             this.content = content;
             this.StackAmount = amount;
@@ -45,10 +45,10 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <summary>
-        /// Sets the values of <see cref="LazyInventoryStackSlot{T}.content"/> and <see cref="LazyInventoryStackSlot{T}.StackAmount"/>
+        /// Sets the values of <see cref="InventoryLazyStackSlot{T}.content"/> and <see cref="InventoryLazyStackSlot{T}.StackAmount"/>
         /// </summary>
-        /// <param name="item">The value to be set to <see cref="LazyInventoryStackSlot{T}.content"/></param>
-        /// <param name="amount">The value to be set to <see cref="LazyInventoryStackSlot{T}.StackAmount"/></param>
+        /// <param name="item">The value to be set to <see cref="InventoryLazyStackSlot{T}.content"/></param>
+        /// <param name="amount">The value to be set to <see cref="InventoryLazyStackSlot{T}.StackAmount"/></param>
         protected void SetContent(T? item, int amount)
         {
             this.content = item;
@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Adds an amount of items to the slot.
         /// <para>
-        /// This method doesn't validate the params and should be used only after <see cref="LazyInventoryStackSlot{T}.CanAdd(T, int)"/>
+        /// This method doesn't validate the params and should be used only after <see cref="InventoryLazyStackSlot{T}.CanAdd(T, int)"/>
         /// </para>
         /// <param name="item">The item to be added </param>
         /// <param name="amount">The amount of items added</param>
@@ -132,7 +132,7 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="item"><inheritdoc/></param>
         /// <param name="amount"><inheritdoc/></param>
-        /// <returns>true if <paramref name="item"/> is not null and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyInventoryStackSlot{T}.MaxStackAmount"/></returns>
+        /// <returns>true if <paramref name="item"/> is not null and <paramref name="amount"/> is bigger than zero and smaller than <see cref="InventoryLazyStackSlot{T}.MaxStackAmount"/></returns>
         public virtual bool CanReplace(T item, int amount = 1)
         {
             if (item is null)
@@ -154,7 +154,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="amount"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyInventoryStackSlot{T}.MaxStackAmount"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="InventoryLazyStackSlot{T}.MaxStackAmount"/></exception>
         public virtual T[] Replace(T item, int amount = 1)
         {
             if (item == null)
@@ -177,7 +177,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// </summary>
         /// <param name="item"><inheritdoc/></param>
-        /// <returns>true if the slot is not empty and <paramref name="item"/> is equal to <see cref="LazyInventoryStackSlot{T}.Content"/></returns>
+        /// <returns>true if the slot is not empty and <paramref name="item"/> is equal to <see cref="InventoryLazyStackSlot{T}.Content"/></returns>
         public virtual bool Contains(T item)
         {
             if (this.IsEmpty)
