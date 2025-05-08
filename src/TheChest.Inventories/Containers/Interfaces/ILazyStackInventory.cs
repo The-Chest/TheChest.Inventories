@@ -10,7 +10,7 @@ namespace TheChest.Inventories.Containers.Interfaces
     {
         #region ILazyStackInventory
         /// <summary>
-        /// Gets an <see cref="item"/> inside a slot
+        /// Gets an item from inside a slot
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
