@@ -26,8 +26,8 @@ namespace TheChest.Inventories.Slots
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
         /// <param name="content">default item inside the slot</param>
-        /// <param name="amount">amount of </param>
-        /// <param name="maxStackAmount"></param>
+        /// <param name="amount">amount of the <paramref name="amount"/></param>
+        /// <param name="maxStackAmount">the max accepted amount of this slot</param>
         public InventoryLazyStackSlot(T? content, int amount, int maxStackAmount) : base(content, amount, maxStackAmount)
         {
             this.content = content;
