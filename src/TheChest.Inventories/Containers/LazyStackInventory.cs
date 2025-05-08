@@ -182,7 +182,20 @@ namespace TheChest.Inventories.Containers
 
         public virtual int GetCount(T item)
         {
-            throw new NotImplementedException();
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            var count = 0;
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.Contains(item))
+                {
+                    count += slot.StackAmount;
+                }
+            }
+
+            return count;
         }
 
         public virtual void Move(int origin, int target)
