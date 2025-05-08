@@ -18,7 +18,17 @@ namespace TheChest.Inventories.Containers
 
         public virtual bool Add(T item)
         {
-            throw new NotImplementedException();
+            if(item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.Contains(item))
+                    return slot.Add(item) == 1;
+            }
+
+            return false;
         }
 
         public virtual T[] Add(T item, int amount)
