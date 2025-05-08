@@ -57,7 +57,26 @@ namespace TheChest.Inventories.Containers
 
         public virtual T[] AddAt(T item, int index, int amount, bool replace = true)
         {
-            throw new NotImplementedException();
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+            if (slot.CanAdd(item, amount))
+            {
+                var notAdded = slot.Add(item, amount);
+                if(notAdded == 0)
+                    return Array.Empty<T>();
+            }
+            else if(replace && slot.CanReplace(item, amount))
+            {
+                return slot.Replace(item, amount);
+            }
+
+            return Enumerable.Repeat(item, amount).ToArray();
         }
 
         public virtual T[] Clear()
