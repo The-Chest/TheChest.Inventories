@@ -81,7 +81,18 @@ namespace TheChest.Inventories.Containers
 
         public virtual T[] Clear()
         {
-            throw new NotImplementedException();
+            var items = new List<T>();
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (!slot.IsEmpty)
+                {
+                    var slotItems = slot.GetAll();
+                    items.AddRange(slotItems);
+                }
+            }
+            
+            return items.ToArray();
         }
 
         public virtual T? Get(int index)
