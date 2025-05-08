@@ -174,7 +174,10 @@ namespace TheChest.Inventories.Containers
 
         public virtual T[] GetAll(int index)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].GetAll();
         }
 
         public virtual int GetCount(T item)
