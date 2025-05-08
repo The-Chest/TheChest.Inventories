@@ -155,7 +155,21 @@ namespace TheChest.Inventories.Containers
 
         public virtual T[] GetAll(T item)
         {
-            throw new NotImplementedException();
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            var items = new List<T>();
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.Contains(item))
+                {
+                    var slotItems = slot.GetAll();
+                    items.AddRange(slotItems);
+                }
+            }
+
+            return items.ToArray();
         }
 
         public virtual T[] GetAll(int index)
