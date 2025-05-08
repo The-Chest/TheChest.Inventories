@@ -120,7 +120,27 @@ namespace TheChest.Inventories.Containers
 
         public virtual T[] Get(T item, int amount)
         {
-            throw new NotImplementedException();
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            var items = new List<T>();
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.Contains(item))
+                {
+                    var slotItems = slot.Get(amount);
+
+                    items.AddRange(slotItems);
+                    amount -= slotItems.Length;
+                    if (amount == 0)
+                        break;
+                }
+            }
+
+            return items.ToArray();
         }
 
         public virtual T[] Get(int index, int amount)
