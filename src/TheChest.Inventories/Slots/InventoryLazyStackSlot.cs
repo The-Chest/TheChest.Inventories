@@ -89,7 +89,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero</exception>
         public virtual int Add(T item, int amount = 1)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -157,7 +157,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="InventoryLazyStackSlot{T}.MaxStackAmount"/></exception>
         public virtual T[] Replace(T item, int amount = 1)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0 || amount > this.MaxStackAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));
