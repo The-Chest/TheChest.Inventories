@@ -24,7 +24,7 @@ namespace TheChest.Inventories.Containers
             for (int i = 0; i < this.Size; i++)
             {
                 var slot = this.slots[i];
-                if (slot.Contains(item))
+                if (slot.CanAdd(item))
                     return slot.Add(item) == 1;
             }
 
@@ -33,7 +33,26 @@ namespace TheChest.Inventories.Containers
 
         public virtual T[] Add(T item, int amount)
         {
-            throw new NotImplementedException();
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.CanAdd(item))
+                {
+                    var notAdded = slot.Add(item, amount);
+                    if (notAdded == 0)
+                    {
+                        return Array.Empty<T>();
+                    }
+                    amount = notAdded;
+                }
+            }
+
+            return Enumerable.Repeat(item, amount).ToArray();
         }
 
         public virtual T[] AddAt(T item, int index, int amount, bool replace = true)
