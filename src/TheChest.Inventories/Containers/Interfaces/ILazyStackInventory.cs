@@ -2,6 +2,10 @@
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
+    /// <summary>
+    /// Interface with methods for a basic Inventory Stackable with lazy behavior
+    /// </summary>
+    /// <typeparam name="T">Item the Inventory accept</typeparam>
     public interface ILazyStackInventory<T> : IStackContainer<T>
     {
         #region ILazyStackInventory
