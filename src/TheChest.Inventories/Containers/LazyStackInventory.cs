@@ -194,13 +194,30 @@ namespace TheChest.Inventories.Containers
                     count += slot.StackAmount;
                 }
             }
-
             return count;
         }
 
         public virtual void Move(int origin, int target)
         {
-            throw new NotImplementedException();
+            if (origin < 0 || origin > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(origin));
+            if (target < 0 || target > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(target));
+            if (origin == target)
+                throw new ArgumentException("Origin and target cannot be the same");
+
+            var originSlot = this.slots[origin];
+            var targetSlot = this.slots[target];
+            if (originSlot.IsEmpty && targetSlot.IsEmpty)
+                return;
+
+            var originItems = originSlot.GetAll();
+            var originItem = originItems.FirstOrDefault();
+
+            var targetItems = targetSlot.Replace(originItem!, originItems.Length);
+            var targetItem = targetItems.FirstOrDefault();
+
+            originSlot.Replace(targetItem!, targetItems.Length);
         }
     }
 }
