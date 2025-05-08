@@ -97,7 +97,10 @@ namespace TheChest.Inventories.Containers
 
         public virtual T? Get(int index)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].Get().FirstOrDefault();
         }
 
         public virtual T? Get(T item)
