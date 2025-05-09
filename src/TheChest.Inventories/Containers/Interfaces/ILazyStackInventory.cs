@@ -74,8 +74,8 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">Array of item of the same type wich will be added to inventory</param>
         /// <param name="amount">Amount of the item to be returned</param>
-        /// <returns>Returns a array of items replaced or couldn't be added</returns>
-        T[] Add(T item, int amount);
+        /// <returns>Returns the amount of items that couldn't be added</returns>
+        int Add(T item, int amount);
 
         /// <summary>
         /// Adds an amount of item in a specific slot
@@ -83,9 +83,18 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <param name="amount">amount of the item</param>
+        /// <returns>Returns the amount of items that couldn't be added</returns>
+        int AddAt(T item, int index, int amount);
+
+        /// <summary>
+        /// Adds or replace an amount of item in a specific slot
+        /// </summary>
+        /// <param name="item">item to be added</param>
+        /// <param name="index">slot where the item will be added</param>
+        /// <param name="amount">amount of the item</param>
         /// <param name="replace">if true it will repleace the current items inside it</param>
-        /// <returns>Returns the item that couldn't be added or the replaced items</returns>
-        T[] AddAt(T item, int index, int amount, bool replace = true);
+        /// <returns>Returns the items that couldn't be added or the replaced</returns>
+        T[] AddAt(T item, int index, int amount, bool replace);
         #endregion
 
         #region IInteractive

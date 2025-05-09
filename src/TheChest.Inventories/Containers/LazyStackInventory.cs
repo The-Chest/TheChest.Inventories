@@ -24,7 +24,6 @@ namespace TheChest.Inventories.Containers
         {
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
-
         /// <summary>
         /// Adds an item to the first available slot
         /// </summary>
@@ -53,28 +52,26 @@ namespace TheChest.Inventories.Containers
         /// <returns>Empty array when is succesfully added, otherwise it'll return an array with not added items</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
-        public virtual T[] Add(T item, int amount)
+        public virtual int Add(T item, int amount)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
+            var notAdded = amount;
             for (int i = 0; i < this.Size; i++)
             {
                 var slot = this.slots[i];
                 if (slot.CanAdd(item))
                 {
-                    var notAdded = slot.Add(item, amount);
+                    notAdded = slot.Add(item, amount);
                     if (notAdded == 0)
-                    {
-                        return Array.Empty<T>();
-                    }
-                    amount = notAdded;
+                        break;
                 }
             }
 
-            return Enumerable.Repeat(item, amount).ToArray();
+            return notAdded;
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -92,8 +89,7 @@ namespace TheChest.Inventories.Containers
             if (slot.CanAdd(item, amount))
             {
                 var notAdded = slot.Add(item, amount);
-                if(notAdded == 0)
-                    return Array.Empty<T>();
+                return Enumerable.Repeat(item, notAdded).ToArray();
             }
             else if(replace && slot.CanReplace(item, amount))
             {
@@ -101,6 +97,24 @@ namespace TheChest.Inventories.Containers
             }
 
             return Enumerable.Repeat(item, amount).ToArray();
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        public virtual int AddAt(T item, int index, int amount)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+            if (slot.CanAdd(item, amount))
+                return slot.Add(item, amount);
+
+            return amount;
         }
         /// <inheritdoc/>
         public virtual T[] Clear()
