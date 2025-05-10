@@ -6,6 +6,6 @@ namespace TheChest.Inventories.Tests.Containers.Factories.Interfaces
     {
         ILazyStackInventory<T> EmptyContainer(int size = 20);
         ILazyStackInventory<T> FullContainer(int size, int stackSize, T item);
-        ILazyStackInventory<T> ShuffledItemsContainer(int size, int stackSize, T item);
+        ILazyStackInventory<T> ShuffledItemsContainer(int size, int stackSize, params T[] items);
     }
 }

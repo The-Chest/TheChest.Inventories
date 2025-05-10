@@ -85,8 +85,10 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             return (ILazyStackInventory<Item>)container!;
         }
 
-        public virtual ILazyStackInventory<Item> ShuffledItemsContainer(int size, int stackSize, Item item)
+        public virtual ILazyStackInventory<Item> ShuffledItemsContainer(int size, int stackSize, params Item[] items)
         {
+            if(items.Length == 0)
+                throw new ArgumentOutOfRangeException(nameof(items), "Items cannot be empty.");
             var containerType = GetInventoryType();
 
             var slotType = GetSlotTypeFromConstructor();
@@ -94,6 +96,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             Array slots = Array.CreateInstance(slotType, size);
             for (int index = 0; index < size; index++)
             {
+                var item = items[Random.Shared.Next(0, items.Length)];
                 slots.SetValue(
                     slotFactory.WithItem(
                         item: item, 
