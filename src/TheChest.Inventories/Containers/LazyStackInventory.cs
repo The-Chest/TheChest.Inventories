@@ -1,5 +1,4 @@
 ﻿using TheChest.Core.Containers;
-using TheChest.Core.Slots.Interfaces;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -12,7 +11,7 @@ namespace TheChest.Inventories.Containers
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
         protected IInventoryLazyStackSlot<T>[] slots;
-        public override IStackSlot<T> this[int index] => this.slots[index];
+        public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
         public override IInventoryLazyStackSlot<T>[] Slots => this.slots;
 
         /// <summary>
