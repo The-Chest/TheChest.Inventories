@@ -43,7 +43,7 @@ https://nuget.pkg.github.com/The-Chest/index.json
 ```
 After adding the reference, use the following command to install the package:
 ```bash
-nuget install TheChest.Core
+nuget install TheChest.Inventories
 ```
 
 #### DLL
