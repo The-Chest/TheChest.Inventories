@@ -50,12 +50,12 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             return slotType;
         }
 
-        public virtual ILazyStackInventory<Item> EmptyContainer(int size = 20)
+        public virtual ILazyStackInventory<Item> EmptyContainer(int size = 20, int stackSize = 5)
         {
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
 
-            Array slots = Array.CreateInstance(slotType, size);
+            Array slots = Array.CreateInstance(slotType, stackSize);
             for (int index = 0; index < size; index++)
             {
                 slots.SetValue(slotFactory.EmptySlot(), index);
