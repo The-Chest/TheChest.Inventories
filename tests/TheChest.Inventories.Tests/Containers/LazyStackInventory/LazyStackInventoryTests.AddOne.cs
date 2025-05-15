@@ -40,6 +40,29 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void Add_InventoryWithAvailableSlots_AddsToFirstAvilableSlot()
+        {
+            var stackAmount = this.random.Next(1, 5);
+            var inventorySize = this.random.Next(2, 20);
+            var items = this.itemFactory.CreateManyRandom(inventorySize - 1);
+            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackAmount, items);
+
+            var item = this.itemFactory.CreateDefault();
+            inventory.Add(item);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.Slots,
+                    Has.One.Matches<IStackSlot<T>>(
+                        slot =>
+                            slot.Content!.All(item => item.Equals(items)) && 
+                            slot.StackAmount == 1
+                    )
+                );
+            });
+        }
+
+        [Test]
         public void Add_FailedToAdd_ReturnsFalse()
         {
             var items = this.itemFactory.CreateRandom();
@@ -52,7 +75,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_EmptyInventory_DoesNotAddsToInventory()
+        public void Add_FullInventory_DoesNotAddsToInventory()
         {
             var items = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(10, 5, items);
