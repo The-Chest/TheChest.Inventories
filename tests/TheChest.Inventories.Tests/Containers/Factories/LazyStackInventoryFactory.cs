@@ -1,5 +1,6 @@
 ﻿using TheChest.Inventories.Containers;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Tests.Containers.Factories
 {
@@ -34,7 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                         return
                             parameters.Length == 1 &&
                             parameters[0].ParameterType.IsArray &&
-                            typeof(ILazyStackInventory<Item>).IsAssignableFrom(parameters[0].ParameterType.GetElementType());
+                            typeof(IInventoryLazyStackSlot<Item>).IsAssignableFrom(parameters[0].ParameterType.GetElementType());
                     })
                     ?? throw new ArgumentException($"Inventory type '{inventoryType.FullName}' does not have a suitable constructor.");
 
@@ -42,7 +43,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                 ?? throw new ArgumentException($"Inventory type '{inventoryType.FullName}' does not have a constructor with IInventoryLazyStackSlot<{typeof(Item).Name}>[].");
 
             var slotType = slotParameter.ParameterType.GetElementType();
-            if (!typeof(ILazyStackInventory<Item>).IsAssignableFrom(slotType))
+            if (!typeof(IInventoryLazyStackSlot<Item>).IsAssignableFrom(slotType))
             {
                 throw new ArgumentException($"Type '{slotType!.FullName}' does not implement ILazyStackInventory<{typeof(Item).Name}>.");
             }
@@ -55,10 +56,10 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
 
-            Array slots = Array.CreateInstance(slotType, stackSize);
+            Array slots = Array.CreateInstance(slotType, size);
             for (int index = 0; index < size; index++)
             {
-                slots.SetValue(slotFactory.EmptySlot(), index);
+                slots.SetValue(slotFactory.EmptySlot(stackSize), index);
             }
 
             var container = Activator.CreateInstance(
@@ -96,15 +97,21 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             Array slots = Array.CreateInstance(slotType, size);
             for (int index = 0; index < size; index++)
             {
-                var item = items[Random.Shared.Next(0, items.Length)];
-                slots.SetValue(
-                    slotFactory.WithItem(
-                        item: item, 
-                        amount: Random.Shared.Next(0, stackSize), 
-                        maxAmount: stackSize
-                    ),
-                    index
-                 );
+                if(index >= items.Length)
+                {
+                    slots.SetValue(slotFactory.EmptySlot(stackSize), index);
+                }
+                else
+                {
+                    slots.SetValue(
+                        slotFactory.WithItem(
+                            item: items[index], 
+                            amount: Random.Shared.Next(1, stackSize), 
+                            maxAmount: stackSize
+                        ),
+                        index
+                     );
+                }
             }
 
             var container = Activator.CreateInstance(containerType, slots);
