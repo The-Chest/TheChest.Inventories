@@ -6,7 +6,7 @@
         protected readonly ISlotItemFactory<T> itemFactory;
 
         protected readonly Random random;
-        public LazyStackInventoryTests(ILazyStackInventoryFactory<T> containerFactory, ISlotItemFactory<T> itemFactory)
+        protected LazyStackInventoryTests(ILazyStackInventoryFactory<T> containerFactory, ISlotItemFactory<T> itemFactory)
         {
             this.containerFactory = containerFactory;
             this.itemFactory = itemFactory;
