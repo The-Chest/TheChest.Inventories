@@ -100,16 +100,16 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var amount = stackSize + this.random.Next(1, 5);
             var result = inventory.Add(item, amount);
 
-            Assert.That(result, Is.EqualTo(amount));
+            Assert.That(result, Is.EqualTo(amount - stackSize));
         }
 
         [Test]
         public void Add_WithAmount_NotAllItemsBeAdded_AddsToFirstAvailableSlot()
         {
-            var size = this.random.Next(1, 20);
+            var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var randomItem = this.itemFactory.CreateManyRandom(size - 1);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
+            var randomItems = this.itemFactory.CreateManyRandom(size - 1);
+            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
 
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
@@ -120,8 +120,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                 Assert.That(inventory.Slots,
                     Has.One.Matches<IStackSlot<T>>(
                         slot =>
-                            slot.Content!.All(item => item.Equals(randomItem)) &&
-                            slot.StackAmount == 1
+                            slot.Content!.All(content => content?.Equals(item) ?? false) &&
+                            slot.StackAmount == amount - (amount - stackSize)
                     )
                 );
             });
