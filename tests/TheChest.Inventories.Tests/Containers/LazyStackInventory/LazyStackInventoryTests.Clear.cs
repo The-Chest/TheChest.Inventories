@@ -25,7 +25,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var result = inventory.Clear();
 
-            Assert.That(result, Has.All.EqualTo(item).And.Length.EqualTo(size * stackSize));
+            Assert.That(result, Has.Length.EqualTo(size * stackSize).And.All.EqualTo(item));
         }
 
         [Test]
