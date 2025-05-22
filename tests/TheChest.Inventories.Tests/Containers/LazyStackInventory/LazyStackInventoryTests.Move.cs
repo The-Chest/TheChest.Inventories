@@ -6,7 +6,7 @@
         [TestCase(100)]
         public void Move_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
-            var size = this.random.Next(1, 20);
+            var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
@@ -17,7 +17,7 @@
         [TestCase(100)]
         public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
-            var size = this.random.Next(1, 20);
+            var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
@@ -27,7 +27,7 @@
         [Test]
         public void Move_OriginEqualsToTarget_ThrowsArgumentException()
         {
-            var size = this.random.Next(1, 20);
+            var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
@@ -38,7 +38,7 @@
         [Test]
         public void Move_BothSlotsWithItems_SwapsItems()
         {
-            var size = this.random.Next(1, 20);
+            var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
             var items = this.itemFactory.CreateManyRandom(size);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, items);

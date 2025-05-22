@@ -287,10 +287,22 @@ namespace TheChest.Inventories.Containers
             var originItems = originSlot.GetAll();
             var originItem = originItems.FirstOrDefault();
 
-            var targetItems = targetSlot.Replace(originItem!, originItems.Length);
-            var targetItem = targetItems.FirstOrDefault();
+            if (originItem is null)
+            {
+                var targetItems = targetSlot.GetAll();
+                var targetItem = targetItems.FirstOrDefault();
+                originSlot.Add(targetItem!, targetItems.Length);
+            }
+            else
+            {
+                var targetItems = targetSlot.Replace(originItem!, originItems.Length);
+                var targetItem = targetItems.FirstOrDefault();
 
-            originSlot.Replace(targetItem!, targetItems.Length);
+                if(targetItem is not null)
+                {
+                    originSlot.Replace(targetItem!, targetItems.Length);
+                }
+            }
         }
     }
 }
