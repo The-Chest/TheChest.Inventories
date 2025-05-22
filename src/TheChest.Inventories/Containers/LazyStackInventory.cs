@@ -38,7 +38,7 @@ namespace TheChest.Inventories.Containers
             {
                 var slot = this.slots[i];
                 if (slot.CanAdd(item))
-                    return slot.Add(item) == 1;
+                    return slot.Add(item) == 0;
             }
 
             return false;
