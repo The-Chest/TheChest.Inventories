@@ -35,7 +35,7 @@
         }
 
         [Test]
-        public void Get_ByItem_NotFoundItem_ReturnsEmptyArray()
+        public void Get_ByItem_NotFoundItem_ReturnsNull()
         {
             var items = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.ShuffledItemsContainer(10, 5, items);
@@ -43,7 +43,7 @@
 
             var result = inventory.Get(item);
 
-            Assert.That(result, Is.Empty);
+            Assert.That(result, Is.Null);
         }
     }
 }

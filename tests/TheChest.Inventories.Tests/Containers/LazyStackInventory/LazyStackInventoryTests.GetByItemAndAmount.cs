@@ -26,7 +26,7 @@
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 20);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 5, item);
+            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
             var amount = size * stackSize * 2;
             var expectedAmount = size * stackSize;
@@ -50,10 +50,11 @@
         [Test]
         public void Get_ByItemAndAmount_NotFoundItem_ReturnsEmptyArray()
         {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, item);
-            var amount = this.random.Next(2, 20);
+            var randomItem = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(20, 1, randomItem);
 
+            var amount = this.random.Next(2, 20);
+            var item = this.itemFactory.CreateDefault();
             var result = inventory.Get(item, amount);
 
             Assert.That(result, Is.Empty);
