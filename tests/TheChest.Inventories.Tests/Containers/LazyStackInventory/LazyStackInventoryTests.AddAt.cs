@@ -100,14 +100,14 @@
         {
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
-            var randomItem = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
+            var randomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
 
             var item = this.itemFactory.CreateDefault();
             var randomIndex = this.random.Next(0, size);
             inventory.AddAt(item, randomIndex, stackSize);
 
-            Assert.That(inventory[randomIndex].Content, Has.All.EqualTo(randomItem));
+            Assert.That(inventory[randomIndex].Content, Has.None.EqualTo(item));
         }
 
         [Test]

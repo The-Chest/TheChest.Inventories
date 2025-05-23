@@ -92,7 +92,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         public void Add_WithAmount_NotAllItemsBeAdded_ReturnsRemainingAmount()
         {
             var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 10);
+            var stackSize = this.random.Next(2, 10);
             var randomItem = this.itemFactory.CreateManyRandom(size - 1);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
 

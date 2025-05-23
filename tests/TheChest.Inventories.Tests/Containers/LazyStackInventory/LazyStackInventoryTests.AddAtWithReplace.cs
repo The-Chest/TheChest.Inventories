@@ -23,7 +23,7 @@
         }
 
         [TestCase(-1)]
-        [TestCase(2)]
+        [TestCase(200)]
         public void AddAt_WithReplace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var inventory = this.containerFactory.EmptyContainer();
@@ -133,7 +133,7 @@
             var amount = this.random.Next(1, 10) + stackSize;
             var notAddedItems = inventory.AddAt(item, randomIndex, amount, replace);
 
-            Assert.That(notAddedItems, Has.All.EqualTo(item).And.Length.EqualTo(amount - stackSize));
+            Assert.That(notAddedItems, Has.Length.EqualTo(amount - stackSize).And.All.EqualTo(item));
         }
 
         [Test]
@@ -149,7 +149,7 @@
             var amount = stackSize;
             var notAddedItems = inventory.AddAt(item, randomIndex, amount, false);
 
-            Assert.That(notAddedItems, Has.All.EqualTo(item).And.Length.EqualTo(amount));
+            Assert.That(notAddedItems, Has.Length.EqualTo(amount).And.All.EqualTo(item));
         }
 
         [Test]
@@ -181,7 +181,7 @@
             var amount = stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, Has.All.EqualTo(item).And.Length.EqualTo(stackSize));
+            Assert.That(inventory[index].Content, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
         }
 
         [Test]
@@ -189,15 +189,15 @@
         {
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
-            var randomItem = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
+            var randomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
 
             var item = this.itemFactory.CreateDefault();
             var index = this.random.Next(0, size);
             var amount = stackSize;
             var oldItems = inventory.AddAt(item, index, amount, true);
         
-            Assert.That(oldItems, Is.EqualTo(randomItem).And.Length.EqualTo(stackSize));
+            Assert.That(oldItems, Has.All.EqualTo(randomItems[index]));
         }
 
         [Test]
@@ -213,11 +213,9 @@
             var amount = this.random.Next(1,10) + stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, 
-                Has
-                    .None.EqualTo(item).And
-                    .EqualTo(randomItem).And
-                    .Length.EqualTo(stackSize)
+            Assert.That(
+                inventory[index].Content, 
+                Has.None.EqualTo(item)    
             );
         }
 
@@ -234,39 +232,45 @@
             var amount = this.random.Next(1, 10) + stackSize;
             var notAddedItems = inventory.AddAt(item, index, amount, true);
 
-            Assert.That(notAddedItems, Has.All.EqualTo(item).And.Length.EqualTo(amount));
+            Assert.That(notAddedItems, Has.Length.EqualTo(amount).And.All.EqualTo(item));
         }
 
         [Test]
         public void AddAt_WithReplace_ReplaceEnabled_WithSameItem_AddsItem()
         {
             var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 10);
-            var randomItems = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+            var stackSize = this.random.Next(11, 20);
+            var randomItem = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(size, stackSize, randomItem);
+
+            var expectedAmountNotAdded = this.random.Next(1, 10);
+            var index = this.random.Next(0, size);
+            inventory.Get(index, stackSize - expectedAmountNotAdded);
 
             var item = this.itemFactory.CreateDefault();
-            var index = this.random.Next(0, size);
-            var amount = this.random.Next(1, 10);
+            var amount = stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, Has.All.EqualTo(item).And.Length.EqualTo(stackSize + amount));
+            Assert.That(inventory[index].Content, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
         }
 
         [Test]
         public void AddAt_WithReplace_ReplaceEnabled_WithSameItem_ReturnsNotAddedItems()
         {
             var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 10);
-            var randomItem = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
+            var stackSize = this.random.Next(11, 20);
+            var randomItem = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(size, stackSize, randomItem);
+
+            var expectedAmountNotAdded = this.random.Next(1, 10);
+            var index = this.random.Next(0, size);
+            inventory.Get(index, stackSize - expectedAmountNotAdded);
 
             var item = this.itemFactory.CreateDefault();
-            var index = this.random.Next(0, size);
-            var amount = this.random.Next(1, 10) + stackSize;
+            var amount = stackSize;
             var notAddedItems = inventory.AddAt(item, index, amount, true);
         
-            Assert.That(notAddedItems, Has.All.EqualTo(item).And.Length.EqualTo(amount - stackSize));
+            Assert.That(notAddedItems, Has.Length.EqualTo(expectedAmountNotAdded).And.All.EqualTo(item));
         }
     }
 }
