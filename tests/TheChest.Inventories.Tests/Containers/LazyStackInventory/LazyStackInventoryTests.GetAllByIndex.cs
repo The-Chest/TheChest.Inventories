@@ -25,8 +25,8 @@
             Assert.That(
                 result, 
                 Is.Not.Empty
-                    .And.All.EqualTo(expectedItem)
                     .And.Length.EqualTo(stackSize)
+                    .And.All.EqualTo(expectedItem)
             );
         }
 
@@ -44,7 +44,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(inventory.Slots[index].IsEmpty, Is.True);
-                Assert.That(inventory.Slots[index].Content, Is.Null);
+                Assert.That(inventory.Slots[index].Content, Is.Empty);
             });
         }
 
