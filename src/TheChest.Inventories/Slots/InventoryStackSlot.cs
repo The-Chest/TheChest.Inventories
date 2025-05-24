@@ -317,13 +317,14 @@ namespace TheChest.Inventories.Slots
                 return Array.Empty<T>();
             }
 
+            var result = this.GetAll();
             if (this.CanAdd(item))
             {
-                var result = this.GetAll();
-                this.AddItem(ref item);
+                this.Add(ref item);
                 return result;
             }
 
+            this.AddItems(ref result);
             return new T[1]{ item };
         }
 
