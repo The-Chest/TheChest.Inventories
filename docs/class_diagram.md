@@ -145,9 +145,7 @@ direction TB
     IInventoryStackSlot --* StackInventory
 ```
 
-
 ### Lazy Stack Inventory Diagram
-
 The `LazyStackInventory` class is a generic container that holds and manages items in slots that can hold more than one amount of the same type, but stores only one entity.
 
 ```mermaid
@@ -338,4 +336,58 @@ namespace TheChest.Inventories {
 <<interface>> IInventoryStackSlot
 InventoryStackSlot~T~ --|>  StackSlot~T~
 InventoryStackSlot~T~ ..|> IInventoryStackSlot~T~ 
+```
+
+### Inventory Lazy Stack Slot Diagram
+The `InventoryLazyStackSlot` class can hold and manage a single item inside it, but can also hold more than one amount of the same type.
+
+```mermaid
+---
+config:
+  theme: mc
+  look: classic
+  class:
+    hideEmptyMembersBox: true
+---
+classDiagram
+direction TB
+
+namespace TheChest.Core {
+    class LazyStackSlot~T~ {
+        + T? Content
+        + int MaxStackAmount
+        + int StackAmount
+        + bool IsEmpty
+        + bool IsFull
+        + LazyStackSlot(T? currentItem = default)
+        + LazyStackSlot(T? currentItem = default, int maxStackAmount = 1)
+    }
+}
+<<abstract>> LazyStackSlot
+
+namespace TheChest.Inventories {
+    class IInventoryLazyStackSlot~T~ {
+        + bool CanAdd(T item, int amount = 1)
+        + int Add(T item, int amount = 1)
+        + bool CanReplace(T item, int amount = 1)
+        + T[] Replace(T item, int amount = 1)
+        + T[] Get(int amount = 1)
+        + T[] GetAll()
+        + bool Contains(T item)
+    }
+    class InventoryLazyStackSlot~T~ {
+        + InventoryLazyStackSlot(T? currentItem = default)
+        + InventoryLazyStackSlot(T? currentItem = default, int maxStackAmount = 1)
+        + bool CanAdd(T item, int amount = 1)
+        + int Add(T item, int amount = 1)
+        + bool CanReplace(T item, int amount = 1)
+        + T[] Replace(T item, int amount = 1)
+        + T[] Get(int amount = 1)
+        + T[] GetAll()
+        + bool Contains(T item)
+    }
+}
+<<interface>> IInventoryLazyStackSlot
+InventoryLazyStackSlot~T~ --|> LazyStackSlot~T~
+InventoryLazyStackSlot~T~ ..|> IInventoryLazyStackSlot~T~
 ```
