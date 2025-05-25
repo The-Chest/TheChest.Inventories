@@ -53,7 +53,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             return slotType;
         }
 
-        public virtual IStackInventory<Y> EmptyContainer(int size)
+        public virtual IStackInventory<Y> EmptyContainer(int size = 20, int stackSize = 10)
         {
             var containerType = GetInventoryType();
             var slotType = GetSlotTypeFromConstructor();
@@ -61,7 +61,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             Array slots = Array.CreateInstance(slotType, size);
             for (int index = 0; index < size; index++)
             {
-                slots.SetValue(slotFactory.EmptySlot(), index);
+                slots.SetValue(slotFactory.EmptySlot(stackSize), index);
             }
 
             var container = Activator.CreateInstance(

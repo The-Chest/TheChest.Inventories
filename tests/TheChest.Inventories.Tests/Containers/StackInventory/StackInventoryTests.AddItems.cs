@@ -39,10 +39,9 @@
         }
 
         [Test]
-        [Ignore("Find a better way to instantiate an inventory")]
         public void AddItems_EmptyInventory_AddsToFirstSlot()
         {
-            var items = this.itemFactory.CreateMany(20);
+            var items = this.itemFactory.CreateMany(10);
             var inventory = this.containerFactory.EmptyContainer();
 
             inventory.Add(items);
@@ -51,7 +50,6 @@
         }
 
         [Test]
-        [Ignore("Find a better way to instantiate an inventory")]
         public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_AddsToAvailableSlots()
         {
             var items = this.itemFactory.CreateMany(20);
