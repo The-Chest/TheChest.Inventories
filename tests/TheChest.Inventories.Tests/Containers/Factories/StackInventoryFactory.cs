@@ -112,7 +112,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                 else
                 {
                     slots.SetValue(
-                        slotFactory.EmptySlot(),
+                        slotFactory.EmptySlot(stackSize),
                         index
                     );
                 }

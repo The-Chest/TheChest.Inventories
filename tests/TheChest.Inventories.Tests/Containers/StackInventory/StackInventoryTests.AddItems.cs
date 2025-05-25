@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Core.Slots.Interfaces;
+
+namespace TheChest.Inventories.Tests.Containers
 {
     public partial class StackInventoryTests<T>
     {
@@ -28,17 +30,6 @@
         }
 
         [Test]
-        public void AddItems_EmptyInventory_AddingDifferentItems_AddsEachInDifferentSlots()
-        {
-            var items = this.itemFactory.CreateManyRandom(20);
-            var inventory = this.containerFactory.EmptyContainer();
-
-            inventory.Add(items);
-
-            Assert.That(inventory.Slots.SelectMany(x => x.Content), Is.EqualTo(items));
-        }
-
-        [Test]
         public void AddItems_EmptyInventory_AddsToFirstSlot()
         {
             var items = this.itemFactory.CreateMany(10);
@@ -47,6 +38,57 @@
             inventory.Add(items);
 
             Assert.That(inventory[0].Content, Is.EqualTo(items));
+        }
+
+        [Test]
+        public void AddItems_SlotWithSameItem_AddsToSlotWithItemFirst()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var maxSize = this.random.Next(2, 10);
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            inventory.Get(item, maxSize - 1);
+
+            var amount = maxSize;
+            var items = this.itemFactory.CreateMany(amount);
+            inventory.Add(items);
+
+            Assert.That(inventory.Slots, Has.One.Matches<IStackSlot<T>>(x => x.StackAmount == maxSize && x.Content!.Contains(item)));
+        }
+
+        [Test]
+        public void AddItems_FullSlotWithSameItem_AddsToSlotWithItemFirst()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var maxSize = this.random.Next(2, 10);
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+
+            var amount = this.random.Next(1, maxSize - 1);
+            var items = this.itemFactory.CreateMany(maxSize + amount);
+            inventory.Add(items);
+
+            Assert.That(
+                inventory.Slots, 
+                Has.Exactly(2).Matches<IStackSlot<T>>(x => x.StackAmount == maxSize && x.Content!.Contains(item))
+            );
+            Assert.That(
+                inventory.Slots,
+                Has.Exactly(1).Matches<IStackSlot<T>>(x => x.StackAmount == amount && x.Content!.Contains(item))
+            );
+        }
+
+        [Test]
+        public void AddItems_SlotWithSameItem_AddsToFirstAvailableSlot()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var maxSize = this.random.Next(2, 10);
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            inventory.Get(item, maxSize - 1);
+
+            var amount = maxSize;
+            var items = this.itemFactory.CreateMany(amount);
+            inventory.Add(items);
+
+            Assert.That(inventory.Slots, Has.One.Matches<IStackSlot<T>>(x => x.StackAmount == 1 && x.Content!.Contains(item)));
         }
 
         [Test]
