@@ -74,15 +74,31 @@ namespace TheChest.Inventories.Containers
             if (items.Length == 0)
                 throw new ArgumentException("No items to add", nameof(items));
 
+            var fallbackIndexes = new List<int>();
             for (var i = 0; i < this.Size; i++)
             {
                 var slot = this.slots[i];
                 if (slot.CanAdd(items))
                 {
-                    slot.Add(ref items);
-                    if (items.Length == 0)
-                        break;
+                    if (slot.Contains(items[0]))
+                    {
+                        slot.Add(ref items);
+                        if (items.Length == 0)
+                            break;
+
+                        continue;
+                    }
+
+                    fallbackIndexes.Add(i);
                 }
+            }
+
+            foreach (var index in fallbackIndexes)
+            {
+                var slot = this.slots[index];
+                slot.Add(ref items);
+                if (items.Length == 0)
+                    break;
             }
 
             return items;
