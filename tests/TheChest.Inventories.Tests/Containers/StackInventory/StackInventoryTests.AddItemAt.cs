@@ -82,7 +82,7 @@
             var item = this.itemFactory.CreateDefault();
             var result = inventory.AddAt(item, index, replace: true);
 
-            Assert.That(result, Has.One.AnyOf(item));
+            Assert.That(result, Has.All.EqualTo(slotItem));
         }
 
         [Test]

@@ -308,22 +308,23 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
         public virtual T[] Replace(ref T item)
         {
-            if(item == null)
+            if(item is null)
                 throw new ArgumentNullException(nameof(item));
 
             if (this.IsEmpty)
             {
                 this.AddItem(ref item);
-                return default;
+                return Array.Empty<T>();
             }
 
+            var result = this.GetAll();
             if (this.CanAdd(item))
             {
-                var result = this.GetAll();
-                this.AddItem(ref item);
+                this.Add(ref item);
                 return result;
             }
 
+            this.AddItems(ref result);
             return new T[1]{ item };
         }
 

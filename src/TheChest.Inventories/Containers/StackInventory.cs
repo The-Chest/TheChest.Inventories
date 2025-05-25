@@ -59,7 +59,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="IndexOutOfRangeException"></exception>
         public virtual T[] AddAt(T item, int index, bool replace = true)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             if (index > this.Size || index < 0)
