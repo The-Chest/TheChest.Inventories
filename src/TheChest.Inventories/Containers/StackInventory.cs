@@ -26,6 +26,16 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
+        private bool Contains(T item)
+        {
+            for (int i = 0; i < this.Size; i++)
+            {
+                if (this.slots[i].Contains(item))
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -34,16 +44,30 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
+            var fallbackIndex = -1;
             for (var i = 0; i < this.Size; i++)
             {
-                if (this.slots[i].CanAdd(item))
+                var slot = this.slots[i];
+                if (slot.CanAdd(item))
                 {
-                    this.slots[i].Add(ref item);
-                    return true; 
+                    if (slot.Contains(item))
+                    {
+                        slot.Add(ref item);
+                        return true; 
+                    }
+
+                    if(fallbackIndex == -1)
+                        fallbackIndex = i;
                 }
+            }
+
+            if(fallbackIndex != -1)
+            {
+                this.slots[fallbackIndex].Add(ref item);
+                return true;
             }
 
             return false;
