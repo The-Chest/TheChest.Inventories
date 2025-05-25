@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Core.Slots.Interfaces;
+
+namespace TheChest.Inventories.Tests.Containers
 {
     public partial class StackInventoryTests<T>
     {
@@ -37,6 +39,35 @@
             inventory.Add(item);
             
             Assert.That(inventory.Slots.Any(x => x.Content?.Contains(item) ?? false), Is.True);
+        }
+
+        [Test]
+        public void Add_InventoryWithSameItem_AddsToAvailableSlotWithSameItem()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(2, 10);
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, amount, item);
+            inventory.Get(item, amount - 1);
+
+            inventory.Add(item);
+
+            Assert.That(inventory.Slots, Has.One.Matches<IStackSlot<T>>(x => x.StackAmount == 2 && x.Content!.Contains(item)));
+        }
+
+        [Test]
+        public void Add_InventoryWithFullSlotWithSameItem_AddsToFirstAvailableSlot()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(2, 10);
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, amount, item);
+
+            inventory.Add(item);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.Slots[0].Content, Has.One.EqualTo(item));
+                Assert.That(inventory.Slots[0].StackAmount, Is.EqualTo(1));
+            });
         }
 
         [Test]

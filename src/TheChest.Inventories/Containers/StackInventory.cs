@@ -34,19 +34,78 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
+            var fallbackIndex = -1;
             for (var i = 0; i < this.Size; i++)
             {
-                if (this.slots[i].CanAdd(item))
+                var slot = this.slots[i];
+                if (slot.CanAdd(item))
                 {
-                    this.slots[i].Add(ref item);
-                    return true; 
+                    if (slot.Contains(item))
+                    {
+                        slot.Add(ref item);
+                        return true; 
+                    }
+
+                    if(fallbackIndex == -1)
+                        fallbackIndex = i;
                 }
             }
 
+            if(fallbackIndex != -1)
+            {
+                this.slots[fallbackIndex].Add(ref item);
+                return true;
+            }
+
             return false;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// <para>
+        /// Warning: this method does not accept different items in the same array. 
+        /// This feature will be added in <see href="https://github.com/The-Chest/TheChest.Inventories/issues/42"/>
+        /// </para>
+        /// </summary>
+        /// <param name="items"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        /// <exception cref="ArgumentException">When the param array is empty</exception>
+        public virtual T[] Add(params T[] items)
+        {
+            if (items.Length == 0)
+                throw new ArgumentException("No items to add", nameof(items));
+
+            var fallbackIndexes = new List<int>();
+            for (var i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.CanAdd(items))
+                {
+                    if (slot.Contains(items[0]))
+                    {
+                        slot.Add(ref items);
+                        if (items.Length == 0)
+                            break;
+
+                        continue;
+                    }
+
+                    fallbackIndexes.Add(i);
+                }
+            }
+
+            foreach (var index in fallbackIndexes)
+            {
+                var slot = this.slots[index];
+                slot.Add(ref items);
+                if (items.Length == 0)
+                    break;
+            }
+
+            return items;
         }
 
         /// <summary>
@@ -78,31 +137,6 @@ namespace TheChest.Inventories.Containers
             slot.Add(ref item);
 
             return Array.Empty<T>();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
-        /// <exception cref="ArgumentException">When the param array is empty</exception>
-        public virtual T[] Add(params T[] items)
-        {
-            if(items.Length == 0) 
-                throw new ArgumentException("No items to add", nameof(items));
-
-            for (var i = 0; i < this.Size; i++)
-            {
-                var slot = this.slots[i];
-                if (slot.CanAdd(items))
-                {
-                    slot.Add(ref items);
-                    if(items.Length == 0)
-                        break;
-                }
-            }
-
-            return items;
         }
 
         /// <summary>
