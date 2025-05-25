@@ -26,16 +26,6 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
-        private bool Contains(T item)
-        {
-            for (int i = 0; i < this.Size; i++)
-            {
-                if (this.slots[i].Contains(item))
-                    return true;
-            }
-            return false;
-        }
-
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
