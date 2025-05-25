@@ -65,6 +65,10 @@ namespace TheChest.Inventories.Containers
 
         /// <summary>
         /// <inheritdoc/>
+        /// <para>
+        /// Warning: this method does not accept different items in the same array. 
+        /// This feature will be added in <see href="https://github.com/The-Chest/TheChest.Inventories/issues/42"/>
+        /// </para>
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
