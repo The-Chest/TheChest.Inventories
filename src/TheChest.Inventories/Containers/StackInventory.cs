@@ -76,6 +76,31 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        /// <param name="items"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        /// <exception cref="ArgumentException">When the param array is empty</exception>
+        public virtual T[] Add(params T[] items)
+        {
+            if (items.Length == 0)
+                throw new ArgumentException("No items to add", nameof(items));
+
+            for (var i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                if (slot.CanAdd(items))
+                {
+                    slot.Add(ref items);
+                    if (items.Length == 0)
+                        break;
+                }
+            }
+
+            return items;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <param name="item"><inheritdoc/></param>
         /// <param name="index"><inheritdoc/></param>
         /// <param name="replace"><inheritdoc/></param>
@@ -102,31 +127,6 @@ namespace TheChest.Inventories.Containers
             slot.Add(ref item);
 
             return Array.Empty<T>();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
-        /// <exception cref="ArgumentException">When the param array is empty</exception>
-        public virtual T[] Add(params T[] items)
-        {
-            if(items.Length == 0) 
-                throw new ArgumentException("No items to add", nameof(items));
-
-            for (var i = 0; i < this.Size; i++)
-            {
-                var slot = this.slots[i];
-                if (slot.CanAdd(items))
-                {
-                    slot.Add(ref items);
-                    if(items.Length == 0)
-                        break;
-                }
-            }
-
-            return items;
         }
 
         /// <summary>
