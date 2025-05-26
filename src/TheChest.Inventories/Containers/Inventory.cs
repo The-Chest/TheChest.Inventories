@@ -150,8 +150,12 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             for (int i = 0; i < this.Size; i++)
             {
                 if (this.slots[i].Contains(item))
