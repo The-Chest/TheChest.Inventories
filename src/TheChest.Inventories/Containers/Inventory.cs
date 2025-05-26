@@ -33,8 +33,8 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
         public virtual T[] Add(params T[] items)
         {
-            if (items.Length == 0)
-                throw new ArgumentException("No items to add", nameof(items));
+            if (items.Length == 0) 
+                return items;
 
             var addedAmount = 0;
             for (int i = 0; i < this.Size; i++)

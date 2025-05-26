@@ -76,7 +76,7 @@ namespace TheChest.Inventories.Containers
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0)
-                throw new ArgumentException("No items to add", nameof(items));
+                return items;
 
             var fallbackIndexes = new List<int>();
             for (var i = 0; i < this.Size; i++)
