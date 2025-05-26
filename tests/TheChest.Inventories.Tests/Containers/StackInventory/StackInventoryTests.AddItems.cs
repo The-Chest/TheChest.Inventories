@@ -7,15 +7,12 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void AddItems_AddingEmptyArray_ThrowsArgumentException()
         {
-            var items = Array.Empty<T>();
-
             var inventory = this.containerFactory.EmptyContainer();
 
-            Assert.That(
-                () => inventory.Add(items), 
-                Throws.ArgumentException.
-                With.Message.EqualTo("No items to add (Parameter 'items')")
-            );
+            var items = Array.Empty<T>();
+            var result = inventory.Add(items);
+
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
