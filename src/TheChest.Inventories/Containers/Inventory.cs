@@ -199,6 +199,9 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual int GetCount(T item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             var count = 0;
             for (int i = 0; i < this.Size; i++)
             {
