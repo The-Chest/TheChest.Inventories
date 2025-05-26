@@ -139,11 +139,7 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="index"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="IndexOutOfRangeException">When index is smaller than zero or bigger than the container size</exception>
         public virtual T? Get(int index)
         {
@@ -153,6 +149,7 @@ namespace TheChest.Inventories.Containers
             return this.slots[index].Get();
         }
 
+        /// <inheritdoc/>
         public virtual T? Get(T item)
         {
             for (int i = 0; i < this.Size; i++)
@@ -166,12 +163,7 @@ namespace TheChest.Inventories.Containers
             return default;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <param name="amount"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(T item, int amount = 1)
         {
