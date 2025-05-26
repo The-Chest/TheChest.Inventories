@@ -6,7 +6,7 @@
         protected readonly ISlotItemFactory<T> itemFactory;
 
         protected readonly Random random;
-        public InventoryTests(IInventoryFactory<T> containerFactory, ISlotItemFactory<T> itemFactory) 
+        protected InventoryTests(IInventoryFactory<T> containerFactory, ISlotItemFactory<T> itemFactory) 
         { 
             this.containerFactory = containerFactory;
             this.itemFactory = itemFactory;
