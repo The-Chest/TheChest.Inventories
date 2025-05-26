@@ -3,6 +3,13 @@
     public partial class InventoryTests<T>
     {
         [Test]
+        public void GetCount_NullItem_ThrowsArgumentNullException()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            Assert.That(() => inventory.GetCount(item: default!), Throws.ArgumentNullException);
+        }
+
+        [Test]
         public void GetCount_ReturnsItemCount()
         {
             var size = this.random.Next(10, 20);

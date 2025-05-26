@@ -121,8 +121,13 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] GetAll(T item)
         {
+            if(item is null)
+                throw new ArgumentNullException(nameof(item));
+
             var items = new List<T>();
             for (int i = 0; i < this.Size; i++)
             {
@@ -134,11 +139,7 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="index"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="IndexOutOfRangeException">When index is smaller than zero or bigger than the container size</exception>
         public virtual T? Get(int index)
         {
@@ -148,8 +149,13 @@ namespace TheChest.Inventories.Containers
             return this.slots[index].Get();
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             for (int i = 0; i < this.Size; i++)
             {
                 if (this.slots[i].Contains(item))
@@ -161,16 +167,14 @@ namespace TheChest.Inventories.Containers
             return default;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <param name="amount"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
-        public virtual T[] Get(T item, int amount = 1)
+        public virtual T[] Get(T item, int amount)
         {
-            if(amount <= 0)
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             var items = new List<T>();
@@ -180,7 +184,7 @@ namespace TheChest.Inventories.Containers
                     continue;
 
                 var slotItem = this.slots[i].Get();
-                if(slotItem == null)
+                if(slotItem is null)
                     continue;
 
                 items.Add(slotItem);
@@ -190,9 +194,14 @@ namespace TheChest.Inventories.Containers
             }
             return items.ToArray();
         }
-
+        
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual int GetCount(T item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             var count = 0;
             for (int i = 0; i < this.Size; i++)
             {

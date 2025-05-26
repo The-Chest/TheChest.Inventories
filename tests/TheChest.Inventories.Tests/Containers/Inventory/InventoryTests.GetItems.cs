@@ -16,6 +16,13 @@
         }
 
         [Test]
+        public void GetItems_NullItem_ThrowsArgumentNullException()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            Assert.That(() => inventory.Get(item: default!, amount: 1), Throws.ArgumentNullException);
+        }
+
+        [Test]
         public void GetItems_ValidAmountNotFoundItem_ReturnsEmptyArray()
         {
             var size = this.random.Next(10, 20);
