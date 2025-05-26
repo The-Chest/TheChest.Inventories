@@ -121,8 +121,13 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] GetAll(T item)
         {
+            if(item is null)
+                throw new ArgumentNullException(nameof(item));
+
             var items = new List<T>();
             for (int i = 0; i < this.Size; i++)
             {
