@@ -16,6 +16,67 @@
         }
 
         [Test]
+        public void AddItems_ArrayWithOnlyNullItems_ReturnsEmptyArray()
+        {
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size);
+
+            var items = new T[10];
+            var result = inventory.Add(items);
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void AddItems_ArrayWithOnlyNullItems_DoesNotAddToAnySlot()
+        {
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size);
+
+            var items = new T[10];
+            inventory.Add(items);
+
+            Assert.That(inventory.Slots.All(slot => slot.IsEmpty), Is.True);
+        }
+
+        [Test]
+        public void AddItems_ArrayContainingNullItems_ReturnsEmptyArray()
+        {
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size);
+
+            var items = this.itemFactory
+                .CreateManyRandom(10)
+                .Append(default!)
+                .Reverse()
+                .ToArray();
+            var result = inventory.Add(items);
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void AddItems_ArrayContainingNullItems_DoesNotAddToSlot()
+        {
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size);
+
+            var randomItemSize = this.random.Next(2, size);
+            var items = this.itemFactory
+                .CreateManyRandom(randomItemSize)
+                .Append(default!)
+                .Reverse()
+                .ToArray();
+            inventory.Add(items);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.Slots[0].Content, Is.EqualTo(items[1]));
+                Assert.That(inventory.Slots[randomItemSize - 1].Content, Is.EqualTo(items[randomItemSize - 2]));
+            });
+        }
+
+        [Test]
         public void AddItems_EmptySlots_AddsAllItems()
         {
             var size = this.random.Next(10, 20);
