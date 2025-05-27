@@ -26,24 +26,30 @@ namespace TheChest.Inventories.Containers
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0) 
                 return items;
 
             var addedAmount = 0;
-            for (int i = 0; i < this.Size; i++)
+            var index = 0;
+            while (index < this.Size)
             {
-                var added = this.slots[i].Add(items[addedAmount]);
-                if (added)
+                if(addedAmount >= items.Length)
+                    break;
+
+                var item = items[addedAmount];
+                if (item is null)
                 {
                     addedAmount++;
-                    if (addedAmount >= items.Length)
-                    {
-                        break;
-                    }
+                    continue;
                 }
+
+                var added = this.slots[index].Add(item);
+                if (added)
+                    addedAmount++;
+
+                index++;
             }
 
             if (addedAmount < items.Length)
