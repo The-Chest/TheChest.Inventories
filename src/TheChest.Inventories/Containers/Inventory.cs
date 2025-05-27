@@ -25,11 +25,7 @@ namespace TheChest.Inventories.Containers
 
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
-        /// <summary>
-        /// <inheritdoc/>.
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
+        /// <inheritdoc/>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
         public virtual T[] Add(params T[] items)
         {
@@ -58,13 +54,13 @@ namespace TheChest.Inventories.Containers
             return Array.Empty<T>();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             for (int i = 0; i < this.Size ; i ++)
             {
                 var added = this.slots[i].Add(item);
@@ -77,16 +73,12 @@ namespace TheChest.Inventories.Containers
             return false;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <param name="index"><inheritdoc/></param>
-        /// <param name="replace"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
         public virtual T? AddAt(T item, int index, bool replace = true)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
                 throw new IndexOutOfRangeException();
 

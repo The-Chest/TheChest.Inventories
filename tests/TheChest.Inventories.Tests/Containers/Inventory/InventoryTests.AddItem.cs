@@ -5,6 +5,13 @@ namespace TheChest.Inventories.Tests.Containers
     public partial class InventoryTests<T>
     {
         [Test]
+        public void AddItem_NullItem_ThrowsArgumentNullException()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            Assert.That(() => inventory.Add(item: default!), Throws.ArgumentNullException);
+        }
+
+        [Test]
         public void AddItem_EmptyInventory_AddsToFirstSlot()
         {
             var inventory = this.containerFactory.EmptyContainer();
