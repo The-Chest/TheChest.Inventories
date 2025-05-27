@@ -15,6 +15,13 @@
         }
 
         [Test]
+        public void AddAt_NullItem_ThrowsArgumentNullException()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            Assert.That(() => inventory.AddAt(default!, 0), Throws.ArgumentNullException);
+        }
+
+        [Test]
         public void AddAt_EmptySlot_AddsTheItem()
         {
             var size = this.random.Next(10,20);
