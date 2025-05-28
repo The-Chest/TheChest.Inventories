@@ -12,7 +12,7 @@
 
             Assert.That(
                 () => inventory.Get(index), 
-                Throws.Exception.TypeOf<IndexOutOfRangeException>()
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>()
             );
         }
 
