@@ -80,13 +80,14 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T? AddAt(T item, int index, bool replace = true)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             T? result = default;
             if (replace)
