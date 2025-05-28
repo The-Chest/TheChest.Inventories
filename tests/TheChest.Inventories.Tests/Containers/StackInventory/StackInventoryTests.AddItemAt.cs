@@ -6,12 +6,12 @@
     {
         [TestCase(-1)]
         [TestCase(100)]
-        public void AddItemAt_InvalidIndex_ThrowsIndexOutOfRangeException(int index)
+        public void AddItemAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.EmptyContainer(20);
 
-            Assert.That(() => inventory.AddAt(item, index), Throws.TypeOf<IndexOutOfRangeException>());
+            Assert.That(() => inventory.AddAt(item, index), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
