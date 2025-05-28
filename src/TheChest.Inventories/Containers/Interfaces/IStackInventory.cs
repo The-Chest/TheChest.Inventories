@@ -85,7 +85,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <param name="replace"></param>
-        /// <returns>Returns the item that couldn't be added or the replaced item</returns>
+        /// <returns>Returns the item that couldn't be added or the replaced item if <paramref name="replace"/> is true</returns>
         T[] AddAt(T item, int index, bool replace = true);
 
         /// <summary>

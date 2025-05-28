@@ -63,16 +63,13 @@ namespace TheChest.Inventories.Containers
             return false;
         }
 
-        /// <summary>
         /// <inheritdoc/>
+        /// <summary>
         /// <para>
         /// Warning: this method does not accept different items in the same array. 
         /// This feature will be added in <see href="https://github.com/The-Chest/TheChest.Inventories/issues/42"/>
         /// </para>
         /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
-        /// <exception cref="ArgumentException">When the param array is empty</exception>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0)
@@ -108,21 +105,16 @@ namespace TheChest.Inventories.Containers
             return items;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <param name="index"><inheritdoc/></param>
-        /// <param name="replace"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
-        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T[] AddAt(T item, int index, bool replace = true)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             if (index > this.Size || index < 0)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             
             var slot = this.Slots[index];
 
@@ -139,24 +131,21 @@ namespace TheChest.Inventories.Containers
             return Array.Empty<T>();
         }
 
-        /// <summary>
         /// <inheritdoc/>
+        /// <summary>
         /// <para>
         /// If <paramref name="replace"/> is true, it replaces the item from <paramref name="index"/>
         /// </para>
         /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <param name="index"><inheritdoc/></param>
-        /// <param name="replace"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
-        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
+        /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T[] AddAt(T[] items, int index, bool replace = true)
         {
             if(items.Length == 0)
                 throw new ArgumentException("No items to be added", nameof(items));
 
             if (index < 0 || index > this.Size)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             var slot = this.slots[index];
 
@@ -169,6 +158,7 @@ namespace TheChest.Inventories.Containers
             return items;
         }
 
+        /// <inheritdoc/>
         public virtual T[] Clear()
         {
             var items = new List<T>();
@@ -181,25 +171,17 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="index"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
         public virtual T[] GetAll(int index)
         {
             if (index > this.Size || index < 0)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             return this.slots[index].GetAll();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] GetAll(T item)
         {
@@ -219,25 +201,17 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="index"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T? Get(int index)
         {
             if (index > this.Size || index < 0)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
             
             return this.slots[index].Get();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
@@ -254,12 +228,7 @@ namespace TheChest.Inventories.Containers
             return default;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <param name="amount"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] Get(T item, int amount)
@@ -287,18 +256,13 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="index"><inheritdoc/></param>
-        /// <param name="amount"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
-        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(int index, int amount)
         {
             if (index > this.Size || index < 0)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -306,11 +270,7 @@ namespace TheChest.Inventories.Containers
             return this.slots[index].Get(amount);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual int GetCount(T item)
         {
@@ -328,12 +288,8 @@ namespace TheChest.Inventories.Containers
             return amount;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="origin"><inheritdoc/></param>
-        /// <param name="target"><inheritdoc/></param>
-        /// <exception cref="IndexOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
         public virtual void Move(int origin, int target)
         {
             if (origin < 0 || origin >= this.Size)

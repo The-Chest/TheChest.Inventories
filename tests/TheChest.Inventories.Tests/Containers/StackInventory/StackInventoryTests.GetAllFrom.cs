@@ -12,10 +12,10 @@
 
         [TestCase(-1)]
         [TestCase(100)]
-        public void GetAllFrom_InvalidIndex_ThrowsIndexOutOfRangeException(int index)
+        public void GetAllFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.GetAll(index), Throws.InstanceOf<IndexOutOfRangeException>());
+            Assert.That(() => inventory.GetAll(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]

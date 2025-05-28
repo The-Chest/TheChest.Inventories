@@ -10,7 +10,7 @@
 
             Assert.That(
                 () => inventory.AddAt(this.itemFactory.CreateDefault(), index),
-                Throws.Exception.TypeOf<IndexOutOfRangeException>()
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>()
             );
         }
 

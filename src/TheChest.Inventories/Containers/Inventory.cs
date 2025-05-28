@@ -80,13 +80,14 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T? AddAt(T item, int index, bool replace = true)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             T? result = default;
             if (replace)
@@ -105,6 +106,7 @@ namespace TheChest.Inventories.Containers
             return result;
         }
 
+        /// <inheritdoc/>
         public virtual T[] Clear()
         {
             var items = new List<T>();
@@ -138,11 +140,11 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="IndexOutOfRangeException">When index is smaller than zero or bigger than the container size</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T? Get(int index)
         {
             if (index < 0 || index >= this.Size)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             return this.slots[index].Get();
         }
