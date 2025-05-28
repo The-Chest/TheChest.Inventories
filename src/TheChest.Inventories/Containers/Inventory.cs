@@ -106,6 +106,7 @@ namespace TheChest.Inventories.Containers
             return result;
         }
 
+        /// <inheritdoc/>
         public virtual T[] Clear()
         {
             var items = new List<T>();
