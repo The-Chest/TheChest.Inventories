@@ -174,19 +174,6 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns>true if the slot is not empty and <paramref name="item"/> is equal to <see cref="InventoryLazyStackSlot{T}.Content"/></returns>
-        public virtual bool Contains(T item)
-        {
-            if (this.IsEmpty)
-                return false;
-
-            return this.content?.Equals(item) ?? false;
-        }
-
-        /// <summary>
         /// Gets an amount of items from the slot
         /// </summary>
         /// <param name="amount">The choosen amount to be returned</param>
