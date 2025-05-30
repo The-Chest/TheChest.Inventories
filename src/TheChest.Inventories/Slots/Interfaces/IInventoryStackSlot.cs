@@ -71,11 +71,5 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <returns>an array with all items from slot</returns>
         T[] GetAll();
-        /// <summary>
-        /// Checks if the slot contains the <paramref name="item"/>
-        /// </summary>
-        /// <param name="item">The item to be checked</param>
-        /// <returns>Returns true if the item is equal to the Slot</returns>
-        bool Contains(T item);
     }
 }
