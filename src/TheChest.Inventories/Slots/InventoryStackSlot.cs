@@ -6,9 +6,6 @@ namespace TheChest.Inventories.Slots
 {
     /// <summary>
     /// Slot with with <see cref="IInventoryStackSlot{T}"/> implementation with a collection of items
-    /// <para>
-    /// This slot has behaviors of <seealso cref="StackSlot{T}"/>
-    /// </para>
     /// </summary>
     /// <typeparam name="T">The item collection inside the slot accepts</typeparam>
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
@@ -326,19 +323,6 @@ namespace TheChest.Inventories.Slots
 
             this.AddItems(ref result);
             return new T[1]{ item };
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns>Returns true if the item is equal to the first item inside the Slot</returns>
-        public virtual bool Contains(T item)
-        {
-            if (this.IsEmpty)
-                return false;
-
-            return this.Content.First()!.Equals(item);
         }
     }
 }
