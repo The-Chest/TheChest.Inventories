@@ -86,11 +86,10 @@
             var maxAmount = this.random.Next(11, 20);
             var slot = this.slotFactory.WithItem(item, amount, maxAmount);
 
-            var newAmount = this.random.Next(11, 20);
-            var newItem = this.itemFactory.CreateDefault();
-            var result = slot.Add(newItem, newAmount);
+            var newAmount = this.random.Next(1, maxAmount - amount + 1);
+            var result = slot.Add(item, newAmount);
 
-            var expectedAmount = Math.Abs(maxAmount - amount - newAmount);
+            var expectedAmount = Math.Max(0, amount + newAmount - maxAmount);
             Assert.That(result, Is.EqualTo(expectedAmount));
         }
 
