@@ -181,7 +181,7 @@
             var amount = stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
+            Assert.That(inventory[index].Content, Has.Count.EqualTo(stackSize).And.All.EqualTo(item));
         }
 
         [Test]
@@ -251,7 +251,7 @@
             var amount = stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
+            Assert.That(inventory[index].Content, Has.Count.EqualTo(stackSize).And.All.EqualTo(item));
         }
 
         [Test]
