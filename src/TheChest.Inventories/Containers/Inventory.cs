@@ -13,9 +13,10 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class Inventory<T> : Container<T>, IInventory<T>
     {
-        protected readonly IInventorySlot<T>[] slots;
+        protected new readonly IInventorySlot<T>[] slots;
 
         public event EventHandler<InventoryGetEventArgs<T>>? OnGet;
+        public event EventHandler<InventoryAddEventArgs<T>>? OnAdd;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -31,7 +32,32 @@ namespace TheChest.Inventories.Containers
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
+        private void InvokeAdd(T item, int index)
+        {
+            var data = new InventoryAddItemEventData<T>[1] {
+                new(Item: item, Index: index)
+            };
+
+            this.OnAdd?.Invoke(this, new InventoryAddEventArgs<T>(data));
+        }
+
+        private void InvokeAdd(List<T> items, List<int> indexes)
+        {
+            var data = items.Select(
+                (item, i) =>
+                    new InventoryAddItemEventData<T>(
+                        Item: item,
+                        Index: indexes[i]
+                    )
+                ).ToArray();
+
+            this.OnAdd?.Invoke(this, new InventoryAddEventArgs<T>(data));
+        }
+
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers <see cref="OnAdd"/> event when any <paramref name="item"/> is added.
+        /// </remarks>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0) 
@@ -53,7 +79,10 @@ namespace TheChest.Inventories.Containers
 
                 var added = this.slots[index].Add(item);
                 if (added)
+                {
+                    this.InvokeAdd(item, index);
                     addedAmount++;
+                }
 
                 index++;
             }
@@ -67,6 +96,9 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers <see cref="OnAdd"/> event when <paramref name="item"/> is added.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
         {
@@ -78,6 +110,7 @@ namespace TheChest.Inventories.Containers
                 var added = this.slots[i].Add(item);
                 if (added)
                 {
+                    this.InvokeAdd(item, i);
                     return true;
                 }
             }
@@ -86,6 +119,9 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T? AddAt(T item, int index, bool replace = true)
@@ -99,12 +135,14 @@ namespace TheChest.Inventories.Containers
             if (replace)
             {
                 result = this.slots[index].Replace(item);
+                this.InvokeAdd(item, index);
             }
             else
             {
                 var added = this.slots[index].Add(item);
                 if (!added)
                 {
+                    this.InvokeAdd(item, index);
                     result = item;
                 }
             }
@@ -136,7 +174,7 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The method triggers the <see cref="OnGetAll"/> event with every item returned from it.
+        /// The method triggers the <see cref="OnGet"/> event with every item returned from it.
         /// </remarks>
         public virtual T[] Clear()
         {
@@ -160,7 +198,7 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The method triggers the <see cref="OnGetAll"/> event when any amount of <paramref name="item"/> is found.
+        /// The method triggers the <see cref="OnGet"/> event when any amount of <paramref name="item"/> is found.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] GetAll(T item)
