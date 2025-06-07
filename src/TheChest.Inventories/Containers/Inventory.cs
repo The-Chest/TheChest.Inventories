@@ -155,6 +155,9 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers the <see cref="OnGetOne"/> event when <paramref name="item"/> is found.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
