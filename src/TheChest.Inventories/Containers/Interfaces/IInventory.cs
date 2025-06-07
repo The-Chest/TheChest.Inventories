@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Containers.Interfaces
+﻿using TheChest.Inventories.Containers.Events;
+
+namespace TheChest.Inventories.Containers.Interfaces
 {
     /// <summary>
     /// Inventory Interface
@@ -9,6 +11,11 @@
     /// <typeparam name="T">An item type</typeparam>
     public interface IInventory<T> : IInteractiveContainer<T>
     {
+        /// <summary>
+        /// Raised when an item is requested from the inventory
+        /// </summary>
+        event EventHandler<InventoryGetOneEventArgs<T>> OnGetOne;
+
         /// <summary>
         /// Gets an <see cref="item"/> inside a slot
         /// </summary>

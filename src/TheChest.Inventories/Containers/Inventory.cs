@@ -1,5 +1,6 @@
 ﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
+using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -12,6 +13,8 @@ namespace TheChest.Inventories.Containers
     public class Inventory<T> : Container<T>, IInventory<T>
     {
         protected readonly IInventorySlot<T>[] slots;
+
+        public event EventHandler<InventoryGetOneEventArgs<T>>? OnGetOne;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -161,6 +164,7 @@ namespace TheChest.Inventories.Containers
             {
                 if (this.slots[i].Contains(item))
                 {
+                    this.OnGetOne?.Invoke(this, new InventoryGetOneEventArgs<T>(item, i));
                     return this.slots[i].Get();
                 }
             }
