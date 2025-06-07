@@ -31,7 +31,7 @@
 
             slot.Get();
 
-            Assert.That(slot.Content, Has.Length.EqualTo(19));
+            Assert.That(slot.Content, Has.Count.EqualTo(19));
         }
     }
 }

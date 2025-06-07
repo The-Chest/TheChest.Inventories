@@ -23,7 +23,7 @@
             Array.Fill(expectedResult, item);
             slot.Replace(ref item);
 
-            Assert.That(slot.Content, Has.Length.EqualTo(1).And.EqualTo(expectedResult));
+            Assert.That(slot.Content, Has.Count.EqualTo(1).And.EqualTo(expectedResult));
         }
 
         [Test]
