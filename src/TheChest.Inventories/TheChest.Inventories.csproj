@@ -5,6 +5,8 @@
 		<Description>Provides generic collections to inventory management systems.</Description>
 		<Authors>The Chest</Authors>
 		<RepositoryUrl>https://github.com/The-Chest/TheChest.Inventories</RepositoryUrl>
+		<PackageProjectUrl>https://www.nuget.org/packages/TheChest.Inventories/</PackageProjectUrl>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Compiler">
@@ -12,6 +14,13 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<ItemGroup Label="Package">
+	  <None Include="..\..\readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="TheChest.Core" Version="0.7.0" />
