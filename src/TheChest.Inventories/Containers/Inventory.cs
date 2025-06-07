@@ -27,6 +27,7 @@ namespace TheChest.Inventories.Containers
 
         public override IInventorySlot<T> this[int index] => this.slots[index];
 
+        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
         /// <inheritdoc/>

@@ -11,8 +11,10 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
-        protected IInventoryLazyStackSlot<T>[] slots;
+        protected new IInventoryLazyStackSlot<T>[] slots;
         public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
+        
+        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventoryLazyStackSlot<T>[] Slots => this.slots;
 
         /// <summary>
