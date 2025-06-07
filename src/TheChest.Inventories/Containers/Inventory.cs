@@ -114,7 +114,7 @@ namespace TheChest.Inventories.Containers
 
         private void InvokeGet(T item, int index)
         {
-            var data = new InventoryItemEventData<T>[1] {
+            var data = new InventoryGetItemEventData<T>[1] {
                 new(Item: item, Index: index) 
             };
 
@@ -125,7 +125,7 @@ namespace TheChest.Inventories.Containers
         {
             var data = items.Select(
                 (item, i) =>
-                    new InventoryItemEventData<T>(
+                    new InventoryGetItemEventData<T>(
                         Item: item,
                         Index: indexes[i]
                     )
