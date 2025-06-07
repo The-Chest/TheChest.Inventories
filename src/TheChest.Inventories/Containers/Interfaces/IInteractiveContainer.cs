@@ -6,6 +6,7 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// Interface with methods for interaction with the Container 
     /// </summary>
     /// <typeparam name="T">An item type</typeparam>
+    [Obsolete("Do not inherit it directly, use IInventory<T> or IStackInventory<T> instead")]
     public interface IInteractiveContainer<out T> : IContainer<T>
     {
         /// <summary>
