@@ -15,6 +15,7 @@ namespace TheChest.Inventories.Containers
         protected readonly IInventorySlot<T>[] slots;
 
         public event EventHandler<InventoryGetOneEventArgs<T>>? OnGetOne;
+        public event EventHandler<InventoryGetAllEventArgs<T>>? OnGetAll;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -127,6 +128,9 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers the <see cref="OnGetAll"/> event when any amount of <paramref name="item"/> is found.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] GetAll(T item)
         {
@@ -134,12 +138,30 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
+            var indexes = new List<int>();
             for (int i = 0; i < this.Size; i++)
             {
                 if (this.slots[i].Contains(item))
                 {
+                    indexes.Add(i);
                     items.Add(this.slots[i].Get()!);
                 }
+            }
+
+            if(items.Count > 0)
+            {
+                this.OnGetAll?.Invoke(
+                    sender: this, 
+                    e: new InventoryGetAllEventArgs<T>(
+                        data: items.Select(
+                            (x, i) => 
+                            new InventoryItemEventData<T>(
+                                Item: x, 
+                                Index: indexes[i]
+                            )
+                        ).ToArray()
+                    )
+                );
             }
             return items.ToArray();
         }

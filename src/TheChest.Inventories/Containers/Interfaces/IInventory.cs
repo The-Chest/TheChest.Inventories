@@ -15,6 +15,10 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when an item is requested from the inventory
         /// </summary>
         event EventHandler<InventoryGetOneEventArgs<T>> OnGetOne;
+        /// <summary>
+        /// Raised when all items of a type are requested from the inventory
+        /// </summary>
+        event EventHandler<InventoryGetAllEventArgs<T>>? OnGetAll;
 
         /// <summary>
         /// Gets an <see cref="item"/> inside a slot
