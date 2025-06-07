@@ -65,8 +65,8 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.Slots[0].Content, Has.One.EqualTo(item));
-                Assert.That(inventory.Slots[0].StackAmount, Is.EqualTo(1));
+                Assert.That(inventory[0].Content, Has.One.EqualTo(item));
+                Assert.That(inventory[0].StackAmount, Is.EqualTo(1));
             });
         }
 
@@ -78,15 +78,15 @@ namespace TheChest.Inventories.Tests.Containers
                 .Append(this.itemFactory.CreateDefault())
                 .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, 10, items);
-            var slotIndex = Array.IndexOf(inventory.Slots, inventory.Slots.First(x => x.Content?.Contains(item) ?? false));
+            var slotIndex = Array.IndexOf(inventory.Slots.ToArray(), inventory.Slots.First(x => x.Content?.Contains(item) ?? false));
             inventory.Get(slotIndex, 9);
 
             inventory.Add(item);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.Slots[slotIndex].Content, Has.All.EqualTo(item));
-                Assert.That(inventory.Slots[slotIndex].StackAmount, Is.EqualTo(2));
+                Assert.That(inventory[slotIndex].Content, Has.All.EqualTo(item));
+                Assert.That(inventory[slotIndex].StackAmount, Is.EqualTo(2));
             });
         }
 

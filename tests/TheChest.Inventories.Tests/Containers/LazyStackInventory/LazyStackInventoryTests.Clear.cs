@@ -42,7 +42,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             {
                 Assert.That(inventory.Slots,
                     Has.All.Matches<IStackSlot<T>>(
-                        slot => slot.Content!.Length == 0 &&  slot.StackAmount == 0
+                        slot => slot.Content!.Count == 0 &&  slot.StackAmount == 0
                     )
                 );
                 Assert.That(inventory.IsEmpty, Is.True);

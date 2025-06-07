@@ -42,14 +42,14 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.Slots[origin].Content;
-            var ItemFromTarget = inventory.Slots[target].Content;
+            var itemFromOrigin = inventory[origin].Content;
+            var ItemFromTarget = inventory[target].Content;
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.Slots[origin].Content, Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory.Slots[target].Content, Is.EqualTo(itemFromOrigin));
+                Assert.That(inventory[origin].Content, Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory[target].Content, Is.EqualTo(itemFromOrigin));
             });
         }
 
@@ -66,14 +66,12 @@
 
             Assert.Multiple(() =>
             {
-                var slots = inventory.Slots;
-                Assert.That(slots[0].Content, Is.Empty);
-                Assert.That(slots[0].IsEmpty, Is.True);
+                Assert.That(inventory[0].Content, Is.Empty);
+                Assert.That(inventory[0].IsEmpty, Is.True);
             });
             Assert.Multiple(() => {
-                var slots = inventory.Slots;
-                Assert.That(slots[1].Content, Has.All.EqualTo(item));
-                Assert.That(slots[1].StackAmount, Is.EqualTo(1));
+                Assert.That(inventory[1].Content, Has.All.EqualTo(item));
+                Assert.That(inventory[1].StackAmount, Is.EqualTo(1));
             });
         }
 
@@ -89,15 +87,13 @@
             inventory.Move(0, 1);
 
             Assert.Multiple(() => {
-                var slots = inventory.Slots;
-                Assert.That(slots[0].Content, Has.All.EqualTo(item));
-                Assert.That(slots[0].StackAmount, Is.EqualTo(1));
+                Assert.That(inventory[0].Content, Has.All.EqualTo(item));
+                Assert.That(inventory[0].StackAmount, Is.EqualTo(1));
             });
             Assert.Multiple(() =>
             {
-                var slots = inventory.Slots;
-                Assert.That(slots[1].Content, Is.Empty);
-                Assert.That(slots[1].IsEmpty, Is.True);
+                Assert.That(inventory[1].Content, Is.Empty);
+                Assert.That(inventory[1].IsEmpty, Is.True);
             });
         }
     }

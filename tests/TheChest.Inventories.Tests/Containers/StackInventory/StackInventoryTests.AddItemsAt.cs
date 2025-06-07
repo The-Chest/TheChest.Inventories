@@ -117,7 +117,7 @@
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content[^2..], Is.EqualTo(items));
+                Assert.That(inventory[index].Content?.Reverse().Take(2), Is.EqualTo(items));
             });
         }
 
@@ -153,7 +153,7 @@
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content[^2..], Is.EqualTo(items));
+                Assert.That(inventory[index].Content.Reverse().Take(2), Is.EqualTo(items));
             });
         }
 
