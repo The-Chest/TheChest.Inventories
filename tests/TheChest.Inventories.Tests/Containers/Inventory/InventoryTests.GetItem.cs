@@ -43,7 +43,7 @@
 
             inventory.Get(item);
 
-            Assert.That(inventory.Slots[0].Content, Is.Null);
+            Assert.That(inventory[0].Content, Is.Null);
         }
     }
 }

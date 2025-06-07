@@ -71,8 +71,8 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.Slots[0].Content, Is.EqualTo(items[1]));
-                Assert.That(inventory.Slots[randomItemSize - 1].Content, Is.EqualTo(items[randomItemSize - 2]));
+                Assert.That(inventory[0].Content, Is.EqualTo(items[1]));
+                Assert.That(inventory[randomItemSize - 1].Content, Is.EqualTo(items[randomItemSize - 2]));
             });
         }
 
@@ -86,7 +86,7 @@
             var items = this.itemFactory.CreateMany(randomSize);
             inventory.Add(items);
 
-            Assert.That(inventory.Slots[0..randomSize].Select(x => x.Content), Is.EqualTo(items));
+            Assert.That(inventory.Slots.Skip(0).Take(randomSize).Select(x => x.Content), Is.EqualTo(items));
         }
 
         [Test]
