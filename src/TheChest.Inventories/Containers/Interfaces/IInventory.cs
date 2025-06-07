@@ -12,13 +12,9 @@ namespace TheChest.Inventories.Containers.Interfaces
     public interface IInventory<T> : IInteractiveContainer<T>
     {
         /// <summary>
-        /// Raised when an item is requested from the inventory
+        /// Raised when an amount of item is requested from an index ofthe inventory
         /// </summary>
-        event EventHandler<InventoryGetOneEventArgs<T>> OnGetOne;
-        /// <summary>
-        /// Raised when all items of a type are requested from the inventory
-        /// </summary>
-        event EventHandler<InventoryGetAllEventArgs<T>>? OnGetAll;
+        event EventHandler<InventoryGetEventArgs<T>>? OnGet;
 
         /// <summary>
         /// Gets an <see cref="item"/> inside a slot

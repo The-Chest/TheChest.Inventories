@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Containers;
+﻿using System;
+using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
@@ -14,8 +15,7 @@ namespace TheChest.Inventories.Containers
     {
         protected readonly IInventorySlot<T>[] slots;
 
-        public event EventHandler<InventoryGetOneEventArgs<T>>? OnGetOne;
-        public event EventHandler<InventoryGetAllEventArgs<T>>? OnGetAll;
+        public event EventHandler<InventoryGetEventArgs<T>>? OnGet;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -112,18 +112,49 @@ namespace TheChest.Inventories.Containers
             return result;
         }
 
+        private void InvokeGet(T item, int index)
+        {
+            var data = new InventoryItemEventData<T>[1] {
+                new(Item: item, Index: index) 
+            };
+
+            this.OnGet?.Invoke(this, new InventoryGetEventArgs<T>(data));
+        }
+
+        private void InvokeGet(List<T> items, List<int> indexes)
+        {
+            var data = items.Select(
+                (item, i) =>
+                    new InventoryItemEventData<T>(
+                        Item: item,
+                        Index: indexes[i]
+                    )
+                ).ToArray();
+
+            this.OnGet?.Invoke(this, new InventoryGetEventArgs<T>(data));
+        }
+
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers the <see cref="OnGetAll"/> event with every item returned from it.
+        /// </remarks>
         public virtual T[] Clear()
         {
             var items = new List<T>();
+            var indexes = new List<int>();
             for (int i = 0; i < this.Size; i++)
             {
                 var item = this.slots[i].Get();
-                if(item != null)
+                if(item is not null)
                 {
+                    indexes.Add(i);
                     items.Add(item);
                 }
             }
+
+            if (items.Count > 0)
+                this.InvokeGet(items, indexes);
+
             return items.ToArray();
         }
 
@@ -148,37 +179,33 @@ namespace TheChest.Inventories.Containers
                 }
             }
 
-            if(items.Count > 0)
-            {
-                this.OnGetAll?.Invoke(
-                    sender: this, 
-                    e: new InventoryGetAllEventArgs<T>(
-                        data: items.Select(
-                            (x, i) => 
-                            new InventoryItemEventData<T>(
-                                Item: x, 
-                                Index: indexes[i]
-                            )
-                        ).ToArray()
-                    )
-                );
-            }
+            if (items.Count > 0)
+                this.InvokeGet(items, indexes);
+
             return items.ToArray();
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T? Get(int index)
         {
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].Get();
+            var item = this.slots[index].Get();
+
+            if(item is not null)
+                this.InvokeGet(item, 1);
+
+            return item;
         }
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The method triggers the <see cref="OnGetOne"/> event when <paramref name="item"/> is found.
+        /// The method triggers the <see cref="OnGet"/> event when <paramref name="item"/> is found.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
@@ -190,7 +217,7 @@ namespace TheChest.Inventories.Containers
             {
                 if (this.slots[i].Contains(item))
                 {
-                    this.OnGetOne?.Invoke(this, new InventoryGetOneEventArgs<T>(item, i));
+                    this.InvokeGet(item, i);
                     return this.slots[i].Get();
                 }
             }
@@ -199,6 +226,9 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method triggers the <see cref="OnGet"/> event when the maximum possible <paramref name="amount"/> of <paramref name="item"/> is found.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(T item, int amount)
@@ -209,6 +239,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             var items = new List<T>();
+            var indexes = new List<int>();
             for (int i = 0; i < this.Size; i++)
             {
                 if (!this.slots[i].Contains(item))
@@ -219,10 +250,14 @@ namespace TheChest.Inventories.Containers
                     continue;
 
                 items.Add(slotItem);
+                indexes.Add(i);
 
                 if (items.Count == amount)
                     break;
             }
+            if (items.Count > 0)
+                this.InvokeGet(items, indexes);
+
             return items.ToArray();
         }
         
