@@ -32,28 +32,6 @@ namespace TheChest.Inventories.Containers
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
-        private void InvokeAdd(T item, int index)
-        {
-            var data = new InventoryAddItemEventData<T>[1] {
-                new(Item: item, Index: index)
-            };
-
-            this.OnAdd?.Invoke(this, new InventoryAddEventArgs<T>(data));
-        }
-
-        private void InvokeAdd(List<T> items, List<int> indexes)
-        {
-            var data = items.Select(
-                (item, i) =>
-                    new InventoryAddItemEventData<T>(
-                        Item: item,
-                        Index: indexes[i]
-                    )
-                ).ToArray();
-
-            this.OnAdd?.Invoke(this, new InventoryAddEventArgs<T>(data));
-        }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method triggers <see cref="OnAdd"/> event when any <paramref name="item"/> is added.
@@ -80,8 +58,8 @@ namespace TheChest.Inventories.Containers
                 var added = this.slots[index].Add(item);
                 if (added)
                 {
-                    this.InvokeAdd(item, index);
                     addedAmount++;
+                    this.OnAdd?.Invoke(this, (item, index));
                 }
 
                 index++;
@@ -110,7 +88,7 @@ namespace TheChest.Inventories.Containers
                 var added = this.slots[i].Add(item);
                 if (added)
                 {
-                    this.InvokeAdd(item, i);
+                    this.OnAdd?.Invoke(this, (item, i)); 
                     return true;
                 }
             }
@@ -135,14 +113,14 @@ namespace TheChest.Inventories.Containers
             if (replace)
             {
                 result = this.slots[index].Replace(item);
-                this.InvokeAdd(item, index);
+                this.OnAdd?.Invoke(this, (item, index));
             }
             else
             {
                 var added = this.slots[index].Add(item);
                 if (!added)
                 {
-                    this.InvokeAdd(item, index);
+                    this.OnAdd?.Invoke(this, (item, index));
                     result = item;
                 }
             }
