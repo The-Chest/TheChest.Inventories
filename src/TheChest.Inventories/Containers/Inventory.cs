@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Core.Containers;
+﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
@@ -17,6 +16,7 @@ namespace TheChest.Inventories.Containers
 
         public event EventHandler<InventoryGetEventArgs<T>>? OnGet;
         public event EventHandler<InventoryAddEventArgs<T>>? OnAdd;
+        public event EventHandler<InventoryMoveEventArgs<T>>? OnMove;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -317,11 +317,29 @@ namespace TheChest.Inventories.Containers
             return count;
         }
 
-        /// <summary>
+        private void InvokeMove(
+            T originItem, int originIndex, 
+            T targetItem, int targetIndex
+        )
+        {
+            var from    = new InventoryMoveItemEventData<T>(
+                Item: originItem, 
+                OldIndex: originIndex, 
+                NewIndex: targetIndex
+            );
+            var to      = new InventoryMoveItemEventData<T>(
+                Item: targetItem, 
+                OldIndex: targetIndex, 
+                NewIndex: originIndex
+            );
+
+            this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(from, to));
+        }
+
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="origin"><inheritdoc/></param>
-        /// <param name="target"><inheritdoc/></param>
+        /// <remarks>
+        /// The method triggers the <see cref="OnMove"/> event.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are smaller than zero or bigger than the container size</exception>
         public virtual void Move(int origin, int target)
         {
@@ -331,9 +349,9 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(target));
 
             var item = this.slots[origin].Get();
-
             var oldItem = this.slots[target].Replace(item);
             this.slots[origin].Replace(oldItem);
+            this.InvokeMove(item, origin, oldItem, target);
         }
     }
 }

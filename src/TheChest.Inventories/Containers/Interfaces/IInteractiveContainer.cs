@@ -1,4 +1,5 @@
 ﻿using TheChest.Core.Containers.Interfaces;
+using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -7,10 +8,12 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// </summary>
     /// <typeparam name="T">An item type</typeparam>
     [Obsolete("Do not inherit it directly, use IInventory<T> or IStackInventory<T> instead")]
-    public interface IInteractiveContainer<out T> : IContainer<T>
+    public interface IInteractiveContainer<T> : IContainer<T>
     {
+        event EventHandler<InventoryMoveEventArgs<T>> OnMove;
+
         /// <summary>
-        /// Move a item between two slots
+        /// Moves an item from one index to another in the inventory
         /// </summary>
         /// <param name="origin">Selected item</param>
         /// <param name="target">Where the item will be placed</param>
