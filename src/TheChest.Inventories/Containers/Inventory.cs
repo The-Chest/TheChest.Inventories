@@ -128,28 +128,6 @@ namespace TheChest.Inventories.Containers
             return result;
         }
 
-        private void InvokeGet(T item, int index)
-        {
-            var data = new InventoryGetItemEventData<T>[1] {
-                new(Item: item, Index: index) 
-            };
-
-            this.OnGet?.Invoke(this, new InventoryGetEventArgs<T>(data));
-        }
-
-        private void InvokeGet(List<T> items, List<int> indexes)
-        {
-            var data = items.Select(
-                (item, i) =>
-                    new InventoryGetItemEventData<T>(
-                        Item: item,
-                        Index: indexes[i]
-                    )
-                ).ToArray();
-
-            this.OnGet?.Invoke(this, new InventoryGetEventArgs<T>(data));
-        }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method triggers the <see cref="OnGet"/> event with every item returned from it.
@@ -169,7 +147,7 @@ namespace TheChest.Inventories.Containers
             }
 
             if (items.Count > 0)
-                this.InvokeGet(items, indexes);
+                this.OnGet?.Invoke(this, (items.ToArray(), indexes.ToArray()));
 
             return items.ToArray();
         }
@@ -196,7 +174,7 @@ namespace TheChest.Inventories.Containers
             }
 
             if (items.Count > 0)
-                this.InvokeGet(items, indexes);
+                this.OnGet?.Invoke(this, (items.ToArray(), indexes.ToArray()));
 
             return items.ToArray();
         }
@@ -214,7 +192,7 @@ namespace TheChest.Inventories.Containers
             var item = this.slots[index].Get();
 
             if(item is not null)
-                this.InvokeGet(item, 1);
+                this.OnGet?.Invoke(this, (item, 1));
 
             return item;
         }
@@ -233,7 +211,7 @@ namespace TheChest.Inventories.Containers
             {
                 if (this.slots[i].Contains(item))
                 {
-                    this.InvokeGet(item, i);
+                    this.OnGet?.Invoke(this, (item, i));
                     return this.slots[i].Get();
                 }
             }
@@ -272,7 +250,7 @@ namespace TheChest.Inventories.Containers
                     break;
             }
             if (items.Count > 0)
-                this.InvokeGet(items, indexes);
+                this.OnGet?.Invoke(this, (items.ToArray(), indexes.ToArray()));
 
             return items.ToArray();
         }

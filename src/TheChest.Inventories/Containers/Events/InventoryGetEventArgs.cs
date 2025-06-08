@@ -9,5 +9,27 @@
         {
             Data = data;
         }
+
+        public static implicit operator InventoryGetEventArgs<T>((T Item, int Index) data)
+        {
+            return new InventoryGetEventArgs<T>(
+                new InventoryGetItemEventData<T>[] {
+                    new(data.Item, data.Index)
+                }
+            );
+        }
+
+        public static implicit operator InventoryGetEventArgs<T>((T[] Items, int[] Indexes) data)
+        {
+            return new InventoryGetEventArgs<T>(
+                data.Items.Select(
+                (item, i) =>
+                    new InventoryGetItemEventData<T>(
+                        Item: item,
+                        Index: data.Indexes[i]
+                    )
+                ).ToArray()
+            );
+        }
     }
 }
