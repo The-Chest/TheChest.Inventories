@@ -14,5 +14,15 @@
             From = from;
             To = to;
         }
+
+        public static implicit operator InventoryMoveEventArgs<T>(((T Item, int Index) Origin, (T Item, int Index) Target) data)
+        {
+            var origin = data.Origin;
+            var target = data.Target;
+            return new InventoryMoveEventArgs<T>(
+                new InventoryMoveItemEventData<T>(origin.Item, origin.Index, target.Index),
+                new InventoryMoveItemEventData<T>(target.Item, target.Index, origin.Index)
+            );
+        }
     }
 }

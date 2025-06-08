@@ -273,25 +273,6 @@ namespace TheChest.Inventories.Containers
             return count;
         }
 
-        private void InvokeMove(
-            T originItem, int originIndex, 
-            T targetItem, int targetIndex
-        )
-        {
-            var from    = new InventoryMoveItemEventData<T>(
-                Item: originItem, 
-                OldIndex: originIndex, 
-                NewIndex: targetIndex
-            );
-            var to      = new InventoryMoveItemEventData<T>(
-                Item: targetItem, 
-                OldIndex: targetIndex, 
-                NewIndex: originIndex
-            );
-
-            this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(from, to));
-        }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method triggers the <see cref="OnMove"/> event.
@@ -307,7 +288,7 @@ namespace TheChest.Inventories.Containers
             var item = this.slots[origin].Get();
             var oldItem = this.slots[target].Replace(item);
             this.slots[origin].Replace(oldItem);
-            this.InvokeMove(item, origin, oldItem, target);
+            this.OnMove?.Invoke(this, ((item, origin), (oldItem, target)));
         }
     }
 }
