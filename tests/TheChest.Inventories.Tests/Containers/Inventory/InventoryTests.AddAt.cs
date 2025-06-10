@@ -22,7 +22,7 @@
         }
 
         [Test]
-        public void AddAt_EmptySlot_AddsTheItem()
+        public void AddAt_EmptySlot_AddsItem()
         {
             var size = this.random.Next(10,20);
             var inventory = this.containerFactory.EmptyContainer(size);

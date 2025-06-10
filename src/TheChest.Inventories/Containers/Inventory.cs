@@ -119,10 +119,9 @@ namespace TheChest.Inventories.Containers
             {
                 var added = this.slots[index].Add(item);
                 if (!added)
-                {
-                    this.OnAdd?.Invoke(this, (item, index));
                     result = item;
-                }
+                else
+                    this.OnAdd?.Invoke(this, (item, index));
             }
 
             return result;
