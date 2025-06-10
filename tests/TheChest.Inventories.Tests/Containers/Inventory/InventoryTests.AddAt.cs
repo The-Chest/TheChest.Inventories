@@ -35,6 +35,25 @@
         }
 
         [Test]
+        public void AddAt_EmptySlot_CallsOnAddEvent()
+        {
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size);
+
+            var randomIndex = this.random.Next(0, size);
+            var item = this.itemFactory.CreateDefault();
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(sender, Is.EqualTo(inventory));
+                    Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
+                });
+            };
+            inventory.AddAt(item, randomIndex);
+        }
+
+        [Test]
         public void AddAt_EmptySlot_ReturnsNull()
         {
             var size = this.random.Next(10, 20);
@@ -67,7 +86,7 @@
         }
 
         [Test]
-        public void AddAt_FullSlot_ReturnsOldItem()
+        public void AddAt_FullSlotReplaceTrue_ReturnsOldItem()
         {
             var size = this.random.Next(10, 20);
             var oldItem = this.itemFactory.CreateDefault();
@@ -78,6 +97,19 @@
             var result = inventory.AddAt(item, randomIndex);
 
             Assert.That(result, Is.EqualTo(oldItem));
+        }
+
+        [Test]
+        public void AddAt_FullSlotReplaceFalse_DoNotCallOnAddEvent()
+        {
+            var size = this.random.Next(10, 20);
+            var oldItem = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(size, oldItem);
+
+            var randomIndex = this.random.Next(0, size);
+            var item = this.itemFactory.CreateRandom();
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
+            inventory.AddAt(item, randomIndex, false);
         }
 
         [Test]
