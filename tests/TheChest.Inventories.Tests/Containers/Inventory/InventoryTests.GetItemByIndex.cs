@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Inventories.Containers.Events;
+
+namespace TheChest.Inventories.Tests.Containers
 {
     public partial class InventoryTests<T>
     {
@@ -65,8 +67,11 @@
             var randomIndex = this.random.Next(0, size);
             inventory.OnGet += (sender, args) =>
             {
-                Assert.That(args.Data, Has.Count.EqualTo(1));
-                Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
+                Assert.That(
+                    args.Data, 
+                    Has.Count.EqualTo(1)
+                        .And.All.EqualTo(new InventoryGetItemEventData<T>(item, randomIndex))
+                );
             };
             inventory.Get(randomIndex);
         }

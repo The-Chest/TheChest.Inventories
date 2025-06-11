@@ -62,12 +62,12 @@
             var sameItems = this.itemFactory.CreateManyRandom(size / 2);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
 
+            var randomItem = sameItems[0];
             inventory.OnGet += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
-                Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(sameItems[0]));
+                Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(randomItem));
             };
-            var randomItem = sameItems[0];
             inventory.Get(randomItem);
         }
     }

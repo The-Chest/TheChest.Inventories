@@ -199,7 +199,7 @@ namespace TheChest.Inventories.Containers
             var item = this.slots[index].Get();
 
             if(item is not null)
-                this.OnGet?.Invoke(this, (item, 1));
+                this.OnGet?.Invoke(this, (item, index));
 
             return item;
         }
