@@ -10,7 +10,7 @@
         }
 
         [Test]
-        public void GetItem_EmptyInventory_DoesNotCallsOnGetEvent()
+        public void GetItem_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var inventory = this.containerFactory.EmptyContainer();
             inventory.Get(this.itemFactory.CreateRandom());

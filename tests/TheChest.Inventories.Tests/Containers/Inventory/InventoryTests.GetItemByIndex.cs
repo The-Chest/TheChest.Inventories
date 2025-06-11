@@ -17,7 +17,7 @@
         }
 
         [Test]
-        public void GetItemByIndex_ValidIndexEmptySlot_DoesNotCallsOnGetEvent()
+        public void GetItemByIndex_ValidIndexEmptySlot_DoesNotCallOnGetEvent()
         {
             var size = this.random.Next(10, 20);
             var inventory = this.containerFactory.EmptyContainer();

@@ -10,11 +10,11 @@
         }
 
         [Test]
-        public void GetAll_EmptyInventory_DoesNotCallsOnGetEvent()
+        public void GetAll_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var inventory = this.containerFactory.EmptyContainer();
             inventory.GetAll(this.itemFactory.CreateRandom());
-            inventory.OnGet += (sender, args) => Assert.Fail("GetAll(T item) should not be called if no item is found");
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
         }
 
         [Test]
@@ -59,7 +59,7 @@
         }
 
         [Test]
-        public void GetAll_NonExistingItem_DoNotRemovesFromAnySlots()
+        public void GetAll_NonExistingItem_DoESNotRemoveFromAnySlots()
         {
             var size = this.random.Next(10, 20);
             var items = this.itemFactory.CreateMany(size);
