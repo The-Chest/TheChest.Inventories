@@ -3,11 +3,11 @@
 namespace TheChest.Inventories.Containers.Interfaces
 {
     /// <summary>
-    /// Inventory Interface
-    /// <para>
-    /// This interface is still unstable. Some methods can be moved to a separated interface.
-    /// </para>
+    /// Inventory Interface with add and get methods
     /// </summary>
+    /// <remarks>
+    /// This interface is still unstable. Some methods can be moved to separated interfaces.
+    /// </remarks>
     /// <typeparam name="T">An item type</typeparam>
     public interface IInventory<T> : IInteractiveContainer<T>
     {
@@ -21,62 +21,62 @@ namespace TheChest.Inventories.Containers.Interfaces
         event EventHandler<InventoryAddEventArgs<T>>? OnAdd;
 
         /// <summary>
-        /// Gets an <see cref="item"/> inside a slot
+        /// Gets an item inside a slot
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
-        /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
+        /// <returns>An item inside of the <paramref name="index"/> Slot</returns>
         T? Get(int index);
 
         /// <summary>
-        /// Search an Item from inventory
+        /// Search an item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
-        /// <returns>Returns the first item founded</returns>
+        /// <returns>First item found that is equal <paramref name="item"/></returns>
         T? Get(T item);
 
         /// <summary>
         /// Search an amount of items in the inventory
         /// </summary>
-        /// <param name="item">Item to be founded</param>
+        /// <param name="item">Item to be found</param>
         /// <param name="amount">Amount to be returned</param>
-        /// <returns>Returns the amount of items searched (or the max it can)</returns>
+        /// <returns>An array with the <paramref name="amount"/> of items equal to <paramref name="item"/> (or the max it can)</returns>
         T[] Get(T item, int amount);
 
         /// <summary>
         /// Get all Item of the selected type from all slots
         /// </summary>
         /// <param name="item">Item to be search</param>
-        /// <returns>Returns a list with all items founded in the inventory</returns>
+        /// <returns>An array with all items that are equal to <paramref name="item"/> in the inventory</returns>
         T[] GetAll(T item);
 
         /// <summary>
-        /// Returns the amount of an item inside the inventory
+        /// Get the amount of an <paramref name="item"/> inside the inventory
         /// </summary>
-        /// <param name="item">The item to de counted</param>
-        /// <returns>Returns the current amount of the item in the Inventory</returns>
+        /// <param name="item">Item to be search</param>
+        /// <returns>The current amount of the <paramref name="item"/> in the Inventory</returns>
         int GetCount(T item);
 
         /// <summary>
-        /// Adds and array of item in a avaliable slot
+        /// Adds and array of items in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <returns></returns>
+        /// <returns>The items from param that were not possible to add</returns>
         T[] Add(T[] items);
 
         /// <summary>
         /// Adds an item in a avaliable slot 
         /// </summary>
         /// <param name="item">item to be added</param>
-        /// <returns>returns true if the item could be added</returns>
+        /// <returns>true if the <paramref name="item"/> could be added</returns>
         bool Add(T item);
 
         /// <summary>
         /// Adds an item in a specific slot
         /// </summary>
-        /// <param name="item">item to be added</param>
-        /// <param name="index">slot where the item will be added</param>
-        /// <param name="replace"></param>
-        /// <returns>Returns the item that couldn't be added or the replaced item</returns>
+        /// <param name="item">Item to be added</param>
+        /// <param name="index">Slot where the item will be added</param>
+        /// <param name="replace">Flag that decide if the item on <paramref name="index"/> (if exists) will be replaced</param>
+        /// <returns>item that couldn't be added or the replaced item</returns>
         T? AddAt(T item, int index, bool replace = true);
     }
 }
