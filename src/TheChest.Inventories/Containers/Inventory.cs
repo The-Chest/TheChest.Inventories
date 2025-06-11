@@ -32,17 +32,23 @@ namespace TheChest.Inventories.Containers
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
+        /// <summary>
         /// <inheritdoc/>
+        /// </summary>
+        /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <remarks>
-        /// The method triggers <see cref="OnAdd"/> event when EVERY <paramref name="item"/> is added. 
-        /// This might change in future versions.
+        /// The method triggers <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
+        /// <returns>
+        /// Returns <paramref name="items"/> that were not added to the inventory.
+        /// </returns>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0) 
                 return items;
 
             var addedAmount = 0;
+            var addedItems = new Dictionary<int, T>();
             var index = 0;
             while (index < this.Size)
             {
@@ -59,17 +65,17 @@ namespace TheChest.Inventories.Containers
                 var added = this.slots[index].Add(item);
                 if (added)
                 {
+                    addedItems.Add(index, item);
                     addedAmount++;
-                    this.OnAdd?.Invoke(this, (item, index));
                 }
 
                 index++;
             }
 
+            this.OnAdd?.Invoke(this, (addedItems.Values.ToArray() , addedItems.Keys.ToArray()));
+
             if (addedAmount < items.Length)
-            {
                 return items[addedAmount..];
-            }
 
             return Array.Empty<T>();
         }
