@@ -100,7 +100,7 @@
         }
 
         [Test]
-        public void AddAt_FullSlotReplaceFalse_DoNotCallOnAddEvent()
+        public void AddAt_FullSlotReplaceFalse_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(10, 20);
             var oldItem = this.itemFactory.CreateDefault();
@@ -113,7 +113,7 @@
         }
 
         [Test]
-        public void AddAt_FullSlotReplaceFalse_DoNotReplaceTheItem()
+        public void AddAt_FullSlotReplaceFalse_DoesNotReplaceTheItem()
         {
             var size = this.random.Next(10, 20);
             var oldItem = this.itemFactory.CreateDefault();

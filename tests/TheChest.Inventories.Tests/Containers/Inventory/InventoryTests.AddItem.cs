@@ -88,7 +88,7 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void AddItem_FullInventory_DoNotCallOnAddEvent()
+        public void AddItem_FullInventory_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(10, 20);
             var items = this.itemFactory.CreateDefault();
