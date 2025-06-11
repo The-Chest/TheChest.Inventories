@@ -29,6 +29,23 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
+        public void AddItem_EmptyInventory_CallsOnAddEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+
+            var item = this.itemFactory.CreateDefault();
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(sender, Is.EqualTo(inventory));
+                    Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
+                });
+            }; 
+            inventory.Add(item);
+        }
+
+        [Test]
         public void AddItem_EmptyInventory_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer();
@@ -68,6 +85,18 @@ namespace TheChest.Inventories.Tests.Containers
             inventory.Add(item);
 
             Assert.That(inventory.Slots, Is.All.Matches<IInventorySlot<T>>(x => x.IsFull && !x.Content!.Equals(item)));
+        }
+
+        [Test]
+        public void AddItem_FullInventory_DoNotCallOnAddEvent()
+        {
+            var size = this.random.Next(10, 20);
+            var items = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(size, items);
+
+            var item = this.itemFactory.CreateRandom();
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
+            inventory.Add(item);
         }
 
         [Test]
