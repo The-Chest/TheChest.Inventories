@@ -34,7 +34,8 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The method triggers <see cref="OnAdd"/> event when any <paramref name="item"/> is added.
+        /// The method triggers <see cref="OnAdd"/> event when EVERY <paramref name="item"/> is added. 
+        /// This might change in future versions.
         /// </remarks>
         public virtual T[] Add(params T[] items)
         {
@@ -118,10 +119,10 @@ namespace TheChest.Inventories.Containers
             else
             {
                 var added = this.slots[index].Add(item);
-                if (!added)
-                    result = item;
-                else
+                if (added)
                     this.OnAdd?.Invoke(this, (item, index));
+                else
+                    result = item;
             }
 
             return result;
