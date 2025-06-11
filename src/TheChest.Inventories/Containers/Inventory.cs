@@ -40,7 +40,7 @@ namespace TheChest.Inventories.Containers
         /// The method triggers <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
         /// <returns>
-        /// Returns <paramref name="items"/> that were not added to the inventory.
+        /// An array of <paramref name="items"/> that were not added to the inventory.
         /// </returns>
         public virtual T[] Add(params T[] items)
         {
@@ -72,7 +72,8 @@ namespace TheChest.Inventories.Containers
                 index++;
             }
 
-            this.OnAdd?.Invoke(this, (addedItems.Values.ToArray() , addedItems.Keys.ToArray()));
+            if(addedItems.Count > 0)
+                this.OnAdd?.Invoke(this, (addedItems.Values.ToArray() , addedItems.Keys.ToArray()));
 
             if (addedAmount < items.Length)
                 return items[addedAmount..];
