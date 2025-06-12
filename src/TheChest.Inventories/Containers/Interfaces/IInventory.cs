@@ -14,7 +14,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
-        event EventHandler<InventoryGetEventArgs<T>>? OnGet;
+        event InventoryGetEventHandler<T>? OnGet;
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>

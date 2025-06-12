@@ -14,7 +14,7 @@ namespace TheChest.Inventories.Containers
     {
         protected new readonly IInventorySlot<T>[] slots;
 
-        public event EventHandler<InventoryGetEventArgs<T>>? OnGet;
+        public event InventoryGetEventHandler<T>? OnGet;
         public event EventHandler<InventoryAddEventArgs<T>>? OnAdd;
         public event EventHandler<InventoryMoveEventArgs<T>>? OnMove;
 
