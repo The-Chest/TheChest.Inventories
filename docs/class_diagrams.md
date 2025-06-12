@@ -18,54 +18,64 @@ config:
 ---
 classDiagram
 direction TB
+	namespace TheChest.Core {
+        class Container~T~ {
+        }
+	}
+	namespace TheChest.Inventories {
+        class IInventory~T~ {
+	        + ~~event~~ OnGet: InventoryGetEventHandler 
+	        + ~~event~~ OnAdd: InventoryAddEventHandler 
+            + T? Get(int index)
+	        + T[] GetAll(T item)
+	        + T[] Clear()
+	        + bool Add(T item)
+	        + T[] Add(params T[] items)
+	        + T? AddAt(T item, int index, bool replace = true)
+	        + void Move(int origin, int target)
+	        + int GetCount(T item)
+        }
+        class IInventorySlot~T~ {
+	        + bool Add(T item)
+	        + T? Get()
+	        + bool Contains(T item)
+	        + T Replace(T item)
+        }
+        class Inventory~T~ {
+	        - IInventorySlot~T~[] slots
+	        + IInventorySlot~T~ this[int index]
+	        + IInventorySlot~T~[] Slots
+	        + ~~event~~ OnGet: InventoryGetEventHandler 
+	        + ~~event~~ OnAdd: InventoryAddEventHandler 
+            + ~~event~~ OnMove: InventoryMoveEventHandler 
+	        + Inventory(IInventorySlot~T~[] slots)
+            + T[] Add(params T[] items)
+	        + bool Add(T item)
+	        + T? AddAt(T item, int index, bool replace = true)
+	        + T[] Clear()
+	        + T[] GetAll(T item)
+	        + T? Get(int index)
+	        + T? Get(T item)
+	        + T[] Get(T item, int amount)
+	        + int GetCount(T item)
+	        + void Move(int origin, int target)
+        }
+        class IInteractiveContainer~T~{
+	        + ~~event~~ OnMove: InventoryMoveEventHandler 
+            + void Move(int origin, int target)
+            + T[] Clear()
+        } 
+	}
 
-namespace TheChest.Core {
-    class Container~T~ {
-    }
-}
-<<abstract>> Container
+	<<abstract>> Container
+	<<interface>> IInventory
+	<<interface>> IInventorySlot
+	<<interface>> IInteractiveContainer
 
-namespace TheChest.Inventories {
-    class IInventory~T~ {
-        + T? Get(int index)
-        + T[] GetAll(T item)
-        + T[] Clear()
-        + bool Add(T item)
-        + T[] Add(params T[] items)
-        + T? AddAt(T item, int index, bool replace = true)
-        + void Move(int origin, int target)
-        + int GetCount(T item)
-    }
-    class IInventorySlot~T~ {
-        + bool Add(T item)
-        + T? Get()
-        + bool Contains(T item)
-        + T Replace(T item)
-    }
-    class Inventory~T~ {
-        - IInventorySlot~T~[] slots
-        + Inventory(IInventorySlot~T~[] slots)
-        + IInventorySlot~T~ this[int index]
-        + IInventorySlot~T~[] Slots
-        + T[] Add(params T[] items)
-        + bool Add(T item)
-        + T? AddAt(T item, int index, bool replace = true)
-        + T[] Clear()
-        + T[] GetAll(T item)
-        + T? Get(int index)
-        + T? Get(T item)
-        + T[] Get(T item, int amount)
-        + int GetCount(T item)
-        + void Move(int origin, int target)
-    }
-}
-
-<<interface>> IInventorySlot
-<<interface>> IInventory
-
-Inventory~T~ --|> Container~T~ 
-Inventory~T~ ..|> IInventory~T~
-Inventory~T~ ..|> IInventorySlot~T~
+    Inventory --|> Container
+    Inventory ..|> IInventory
+    Inventory ..|> IInteractiveContainer
+    IInventorySlot ..* Inventory
 ```
 
 ### Stack Inventory Diagram

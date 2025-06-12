@@ -22,7 +22,7 @@
         }
 
         [Test]
-        public void GetCount_DoNotRemoveItems()
+        public void GetCount_DoesNotRemoveItems()
         {
             var size = this.random.Next(10, 20);
             var items = this.itemFactory.CreateMany(size);

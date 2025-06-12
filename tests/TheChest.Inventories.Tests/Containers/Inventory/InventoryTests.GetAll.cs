@@ -10,6 +10,14 @@
         }
 
         [Test]
+        public void GetAll_EmptyInventory_DoesNotCallOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.GetAll(this.itemFactory.CreateRandom());
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
+        }
+
+        [Test]
         public void GetAll_WithItems_ReturnsSearchingItem()
         {
             var size = this.random.Next(10, 20);
@@ -51,7 +59,7 @@
         }
 
         [Test]
-        public void GetAll_NonExistingItem_DoNotRemovesFromAnySlots()
+        public void GetAll_NonExistingItem_DoESNotRemoveFromAnySlots()
         {
             var size = this.random.Next(10, 20);
             var items = this.itemFactory.CreateMany(size);
@@ -62,6 +70,23 @@
             inventory.GetAll(randomItem);
 
             Assert.That(inventory.Slots, Is.EqualTo(slots));
+        }
+
+        [Test]
+        public void GetAll_WithItems_CallsOnGetEvent()
+        {
+            var size = this.random.Next(10, 20);
+            var items = this.itemFactory.CreateMany(size / 2);
+            var sameItems = this.itemFactory.CreateManyRandom(size / 2);
+            var inventory = this.containerFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
+
+            inventory.OnGet += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(sameItems.Length));
+                Assert.That(args.Data.Select(x => x.Item), Is.EqualTo(sameItems));
+            };
+            var randomItem = sameItems[0];
+            inventory.GetAll(randomItem);
         }
     }
 }
