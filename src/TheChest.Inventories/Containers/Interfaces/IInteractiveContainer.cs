@@ -10,6 +10,9 @@ namespace TheChest.Inventories.Containers.Interfaces
     [Obsolete("Do not inherit it directly, use IInventory<T> or IStackInventory<T> instead")]
     public interface IInteractiveContainer<T> : IContainer<T>
     {
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
         event EventHandler<InventoryMoveEventArgs<T>> OnMove;
 
         /// <summary>
