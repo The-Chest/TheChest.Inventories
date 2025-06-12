@@ -89,3 +89,50 @@ inventory.OnAdd += (sender, args) =>
 var result = inventory.Add("Item");
 Console.WriteLine($"Item {result} added");
 ```
+
+### InventoryMoveEventHandler
+
+Fires when an item is moved from an index to another to the inventory.
+
+#### Signature
+```csharp
+public delegate void InventoryMoveEventHandler<T>(object? sender, InventoryMoveEventArgs<T> e);
+```
+
+#### EventArgs
+
+| Property                  | Type                                                  | Description                                        |
+|---------------------------|-------------------------------------------------------|----------------------------------------------------|
+| sender                    | `object`                                              | Inventory responsible for firing the event         |
+| args                      | `InventoryMoveEventArgs`                              | Class that holds data of the event                 |
+| args.Data                 | `IReadOnlyCollection<InventoryMoveItemEventData<T>>`  | An array with all items and its respective indexes |
+| args.Data[].Item          | `Generic`                                             | Item that were moved                               |
+| args.Data[].FromIndex     | `Integer`                                             | Index number where the `Item` started              |
+| args.Data[].ToIndex       | `Integer`                                             | Index number where the `Item` was moved to         |
+
+#### Example
+
+```csharp
+using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventorySlot<string>[10];
+for (int i = 0; i < slots.Length - 1; i++)
+{
+    slots[i] = new InventorySlot<string>($"Item_{i}");
+}
+
+var inventory = new Inventory<string>();
+
+inventory.OnMove += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"Item {action.Item} got from index {action.Index}");
+    }
+};
+
+//This will fire an event with the two items moved
+inventory.Move(0, 1);
+//This will fire an event with the one item moved (the index 9 is empty)
+inventory.Move(9, 2);
+```
