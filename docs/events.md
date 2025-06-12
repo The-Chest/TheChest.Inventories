@@ -42,7 +42,50 @@ inventory.OnGet += (sender, args) =>
 };
 
 //Any method except GetCount will fire the event
-
 var result = inventory.Get(0);
 Console.WriteLine($"Item {result} got from index {0}");
+```
+
+### InventoryAddEventHandler
+
+Fires when an item is added to the inventory.
+
+#### Signature
+```csharp
+public delegate void InventoryAddEventHandler<T>(object? sender, InventoryAddEventArgs<T> e);
+```
+
+#### EventArgs
+
+| Property                  | Type                                                  | Description                                        |
+|---------------------------|-------------------------------------------------------|----------------------------------------------------|
+| sender                    | `object`                                              | Inventory responsible for firing the event         |
+| args                      | `InventoryAddEventArgs`                               | Class that holds data of the event                 |
+| args.Data                 | `IReadOnlyCollection<InventoryAddItemEventData<T>>`   | An array with all items and its respective indexes |
+| args.Data[].Item          | `Generic`                                             | Item added                                         |
+| args.Data[].Index         | `Integer`                                             | Index number where the `Item` was added            |
+
+#### Example
+
+```csharp
+using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventorySlot<string>[10];
+for (int i = 0; i < slots.Length - 2; i++)
+{
+    slots[i] = new InventorySlot<string>($"Item_{i}");
+}
+
+var inventory = new Inventory<string>();
+inventory.OnAdd += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"Item {action.Item} added on index {action.Index}");
+    }
+};
+
+//Any Add method will fire the event (if sucessful)
+var result = inventory.Add("Item");
+Console.WriteLine($"Item {result} added");
 ```
