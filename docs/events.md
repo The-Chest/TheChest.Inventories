@@ -15,11 +15,11 @@ public delegate void InventoryGetEventHandler<T>(object? sender, InventoryGetEve
 
 | Property                  | Type                                                  | Description                                        |
 |---------------------------|-------------------------------------------------------|----------------------------------------------------|
-| sender                    | object                                                | Inventory responsible for firing the event         |
-| args                      | InventoryGetEventArgs                                 | Class that holds data of the event                 |
-| args.Data                 | IReadOnlyCollection<InventoryGetItemEventData<T>>     | An array with all items and its respective indexes |
-| args.Data[].Item          | Generic                                               | Found item                                         |
-| args.Data[].Index         | Integer                                               | Index number where the `Item` was found            |
+| sender                    | `object`                                              | Inventory responsible for firing the event         |
+| args                      | `InventoryGetEventArgs`                               | Class that holds data of the event                 |
+| args.Data                 | `IReadOnlyCollection<InventoryGetItemEventData<T>>`   | An array with all items and its respective indexes |
+| args.Data[].Item          | `Generic`                                             | Found item                                         |
+| args.Data[].Index         | `Integer`                                             | Index number where the `Item` was found            |
 
 #### Example
 
