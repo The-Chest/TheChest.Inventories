@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Containers
 
         public event InventoryGetEventHandler<T>? OnGet;
         public event EventHandler<InventoryAddEventArgs<T>>? OnAdd;
-        public event EventHandler<InventoryMoveEventArgs<T>>? OnMove;
+        public event InventoryMoveEventHandler<T>? OnMove;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation

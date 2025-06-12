@@ -13,7 +13,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
-        event EventHandler<InventoryMoveEventArgs<T>> OnMove;
+        event InventoryMoveEventHandler<T> OnMove;
 
         /// <summary>
         /// Moves an item from one index to another in the inventory
