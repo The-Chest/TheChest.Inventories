@@ -27,7 +27,7 @@ The library provides a robust framework for managing inventories and slots in a 
 - **`InventoryStackSlot<T>`**: Extends `InventorySlot<T>` to support stacked items.
 - **Interfaces**: Defines contracts for slots behaviors, such as `IInventorySlot<T>` and `IInventoryStackSlot<T>`.
 
-The class diagrams can be found in the [docs/class_diagram](/docs/class_diagram.md) file.
+The class diagrams can be found in the [docs/class_diagrams](/docs/class_diagrams.md) file.
 
 ## How to use it
 
