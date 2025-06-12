@@ -294,14 +294,17 @@ namespace TheChest.Inventories.Containers
 
             var item = this.slots[origin].Get();
             var oldItem = this.slots[target].Replace(item);
+
+            var events = new List<InventoryMoveItemEventData<T>>();
             if (item is not null)
-                this.OnMove?.Invoke(this, (item, origin, target));
+                events.Add(new(item, origin, target));
 
             if (oldItem is not null)
             {
                 this.slots[origin].Replace(oldItem);
-                this.OnMove?.Invoke(this, (oldItem, target, origin));
+                events.Add(new(oldItem, target, origin));
             }
+            this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }
     }
 }

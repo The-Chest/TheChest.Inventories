@@ -39,5 +39,20 @@
                 }
             );
         }
+
+        public static implicit operator InventoryMoveEventArgs<T>(
+            (T Item, int OriginIndex, int TargetIndex)[] data
+        )
+        {
+            return new InventoryMoveEventArgs<T>(
+                data.Select(
+                    item => new InventoryMoveItemEventData<T>(
+                        Item: item.Item,
+                        FromIndex: item.OriginIndex,
+                        ToIndex: item.TargetIndex
+                    )
+                ).ToArray()
+            );
+        }
     }
 }
