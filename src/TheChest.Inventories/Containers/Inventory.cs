@@ -293,12 +293,9 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(target));
 
             var item = this.slots[origin].Get();
-            var oldItem = default(T);
-            if(item is not null)
-            {
-                oldItem = this.slots[target].Replace(item);
+            var oldItem = this.slots[target].Replace(item);
+            if (item is not null)
                 this.OnMove?.Invoke(this, (item, origin, target));
-            }
 
             if (oldItem is not null)
             {
