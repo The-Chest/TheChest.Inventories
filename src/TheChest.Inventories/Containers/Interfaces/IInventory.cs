@@ -72,11 +72,14 @@ namespace TheChest.Inventories.Containers.Interfaces
 
         /// <summary>
         /// Adds an item in a specific slot
+        /// <para>
+        /// The param <paramref name="replace"/> might be changed to default to false in the future.
+        /// </para>
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>
         /// <param name="replace">Flag that decide if the item on <paramref name="index"/> (if exists) will be replaced</param>
-        /// <returns>item that couldn't be added or the replaced item</returns>
+        /// <returns>The item from param that couldn't be added or the replaced item that were inside the slot</returns>
         T? AddAt(T item, int index, bool replace = true);
     }
 }

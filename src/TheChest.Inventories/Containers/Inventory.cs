@@ -121,7 +121,7 @@ namespace TheChest.Inventories.Containers
             if (replace)
             {
                 result = this.slots[index].Replace(item);
-                this.OnAdd?.Invoke(this, (item, index));
+                this.OnAdd?.Invoke(this, (item, index));//TODO: change it to OnReplace when #75 is implemented
             }
             else
             {
