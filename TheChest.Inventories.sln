@@ -19,8 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
 	ProjectSection(SolutionItems) = preProject
-		events.md = events.md
 		docs\class_diagrams.md = docs\class_diagrams.md
+		docs\events.md = docs\events.md
 	EndProjectSection
 EndProject
 Global
