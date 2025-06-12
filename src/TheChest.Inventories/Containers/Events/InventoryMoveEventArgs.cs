@@ -22,24 +22,6 @@
         }
 
         public static implicit operator InventoryMoveEventArgs<T>(
-            (
-                (T Item, int Index) Origin, 
-                (T Item, int Index) Target
-            ) data
-        )
-        {
-            var origin = data.Origin;
-            var target = data.Target;
-            return new InventoryMoveEventArgs<T>(
-                new InventoryMoveItemEventData<T>[2]
-                {
-                    new(origin.Item, origin.Index, target.Index),
-                    new(target.Item, target.Index, origin.Index)
-                }
-            );
-        }
-
-        public static implicit operator InventoryMoveEventArgs<T>(
             (T Item, int OriginIndex, int TargetIndex) data
         )
         {
