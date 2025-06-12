@@ -2,9 +2,9 @@
 
 ## Inventory events
 
-### InventoryAddEventHandler
+### InventoryGetEventHandler
 
-Fires when an item is added to the inventory.
+Fires when an item is returned to the inventory.
 
 #### Signature
 ```csharp
