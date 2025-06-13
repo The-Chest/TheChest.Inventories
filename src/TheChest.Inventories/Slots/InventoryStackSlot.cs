@@ -140,12 +140,10 @@ namespace TheChest.Inventories.Slots
             return true;
         }
 
-        /// <summary>
         /// <inheritdoc/>.
-        /// Uses <see cref="IInventoryStackSlot{T}.CanAdd(T)"/> validation for each one.
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
+        /// <remarks>
+        /// Uses <see cref="IInventoryStackSlot{T}.CanAdd(T)"/> for the validation for each item inside <paramref name="items"/>.
+        /// </remarks>
         public virtual bool CanAdd(T[] items)
         {
             if (items.Length == 0)
