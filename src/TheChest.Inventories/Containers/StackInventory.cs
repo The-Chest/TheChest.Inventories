@@ -15,6 +15,7 @@ namespace TheChest.Inventories.Containers
         protected new readonly IInventoryStackSlot<T>[] slots;
 
         public event StackInventoryAddEventHandler<T>? OnAdd;
+        public event StackInventoryGetEventHandler<T>? OnGet;
 
         public override IInventoryStackSlot<T> this[int index] => this.slots[index];
 
@@ -187,104 +188,153 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when every item is retrieved from the inventory. 
+        /// </remarks>
         public virtual T[] Clear()
         {
+            if(this.IsEmpty)
+                return Array.Empty<T>();
+
             var items = new List<T>();
+            var events = new List<StackInventoryGetItemEventData<T>>();
 
             for (int i = 0; i < this.Size; i++)
             {
-                items.AddRange(this.slots[i].GetAll());
+                var slotItems = this.slots[i].GetAll();
+                if(slotItems.Length > 0)
+                    events.Add(new(slotItems, i));
+
+                items.AddRange(slotItems);
             }
+            if(events.Count > 0)
+                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
 
             return items.ToArray();
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
+        /// </remarks>
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
         public virtual T[] GetAll(int index)
         {
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].GetAll();
+            var items =  this.slots[index].GetAll();
+            if(items.Length > 0)
+                this.OnGet?.Invoke(this, (items, index));
+            return items;
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] GetAll(T item)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
-
-            for (int i = 0; i < this.Size; i++)
+            var events = new List<StackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                if (this.slots[i].Contains(item))
+                var slot = this.slots[index];
+                if (slot.Contains(item))
                 {
-                    items.AddRange(this.slots[i].GetAll());
+                    var slotItems = slot.GetAll();
+                    events.Add(new(slotItems, index));
+                    items.AddRange(slotItems);
                 }
             }
+            if(events.Count > 0)
+                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
 
             return items.ToArray();
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when one item from <paramref name="index"/> are retrieved.
+        /// </remarks>
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T? Get(int index)
         {
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
             
-            return this.slots[index].Get();
+            var item = this.slots[index].Get();
+            if(item is not null)
+                this.OnGet?.Invoke(this, (new[]{ item }, index));
+            return item;
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                if (this.slots[i].Contains(item))
+                var slot = this.slots[index];
+                if (slot.Contains(item))
                 {
-                    return this.slots[i].Get();
+                    var result = slot.Get();
+                    if(result is not null)
+                        this.OnGet?.Invoke(this, (new[]{ result }, index));
+                    return result;
                 }
             }
             return default;
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items in an <paramref name="amount"/> from the inventory that contains <paramref name="item"/> are retrieved.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T[] Get(T item, int amount)
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
+            var events = new List<StackInventoryGetItemEventData<T>>();
             var remainingAmount = amount;
             for (int i = 0; i < this.Size; i++)
             {
-                if (this.slots[i].Contains(item))
+                var slot = this.slots[i];
+                if (slot.Contains(item))
                 {
-                    var slotItems = this.slots[i].Get(remainingAmount);
+                    var slotItems = slot.Get(remainingAmount);
+                    events.Add(new(slotItems, i));
                     items.AddRange(slotItems);
                     remainingAmount -= slotItems.Length;
                     if (remainingAmount <= 0)
                         break;
                 }
-
             }
-
+            if(events.Count > 0)
+                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));    
             return items.ToArray();
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items in an <paramref name="amount"/> from the <paramref name="index"/> are retrieved.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(int index, int amount)
@@ -295,14 +345,17 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            return this.slots[index].Get(amount);
+            var items = this.slots[index].Get(amount);
+            if(items.Length > 0)
+                this.OnGet?.Invoke(this, (items, index));
+            return items;
         }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual int GetCount(T item)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             var amount = 0;

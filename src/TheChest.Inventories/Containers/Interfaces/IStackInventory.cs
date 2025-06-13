@@ -1,5 +1,4 @@
 ﻿using TheChest.Core.Containers.Interfaces;
-using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Events.Stack;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -14,6 +13,8 @@ namespace TheChest.Inventories.Containers.Interfaces
     public interface IStackInventory<T> : IStackContainer<T>
     {
         event StackInventoryAddEventHandler<T>? OnAdd;
+
+        event StackInventoryGetEventHandler<T>? OnGet;
 
         #region IStackInventory
         /// <summary>
