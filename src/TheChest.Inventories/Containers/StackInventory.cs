@@ -1,5 +1,6 @@
 ﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
+using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -30,10 +31,17 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
+        /// <remarks>
+        /// <para>
+        /// It searches for an <see cref="IInventoryStackSlot{T}"/> that already contains the same type of <paramref name="item"/>, 
+        /// if it finds it, it adds it to that slot, 
+        /// else, it adds to the first empty slot.
+        /// </para>
+        /// <para>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory. 
+        /// </para>
+        /// </remarks>
         /// <returns>true if is possible to add the items</returns>
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
@@ -42,25 +50,27 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
 
             var fallbackIndex = -1;
-            for (var i = 0; i < this.Size; i++)
+            for (var index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.CanAdd(item))
                 {
                     if (slot.Contains(item))
                     {
                         slot.Add(ref item);
+                        this.OnAdd?.Invoke(this, (item, index, 1));
                         return true; 
                     }
 
                     if(fallbackIndex == -1)
-                        fallbackIndex = i;
+                        fallbackIndex = index;
                 }
             }
 
             if(fallbackIndex != -1)
             {
                 this.slots[fallbackIndex].Add(ref item);
+                this.OnAdd?.Invoke(this, (item, fallbackIndex, 1));
                 return true;
             }
 
@@ -68,12 +78,15 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <summary>
+        /// <remarks>
+        /// <para>
+        /// The method fires <see cref="OnAdd"/> event when 
+        /// </para>
         /// <para>
         /// Warning: this method does not accept different items in the same array. 
         /// This feature will be added in <see href="https://github.com/The-Chest/TheChest.Inventories/issues/42"/>
         /// </para>
-        /// </summary>
+        /// </remarks>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0)
@@ -105,6 +118,8 @@ namespace TheChest.Inventories.Containers
                 if (items.Length == 0)
                     break;
             }
+            
+            //this.OnAdd?.Invoke(this, (items, index, ));
 
             return items;
         }
@@ -120,17 +135,23 @@ namespace TheChest.Inventories.Containers
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
             
-            var slot = this.Slots[index];
+            var slot = this.slots[index];
 
             if (!slot.CanAdd(item))
             {
                 if (slot.CanReplace(item) && replace)
+                {
+                    //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
+                    this.OnAdd?.Invoke(this, (item, index, 1));
+                    
                     return slot.Replace(ref item);
+                }
 
                 return new T[1] { item };
             }
 
             slot.Add(ref item);
+            this.OnAdd?.Invoke(this, (item, index, 1));
 
             return Array.Empty<T>();
         }

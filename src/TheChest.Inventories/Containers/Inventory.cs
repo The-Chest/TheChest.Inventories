@@ -121,7 +121,7 @@ namespace TheChest.Inventories.Containers
             if (replace)
             {
                 result = this.slots[index].Replace(item);
-                this.OnAdd?.Invoke(this, (item, index));//TODO: change it to OnReplace when #75 is implemented
+                this.OnAdd?.Invoke(this, (item, index));//TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
             }
             else
             {

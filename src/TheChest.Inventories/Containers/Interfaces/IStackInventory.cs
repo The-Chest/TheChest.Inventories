@@ -63,7 +63,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
-        /// <returns>true if the item could be added</returns>
+        /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
         #endregion
 
