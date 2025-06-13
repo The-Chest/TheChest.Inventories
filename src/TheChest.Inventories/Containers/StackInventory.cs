@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Containers
                     if (slot.Contains(item))
                     {
                         slot.Add(ref item);
-                        this.OnAdd?.Invoke(this, (item, index, 1));
+                        this.OnAdd?.Invoke(this, (new[]{ item }, index));
                         return true; 
                     }
 
@@ -70,7 +70,7 @@ namespace TheChest.Inventories.Containers
             if(fallbackIndex != -1)
             {
                 this.slots[fallbackIndex].Add(ref item);
-                this.OnAdd?.Invoke(this, (item, fallbackIndex, 1));
+                this.OnAdd?.Invoke(this, (new[] { item }, fallbackIndex));
                 return true;
             }
 
@@ -125,6 +125,9 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> of the inventory. 
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
         public virtual T[] AddAt(T item, int index, bool replace = true)
@@ -142,7 +145,7 @@ namespace TheChest.Inventories.Containers
                 if (slot.CanReplace(item) && replace)
                 {
                     //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
-                    this.OnAdd?.Invoke(this, (item, index, 1));
+                    this.OnAdd?.Invoke(this, (new []{ item }, index));
                     
                     return slot.Replace(ref item);
                 }
@@ -151,17 +154,17 @@ namespace TheChest.Inventories.Containers
             }
 
             slot.Add(ref item);
-            this.OnAdd?.Invoke(this, (item, index, 1));
+            this.OnAdd?.Invoke(this, (new[] { item }, index));
 
             return Array.Empty<T>();
         }
 
         /// <inheritdoc/>
-        /// <summary>
+        /// <remarks>
         /// <para>
         /// If <paramref name="replace"/> is true, it replaces the item from <paramref name="index"/>
         /// </para>
-        /// </summary>
+        /// </remarks>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T[] AddAt(T[] items, int index, bool replace = true)

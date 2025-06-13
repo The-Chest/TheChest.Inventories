@@ -1,6 +1,6 @@
 ﻿namespace TheChest.Inventories.Containers.Events.Stack
 {
-    public record struct StackInventoryAddItemEventData<T>(T Item, int Index, int Amount);
+    public record struct StackInventoryAddItemEventData<T>(T[] Items, int Index);
 
     public sealed class StackInventoryAddEventArgs<T> : EventArgs
     {
@@ -10,28 +10,26 @@
             Data = data;
         }
 
-        public static implicit operator StackInventoryAddEventArgs<T>((T Item, int Index, int Amount) data)
+        public static implicit operator StackInventoryAddEventArgs<T>((T[] Items, int Index) data)
         {
             return new StackInventoryAddEventArgs<T>(
                 new StackInventoryAddItemEventData<T>[] {
                     new(
-                        Item: data.Item,
-                        Index: data.Index,
-                        Amount: data.Amount
+                        Items: data.Items,
+                        Index: data.Index
                     )
                 }
             );
         }
 
-        public static implicit operator StackInventoryAddEventArgs<T>((T[] Items, int[] Indexes, int[] Amounts) data)
+        public static implicit operator StackInventoryAddEventArgs<T>((T[][] Items, int[] Indexes, int[] Amounts) data)
         {
             return new StackInventoryAddEventArgs<T>(
                 data.Items.Select(
-                (item, i) =>
+                (items, i) =>
                     new StackInventoryAddItemEventData<T>(
-                        Item: item,
-                        Index: data.Indexes[i],
-                        Amount: data.Amounts[i]
+                        Items: items,
+                        Index: data.Indexes[i]
                     )
                 ).ToArray()
             );
