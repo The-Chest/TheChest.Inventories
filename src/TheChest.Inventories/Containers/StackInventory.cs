@@ -11,7 +11,9 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class StackInventory<T> : StackContainer<T>, IStackInventory<T>
     {
-        protected readonly IInventoryStackSlot<T>[] slots;
+        protected new readonly IInventoryStackSlot<T>[] slots;
+
+        public event StackInventoryAddEventHandler<T>? OnAdd;
 
         public override IInventoryStackSlot<T> this[int index] => this.slots[index];
 
