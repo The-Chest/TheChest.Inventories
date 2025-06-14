@@ -12,10 +12,17 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">An item type</typeparam>
     public interface IStackInventory<T> : IStackContainer<T>
     {
+        /// <summary>
+        /// Raised when an amount of item is added to an index of the inventory
+        /// </summary>
         event StackInventoryAddEventHandler<T>? OnAdd;
-
+        /// <summary>
+        /// Raised when an amount of item is requested from an index of the inventory
+        /// </summary>
         event StackInventoryGetEventHandler<T>? OnGet;
-
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
         event StackInventoryMoveEventHandler<T>? OnMove;
 
         #region IStackInventory

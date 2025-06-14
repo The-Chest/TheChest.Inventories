@@ -32,6 +32,7 @@
             );
         }
     }
+    
     /// <summary>
     /// Event handler triggered when one or more items of the same type are added to an inventory.
     /// </summary>
