@@ -10,6 +10,14 @@
             Assert.That(items, Is.Empty);
         }
 
+        [Test]
+        public void GetAllFrom_EmptySlot_DoesNotCallOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty slot");
+            inventory.GetAll(0);
+        }
+
         [TestCase(-1)]
         [TestCase(100)]
         public void GetAllFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
@@ -50,6 +58,27 @@
                 Assert.That(inventory[index].IsEmpty, Is.True);
                 Assert.That(inventory[index].Content, Is.Empty);
             });
+        }
+
+        [Test]
+        public void GetAllFrom_SlotWithItems_CallsOnGetEvent()
+        {
+            var index = this.random.Next(0, 20);
+            var stackSize = this.random.Next(1, 20);
+            var slotItem = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            inventory.OnGet += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.FirstOrDefault();
+                    Assert.That(args.Data, Has.Count.EqualTo(1));
+                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(firstEvent.Index, Is.EqualTo(index));
+                });
+            };
+
+            inventory.GetAll(index);
         }
     }
 }
