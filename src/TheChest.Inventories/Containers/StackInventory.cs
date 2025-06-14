@@ -54,18 +54,18 @@ namespace TheChest.Inventories.Containers
             for (var index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (slot.CanAdd(item))
+                if (!slot.CanAdd(item))
+                    continue;
+                
+                if (slot.Contains(item))
                 {
-                    if (slot.Contains(item))
-                    {
-                        slot.Add(ref item);
-                        this.OnAdd?.Invoke(this, (new[]{ item }, index));
-                        return true; 
-                    }
-
-                    if(fallbackIndex == -1)
-                        fallbackIndex = index;
+                    slot.Add(ref item);
+                    this.OnAdd?.Invoke(this, (new[]{ item }, index));
+                    return true; 
                 }
+
+                if(fallbackIndex == -1)
+                    fallbackIndex = index;
             }
 
             if(fallbackIndex != -1)
