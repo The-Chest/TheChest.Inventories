@@ -81,46 +81,54 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         /// <remarks>
         /// <para>
-        /// The method fires <see cref="OnAdd"/> event when 
+        /// The method fires <see cref="OnAdd"/> event when every possible item is added to the inventory.
         /// </para>
         /// <para>
         /// Warning: this method does not accept different items in the same array. 
         /// This feature will be added in <see href="https://github.com/The-Chest/TheChest.Inventories/issues/42"/>
         /// </para>
         /// </remarks>
+        /// <returns>Items from params that were not added to the inventory</returns>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0)
                 return items;
 
             var fallbackIndexes = new List<int>();
-            for (var i = 0; i < this.Size; i++)
+            var events = new List<StackInventoryAddItemEventData<T>>();
+            for (var index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.CanAdd(items))
+                    continue;
+
+                if (slot.Contains(items[0]))
                 {
-                    if (slot.Contains(items[0]))
-                    {
-                        slot.Add(ref items);
-                        if (items.Length == 0)
-                            break;
+                    var addedItems = items.ToArray();
+                    slot.Add(ref items);
 
-                        continue;
-                    }
+                    events.Add(new(addedItems[items.Length..], index));
+                    if (items.Length == 0)
+                        break;
 
-                    fallbackIndexes.Add(i);
+                    continue;
                 }
+
+                if(fallbackIndexes.Count <= items.Length)
+                    fallbackIndexes.Add(index);
             }
 
             foreach (var index in fallbackIndexes)
             {
-                var slot = this.slots[index];
-                slot.Add(ref items);
+                var addedItems = items.ToArray();
+                this.slots[index].Add(ref items);
+                events.Add(new(addedItems[items.Length..], index));
                 if (items.Length == 0)
                     break;
             }
-            
-            //this.OnAdd?.Invoke(this, (items, index, ));
+
+            if(events.Count > 0)
+                this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events));
 
             return items;
         }

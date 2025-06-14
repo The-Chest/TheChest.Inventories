@@ -21,19 +21,6 @@
                 }
             );
         }
-
-        public static implicit operator StackInventoryAddEventArgs<T>((T[][] Items, int[] Indexes, int[] Amounts) data)
-        {
-            return new StackInventoryAddEventArgs<T>(
-                data.Items.Select(
-                (items, i) =>
-                    new StackInventoryAddItemEventData<T>(
-                        Items: items,
-                        Index: data.Indexes[i]
-                    )
-                ).ToArray()
-            );
-        }
     }
 
     public delegate void StackInventoryAddEventHandler<T>(object? sender, StackInventoryAddEventArgs<T> e);
