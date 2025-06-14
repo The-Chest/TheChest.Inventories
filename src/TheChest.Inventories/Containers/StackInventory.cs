@@ -1,5 +1,6 @@
 ﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
+using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
@@ -16,6 +17,7 @@ namespace TheChest.Inventories.Containers
 
         public event StackInventoryAddEventHandler<T>? OnAdd;
         public event StackInventoryGetEventHandler<T>? OnGet;
+        public event StackInventoryMoveEventHandler<T>? OnMove;
 
         public override IInventoryStackSlot<T> this[int index] => this.slots[index];
 
@@ -389,10 +391,21 @@ namespace TheChest.Inventories.Containers
 
             if(origin == target)
                 return;
+            //TODO: compare the size of both slots are equivalent
 
             var items = this.slots[origin].GetAll();
             var oldItems = this.slots[target].Replace(ref items);
-            this.slots[origin].Replace(ref oldItems);
+
+            var events = new List<StackInventoryMoveItemEventData<T>>();
+            if (items is not null)
+                events.Add(new(items, origin, target));
+
+            if (oldItems is not null)
+            {
+                this.slots[origin].Replace(ref oldItems);
+                events.Add(new(oldItems, target, origin));
+            }
+            this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
         }
     }
 }

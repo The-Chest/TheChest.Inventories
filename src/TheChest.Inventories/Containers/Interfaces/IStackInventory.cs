@@ -16,6 +16,8 @@ namespace TheChest.Inventories.Containers.Interfaces
 
         event StackInventoryGetEventHandler<T>? OnGet;
 
+        event StackInventoryMoveEventHandler<T>? OnMove;
+
         #region IStackInventory
         /// <summary>
         /// Gets an <see cref="item"/> inside a slot
