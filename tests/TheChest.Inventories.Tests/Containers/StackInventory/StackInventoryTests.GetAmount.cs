@@ -28,6 +28,15 @@
         }
 
         [Test]
+        public void GetAmount_EmptyInventory_DoesNotCallOnGetEvent()
+        {
+            var item = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            inventory.Get(item, 10);
+        }
+
+        [Test]
         public void GetAmount_InventoryWithItems_ReturnsSearchedItems()
         {
             var inventorySize = this.random.Next(10, 20);
@@ -62,10 +71,29 @@
         }
 
         [Test]
+        public void GetAmount_InventoryWithItems_CallsOnGetEvent()
+        {
+            var inventorySize = this.random.Next(10, 20);
+            var stackSize = this.random.Next(1, 20);
+            var slotItem = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+            inventory.OnGet += (sender, args) => {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(stackSize));
+                    Assert.That(firstEvent.Index, Is.EqualTo(0));
+                });
+            };  
+            inventory.Get(slotItem, stackSize);
+        }
+
+        [Test]
         public void GetAmount_InventoryWithItems_RemovesItemsFromMultipleSlotsInOrder()
         {
             var inventorySize = this.random.Next(10, 20);
-            var stackSize = this.random.Next(2, 20);
+            var stackSize = this.random.Next(3, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
 
@@ -76,6 +104,34 @@
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(0));
                 Assert.That(inventory[1].StackAmount, Is.EqualTo(2));
             });
+        }
+
+        [Test]
+        public void GetAmount_InventoryWithItems_CallsOnGetEventFromMultipleSlotsInOrder()
+        {
+            var inventorySize = this.random.Next(10, 20);
+            var stackSize = this.random.Next(3, 20);
+            var slotItem = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+            inventory.OnGet += (sender, args) => {
+                Assert.That(args.Data, Has.Count.EqualTo(2));
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(stackSize));
+                    Assert.That(firstEvent.Index, Is.EqualTo(0));
+                });
+                Assert.Multiple(() =>
+                {
+                    var secondEvent = args.Data.Skip(1).First();
+                    Assert.That(secondEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(secondEvent.Items, Has.Length.EqualTo(stackSize - 2));
+                    Assert.That(secondEvent.Index, Is.EqualTo(1));
+                });
+            };
+
+            inventory.Get(slotItem, stackSize + (stackSize - 2));
         }
     }
 }
