@@ -150,23 +150,23 @@ namespace TheChest.Inventories.Containers
             
             var slot = this.slots[index];
 
-            if (!slot.CanAdd(item))
+            if (slot.CanAdd(item)) 
             {
-                if (slot.CanReplace(item) && replace)
-                {
-                    //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
-                    this.OnAdd?.Invoke(this, (new []{ item }, index));
-                    
-                    return slot.Replace(ref item);
-                }
+                slot.Add(ref item);
+                this.OnAdd?.Invoke(this, (new[] { item }, index));
 
-                return new T[1] { item };
+                return Array.Empty<T>();
+            }
+            
+            if (slot.CanReplace(item) && replace)
+            {
+                //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
+                this.OnAdd?.Invoke(this, (new []{ item }, index));
+                
+                return slot.Replace(ref item);
             }
 
-            slot.Add(ref item);
-            this.OnAdd?.Invoke(this, (new[] { item }, index));
-
-            return Array.Empty<T>();
+            return new T[1] { item };
         }
 
         /// <inheritdoc/>
