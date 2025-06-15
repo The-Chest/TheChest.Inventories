@@ -188,10 +188,21 @@ namespace TheChest.Inventories.Containers
             var slot = this.slots[index];
 
             if (slot.CanAdd(items))
+            {
+                var addedItems = items.ToArray();
                 slot.Add(ref items);
+                this.OnAdd?.Invoke(this, (addedItems[items.Length..], index));
+            }
 
             if (replace && slot.CanReplace(items))
-                return slot.Replace(ref items);
+            {
+                var replacedItems = items.ToArray();
+                var oldItems = slot.Replace(ref items);
+
+                //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
+                this.OnAdd?.Invoke(this, (replacedItems[items.Length..], index));
+                return oldItems;
+            }
 
             return items;
         }
