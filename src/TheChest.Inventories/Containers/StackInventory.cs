@@ -100,23 +100,23 @@ namespace TheChest.Inventories.Containers
             for (var index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (slot.CanAdd(items))
+                if (!slot.CanAdd(items))
                     continue;
 
-                if (slot.Contains(items[0]))
+                if (!slot.Contains(items[0]))
                 {
-                    var addedItems = items.ToArray();
-                    slot.Add(ref items);
-
-                    events.Add(new(addedItems[items.Length..], index));
-                    if (items.Length == 0)
-                        break;
+                    if(fallbackIndexes.Count <= items.Length)
+                        fallbackIndexes.Add(index);
 
                     continue;
                 }
 
-                if(fallbackIndexes.Count <= items.Length)
-                    fallbackIndexes.Add(index);
+                var addedItems = items.ToArray();
+                slot.Add(ref items);
+
+                events.Add(new(addedItems[items.Length..], index));
+                if (items.Length == 0)
+                    break;
             }
 
             foreach (var index in fallbackIndexes)
