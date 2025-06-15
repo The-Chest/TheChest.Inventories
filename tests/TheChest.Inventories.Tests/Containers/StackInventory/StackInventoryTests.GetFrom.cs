@@ -19,6 +19,14 @@
         }
 
         [Test]
+        public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            inventory.Get(0);
+        }
+
+        [Test]
         public void GetFrom_SlotWithItems_ReturnsItem()
         {
             var index = this.random.Next(0, 20);
@@ -42,6 +50,27 @@
             inventory.Get(index);
 
             Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize - 1));
+        }
+
+        [Test]
+        public void GetFrom_SlotWithItems_CallsOnGetEvent()
+        {
+            var stackSize = this.random.Next(1, 20);
+            var slotItem = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+
+            var index = this.random.Next(0, 20);
+            inventory.OnGet += (sender, args) => {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(1));
+                    Assert.That(firstEvent.Index, Is.EqualTo(index));
+                });
+            };
+            inventory.Get(index);
         }
     }
 }
