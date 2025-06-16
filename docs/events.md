@@ -136,3 +136,49 @@ inventory.Move(0, 1);
 //This will fire an event with the one item moved (the index 9 is empty)
 inventory.Move(9, 2);
 ```
+
+## Stack Inventory events
+
+### StackInventoryGetEventHandler
+
+Fires when any amount of item is returned from the inventory.
+
+#### Signature
+```csharp
+public delegate void StackInventoryGetEventHandler<T>(object? sender, StackInventoryGetEventArgs<T> e);
+```
+
+#### EventArgs
+
+| Property                  | Type                                                     | Description                                        |
+|---------------------------|----------------------------------------------------------|----------------------------------------------------|
+| sender                    | `object`                                                 | Inventory responsible for firing the event         |
+| args                      | `StackInventoryGetEventArgs`                             | Class that holds data of the event                 |
+| args.Data                 | `IReadOnlyCollection<StackInventoryGetItemEventData<T>>` | An array with all items and its respective indexes |
+| args.Data[].Items[]       | `Array.Generic`                                          | Found items                                        |
+| args.Data[].Index         | `Integer`                                                | Index number where the `Items` were found          |
+
+#### Example
+
+```csharp
+using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventoryStackSlot<string>[10];
+for (int i = 0; i < slots.Length; i++)
+{
+    slots[i] = new InventoryStackSlot<string>($"Item_{i}", 1, 10);
+}
+
+var inventory = new StackInventory<string>();
+inventory.OnGet += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"{action.Items.Length} Items returned from index {action.Index}");
+    }
+};
+
+//Any method except GetCount will fire the event
+var result = inventory.Get(0, 10);
+Console.WriteLine($"{result.Length} Items returned from index {0}");
+```
