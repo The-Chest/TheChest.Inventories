@@ -1,6 +1,7 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
+using TheChest.Core.Slots.Extensions;
 
 namespace TheChest.Inventories.Slots
 {
@@ -65,7 +66,7 @@ namespace TheChest.Inventories.Slots
                     break;
                 }
             }
-            item = default;
+            item = default!;
         }
 
         /// <summary>
@@ -79,26 +80,24 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
         /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
-        public virtual void Add(T[] items)//TODO: return not added items
+        public virtual T[] Add(T[] items)
         {
-            //TODO: improve this method
+            //TODO: improve this method validations
             if (items.Length == 0)
                 throw new ArgumentException("Cannot add empty list of items", nameof(items));
 
             for (int i = 1; i < items.Length; i++)
             {
                 if (!items[0]!.Equals(items[i]))
-                {
                     throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
-                }
 
-                if (!this.IsEmpty && !this.Content.First()!.Equals(items[i]))//TODO: use Contains
-                {
+                if (!this.IsEmpty && !this.Contains(items[i]))//TODO: use Contains
                     throw new ArgumentException($"Param \"items\" must have every item equal to the Current item on the Slot ({i})", nameof(items));
-                }
             }           
 
             this.AddItems(ref items);
+
+            return items;
         }
        
         /// <summary>

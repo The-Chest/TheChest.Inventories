@@ -112,18 +112,18 @@ namespace TheChest.Inventories.Containers
                 }
 
                 var addedItems = items.ToArray();
-                slot.Add(items);
+                items = slot.Add(items);
 
                 events.Add(new(addedItems[items.Length..], index));
                 if (items.Length == 0)
                     break;
             }
 
+            var notAddedItems = items.ToArray();
             foreach (var index in fallbackIndexes)
             {
-                var addedItems = items.ToArray();
-                this.slots[index].Add(items);
-                events.Add(new(addedItems[items.Length..], index));
+                notAddedItems = this.slots[index].Add(items);
+                events.Add(new(items[notAddedItems.Length..], index));
                 if (items.Length == 0)
                     break;
             }
@@ -131,7 +131,7 @@ namespace TheChest.Inventories.Containers
             if(events.Count > 0)
                 this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events));
 
-            return items;
+            return notAddedItems;
         }
 
         /// <inheritdoc/>
@@ -189,9 +189,9 @@ namespace TheChest.Inventories.Containers
 
             if (slot.CanAdd(items))
             {
-                var addedItems = items.ToArray();
-                slot.Add(items);
-                this.OnAdd?.Invoke(this, (addedItems[items.Length..], index));
+                var notAddedItems = slot.Add(items);
+                this.OnAdd?.Invoke(this, (items[notAddedItems.Length..], index));
+                return notAddedItems;
             }
 
             if (replace && slot.CanReplace(items))

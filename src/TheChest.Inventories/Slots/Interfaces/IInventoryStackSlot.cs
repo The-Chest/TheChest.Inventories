@@ -41,8 +41,9 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <summary>
         /// Adds an array of items to the slot.
         /// </summary>
-        /// <param name="items">items to bem added to the slot</param>
-        void Add(T[] items);
+        /// <param name="items">items to be added to the slot</param>
+        /// <returns>The items that were not added to the slot</returns>
+        T[] Add(T[] items);
         /// <summary>
         /// Checks if is possible to replace an item
         /// </summary>
