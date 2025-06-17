@@ -31,7 +31,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="item">The item to be added</param>
         /// <returns>True if the value is successful added</returns>
-        void Add(T item);
+        bool Add(T item);
         /// <summary>
         /// Adds an array of items to the slot.
         /// </summary>

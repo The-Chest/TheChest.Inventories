@@ -50,6 +50,7 @@ namespace TheChest.Inventories.Slots
 
             items = items[addAmount..];
         }
+       
         /// <summary>
         /// Adds an item inside the Content with no previous validation.
         /// </summary>
@@ -99,6 +100,7 @@ namespace TheChest.Inventories.Slots
 
             this.AddItems(ref items);
         }
+       
         /// <summary>
         /// <inheritdoc/>
         /// <para>
@@ -118,14 +120,20 @@ namespace TheChest.Inventories.Slots
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
-        public virtual void Add(T item)// TODO: return true or false
+        public virtual bool Add(T item)
         {
             if(item == null)
                 throw new ArgumentNullException(nameof(item));
 
             if (this.CanAdd(item))
+            {
                 this.AddItem(ref item);
+                return true;
+            }
+
+            return false;
         }
+       
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
         public void Add(ref T item)

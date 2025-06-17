@@ -60,9 +60,9 @@ namespace TheChest.Inventories.Containers
                 
                 if (slot.Contains(item))
                 {
-                    slot.Add(item);
+                    var added = slot.Add(item);
                     this.OnAdd?.Invoke(this, (new[] { item }, index));
-                    return true; 
+                    return added; 
                 }
 
                 if(fallbackIndex == -1)
@@ -71,9 +71,9 @@ namespace TheChest.Inventories.Containers
 
             if(fallbackIndex != -1)
             {
-                this.slots[fallbackIndex].Add(item);
+                var added = this.slots[fallbackIndex].Add(item);
                 this.OnAdd?.Invoke(this, (new[] { item }, fallbackIndex));
-                return true;
+                return added;
             }
 
             return false;
@@ -160,10 +160,10 @@ namespace TheChest.Inventories.Containers
             
             if (slot.CanReplace(item) && replace)
             {
+                var result = slot.Replace(ref item);
                 //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
                 this.OnAdd?.Invoke(this, (new []{ item }, index));
-                
-                return slot.Replace(ref item);
+                return result;
             }
 
             return new T[1] { item };
