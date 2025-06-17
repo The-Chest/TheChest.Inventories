@@ -13,13 +13,10 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
-        /// <param name="items"><inheritdoc/></param>
         public InventoryStackSlot(T[] items) : base(items) { }
         /// <summary>
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
-        /// <param name="items"><inheritdoc cref="StackSlot{T}.StackSlot(T[], int)" path="/param[@name='items']" /></param>
-        /// <param name="maxStackAmount"><inheritdoc cref="StackSlot{T}.StackSlot(T[], int)" path="/param[@name='maxStackAmount']"/></param>
         public InventoryStackSlot(T[] items, int maxStackAmount) : base(items, maxStackAmount) { }
 
         /// <summary>
@@ -28,7 +25,7 @@ namespace TheChest.Inventories.Slots
         /// It's recommended to use <see cref="IInventoryStackSlot{T}.Add(ref T[])"/> or <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> to ensure no invalid items are added
         /// </para>
         /// </summary>
-        /// <param name="items">items to be added to <see cref="ISlot{T}.Content"/></param>
+        /// <param name="items">items to be added to <see cref="ISlot{T}.Content"/> (and the reference will be removed after)</param>
         protected virtual void AddItems(ref T[] items)
         {
             var availableAmount = this.MaxStackAmount - this.StackAmount;
@@ -105,10 +102,7 @@ namespace TheChest.Inventories.Slots
             this.AddItems(ref items);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
         public virtual void Add(T item)
         {
@@ -119,10 +113,7 @@ namespace TheChest.Inventories.Slots
                 this.AddItem(ref item);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
         /// <returns>Returns false if is Full or Contains item of a different type than <paramref name="item"/></returns>
         public virtual bool CanAdd(T item)
         {
@@ -214,10 +205,7 @@ namespace TheChest.Inventories.Slots
             return this.Get(1).FirstOrDefault();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
         /// <returns>false if the array is bigger than <see cref="IStackSlot{T}.MaxStackAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
         {
@@ -239,10 +227,7 @@ namespace TheChest.Inventories.Slots
             return true;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
         /// <returns>false if the param <paramref name="item"/> is null</returns>
         public virtual bool CanReplace(T item)
         {
@@ -252,10 +237,7 @@ namespace TheChest.Inventories.Slots
             return true;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
         /// <returns>The current items from <see cref="ISlot{T}.Content"/> or <paramref name="items"/> if is not possible to replace</returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
         /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
@@ -293,9 +275,7 @@ namespace TheChest.Inventories.Slots
             return items;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         /// <param name="item">the item that will be attempt to replace</param>
         /// <returns>null if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
