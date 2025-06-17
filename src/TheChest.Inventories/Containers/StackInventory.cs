@@ -112,7 +112,7 @@ namespace TheChest.Inventories.Containers
                 }
 
                 var addedItems = items.ToArray();
-                slot.Add(ref items);
+                slot.Add(items);
 
                 events.Add(new(addedItems[items.Length..], index));
                 if (items.Length == 0)
@@ -122,7 +122,7 @@ namespace TheChest.Inventories.Containers
             foreach (var index in fallbackIndexes)
             {
                 var addedItems = items.ToArray();
-                this.slots[index].Add(ref items);
+                this.slots[index].Add(items);
                 events.Add(new(addedItems[items.Length..], index));
                 if (items.Length == 0)
                     break;
@@ -190,7 +190,7 @@ namespace TheChest.Inventories.Containers
             if (slot.CanAdd(items))
             {
                 var addedItems = items.ToArray();
-                slot.Add(ref items);
+                slot.Add(items);
                 this.OnAdd?.Invoke(this, (addedItems[items.Length..], index));
             }
 

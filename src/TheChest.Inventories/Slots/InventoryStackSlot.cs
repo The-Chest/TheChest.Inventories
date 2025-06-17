@@ -78,13 +78,11 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
         /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
-        public virtual void Add(ref T[] items)
+        public virtual void Add(T[] items)//TODO: return not added items
         {
             //TODO: improve this method
             if (items.Length == 0)
-            {
                 throw new ArgumentException("Cannot add empty list of items", nameof(items));
-            }
 
             for (int i = 1; i < items.Length; i++)
             {
@@ -104,7 +102,7 @@ namespace TheChest.Inventories.Slots
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
-        public virtual void Add(T item)
+        public virtual void Add(T item)// TODO: return true or false
         {
             if(item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -260,14 +258,14 @@ namespace TheChest.Inventories.Slots
 
             if(this.IsEmpty) 
             {
-                this.Add(ref items);
+                this.Add(items);
                 return Array.Empty<T>();
             }
 
             var result = this.GetAll();
             if (this.CanAdd(items))
             {
-                this.Add(ref items);
+                this.Add(items);
                 return result; 
             }
 

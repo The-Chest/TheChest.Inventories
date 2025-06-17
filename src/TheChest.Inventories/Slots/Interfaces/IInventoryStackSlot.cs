@@ -30,7 +30,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Adds an array of items to the slot.
         /// </summary>
         /// <param name="items">items to bem added to the slot</param>
-        void Add(ref T[] items);
+        void Add(T[] items);
         /// <summary>
         /// Checks if is possible to replace an item
         /// </summary>
