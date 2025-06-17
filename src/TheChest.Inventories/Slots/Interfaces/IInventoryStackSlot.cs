@@ -24,8 +24,20 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Adds an item to the slot
         /// </summary>
         /// <param name="item">The item to be added</param>
+        [Obsolete("Use Add(T item) instead to avoid reference issues. This method will be removed.")]
+        void Add(ref T item);
+        /// <summary>
+        /// Adds an item to the slot
+        /// </summary>
+        /// <param name="item">The item to be added</param>
         /// <returns>True if the value is successful added</returns>
         void Add(T item);
+        /// <summary>
+        /// Adds an array of items to the slot.
+        /// </summary>
+        /// <param name="items">items to bem added to the slot</param>
+        [Obsolete("Use Add(T[] items) instead to avoid reference issues. This method will be removed.")]
+        void Add(ref T[] items);
         /// <summary>
         /// Adds an array of items to the slot.
         /// </summary>

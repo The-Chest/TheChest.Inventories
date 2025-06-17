@@ -99,6 +99,22 @@ namespace TheChest.Inventories.Slots
 
             this.AddItems(ref items);
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// <para>
+        /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
+        /// </para>
+        /// <para>
+        /// Use <see cref="IInventoryStackSlot{T}.TryAdd(ref T[])"/> if you don't want to handle these exceptions or after <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> 
+        /// </para>
+        /// </summary>
+        /// <param name="items"><inheritdoc/></param>
+        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
+        public void Add(ref T[] items)
+        {
+            this.Add(items);
+            items = default;
+        }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
@@ -109,6 +125,13 @@ namespace TheChest.Inventories.Slots
 
             if (this.CanAdd(item))
                 this.AddItem(ref item);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
+        public void Add(ref T item)
+        {
+            this.Add(item);
+            item = default;
         }
 
         /// <inheritdoc/>
