@@ -30,7 +30,7 @@ namespace TheChest.Inventories.Tests.Containers
                 {
                     var firstEvent = args.Data.First();
                     Assert.That(args.Data, Has.Count.EqualTo(1));
-                    Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.EqualTo(item));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                 });
             };
@@ -70,7 +70,7 @@ namespace TheChest.Inventories.Tests.Containers
                 {
                     var firstEvent = args.Data.First();
                     Assert.That(args.Data, Has.Count.EqualTo(1));
-                    Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.EqualTo(item));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     // TODO: improve this test by improving container creation
                     // Creating a better factory will allow to create an inventory with ordered items
                     // Assert.That(firstEvent.Index, Is.EqualTo(10));
