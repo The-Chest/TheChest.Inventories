@@ -65,8 +65,9 @@ namespace TheChest.Inventories.Slots
                 {
                     this.content[i] = item;
                     break;
-                } 
+                }
             }
+            item = default;
         }
 
         /// <summary>
@@ -109,16 +110,13 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="item"><inheritdoc/></param>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
-        public virtual void Add(ref T item)
+        public virtual void Add(T item)
         {
             if(item == null)
                 throw new ArgumentNullException(nameof(item));
 
             if (this.CanAdd(item))
-            {
                 this.AddItem(ref item);
-                item = default;
-            }
         }
 
         /// <summary>
@@ -315,7 +313,7 @@ namespace TheChest.Inventories.Slots
             var result = this.GetAll();
             if (this.CanAdd(item))
             {
-                this.Add(ref item);
+                this.Add(item);
                 return result;
             }
 

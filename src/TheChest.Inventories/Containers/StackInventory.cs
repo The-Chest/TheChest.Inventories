@@ -60,8 +60,8 @@ namespace TheChest.Inventories.Containers
                 
                 if (slot.Contains(item))
                 {
-                    slot.Add(ref item);
-                    this.OnAdd?.Invoke(this, (new[]{ item }, index));
+                    slot.Add(item);
+                    this.OnAdd?.Invoke(this, (new[] { item }, index));
                     return true; 
                 }
 
@@ -71,7 +71,7 @@ namespace TheChest.Inventories.Containers
 
             if(fallbackIndex != -1)
             {
-                this.slots[fallbackIndex].Add(ref item);
+                this.slots[fallbackIndex].Add(item);
                 this.OnAdd?.Invoke(this, (new[] { item }, fallbackIndex));
                 return true;
             }
@@ -152,7 +152,7 @@ namespace TheChest.Inventories.Containers
 
             if (slot.CanAdd(item)) 
             {
-                slot.Add(ref item);
+                slot.Add(item);
                 this.OnAdd?.Invoke(this, (new[] { item }, index));
 
                 return Array.Empty<T>();
