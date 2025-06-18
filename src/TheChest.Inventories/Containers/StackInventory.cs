@@ -160,7 +160,7 @@ namespace TheChest.Inventories.Containers
             
             if (slot.CanReplace(item) && replace)
             {
-                var result = slot.Replace(ref item);
+                var result = slot.Replace(item);
                 //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
                 this.OnAdd?.Invoke(this, (new []{ item }, index));
                 return result;
@@ -197,7 +197,7 @@ namespace TheChest.Inventories.Containers
             if (replace && slot.CanReplace(items))
             {
                 var replacedItems = items.ToArray();
-                var oldItems = slot.Replace(ref items);
+                var oldItems = slot.Replace(items);
 
                 //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
                 this.OnAdd?.Invoke(this, (replacedItems[items.Length..], index));
@@ -404,7 +404,7 @@ namespace TheChest.Inventories.Containers
             //TODO: compare the size of both slots are equivalent
 
             var items = this.slots[origin].GetAll();
-            var oldItems = this.slots[target].Replace(ref items);
+            var oldItems = this.slots[target].Replace(items);
 
             var events = new List<StackInventoryMoveItemEventData<T>>();
             if (items is not null)
@@ -412,7 +412,7 @@ namespace TheChest.Inventories.Containers
 
             if (oldItems is not null)
             {
-                this.slots[origin].Replace(ref oldItems);
+                this.slots[origin].Replace(oldItems);
                 events.Add(new(oldItems, target, origin));
             }
             this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
