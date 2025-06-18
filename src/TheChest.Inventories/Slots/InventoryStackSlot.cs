@@ -99,7 +99,7 @@ namespace TheChest.Inventories.Slots
 
             return items;
         }
-       
+
         /// <summary>
         /// <inheritdoc/>
         /// <para>
@@ -111,6 +111,7 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
         /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
+        [Obsolete("Use Add(T[] items) instead to avoid reference issues. This method will be removed.")]
         public void Add(ref T[] items)
         {
             this.Add(items);
@@ -135,6 +136,7 @@ namespace TheChest.Inventories.Slots
        
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
+        [Obsolete("Use Add(T item) instead to avoid reference issues. This method will be removed.")]
         public void Add(ref T item)
         {
             this.Add(item);
