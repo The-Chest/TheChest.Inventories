@@ -39,14 +39,10 @@ namespace TheChest.Inventories.Slots
             for (int i = 0; i < this.MaxStackAmount; i++)
             {
                 if (this.content[i] is null)
-                {
                     this.content[i] = items[itemIndex++];
-                }
 
                 if (itemIndex == addAmount)
-                {
                     break;
-                }
             }
 
             items = items[addAmount..];
@@ -69,16 +65,10 @@ namespace TheChest.Inventories.Slots
             item = default!;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// <para>
+        /// <remarks>
         /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
-        /// </para>
-        /// <para>
-        /// Use <see cref="IInventoryStackSlot{T}.TryAdd(ref T[])"/> if you don't want to handle these exceptions or after <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> 
-        /// </para>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
+        /// </remarks>
         /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
         public virtual T[] Add(T[] items)
         {
@@ -91,7 +81,7 @@ namespace TheChest.Inventories.Slots
                 if (!items[0]!.Equals(items[i]))
                     throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
 
-                if (!this.IsEmpty && !this.Contains(items[i]))//TODO: use Contains
+                if (!this.IsEmpty && !this.Contains(items[i]))
                     throw new ArgumentException($"Param \"items\" must have every item equal to the Current item on the Slot ({i})", nameof(items));
             }           
 
@@ -100,16 +90,10 @@ namespace TheChest.Inventories.Slots
             return items;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// <para>
+        /// <remarks>
         /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
-        /// </para>
-        /// <para>
-        /// Use <see cref="IInventoryStackSlot{T}.TryAdd(ref T[])"/> if you don't want to handle these exceptions or after <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> 
-        /// </para>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
+        /// </remarks>
         /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
         [Obsolete("Use Add(T[] items) instead to avoid reference issues. This method will be removed.")]
         public void Add(ref T[] items)
