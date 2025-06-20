@@ -33,6 +33,23 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
+        /// <summary>
+        /// Adds an array of items to the inventory at a specific slot index and fires a <see cref="OnAdd"/> event with the items that were not added.
+        /// </summary>
+        /// <remarks>
+        /// This method does not validates the <paramref name="items"/> nor the <paramref name="index"/>. Use public Add methods validate.
+        /// </remarks>
+        /// <param name="items">Items to be added to <paramref name="index"/></param>
+        /// <param name="index">Index of to be added on <see cref="slots"/></param>
+        /// <returns>Not added <paramref name="items"/></returns>
+        protected virtual T[] AddItems(T[] items, int index)
+        {
+            var slot = this.slots[index];
+            var notAddedItems = slot.Add(items);
+            this.OnAdd?.Invoke(this, (items[notAddedItems.Length..], index));
+            return notAddedItems;
+        }
+
         /// <inheritdoc/>
         /// <remarks>
         /// <para>
@@ -111,19 +128,14 @@ namespace TheChest.Inventories.Containers
                     continue;
                 }
 
-                var addedItems = items.ToArray();
-                items = slot.Add(items);
-
-                events.Add(new(addedItems[items.Length..], index));
+                items = this.AddItems(items, index);
                 if (items.Length == 0)
                     break;
             }
 
-            var notAddedItems = items.ToArray();
             foreach (var index in fallbackIndexes)
             {
-                notAddedItems = this.slots[index].Add(items);
-                events.Add(new(items[notAddedItems.Length..], index));
+                items = this.AddItems(items, index);
                 if (items.Length == 0)
                     break;
             }
@@ -131,7 +143,7 @@ namespace TheChest.Inventories.Containers
             if(events.Count > 0)
                 this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events));
 
-            return notAddedItems;
+            return items;
         }
 
         /// <inheritdoc/>
@@ -154,7 +166,6 @@ namespace TheChest.Inventories.Containers
             {
                 slot.Add(item);
                 this.OnAdd?.Invoke(this, (new[] { item }, index));
-
                 return Array.Empty<T>();
             }
             
@@ -188,11 +199,7 @@ namespace TheChest.Inventories.Containers
             var slot = this.slots[index];
 
             if (slot.CanAdd(items))
-            {
-                var notAddedItems = slot.Add(items);
-                this.OnAdd?.Invoke(this, (items[notAddedItems.Length..], index));
-                return notAddedItems;
-            }
+                return this.AddItems(items, index);
 
             if (replace && slot.CanReplace(items))
             {
