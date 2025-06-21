@@ -38,6 +38,25 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
+        public void AddItems_EmptyInventory_CallsOnAddEvent()
+        {
+            var items = this.itemFactory.CreateMany(10);
+            var inventory = this.containerFactory.EmptyContainer();
+
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(args.Data, Has.Count.EqualTo(1));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(items.Length).And.EqualTo(items));
+                    Assert.That(firstEvent.Index, Is.EqualTo(0));
+                });
+            };
+            inventory.Add(items);
+        }
+
+        [Test]
         public void AddItems_SlotWithSameItem_AddsToSlotWithItemFirst()
         {
             var item = this.itemFactory.CreateDefault();
