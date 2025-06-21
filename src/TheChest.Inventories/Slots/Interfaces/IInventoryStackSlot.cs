@@ -18,19 +18,32 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Checks if is possible to add an array of items to the slot
         /// </summary>
         /// <param name="items">items to be checked to add</param>
-        /// <returns>true if is possible to add the item</returns>
+        /// <returns>true if is possible to add <paramref name="items"/></returns>
         bool CanAdd(T[] items);
         /// <summary>
         /// Adds an item to the slot
         /// </summary>
         /// <param name="item">The item to be added</param>
-        /// <returns>True if the value is successful added</returns>
+        [Obsolete("Use Add(T item) instead to avoid reference issues. This method will be removed.")]
         void Add(ref T item);
+        /// <summary>
+        /// Adds an item to the slot
+        /// </summary>
+        /// <param name="item">The item to be added</param>
+        /// <returns>True if the value is successful added</returns>
+        bool Add(T item);
         /// <summary>
         /// Adds an array of items to the slot.
         /// </summary>
         /// <param name="items">items to bem added to the slot</param>
+        [Obsolete("Use Add(T[] items) instead to avoid reference issues. This method will be removed.")]
         void Add(ref T[] items);
+        /// <summary>
+        /// Adds an array of items to the slot.
+        /// </summary>
+        /// <param name="items">items to be added to the slot</param>
+        /// <returns>The items that were not added to the slot</returns>
+        T[] Add(T[] items);
         /// <summary>
         /// Checks if is possible to replace an item
         /// </summary>
@@ -48,12 +61,26 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="items">items that will replace items from slots</param>
         /// <returns>old items from the slot if the replacement is possible</returns>
+        [Obsolete("Use Replace(T[] items) instead to avoid reference issues. This method will be removed.")]
         T[] Replace(ref T[] items);
+        /// <summary>
+        /// Replaces the items from the slot to <paramref name="items"/>
+        /// </summary>
+        /// <param name="items">items that will replace items from slots</param>
+        /// <returns>old items from the slot if the replacement is possible</returns>
+        T[] Replace(T[] items);
+        /// <summary>
+        /// Replaces the items from the slot to one <paramref name="item"/>
+        /// </summary>
+        /// <param name="item">The item that will replace items from slots</param>
+        /// <returns>the old items from the slot</returns>
+        T[] Replace(T item);
         /// <summary>
         /// Replaces the items from the slot to one <paramref name="item"/>
         /// </summary>
         /// <param name="item">the item that will replace items from slots</param>
         /// <returns>returns the old items from the slot</returns>
+        [Obsolete("Use Replace(T item) instead to avoid reference issues. This method will be removed.")]
         T[] Replace(ref T item);
         /// <summary>
         /// Gets a single item from the slot

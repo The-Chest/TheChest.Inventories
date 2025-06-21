@@ -44,7 +44,7 @@
     }
 
     /// <summary>
-    /// Event handler triggered when an item is added to an inventory.
+    /// Event handler triggered when one or more items of the same type are added to an inventory.
     /// </summary>
     /// <typeparam name="T">Item type</typeparam>
     /// <param name="sender">Inventory that sent the event</param>

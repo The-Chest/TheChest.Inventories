@@ -1,4 +1,5 @@
 ﻿using TheChest.Core.Containers.Interfaces;
+using TheChest.Inventories.Containers.Events.Stack;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -11,6 +12,19 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">An item type</typeparam>
     public interface IStackInventory<T> : IStackContainer<T>
     {
+        /// <summary>
+        /// Raised when an amount of item is added to an index of the inventory
+        /// </summary>
+        event StackInventoryAddEventHandler<T>? OnAdd;
+        /// <summary>
+        /// Raised when an amount of item is requested from an index of the inventory
+        /// </summary>
+        event StackInventoryGetEventHandler<T>? OnGet;
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
+        event StackInventoryMoveEventHandler<T>? OnMove;
+
         #region IStackInventory
         /// <summary>
         /// Gets an <see cref="item"/> inside a slot
@@ -29,23 +43,23 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Search an amount of items in the inventory
         /// </summary>
-        /// <param name="item">Item to be founded</param>
+        /// <param name="item">Item to be found</param>
         /// <param name="amount">Amount to be returned</param>
-        /// <returns>Returns the amount of items searched (or the max it can)</returns>
+        /// <returns>An array with amount of items searched (or the max it can)</returns>
         T[] Get(T item, int amount);
 
         /// <summary>
-        /// Get all Item of the selected type from all slots
+        /// Get all Items of the selected type from all slots
         /// </summary>
         /// <param name="item">Item to be search</param>
-        /// <returns>Returns a list with all items founded in the inventory</returns>
+        /// <returns>An array with all items found in the inventory</returns>
         T[] GetAll(T item);
 
         /// <summary>
-        /// Returns the amount of an item inside the inventory
+        /// Gets the amount of an item inside the inventory
         /// </summary>
         /// <param name="item">The item to de counted</param>
-        /// <returns>Returns the current amount of the item in the Inventory</returns>
+        /// <returns>The current amount of the item in the Inventory</returns>
         int GetCount(T item);
 
         /// <summary>
@@ -59,17 +73,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
-        /// <returns>returns true if the item could be added</returns>
+        /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
         #endregion
 
         #region IInventory
         /// <summary>
-        /// Returns an amount of items inside the Inventory Slot
+        /// Gets an amount of items inside the Inventory Slot
         /// </summary>
         /// <param name="index">Index of the slot</param>
         /// <param name="amount">Amount of the item to be returned</param>
-        /// <returns>Returns the amount of items inside the slot (or the max it can)</returns>
+        /// <returns>An array with the amount of items inside the slot (or the max it can)</returns>
         T[] Get(int index, int amount);
 
         /// <summary>
@@ -85,7 +99,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <param name="replace"></param>
-        /// <returns>Returns the item that couldn't be added or the replaced item if <paramref name="replace"/> is true</returns>
+        /// <returns>The item that couldn't be added or the replaced item if <paramref name="replace"/> is true</returns>
         T[] AddAt(T item, int index, bool replace = true);
 
         /// <summary>
@@ -94,7 +108,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">Array of item of the same type wich will be added to inventory</param>
         /// <param name="index">Wich slot the items will be added</param>
         /// <param name="replace">Defines if the current Slot item will be replaced by the <paramref name="items"/> param</param>
-        /// <returns>Returns a array of items replaced or couldn't be added</returns>
+        /// <returns>An array of items replaced or couldn't be added</returns>
         T[] AddAt(T[] items, int index, bool replace = true);
         #endregion
 

@@ -38,6 +38,25 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
+        public void AddItems_EmptyInventory_CallsOnAddEvent()
+        {
+            var items = this.itemFactory.CreateMany(10);
+            var inventory = this.containerFactory.EmptyContainer();
+
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(args.Data, Has.Count.EqualTo(1));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(items.Length).And.EqualTo(items));
+                    Assert.That(firstEvent.Index, Is.EqualTo(0));
+                });
+            };
+            inventory.Add(items);
+        }
+
+        [Test]
         public void AddItems_SlotWithSameItem_AddsToSlotWithItemFirst()
         {
             var item = this.itemFactory.CreateDefault();
@@ -50,6 +69,34 @@ namespace TheChest.Inventories.Tests.Containers
             inventory.Add(items);
 
             Assert.That(inventory.Slots, Has.One.Matches<IStackSlot<T>>(x => x.StackAmount == maxSize && x.Content!.Contains(item)));
+        }
+
+        [Test]
+        public void AddItems_SlotWithSameItem_CallsOnAddEvent()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var maxSize = this.random.Next(2, 10);
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            inventory.Get(item, maxSize - 1);
+
+            var amount = maxSize;
+            var items = this.itemFactory.CreateMany(amount);
+
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(2));
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(maxSize - 1).And.EqualTo(items[..^1]));
+                });
+                Assert.Multiple(() =>
+                {
+                    var secondEvent = args.Data.Skip(1).First();
+                    Assert.That(secondEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(items[^1]));
+                });
+            };
+            inventory.Add(items);
         }
 
         [Test]
@@ -94,6 +141,33 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(20);
             var inventory = this.containerFactory.EmptyContainer();
 
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(2));
+
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(10).And.EqualTo(items.Take(10)));
+                    Assert.That(firstEvent.Index, Is.EqualTo(0));
+                });
+
+                Assert.Multiple(() =>
+                {
+                    var secondEvent = args.Data.Skip(1).First();
+                    Assert.That(secondEvent.Items, Has.Length.EqualTo(10).And.EqualTo(items.Skip(10)));
+                    Assert.That(secondEvent.Index, Is.EqualTo(1));
+                });
+            };
+            inventory.Add(items);
+        }
+
+        [Test]
+        public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_CallsOnAddEvent()
+        {
+            var items = this.itemFactory.CreateMany(20);
+            var inventory = this.containerFactory.EmptyContainer();
+
             inventory.Add(items);
 
             Assert.Multiple(() =>
@@ -108,12 +182,23 @@ namespace TheChest.Inventories.Tests.Containers
         {
             var slotItem = this.itemFactory.CreateRandom();
             var items = this.itemFactory.CreateMany(20);
-            var expectedItems = items.ToArray();//TODO: clone array
+            var expectedItems = items.ToArray();
             var inventory = this.containerFactory.FullContainer(20, 2, slotItem);
 
             inventory.Add(items);
 
             Assert.That(items, Is.EqualTo(expectedItems));
+        }
+
+        [Test]
+        public void AddItems_FullInventory_DoNotCallOnAddEvent()
+        {
+            var slotItem = this.itemFactory.CreateRandom();
+            var items = this.itemFactory.CreateMany(20);
+            var inventory = this.containerFactory.FullContainer(20, 2, slotItem);
+
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
+            inventory.Add(items);
         }
 
         [Test]

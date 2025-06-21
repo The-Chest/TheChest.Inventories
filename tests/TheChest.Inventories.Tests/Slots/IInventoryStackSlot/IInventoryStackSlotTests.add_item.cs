@@ -7,8 +7,9 @@
         {
             var slot = this.slotFactory.EmptySlot();
             var item = (T)default!;
-            Assert.That(() => slot.Add(ref item), Throws.ArgumentNullException);
+            Assert.That(() => slot.Add(item), Throws.ArgumentNullException);
         }
+
         [Test]
         public void Add_FullSlot_DoNotAddToContent()
         {
@@ -16,20 +17,9 @@
             var slot = this.slotFactory.FullSlot(items);
 
             var item = this.itemFactory.CreateDefault();
-            slot.Add(ref item);
+            slot.Add(item);
 
             Assert.That(slot.Content, Has.No.AnyOf(item));
-        }
-        [Test]
-        public void Add_FullSlot_DoNotRemoveItem()
-        {
-            var items = this.itemFactory.CreateMany(20);
-            var slot = this.slotFactory.FullSlot(items);
-
-            var item = this.itemFactory.CreateDefault();
-            slot.Add(ref item);
-
-            Assert.That(item, Is.Not.Null);
         }
 
         [Test]
@@ -39,19 +29,9 @@
 
             var item = this.itemFactory.CreateDefault();
             var expecteditem = new T[1] { item };
-            slot.Add(ref item);
-        
-            Assert.That(slot.Content, Has.One.EqualTo(expecteditem[0]));
-        }
-        [Test]
-        public void Add_EmptySlot_RemovesItemReference()
-        {
-            var slot = this.slotFactory.EmptySlot();
+            slot.Add(item);
 
-            var item = this.itemFactory.CreateDefault();
-            slot.Add(ref item);
-        
-            Assert.That(item, Is.Null);
+            Assert.That(slot.Content, Has.One.EqualTo(expecteditem[0]));
         }
 
         [Test]
@@ -62,20 +42,9 @@
         
             var item = this.itemFactory.CreateDefault();
             var expecteditem = items.Append(item).ToArray();
-            slot.Add(ref item);
+            slot.Add(item);
 
             Assert.That(slot.Content, Is.EqualTo(expecteditem));
-        }
-        [Test]
-        public void Add_SlotWithSameItem_RemovesItem()
-        {
-            var items = this.itemFactory.CreateMany(5);
-            var slot = this.slotFactory.WithItems(items, 10);
-        
-            var item = this.itemFactory.CreateDefault();
-            slot.Add(ref item);
-
-            Assert.That(item, Is.Null);
         }
 
         [Test]
@@ -85,20 +54,9 @@
             var slot = this.slotFactory.WithItems(items, 10);
         
             var item = this.itemFactory.CreateRandom();
-            slot.Add(ref item);
+            slot.Add(item);
 
             Assert.That(slot.Content, Is.Not.Contains(item));
-        }
-        [Test]
-        public void Add_SlotWithDifferentItem_DoNotRemoveItem()
-        {
-            var items = this.itemFactory.CreateMany(5);
-            var slot = this.slotFactory.WithItems(items, 10);
-        
-            var item = this.itemFactory.CreateRandom();
-            slot.Add(ref item);
-        
-            Assert.That(item, Is.Not.Null);
         }
     }
 }

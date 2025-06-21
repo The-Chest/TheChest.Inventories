@@ -31,6 +31,15 @@
         }
 
         [Test]
+        public void GetItems_ItemNotFound_DoesNotCallOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            var item = this.itemFactory.CreateDefault();
+            inventory.Get(item, 1);
+        }
+
+        [Test]
         public void GetItems_ItemsFound_ReturnsItems()
         {
             var amount = 10;
@@ -64,6 +73,27 @@
         }
 
         [Test]
+        public void GetItems_ItemsFound_CallsOnGetEvent()
+        {
+            var stackSize = this.random.Next(1, 20);
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(10)
+                .Append(item)
+                .ToList();
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
+            inventory.OnGet += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.FirstOrDefault(); 
+                    Assert.That(args.Data, Has.Count.EqualTo(1));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
+                });
+            };
+            inventory.Get(item, stackSize);
+        }
+
+        [Test]
         public void GetItems_AmoutBiggerThanItemsInInventory_ReturnsAllItemsFound()
         {
             var stackSize = this.random.Next(1, 20);
@@ -77,6 +107,27 @@
 
             Assert.That(result, Has.Length.EqualTo(stackSize));
             Assert.That(result, Has.All.EqualTo(item));
+        }
+
+        [Test]
+        public void GetItems_AmoutBiggerThanItemsInInventory_CallsOnGetEvent()
+        {
+            var stackSize = this.random.Next(1, 20);
+            var item = this.itemFactory.CreateDefault();
+            var inventoryItems = this.itemFactory.CreateManyRandom(10)
+                .Append(item)
+                .ToList();
+
+            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
+            inventory.OnGet += (sender, args) =>
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(args.Data, Has.Count.EqualTo(1));
+                    Assert.That(args.Data.First().Items, Has.All.EqualTo(item));
+                });
+            };
+            inventory.Get(item, 100);
         }
     }
 }

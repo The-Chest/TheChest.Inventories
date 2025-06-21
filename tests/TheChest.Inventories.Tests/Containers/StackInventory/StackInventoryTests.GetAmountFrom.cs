@@ -27,6 +27,14 @@
         }
 
         [Test]
+        public void GetAmountFrom_EmptySlot_CallsOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            inventory.Get(0, 10);
+        }
+
+        [Test]
         public void GetAmountFrom_SlotWithItems_ReturnsItems()
         {
             var index = this.random.Next(0, 20);
@@ -56,14 +64,36 @@
         }
 
         [Test]
+        public void GetAmountFrom_SlotWithItems_CallsOnGetEvent()
+        {
+            var stackSize = this.random.Next(10, 20);
+            var slotItem = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+
+            var index = this.random.Next(0, 20);
+            var amount = this.random.Next(1, stackSize);
+            inventory.OnGet += (sender, args) => {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(amount));
+                    Assert.That(firstEvent.Index, Is.EqualTo(index));
+                });
+            };
+            inventory.Get(index, amount);
+        }
+
+        [Test]
         public void GetAmountFrom_AmountBiggerThanItemsInsideSlot_ReturnsTheMaximumAmountPossible()
         {
-            var index = this.random.Next(0, 20);
             var stackSize = this.random.Next(1, 10);
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
 
-            var items = inventory.Get(index, 100);
+            var amount = this.random.Next(stackSize + 1, stackSize * 2);
+            var index = this.random.Next(0, 20);
+            var items = inventory.Get(index, amount);
 
             Assert.That(items.Count, Is.EqualTo(stackSize));
         }
@@ -71,14 +101,36 @@
         [Test]
         public void GetAmountFrom_AmountBiggerThanItemsInsideSlot_RemovesAllItemsFromSlot()
         {
-            var index = this.random.Next(0, 20);
             var stackSize = this.random.Next(1, 10);
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
 
-            inventory.Get(index, 20);
+            var index = this.random.Next(0, 20);
+            var amount = this.random.Next(stackSize + 1, stackSize * 2);
+            inventory.Get(index, amount);
 
             Assert.That(inventory[index].StackAmount, Is.Zero);
+        }
+
+        [Test]
+        public void GetAmountFrom_AmountBiggerThanItemsInsideSlot_CallsOnGetEventWithTheMaximumAmountPossible()
+        {
+            var stackSize = this.random.Next(1, 10);
+            var slotItem = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            
+            var index = this.random.Next(0, 20);
+            var amount = this.random.Next(stackSize + 1, stackSize * 2);
+            inventory.OnGet += (sender, args) => {
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.First();
+                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
+                    Assert.That(firstEvent.Items, Has.Length.EqualTo(stackSize));
+                    Assert.That(firstEvent.Index, Is.EqualTo(index));
+                });
+            };
+            inventory.Get(index, amount);
         }
     }
 }
