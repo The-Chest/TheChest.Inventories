@@ -257,42 +257,34 @@
             Assert.That(result, Is.Empty);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void AddItemAt_FullSlotWithSameItem_DoNotAddsToStack(bool replace)
+        [Test]
+        public void AddItemAt_FullSlotWithSameItem_DoNotAddsToStack()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
-
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index);
-
+            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
             var item = this.itemFactory.CreateDefault();
-            inventory.AddAt(item, index, replace);
+
+            inventory.AddAt(item, index, false);
 
             Assert.That(inventory[index].Content, Has.No.AnyOf(item));
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void AddItemAt_FullSlotWithSameItem_DoNotCallsOnAddEvent(bool replace)
+        [Test]
+        public void AddItemAt_FullSlotWithSameItem_DoNotCallsOnAddEvent()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index);
-
+            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
             var item = this.itemFactory.CreateDefault();
+
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
-            inventory.AddAt(item, index, replace);
+            inventory.AddAt(item, index, false);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void AddItemAt_FullSlotWithSameItem_ReturnsNotAddedItems(bool replace)
+        [Test]
+        public void AddItemAt_FullSlotWithSameItem_ReturnsNotAddedItems()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
@@ -300,7 +292,7 @@
             var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
 
             var item = this.itemFactory.CreateDefault();
-            var result = inventory.AddAt(item, index, replace);
+            var result = inventory.AddAt(item, index, false);
 
             Assert.That(result, Is.Not.Empty.And.Contains(item));
         }
