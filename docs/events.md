@@ -182,3 +182,46 @@ inventory.OnGet += (sender, args) =>
 var result = inventory.Get(0, 10);
 Console.WriteLine($"{result.Length} Items returned from index {0}");
 ```
+
+### StackInventoryAddEventHandler
+
+Fires when any amount of item is added to a slot on the inventory.
+
+#### Signature
+```csharp
+public delegate void StackInventoryAddEventHandler<T>(object? sender, StackInventoryAddEventArgs<T> e);
+```
+
+#### EventArgs
+
+| Property                  | Type                                                     | Description                                        |
+|---------------------------|----------------------------------------------------------|----------------------------------------------------|
+| sender                    | `object`                                                 | Inventory responsible for firing the event         |
+| args                      | `StackInventoryAddEventArgs`                             | Class that holds data of the event                 |
+| args.Data                 | `IReadOnlyCollection<StackInventoryAddItemEventData<T>>` | An array with all items and its respective indexes |
+| args.Data[].Items[]       | `Array.Generic`                                          | Items added                                        |
+| args.Data[].Index         | `Integer`                                                | Index number where the `Items` were added          |
+
+#### Example
+
+```csharp
+using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventoryStackSlot<string>[10];
+for (int i = 0; i < slots.Length; i++)
+{
+    slots[i] = new InventoryStackSlot<string>();
+}
+
+var inventory = new StackInventory<string>();
+inventory.OnAdd += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"{action.Items.Length} Items added to the slot {action.Index}");
+    }
+};
+
+var result = inventory.Add("item_1", "item_2");
+Console.WriteLine($"{result.Length} Items were not added");
+```
