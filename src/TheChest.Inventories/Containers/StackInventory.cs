@@ -197,9 +197,8 @@ namespace TheChest.Inventories.Containers
             {
                 var replacedItems = items.ToArray();
                 var oldItems = slot.Replace(items);
-
                 //TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
-                this.OnAdd?.Invoke(this, (replacedItems[items.Length..], index));
+                this.OnAdd?.Invoke(this, (replacedItems, index));
                 return oldItems;
             }
 
