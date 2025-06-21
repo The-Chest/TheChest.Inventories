@@ -402,13 +402,16 @@ namespace TheChest.Inventories.Containers
             //TODO: compare the size of both slots are equivalent
 
             var items = this.slots[origin].GetAll();
-            var oldItems = this.slots[target].Replace(items);
-
             var events = new List<StackInventoryMoveItemEventData<T>>();
+
+            var oldItems = items.Length == 0
+                ? this.slots[target].GetAll()
+                : this.slots[target].Replace(items);
+
             if (items is not null)
                 events.Add(new(items, origin, target));
 
-            if (oldItems is not null)
+            if (oldItems is not null && oldItems.Length > 0)
             {
                 this.slots[origin].Replace(oldItems);
                 events.Add(new(oldItems, target, origin));
