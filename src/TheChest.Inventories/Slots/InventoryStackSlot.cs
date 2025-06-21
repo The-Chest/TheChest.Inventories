@@ -23,7 +23,7 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Adds an array of items inside the Content with no previous validation.
         /// <para>
-        /// It's recommended to use <see cref="IInventoryStackSlot{T}.Add(ref T[])"/> or <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> to ensure no invalid items are added
+        /// It's recommended to use <see cref="IInventoryStackSlot{T}.Add(T[])"/> or <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> to ensure no invalid items are added
         /// </para>
         /// </summary>
         /// <param name="items">items to be added to <see cref="ISlot{T}.Content"/> (and the reference will be removed after)</param>
