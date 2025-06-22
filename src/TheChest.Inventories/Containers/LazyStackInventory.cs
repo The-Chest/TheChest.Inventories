@@ -34,6 +34,9 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Adds an item to the first available slot
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory.
+        /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <returns>True if <paramref name="item"/> is possible to be added to the inventory</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -58,8 +61,11 @@ namespace TheChest.Inventories.Containers
             return false;
         }
         /// <summary>
-        /// Adds an amount of items to the first available slot
+        /// Adds an amount of items to the first available slot.
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when any amount of <paramref name="item"/> are added to the inventory.
+        /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be added</param>
         /// <returns>Empty array when is succesfully added, otherwise it'll return an array with not added items</returns>
@@ -93,6 +99,9 @@ namespace TheChest.Inventories.Containers
             return notAddedAmount;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> .
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual T[] AddAt(T item, int index, int amount, bool replace)
@@ -120,6 +129,9 @@ namespace TheChest.Inventories.Containers
             return Enumerable.Repeat(item, amount).ToArray();
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> .
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual int AddAt(T item, int index, int amount)
@@ -142,6 +154,9 @@ namespace TheChest.Inventories.Containers
             return amount;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when all items are returned from the inventory.
+        /// </remarks>
         public virtual T[] Clear()
         {
             var events = new List<LazyStackInventoryGetItemEventData<T>>();
@@ -164,6 +179,9 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual T? Get(int index)
         {
@@ -177,6 +195,9 @@ namespace TheChest.Inventories.Containers
             return item;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when <paramref name="item"/> is returned from the inventory.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
@@ -201,6 +222,9 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Gets an amount of items from the inventory
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when any amount of <paramref name="item"/> is returned from the inventory.
+        /// </remarks>
         /// <param name="item">Item to be searched on the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be returned</param>
         /// <returns>The amount of items searched (or the max it can return)</returns>
@@ -238,6 +262,9 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Gets an amount of items from an specific slot the inventory
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when any amount of <paramref name="item"/> is returned from the inventory.
+        /// </remarks>
         /// <param name="index">Slot item index to be returned</param>
         /// <param name="amount">Amount to be returned (or the max available)</param>
         /// <returns>An array of <see cref="{T}"/></returns>
@@ -258,6 +285,9 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Gets all items of the selected type from all slots
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when every <paramref name="item"/> is returned from the inventory.
+        /// </remarks> 
         /// <param name="item">Item to be searched</param>
         /// <returns>A list with all items founded in the inventory</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -284,11 +314,10 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
-        /// <summary>
-        /// Gets all items from an specific slot from the inventory
-        /// </summary>
-        /// <param name="index">Slot item index to be returned</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when all items from <paramref name="index"/> is returned from the inventory.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual T[] GetAll(int index)
         {
