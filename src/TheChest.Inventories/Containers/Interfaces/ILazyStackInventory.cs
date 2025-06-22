@@ -9,8 +9,18 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">Item the Inventory accept</typeparam>
     public interface ILazyStackInventory<T> : IStackContainer<T>
     {
+        /// <summary>
+        /// Raised when an amount of item is requested from an index of the inventory
+        /// </summary>
         event LazyStackInventoryGetEventHandler<T>? OnGet;
+        /// <summary>
+        /// Raised when an amount of item is added to an index of the inventory
+        /// </summary>
         event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
+        event LazyStackInventoryMoveEventHandler<T>? OnMove;
 
         #region ILazyStackInventory
         /// <summary>

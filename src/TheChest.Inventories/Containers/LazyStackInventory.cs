@@ -14,6 +14,7 @@ namespace TheChest.Inventories.Containers
     {
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
         public event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        public event LazyStackInventoryMoveEventHandler<T>? OnMove;
 
         protected new readonly IInventoryLazyStackSlot<T>[] slots;
 
@@ -373,25 +374,34 @@ namespace TheChest.Inventories.Containers
             if (originSlot.IsEmpty && targetSlot.IsEmpty)
                 return;
 
+            var events = new List<LazyStackInventoryMoveItemEventData<T>>();
             var originItems = originSlot.GetAll();
             var originItem = originItems.FirstOrDefault();
 
-            if (originItem is null)
-            {
-                var targetItems = targetSlot.GetAll();
-                var targetItem = targetItems.FirstOrDefault();
-                originSlot.Add(targetItem!, targetItems.Length);
-            }
-            else
+            if (originItem is not null)
             {
                 var targetItems = targetSlot.Replace(originItem!, originItems.Length);
+                events.Add(new(originItem!, originItems.Length, origin, target));
                 var targetItem = targetItems.FirstOrDefault();
 
                 if(targetItem is not null)
                 {
                     originSlot.Replace(targetItem!, targetItems.Length);
+                    events.Add(new(targetItem!, targetItems.Length, target, origin));
                 }
             }
+            else
+            {
+                var targetItems = targetSlot.GetAll();
+                var targetItem = targetItems.FirstOrDefault();
+                if (targetItem is not null)
+                {
+                    originSlot.Add(targetItem!, targetItems.Length);
+                    events.Add(new(targetItem!, targetItems.Length, target, origin)); 
+                }
+            }
+
+            this.OnMove?.Invoke(this, new(events.ToArray()));
         }
     }
 }
