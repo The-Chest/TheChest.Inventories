@@ -1,6 +1,5 @@
 ﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
-using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
@@ -13,7 +12,7 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
-        public event LazyStackInventoryGetEventHandler<T> OnGet;
+        public event LazyStackInventoryGetEventHandler<T>? OnGet;
 
         protected new readonly IInventoryLazyStackSlot<T>[] slots;
 
@@ -141,7 +140,7 @@ namespace TheChest.Inventories.Containers
                 }
             }
             if (events.Count > 0)
-                this.OnGet?.Invoke(this, new LazyStackInventoryGetEventArgs<T>(events));
+                this.OnGet?.Invoke(this, new(events));
 
             return items.ToArray();
         }
@@ -152,7 +151,11 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].Get().FirstOrDefault();
+            var item = this.slots[index].Get().FirstOrDefault();
+            if (item is not null)
+                this.OnGet?.Invoke(this, (item, index, 1));
+
+            return item;
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -161,11 +164,17 @@ namespace TheChest.Inventories.Containers
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.Contains(item))
-                    return slot.Get().FirstOrDefault();
+                {
+                    var foundItem = slot.Get().FirstOrDefault();
+                    if(foundItem is not null)
+                        this.OnGet?.Invoke(this, (foundItem, index, 1));
+
+                    return foundItem;
+                }
             }
 
             return default;
@@ -186,12 +195,15 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             var items = new List<T>();
-            for (int i = 0; i < this.Size; i++)
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.Get(amount);
+                    if (slotItems.Length > 0)
+                        events.Add(new(slotItems[0], index, slotItems.Length));
 
                     items.AddRange(slotItems);
                     amount -= slotItems.Length;
@@ -199,6 +211,8 @@ namespace TheChest.Inventories.Containers
                         break;
                 }
             }
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new(events));
 
             return items.ToArray();
         }
@@ -216,7 +230,11 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            return this.slots[index].Get(amount);
+            var items = this.slots[index].Get(amount);
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+
+            return items;
         }
         /// <summary>
         /// Gets all items of the selected type from all slots
@@ -230,15 +248,20 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
-            for (int i = 0; i < this.Size; i++)
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.GetAll();
+                    if (slotItems.Length > 0)
+                        events.Add(new(slotItems[0], index, slotItems.Length));
                     items.AddRange(slotItems);
                 }
             }
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new(events));
 
             return items.ToArray();
         }
@@ -253,7 +276,11 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].GetAll();
+            var items = this.slots[index].GetAll();
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+
+            return items;
         }
         /// <summary>
         /// Returns the amount of an item inside the inventory

@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">Item the Inventory accept</typeparam>
     public interface ILazyStackInventory<T> : IStackContainer<T>
     {
-        event LazyStackInventoryGetEventHandler<T> OnGet;
+        event LazyStackInventoryGetEventHandler<T>? OnGet;
 
         #region ILazyStackInventory
         /// <summary>
