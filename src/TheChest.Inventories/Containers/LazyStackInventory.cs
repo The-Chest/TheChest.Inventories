@@ -1,5 +1,7 @@
 ﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
+using TheChest.Inventories.Containers.Events.Stack;
+using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -11,7 +13,10 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
-        protected new IInventoryLazyStackSlot<T>[] slots;
+        public event LazyStackInventoryGetEventHandler<T> OnGet;
+
+        protected new readonly IInventoryLazyStackSlot<T>[] slots;
+
         public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
         
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
@@ -121,17 +126,23 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public virtual T[] Clear()
         {
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
             var items = new List<T>();
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (!slot.IsEmpty)
                 {
                     var slotItems = slot.GetAll();
+                    if (slotItems.Length > 0)
+                        events.Add(new(slotItems[0], index, slotItems.Length));
+
                     items.AddRange(slotItems);
                 }
             }
-            
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new LazyStackInventoryGetEventArgs<T>(events));
+
             return items.ToArray();
         }
         /// <inheritdoc/>

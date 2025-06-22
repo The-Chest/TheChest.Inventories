@@ -1,4 +1,5 @@
 ﻿using TheChest.Core.Containers.Interfaces;
+using TheChest.Inventories.Containers.Events.Stack.Lazy;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -8,6 +9,8 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">Item the Inventory accept</typeparam>
     public interface ILazyStackInventory<T> : IStackContainer<T>
     {
+        event LazyStackInventoryGetEventHandler<T> OnGet;
+
         #region ILazyStackInventory
         /// <summary>
         /// Gets an item from inside a slot
