@@ -13,6 +13,7 @@ namespace TheChest.Inventories.Containers
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
+        public event LazyStackInventoryAddEventHandler<T>? OnAdd;
 
         protected new readonly IInventoryLazyStackSlot<T>[] slots;
 
@@ -41,11 +42,17 @@ namespace TheChest.Inventories.Containers
             if(item is null)
                 throw new ArgumentNullException(nameof(item));
 
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.CanAdd(item))
-                    return slot.Add(item) == 0;
+                {
+                    var notAdded = slot.Add(item);
+                    if (notAdded == 0)
+                        this.OnAdd?.Invoke(this, (item, index, 1));
+
+                    return notAdded == 0; 
+                }
             }
 
             return false;
@@ -65,19 +72,25 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            var notAdded = amount;
-            for (int i = 0; i < this.Size; i++)
+            var notAddedAmount = amount;
+            var events = new List<LazyStackInventoryAddItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.CanAdd(item))
                 {
-                    notAdded = slot.Add(item, amount);
-                    if (notAdded == 0)
+                    var previousAmount = notAddedAmount;
+                    notAddedAmount = slot.Add(item, previousAmount);
+                    var addedAmount = previousAmount - notAddedAmount;
+                    events.Add(new(item, index, addedAmount));
+                    if (notAddedAmount == 0)
                         break;
                 }
             }
+            if(events.Count > 0)
+                this.OnAdd?.Invoke(this, new(events));
 
-            return notAdded;
+            return notAddedAmount;
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -95,10 +108,12 @@ namespace TheChest.Inventories.Containers
             if (slot.CanAdd(item, amount))
             {
                 var notAdded = slot.Add(item, amount);
+                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
                 return Enumerable.Repeat(item, notAdded).ToArray();
             }
             else if(replace && slot.CanReplace(item, amount))
             {
+                this.OnAdd?.Invoke(this, (item, index, amount));
                 return slot.Replace(item, amount);
             }
 
@@ -118,7 +133,11 @@ namespace TheChest.Inventories.Containers
 
             var slot = this.slots[index];
             if (slot.CanAdd(item, amount))
-                return slot.Add(item, amount);
+            {
+                var notAdded = slot.Add(item, amount);
+                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
+                return notAdded;
+            }
 
             return amount;
         }

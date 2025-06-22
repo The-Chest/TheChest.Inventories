@@ -10,6 +10,7 @@ namespace TheChest.Inventories.Containers.Interfaces
     public interface ILazyStackInventory<T> : IStackContainer<T>
     {
         event LazyStackInventoryGetEventHandler<T>? OnGet;
+        event LazyStackInventoryAddEventHandler<T>? OnAdd;
 
         #region ILazyStackInventory
         /// <summary>
