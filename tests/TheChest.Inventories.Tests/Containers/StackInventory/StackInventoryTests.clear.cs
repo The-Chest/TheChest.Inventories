@@ -13,6 +13,14 @@
         }
 
         [Test]
+        public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty inventory");
+            inventory.Clear();
+        }
+
+        [Test]
         public void Clear_InventoryWithItems_ReturnsAllItems()
         {
             var inventorySize = 20;
@@ -36,6 +44,22 @@
             inventory.Clear();
 
             Assert.That(inventory.IsEmpty, Is.True);
+        }
+
+        [Test]
+        public void Clear_InventoryWithItems_CallsOnGetEvent()
+        {
+            var inventorySize = this.random.Next(10, 20);
+            var stackSize = this.random.Next(10, 20);
+            var item = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, item);
+
+            inventory.OnGet += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(inventorySize));
+                Assert.That(args.Data.SelectMany(x => x.Items), Has.All.EqualTo(item));
+            };
+            inventory.Clear();
         }
 
         [Test]
