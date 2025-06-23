@@ -16,6 +16,14 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void Clear_EmptyInventory_CallsOnGetEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty inventory");
+            inventory.Clear();
+        }
+
+        [Test]
         public void Clear_InventoryWithItems_ReturnsAllItems()
         {
             var size = this.random.Next(1, 20);
@@ -29,7 +37,26 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Clear_InventoryWithItems_EmptiesSlots()
+        public void Clear_InventoryWithItems_CallsOnGetEvent()
+        {
+            var size = this.random.Next(1, 20);
+            var stackSize = this.random.Next(1, 10);
+            var item = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+
+            inventory.OnGet += (sender, args) => {
+                Assert.That(args.Data, Has.Count.EqualTo(size));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
+                    Assert.That(args.Data.Select(x => x.Amount), Has.All.EqualTo(stackSize));
+                });
+            };
+            inventory.Clear();
+        }
+
+        [Test]
+        public void Clear_InventoryWithItems_RemoveItemsFromAllSlots()
         {
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
