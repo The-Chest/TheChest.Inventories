@@ -90,7 +90,7 @@
             var inventory = this.containerFactory.EmptyContainer(size);
             var index = this.random.Next(0, size);
 
-            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for an empty slot."); ;
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for an empty slot.");
             inventory.GetAll(index);
         }
     }
