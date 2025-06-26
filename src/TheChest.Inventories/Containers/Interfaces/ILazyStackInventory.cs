@@ -108,6 +108,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">amount of the item</param>
         /// <param name="replace">if true it will repleace the current items inside it</param>
         /// <returns>Returns the items that couldn't be added or the replaced</returns>
+        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index, int amount) instead")]
         T[] AddAt(T item, int index, int amount, bool replace);
         #endregion
 
