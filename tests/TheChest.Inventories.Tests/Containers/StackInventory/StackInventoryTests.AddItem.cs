@@ -63,17 +63,20 @@ namespace TheChest.Inventories.Tests.Containers
         public void AddItem_InventoryWithItems_CallsOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, 10, this.itemFactory.CreateManyRandom(10));
+            var size = this.random.Next(2, 20);
+            var stackSize = this.random.Next(2, 10);
+            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var expectedIndex = this.random.Next(0, size);
+            inventory.GetAll(expectedIndex);
+
             inventory.OnAdd += (sender, args) =>
             {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
                 Assert.Multiple(() =>
                 {
                     var firstEvent = args.Data.First();
-                    Assert.That(args.Data, Has.Count.EqualTo(1));
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
-                    // TODO: improve this test by improving container creation
-                    // Creating a better factory will allow to create an inventory with ordered items
-                    // Assert.That(firstEvent.Index, Is.EqualTo(10));
+                    Assert.That(firstEvent.Index, Is.EqualTo(expectedIndex));
                 });
             };
 
@@ -97,15 +100,17 @@ namespace TheChest.Inventories.Tests.Containers
         public void AddItem_InventoryWithFullSlotWithSameItem_AddsToFirstAvailableSlot()
         {
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(2, 10);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, amount, item);
-
+            var size = this.random.Next(2, 20);
+            var stackSize = this.random.Next(2, 10);
+            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var expectedIndex = this.random.Next(0, size);
+            inventory.GetAll(expectedIndex);
             inventory.Add(item);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].Content, Has.One.EqualTo(item));
-                Assert.That(inventory[0].StackAmount, Is.EqualTo(1));
+                Assert.That(inventory[expectedIndex].Content, Has.One.EqualTo(item));
+                Assert.That(inventory[expectedIndex].StackAmount, Is.EqualTo(1));
             });
         }
 
