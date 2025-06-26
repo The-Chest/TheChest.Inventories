@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inventory", "inventory", "{
 	ProjectSection(SolutionItems) = preProject
 		docs\inventory\class_diagram.md = docs\inventory\class_diagram.md
 		docs\inventory\events.md = docs\inventory\events.md
+		docs\inventory\extending.md = docs\inventory\extending.md
 		docs\inventory\implementing.md = docs\inventory\implementing.md
 	EndProjectSection
 EndProject
