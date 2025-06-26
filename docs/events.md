@@ -318,5 +318,50 @@ inventory.OnGet += (sender, args) =>
 
 //Any method except GetCount will fire the event
 var result = inventory.Get(0);
-Console.WriteLine($"{result.Length} amoung of the Item {result} returned from index {0}");
+Console.WriteLine($"{result.Length} amount of the Item {result} returned from index {0}");
+```
+
+### LazyStackInventoryAddEventHandler
+
+Fires when any amount of item is added to a slot on the inventory.
+
+#### Signature
+```csharp
+public delegate void LazyStackInventoryAddEventHandler<T>(object? sender, LazyStackInventoryAddEventArgs<T> e);
+```
+
+#### EventArgs
+
+| Property                  | Type                                                           | Description                                        |
+|---------------------------|----------------------------------------------------------------|----------------------------------------------------|
+| sender                    | `object`                                                       | Inventory responsible for firing the event         |
+| args                      | `LazyStackInventoryAddEventArgs`                               | Class that holds data of the event                 |
+| args.Data                 | `IReadOnlyCollection<LazyStackInventoryAddEventArgs<T>>`       | An array with all items and its respective indexes |
+| args.Data[].Item          | `Generic`                                                      | Found item                                         |
+| args.Data[].Index         | `Integer`                                                      | Index number where the `Item` was added            |
+| args.Data[].Amount        | `Integer`                                                      | Amount of `Item` added                             |
+
+#### Example
+
+```csharp
+using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventoryLazyStackSlot<string>[10];
+for (int i = 0; i < slots.Length; i++)
+{
+    slots[i] = new InventorySlot<string>($"Item_{i}", 5, 10);
+}
+
+var inventory = new LazyStackInventory<string>(slots);
+inventory.OnAdd += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"{action.Amount} amount of the Item {action.Item} added to the index {action.Index}");
+    }
+};
+
+//Any method except GetCount will fire the event
+var result = inventory.AddAt("item_10", 0);
+Console.WriteLine($"{result.Length} amount of the Item {result} added to the index {0}");
 ```
