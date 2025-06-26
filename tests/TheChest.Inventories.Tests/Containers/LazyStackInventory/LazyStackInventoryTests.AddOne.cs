@@ -40,6 +40,25 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void Add_EmptyInventory_CallsOnAddEvent()
+        {
+            var inventory = this.containerFactory.EmptyContainer();
+            var item = this.itemFactory.CreateDefault();
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.FirstOrDefault();
+                    Assert.That(firstEvent.Item, Is.EqualTo(item));
+                    Assert.That(firstEvent.Index, Is.EqualTo(0));
+                    Assert.That(firstEvent.Amount, Is.EqualTo(1));
+                });
+            };  
+            inventory.Add(item);
+        }
+
+        [Test]
         public void Add_InventoryWithAvailableSlots_AddsToFirstAvilableSlot()
         {
             var stackAmount = this.random.Next(1, 5);
@@ -91,6 +110,17 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     )
                 );
             });
+        }
+
+        [Test]
+        public void Add_FullInventory_DoesNotCallOnAddEvent()
+        {
+            var items = this.itemFactory.CreateRandom();
+            var inventory = this.containerFactory.FullContainer(10, 5, items);
+
+            var item = this.itemFactory.CreateDefault();
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when inventory is full.");
+            inventory.Add(item);
         }
     }
 }
