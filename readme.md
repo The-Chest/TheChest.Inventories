@@ -86,6 +86,16 @@ stackInventory.Add("StackableItem", "StackableItem");
 ### Creating a custom Inventory
 If you need more control, you can implement the interfaces or extend classes.
 
+- **`Inventory<T>`**
+    - [docs/inventory/implementing](/docs/inventory/implementing.md)
+    - [docs/inventory/extending](/docs/inventory/extending.md)
+- **`StackInventory<T>`**
+    - [docs/stack_inventory/implementing](/docs/stack_inventory/implementing.md)
+    - [docs/stack_inventory/extending](/docs/stack_inventory/extending.md)
+- **`LazyStackInventory<T>`**
+    - [docs/lazy_stack_inventory/implementing](/docs/lazy_stack_inventory/implementing.md)
+    - [docs/lazy_stack_inventory/extending](/docs/lazy_stack_inventory/extending.md) 
+
 ## Docs 
 
 - **`Inventory<T>`**
