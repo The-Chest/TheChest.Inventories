@@ -17,19 +17,21 @@ The library provides a robust framework for managing inventories and slots in a 
 
 ## Project Structure
 
-### Containers
-- **`Inventory<T>`**: A generic inventory implementation that manages items in slots.
-- **`StackInventory<T>`**: Extends `Inventory<T>` to support stackable items.
-- **Interfaces**: Defines contracts for inventory behavior, such as `IInventory<T>` and `IStackInventory<T>`.
-
-### Slots
+### Inventory<T>
+- 
 - **`InventorySlot<T>`**: Represents a single slot in the inventory.
-- **`InventoryStackSlot<T>`**: Extends `InventorySlot<T>` to support stacked items.
-- **Interfaces**: Defines contracts for slots behaviors, such as `IInventorySlot<T>` and `IInventoryStackSlot<T>`.
 
-Project documentation:
-- [docs/class_diagrams](/docs/class_diagrams.md): Class diagrams for the inventories.
-- [docs/events](/docs/events.md): Events and their usage in the inventories.
+## Docs 
+
+- **`Inventory<T>`** : A generic inventory implementation that manages items in slots.
+    - [docs/inventory/class_diagram](/docs/inventory/class_diagram.md)
+    - [docs/inventory/events](/docs/inventory/events.md)]
+- **`StackInventory<T>`** : A generic inventory that manages stackable items.
+    - [docs/stack_inventory/class_diagram](/docs/stack_inventory/class_diagram.md)
+    - [docs/stack_inventory/events](/docs/stack_inventory/events.md)]
+- **`LazyStackInventory<T>`** : A generic stack inventory that allows lazy loading of stackable items.
+    - [docs/lazy_stack_inventory/class_diagram](/docs/lazy_stack_inventory/class_diagram.md)
+    - [docs/lazy_stack_inventory/events](/docs/lazy_stack_inventory/events.md)]
 
 ## How to use it
 
