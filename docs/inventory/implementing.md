@@ -1,5 +1,5 @@
 # Implementing a custom IInventory<T>
-You can implement the interfaces `IInventory<T>` directly if you need more control.
+You can implement the interface `IInventory<T>` directly if you need more control.
 
 ## IInventory<T>
 
