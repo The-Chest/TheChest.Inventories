@@ -60,6 +60,29 @@
         }
 
         [Test]
+        public void AddAt_AllItemsSuccessfullyAdded_CallsOnAddEvent()
+        {
+            var size = this.random.Next(1, 20);
+            var stackSize = this.random.Next(1, 10);
+            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+
+            var index = this.random.Next(0, size);
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.FirstOrDefault();
+                    Assert.That(firstEvent.Item, Is.EqualTo(item));
+                    Assert.That(firstEvent.Index, Is.EqualTo(index));
+                    Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
+                });
+            };
+            inventory.AddAt(item, index, stackSize);
+        }
+
+        [Test]
         public void AddAt_AvailableSlot_AddsMaxPossibleAmountOfItemToTheSlot()
         {
             var size = this.random.Next(1, 20);
@@ -78,6 +101,31 @@
                 Assert.That(slot.IsFull, Is.True);
                 Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
             });
+        }
+
+        [Test]
+        public void AddAt_NotAllItemsAdded_CallsOnAddEvent()
+        {
+            var size = this.random.Next(1, 20);
+            var stackSize = this.random.Next(1, 10);
+            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+
+            var randomIndex = this.random.Next(0, size);
+            var amount = this.random.Next(1, 10) + stackSize;
+
+            inventory.OnAdd += (sender, args) =>
+            {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
+                Assert.Multiple(() =>
+                {
+                    var firstEvent = args.Data.FirstOrDefault();
+                    Assert.That(firstEvent.Item, Is.EqualTo(item));
+                    Assert.That(firstEvent.Index, Is.EqualTo(randomIndex));
+                    Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
+                });
+            };
+            inventory.AddAt(item, randomIndex, amount);
         }
 
         [Test]
@@ -108,6 +156,21 @@
             inventory.AddAt(item, randomIndex, stackSize);
 
             Assert.That(inventory[randomIndex].Content, Has.None.EqualTo(item));
+        }
+
+        [Test]
+        public void AddAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
+        {
+            var size = this.random.Next(1, 20);
+            var stackSize = this.random.Next(1, 10);
+            var randomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+
+            var item = this.itemFactory.CreateDefault();
+            var randomIndex = this.random.Next(0, size);
+
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when adding to a slot with a different item.");
+            inventory.AddAt(item, randomIndex, stackSize);
         }
 
         [Test]

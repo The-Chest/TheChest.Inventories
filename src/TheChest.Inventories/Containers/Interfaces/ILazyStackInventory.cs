@@ -1,4 +1,5 @@
 ﻿using TheChest.Core.Containers.Interfaces;
+using TheChest.Inventories.Containers.Events.Stack.Lazy;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -8,6 +9,19 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">Item the Inventory accept</typeparam>
     public interface ILazyStackInventory<T> : IStackContainer<T>
     {
+        /// <summary>
+        /// Raised when an amount of item is requested from an index of the inventory
+        /// </summary>
+        event LazyStackInventoryGetEventHandler<T>? OnGet;
+        /// <summary>
+        /// Raised when an amount of item is added to an index of the inventory
+        /// </summary>
+        event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
+        event LazyStackInventoryMoveEventHandler<T>? OnMove;
+
         #region ILazyStackInventory
         /// <summary>
         /// Gets an item from inside a slot
@@ -94,6 +108,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">amount of the item</param>
         /// <param name="replace">if true it will repleace the current items inside it</param>
         /// <returns>Returns the items that couldn't be added or the replaced</returns>
+        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index, int amount) instead")]
         T[] AddAt(T item, int index, int amount, bool replace);
         #endregion
 

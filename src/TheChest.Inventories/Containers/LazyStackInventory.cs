@@ -1,5 +1,6 @@
 ﻿using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
+using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -11,7 +12,12 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
-        protected new IInventoryLazyStackSlot<T>[] slots;
+        public event LazyStackInventoryGetEventHandler<T>? OnGet;
+        public event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        public event LazyStackInventoryMoveEventHandler<T>? OnMove;
+
+        protected new readonly IInventoryLazyStackSlot<T>[] slots;
+
         public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
         
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
@@ -29,6 +35,9 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Adds an item to the first available slot
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory.
+        /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <returns>True if <paramref name="item"/> is possible to be added to the inventory</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -37,18 +46,27 @@ namespace TheChest.Inventories.Containers
             if(item is null)
                 throw new ArgumentNullException(nameof(item));
 
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.CanAdd(item))
-                    return slot.Add(item) == 0;
+                {
+                    var notAdded = slot.Add(item);
+                    if (notAdded == 0)
+                        this.OnAdd?.Invoke(this, (item, index, 1));
+
+                    return notAdded == 0; 
+                }
             }
 
             return false;
         }
         /// <summary>
-        /// Adds an amount of items to the first available slot
+        /// Adds an amount of items to the first available slot.
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when any amount of <paramref name="item"/> are added to the inventory.
+        /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be added</param>
         /// <returns>Empty array when is succesfully added, otherwise it'll return an array with not added items</returns>
@@ -61,23 +79,33 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            var notAdded = amount;
-            for (int i = 0; i < this.Size; i++)
+            var notAddedAmount = amount;
+            var events = new List<LazyStackInventoryAddItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.CanAdd(item))
                 {
-                    notAdded = slot.Add(item, amount);
-                    if (notAdded == 0)
+                    var previousAmount = notAddedAmount;
+                    notAddedAmount = slot.Add(item, previousAmount);
+                    var addedAmount = previousAmount - notAddedAmount;
+                    events.Add(new(item, index, addedAmount));
+                    if (notAddedAmount == 0)
                         break;
                 }
             }
+            if(events.Count > 0)
+                this.OnAdd?.Invoke(this, new(events));
 
-            return notAdded;
+            return notAddedAmount;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> .
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index, int amount) instead")]
         public virtual T[] AddAt(T item, int index, int amount, bool replace)
         {
             if (item is null)
@@ -91,16 +119,21 @@ namespace TheChest.Inventories.Containers
             if (slot.CanAdd(item, amount))
             {
                 var notAdded = slot.Add(item, amount);
+                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
                 return Enumerable.Repeat(item, notAdded).ToArray();
             }
             else if(replace && slot.CanReplace(item, amount))
             {
+                this.OnAdd?.Invoke(this, (item, index, amount));
                 return slot.Replace(item, amount);
             }
 
             return Enumerable.Repeat(item, amount).ToArray();
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> .
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual int AddAt(T item, int index, int amount)
@@ -114,47 +147,76 @@ namespace TheChest.Inventories.Containers
 
             var slot = this.slots[index];
             if (slot.CanAdd(item, amount))
-                return slot.Add(item, amount);
+            {
+                var notAdded = slot.Add(item, amount);
+                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
+                return notAdded;
+            }
 
             return amount;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when all items are returned from the inventory.
+        /// </remarks>
         public virtual T[] Clear()
         {
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
             var items = new List<T>();
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (!slot.IsEmpty)
                 {
                     var slotItems = slot.GetAll();
+                    if (slotItems.Length > 0)
+                        events.Add(new(slotItems[0], index, slotItems.Length));
+
                     items.AddRange(slotItems);
                 }
             }
-            
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new(events));
+
             return items.ToArray();
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual T? Get(int index)
         {
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].Get().FirstOrDefault();
+            var item = this.slots[index].Get().FirstOrDefault();
+            if (item is not null)
+                this.OnGet?.Invoke(this, (item, index, 1));
+
+            return item;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when <paramref name="item"/> is returned from the inventory.
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual T? Get(T item)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.Contains(item))
-                    return slot.Get().FirstOrDefault();
+                {
+                    var foundItem = slot.Get().FirstOrDefault();
+                    if(foundItem is not null)
+                        this.OnGet?.Invoke(this, (foundItem, index, 1));
+
+                    return foundItem;
+                }
             }
 
             return default;
@@ -162,6 +224,9 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Gets an amount of items from the inventory
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when any amount of <paramref name="item"/> is returned from the inventory.
+        /// </remarks>
         /// <param name="item">Item to be searched on the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be returned</param>
         /// <returns>The amount of items searched (or the max it can return)</returns>
@@ -175,12 +240,15 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             var items = new List<T>();
-            for (int i = 0; i < this.Size; i++)
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.Get(amount);
+                    if (slotItems.Length > 0)
+                        events.Add(new(slotItems[0], index, slotItems.Length));
 
                     items.AddRange(slotItems);
                     amount -= slotItems.Length;
@@ -188,12 +256,17 @@ namespace TheChest.Inventories.Containers
                         break;
                 }
             }
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new(events));
 
             return items.ToArray();
         }
         /// <summary>
         /// Gets an amount of items from an specific slot the inventory
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when any amount of <paramref name="item"/> is returned from the inventory.
+        /// </remarks>
         /// <param name="index">Slot item index to be returned</param>
         /// <param name="amount">Amount to be returned (or the max available)</param>
         /// <returns>An array of <see cref="{T}"/></returns>
@@ -205,11 +278,18 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            return this.slots[index].Get(amount);
+            var items = this.slots[index].Get(amount);
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+
+            return items;
         }
         /// <summary>
         /// Gets all items of the selected type from all slots
         /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when every <paramref name="item"/> is returned from the inventory.
+        /// </remarks> 
         /// <param name="item">Item to be searched</param>
         /// <returns>A list with all items founded in the inventory</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
@@ -219,30 +299,38 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
-            for (int i = 0; i < this.Size; i++)
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[i];
+                var slot = this.slots[index];
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.GetAll();
+                    if (slotItems.Length > 0)
+                        events.Add(new(slotItems[0], index, slotItems.Length));
                     items.AddRange(slotItems);
                 }
             }
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new(events));
 
             return items.ToArray();
         }
-        /// <summary>
-        /// Gets all items from an specific slot from the inventory
-        /// </summary>
-        /// <param name="index">Slot item index to be returned</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when all items from <paramref name="index"/> is returned from the inventory.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual T[] GetAll(int index)
         {
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].GetAll();
+            var items = this.slots[index].GetAll();
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+
+            return items;
         }
         /// <summary>
         /// Returns the amount of an item inside the inventory
@@ -287,25 +375,34 @@ namespace TheChest.Inventories.Containers
             if (originSlot.IsEmpty && targetSlot.IsEmpty)
                 return;
 
+            var events = new List<LazyStackInventoryMoveItemEventData<T>>();
             var originItems = originSlot.GetAll();
             var originItem = originItems.FirstOrDefault();
 
-            if (originItem is null)
-            {
-                var targetItems = targetSlot.GetAll();
-                var targetItem = targetItems.FirstOrDefault();
-                originSlot.Add(targetItem!, targetItems.Length);
-            }
-            else
+            if (originItem is not null)
             {
                 var targetItems = targetSlot.Replace(originItem!, originItems.Length);
+                events.Add(new(originItem!, originItems.Length, origin, target));
                 var targetItem = targetItems.FirstOrDefault();
 
                 if(targetItem is not null)
                 {
                     originSlot.Replace(targetItem!, targetItems.Length);
+                    events.Add(new(targetItem!, targetItems.Length, target, origin));
                 }
             }
+            else
+            {
+                var targetItems = targetSlot.GetAll();
+                var targetItem = targetItems.FirstOrDefault();
+                if (targetItem is not null)
+                {
+                    originSlot.Add(targetItem!, targetItems.Length);
+                    events.Add(new(targetItem!, targetItems.Length, target, origin)); 
+                }
+            }
+
+            this.OnMove?.Invoke(this, new(events.ToArray()));
         }
     }
 }

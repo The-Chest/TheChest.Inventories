@@ -1,7 +1,7 @@
 ﻿namespace TheChest.Inventories.Containers.Events.Stack
 {
     /// <summary>
-    /// Data for the Event args on <see cref="InventoryAddEventHandler{T}"/> event.
+    /// Data for the Event args on <see cref="StackInventoryAddEventHandler{T}"/> event.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="Items"></param>
