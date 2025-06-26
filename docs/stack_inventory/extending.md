@@ -36,7 +36,7 @@ public class MyInventoryStackSlot : InventoryStackSlot<int>
         amount = items.Length;
     }
 
-    public virtual int? Get()
+    public override int? Get()
     {
         if (this.amount <= 0 || this.IsEmpty)
         {
