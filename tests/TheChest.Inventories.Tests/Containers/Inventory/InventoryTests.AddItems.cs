@@ -83,14 +83,14 @@
             var size = this.random.Next(10, 20);
             var inventory = this.containerFactory.EmptyContainer(size);
 
-            var randomItemSize = this.random.Next(2, size);
+            var randomItemSize = this.random.Next(3, size);
             var items = this.itemFactory
                 .CreateManyRandom(randomItemSize)
                 .Append(default!)
                 .Reverse()
                 .ToArray();
             inventory.Add(items);
-
+ 
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[0].Content, Is.EqualTo(items[1]));
