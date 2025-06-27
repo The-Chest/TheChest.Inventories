@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inventory", "inventory", "{
 		docs\inventory\implementing.md = docs\inventory\implementing.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stack_inventory", "stack_inventory", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stack_inventory", "stack_inventory", "{6E4E9365-6329-4D99-A987-3975D1D27AF4}"
 	ProjectSection(SolutionItems) = preProject
 		docs\stack_inventory\events.md = docs\stack_inventory\events.md
 		docs\stack_inventory\class_diagram.md = docs\stack_inventory\class_diagram.md
