@@ -10,26 +10,19 @@ The library provides a robust framework for managing inventories and slots in a 
 
 - **Generic Inventory Management**: Supports generic item types for flexibility.
 - **Slot-Based System**: Items are stored and managed in slots, with interfaces and implementations for inventory slots.
-- **Stackable Items**: Includes support for stackable items with `StackInventory` and `InventoryStackSlot`.
-- **Extensible Interfaces**: Interfaces like `IInventory<T>` and `IInventorySlot<T>` allow for custom implementations.
-- **Core Operations**: Add, remove, move, and retrieve items from inventories and slots.
-- **Error Handling**: Includes exception handling for invalid operations, such as adding items to full slots or accessing invalid indices.
+- **Extensible Interfaces**: Allows for custom implementations and extensions of the inventory system.
+- **Core Operations**: Add, retrieve and move  items from inventories and slots.
+- **Error Handling**: Includes exception handling for invalid operations.
 
 ## Project Structure
 
-### Containers
-- **`Inventory<T>`**: A generic inventory implementation that manages items in slots.
-- **`StackInventory<T>`**: Extends `Inventory<T>` to support stackable items.
-- **Interfaces**: Defines contracts for inventory behavior, such as `IInventory<T>` and `IStackInventory<T>`.
-
-### Slots
-- **`InventorySlot<T>`**: Represents a single slot in the inventory.
-- **`InventoryStackSlot<T>`**: Extends `InventorySlot<T>` to support stacked items.
-- **Interfaces**: Defines contracts for slots behaviors, such as `IInventorySlot<T>` and `IInventoryStackSlot<T>`.
-
-Project documentation:
-- [docs/class_diagrams](/docs/class_diagrams.md): Class diagrams for the inventories.
-- [docs/events](/docs/events.md): Events and their usage in the inventories.
+### Inventory
+- **`Inventory<T>`** : A generic inventory implementation that manages items in slots. 
+    - **`InventorySlot<T>`**: Represents a single slot in the inventory.
+- **`StackInventory<T>`** : A generic inventory that manages stackable items.
+    - **`InventoryStackSlot<T>`**: Represents a slot that can hold multiple items of the same type.
+- **`LazyStackInventory<T>`** : A generic stack inventory that allows lazy loading of items.
+    - **`LazyInventoryStackSlot<T>`**: Represents a slot that can hold one item with amount deciding how much it can return.
 
 ## How to use it
 
@@ -51,9 +44,10 @@ nuget install TheChest.Inventories
 #### DLL
 Alternatively, you can download the DLL file and reference it directly in your project.
 
-### Using the bult-in classes
+## Usage
 The library provides ready-to-use implementations such as `Inventory<T>` and `InventorySlot<T>`. These can be used directly. For example:
-#### Inventory
+
+### Inventory
 ```csharp
 var slots = new IInventorySlot<string>[10];
 for (int i = 0; i < slots.Length; i++)
@@ -64,7 +58,8 @@ for (int i = 0; i < slots.Length; i++)
 var inventory = new Inventory<string>(slots);
 inventory.Add("Item1");
 ```
-#### StackInventory
+
+### StackInventory
 ```csharp
 var stackSlots = new IInventoryStackSlot<string>[10];
 for (int i = 0; i < stackSlots.Length; i++)
@@ -76,110 +71,42 @@ var stackInventory = new StackInventory<string>(stackSlots);
 stackInventory.Add("StackableItem", "StackableItem");
 ``` 
 
-### Extending the bult-in Inventories
-You can extend those built-ind classes to override with your own features.
-#### Inventory
+### LazyStackInventory
 ```csharp
-using TheChest.Inventories.Containers;
-using TheChest.Inventories.Slots.Interfaces;
-
-public class MyInventory : Inventory<int>
+var lazyStackSlots = new IInventoryLazyStackSlot<string>[10];
+for (int i = 0; i < lazyStackSlots.Length; i++)
 {
-    public MyInventory(IInventorySlot<int>[] slots) : base(slots)
-    {
-        if (slots.Length != 10)
-            throw new System.ArgumentException("Invalid inventory size");
-    }
-
-    public override bool Add(int item)
-    {
-        return this.slots[item].Add(item);
-    }
+    lazyStackSlots[i] = new InventoryLazyStackSlot<string>($"item_{i}_",5 , 2);
 }
-```
-#### StackInventory
-```csharp
-using TheChest.Inventories.Containers;
-using TheChest.Inventories.Slots.Interfaces;
 
-public class MyStackInventory : StackInventory<int>
-{
-    public MyStackInventory(IInventoryStackSlot<int>[] slots, int maxStackAmount) : base(slots, maxStackAmount)
-    {
-        if (maxStackAmount < 1)
-            throw new System.ArgumentException("Invalid inventory maxStackAmount");
-    }
-
-    public override bool CanAdd(int item)
-    {
-        if(item <= 0)
-            return false;
-        
-        return base.CanAdd(item);
-    }
-}
+var lazyStackInventory = new LazyStackInventory<string>(lazyStackSlots);
+stackInventory.Add("StackableItem", "StackableItem");
 ```
 
-### Implementing a custom Inventory
-If you need more control, you can implement the interfaces directly.
-#### Inventory
-```csharp
-using TheChest.Inventories.Containers.Interfaces;
-using TheChest.Inventories.Slots.Interfaces;
+### Creating a custom Inventory
+If you need more control, you can implement the interfaces or extend classes.
 
-public class MyInventory : IInventory<int>{
-    protected readonly IInventorySlot<int>[] slots;
+- **`Inventory<T>`**
+    - [docs/inventory/implementing](/docs/inventory/implementing.md)
+    - [docs/inventory/extending](/docs/inventory/extending.md)
+- **`StackInventory<T>`**
+    - [docs/stack_inventory/implementing](/docs/stack_inventory/implementing.md)
+    - [docs/stack_inventory/extending](/docs/stack_inventory/extending.md)
+- **`LazyStackInventory<T>`**
+    - [docs/lazy_stack_inventory/implementing](/docs/lazy_stack_inventory/implementing.md)
+    - [docs/lazy_stack_inventory/extending](/docs/lazy_stack_inventory/extending.md) 
 
-    public MyInventory(IInventorySlot<int>[] slots)
-    {
-        this.slots = slots;
-    }
+## Docs 
 
-    public bool Add(int item){
-        if(item < 1)
-            return false;
-
-        if(this.slot[item].IsFull)
-            return false;
-
-        this.slot[item] = item;
-        return true;
-    }
-    /// all other methods will need to be implemented too
-}
-```
-#### StackInventory
-```csharp
-using TheChest.Inventories.Containers.Interfaces;
-using TheChest.Inventories.Slots.Interfaces;
-
-public class MyStackInventory : StackInventory<int>{
-    protected readonly IInventoryStackSlot<int>[] slots;
-
-    public MyInventory(IInventoryStackSlot<int>[] slots)
-    {
-        this.slots = slots;
-    }
-
-    public bool Add(int item){
-        if(item < 1)
-            return false;
-
-        if(this.slot[item].IsFull)
-            return false;
-
-        for(int i = 0; i < this.slot[item].Content.Length; i++){
-            if(this.slot[item].Content[i] <0 || this.slot[item].Content[i] == null){
-                this.slot[item].Content[i] = item;
-                return true;
-            }
-        }
-
-        return false;
-    }
-    /// all other methods will need to be implemented too
-}
-```
+- **`Inventory<T>`**
+    - [docs/inventory/class_diagram](/docs/inventory/class_diagram.md)
+    - [docs/inventory/events](/docs/inventory/events.md)
+- **`StackInventory<T>`**
+    - [docs/stack_inventory/class_diagram](/docs/stack_inventory/class_diagram.md)
+    - [docs/stack_inventory/events](/docs/stack_inventory/events.md)
+- **`LazyStackInventory<T>`**
+    - [docs/lazy_stack_inventory/class_diagram](/docs/lazy_stack_inventory/class_diagram.md)
+    - [docs/lazy_stack_inventory/events](/docs/lazy_stack_inventory/events.md)
 
 ## Future Plans
 
