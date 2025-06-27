@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stack_inventory", "stack_in
 	ProjectSection(SolutionItems) = preProject
 		docs\stack_inventory\events.md = docs\stack_inventory\events.md
 		docs\stack_inventory\class_diagram.md = docs\stack_inventory\class_diagram.md
+		docs\stack_inventory\events.md = docs\stack_inventory\events.md
 		docs\stack_inventory\extending.md = docs\stack_inventory\extending.md
+		docs\stack_inventory\implementing.md = docs\stack_inventory\implementing.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lazy_stack_inventory", "lazy_stack_inventory", "{F23C1317-F2B9-4C47-B2A0-1C9C0B57C495}"
