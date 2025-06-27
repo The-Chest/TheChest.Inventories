@@ -36,6 +36,6 @@ public class MySlot : InventorySlot<int>
         return true;
     }
 
-    /// all other methods will need to be implemented too
+    // You can override other methods as needed
 }
 ```
