@@ -16,7 +16,7 @@ The library provides a robust framework for managing inventories and slots in a 
 
 ## Project Structure
 
-### Inventory<T>
+### Inventory
 - **`Inventory<T>`** : A generic inventory implementation that manages items in slots. 
     - **`InventorySlot<T>`**: Represents a single slot in the inventory.
 - **`StackInventory<T>`** : A generic inventory that manages stackable items.
