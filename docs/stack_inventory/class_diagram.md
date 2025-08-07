@@ -24,8 +24,10 @@ direction TB
             + StackInventory(IInventoryStackSlot~T~[] slots)
             + bool Add(T item)
             + T[] AddAt(T item, int index, bool replace = true)
+            + bool AddAt(T item, int index)
             + T[] Add(params T[] items)
             + T[] AddAt(T[] items, int index, bool replace = true)
+            + T[] AddAt(T[] items, int index)
             + T[] Clear()
             + T[] GetAll(int index)
             + T[] GetAll(T item)
@@ -52,8 +54,10 @@ direction TB
         }
         class IStackInventory~T~ {
             + bool Add(T item)
+            + bool AddAt(T item, int index)
             + T[] AddAt(T item, int index, bool replace = true)
             + T[] Add(params T[] items)
+            + T[] AddAt(T[] items, int index)
             + T[] AddAt(T[] items, int index, bool replace = true)
             + T[] Clear()
             + T[] GetAll(int index)
