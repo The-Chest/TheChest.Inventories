@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.47.0" />
-    <PackageReference Include="TheChest.Core" Version="0.7.0" />
+    <PackageReference Include="TheChest.Core" Version="0.8.0" />
   </ItemGroup>
 
   <ItemGroup>
