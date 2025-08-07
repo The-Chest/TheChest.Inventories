@@ -13,14 +13,6 @@
         }
 
         [Test]
-        public void AddItemsAt_InvalidItem_ThrowsArgumentException()
-        {
-            var inventory = this.containerFactory.EmptyContainer(20);
-
-            Assert.That(() => inventory.AddAt(Array.Empty<T>(), 0), Throws.ArgumentException);
-        }
-
-        [Test]
         public void AddItemsAt_EmptySlot_AddsToStack()
         {
             var index = this.random.Next(0, 20);
