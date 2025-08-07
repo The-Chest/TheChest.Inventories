@@ -14,12 +14,22 @@
     /// <typeparam name="T"></typeparam>
     public sealed class InventoryAddEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<InventoryAddItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates event args for the <see cref="InventoryAddEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="data"></param>
         public InventoryAddEventArgs(IReadOnlyCollection<InventoryAddItemEventData<T>> data)
         {
             Data = data;
         }
-
+        /// <summary>
+        /// Implicit conversion from a tuple to <see cref="InventoryAddEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator InventoryAddEventArgs<T>((T Item, int Index) data)
         {
             return new InventoryAddEventArgs<T>(
@@ -28,7 +38,10 @@
                 }
             );
         }
-
+        /// <summary>
+        /// Implicit conversion from an array of tuples to <see cref="InventoryAddEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator InventoryAddEventArgs<T>((T[] Items, int[] Indexes) data)
         {
             return new InventoryAddEventArgs<T>(
