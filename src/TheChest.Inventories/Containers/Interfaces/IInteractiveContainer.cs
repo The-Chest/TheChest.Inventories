@@ -25,7 +25,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Returns every item from inventory
         /// </summary>
-        /// <returns>Returns an Array of <see cref="{T}"/></returns>
+        /// <returns>Returns an Array of items</returns>
         T[] Clear();
     }
 }

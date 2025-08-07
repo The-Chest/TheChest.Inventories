@@ -14,12 +14,22 @@
     /// <typeparam name="T">Item type</typeparam>
     public sealed class InventoryGetEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<InventoryGetItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates event args for the <see cref="InventoryGetEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="data"></param>
         public InventoryGetEventArgs(IReadOnlyCollection<InventoryGetItemEventData<T>> data)
         {
             Data = data;
         }
-
+        /// <summary>
+        /// Implicit conversion from a tuple to <see cref="InventoryGetEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator InventoryGetEventArgs<T>((T Item, int Index) data)
         {
             return new InventoryGetEventArgs<T>(
@@ -28,7 +38,10 @@
                 }
             );
         }
-
+        /// <summary>
+        /// Implicit conversion from an array of tuples to <see cref="InventoryGetEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator InventoryGetEventArgs<T>((T[] Items, int[] Indexes) data)
         {
             return new InventoryGetEventArgs<T>(

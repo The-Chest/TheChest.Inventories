@@ -15,12 +15,22 @@
     /// <typeparam name="T"></typeparam>
     public sealed class LazyStackInventoryAddEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data that were sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<LazyStackInventoryAddItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates a new instance of <see cref="LazyStackInventoryAddEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public LazyStackInventoryAddEventArgs(IReadOnlyCollection<LazyStackInventoryAddItemEventData<T>> data)
         {
             Data = data;
         }
-
+        /// <summary>
+        /// Implicit conversion from a single item data to <see cref="LazyStackInventoryAddEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator LazyStackInventoryAddEventArgs<T>((T Item, int Index, int Amount) data)
         {
             return new LazyStackInventoryAddEventArgs<T>(

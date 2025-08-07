@@ -14,12 +14,22 @@
     /// <typeparam name="T"></typeparam>
     public sealed class StackInventoryAddEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<StackInventoryAddItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates event args for the <see cref="StackInventoryAddEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="data"></param>
         public StackInventoryAddEventArgs(IReadOnlyCollection<StackInventoryAddItemEventData<T>> data)
         {
             Data = data;
         }
-
+        /// <summary>
+        /// Implicit conversion from a tuple to <see cref="StackInventoryAddEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator StackInventoryAddEventArgs<T>((T[] Items, int Index) data)
         {
             return new StackInventoryAddEventArgs<T>(

@@ -16,12 +16,22 @@
     /// <typeparam name="T"></typeparam>
     public sealed class LazyStackInventoryMoveEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<LazyStackInventoryMoveItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates event args for the <see cref="LazyStackInventoryMoveEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="data"></param>
         public LazyStackInventoryMoveEventArgs(IReadOnlyCollection<LazyStackInventoryMoveItemEventData<T>> data)
         {
             Data = data;
         }
-
+        /// <summary>
+        /// Implicit conversion from a tuple to <see cref="LazyStackInventoryMoveEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator LazyStackInventoryMoveEventArgs<T>(
             (T Item, int Amount, int OriginIndex, int TargetIndex) data
         )

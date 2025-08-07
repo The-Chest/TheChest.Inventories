@@ -12,14 +12,28 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class StackInventory<T> : StackContainer<T>, IStackInventory<T>
     {
+        /// <summary>
+        /// Array of <see cref="IInventoryStackSlot{T}"/> slots in the inventory
+        /// </summary>
         protected new readonly IInventoryStackSlot<T>[] slots;
 
+        /// <inheritdoc/>
         public event StackInventoryAddEventHandler<T>? OnAdd;
+        /// <inheritdoc/>
         public event StackInventoryGetEventHandler<T>? OnGet;
+        /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T>? OnMove;
 
+        /// <summary>
+        /// Gets the <see cref="IInventoryStackSlot{T}"/> at the specified index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public override IInventoryStackSlot<T> this[int index] => this.slots[index];
 
+        /// <summary>
+        /// Gets all slots in the inventory as an array of <see cref="IInventoryStackSlot{T}"/>.
+        /// </summary>
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventoryStackSlot<T>[] Slots => this.slots.ToArray();
 
@@ -139,7 +153,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> of the inventory. 
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual T[] AddAt(T item, int index, bool replace = true)
         {
             if (item is null)

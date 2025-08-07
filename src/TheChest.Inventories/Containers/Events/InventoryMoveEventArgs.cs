@@ -15,12 +15,23 @@
     /// <typeparam name="T"></typeparam>
     public sealed class InventoryMoveEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<InventoryMoveItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates event args for the <see cref="InventoryMoveEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="data"></param>
         public InventoryMoveEventArgs(IReadOnlyCollection<InventoryMoveItemEventData<T>> data)
         {
             Data = data;
         }
 
+        /// <summary>
+        /// Implicit conversion from a tuple to <see cref="InventoryMoveEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator InventoryMoveEventArgs<T>(
             (T Item, int OriginIndex, int TargetIndex) data
         )
@@ -33,6 +44,10 @@
             );
         }
 
+        /// <summary>
+        /// Implicit conversion from an array of tuples to <see cref="InventoryMoveEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator InventoryMoveEventArgs<T>(
             (T Item, int OriginIndex, int TargetIndex)[] data
         )

@@ -3,7 +3,7 @@
     /// <summary>
     /// Data for the Event args on <see cref="StackInventoryMoveEventHandler{T}"/> event.
     /// </summary>
-    /// <typeparam name="T">Type of <paramref name="Item"/></typeparam>
+    /// <typeparam name="T">Type of <paramref name="Items"/></typeparam>
     /// <param name="Items"></param>
     /// <param name="FromIndex"></param>
     /// <param name="ToIndex"></param>
@@ -15,12 +15,22 @@
     /// <typeparam name="T"></typeparam>
     public sealed class StackInventoryMoveEventArgs<T> : EventArgs
     {
+        /// <summary>
+        /// Data sent throught the event.
+        /// </summary>
         public IReadOnlyCollection<StackInventoryMoveItemEventData<T>> Data { get; }
+        /// <summary>
+        /// Creates event args for the <see cref="StackInventoryMoveEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="data"></param>
         public StackInventoryMoveEventArgs(IReadOnlyCollection<StackInventoryMoveItemEventData<T>> data)
         {
             Data = data;
         }
-
+        /// <summary>
+        /// Implicit conversion from a tuple to <see cref="StackInventoryMoveEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator StackInventoryMoveEventArgs<T>(
             (T[] Items, int OriginIndex, int TargetIndex) data
         )
