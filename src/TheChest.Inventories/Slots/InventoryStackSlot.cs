@@ -177,7 +177,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>All items from <see cref="ISlot{T}.Content"/></returns>
         public virtual T[] GetAll()
         {
-            var result = this.Content.Where(x => EqualityComparer<T>.Default.Equals(x, default!)).ToArray();
+            var result = this.Content.Where(x => !EqualityComparer<T>.Default.Equals(x, default!)).ToArray();
             Array.Clear(this.content,0, this.content.Length);
             return result;
         }
@@ -199,7 +199,7 @@ namespace TheChest.Inventories.Slots
 
             //TODO: improve it by getting it from the last items (maybe using IEnumerable)
             var result = this.content
-                .Where(x => EqualityComparer<T>.Default.Equals(x, default!))
+                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
                 .Take(amount)
                 .ToArray();
             for (int i = 0; i < amount; i++)
