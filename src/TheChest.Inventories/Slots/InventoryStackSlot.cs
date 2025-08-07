@@ -1,7 +1,10 @@
-﻿using TheChest.Inventories.Slots.Interfaces;
+﻿using System;
+using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Core.Slots.Extensions;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace TheChest.Inventories.Slots
 {
@@ -131,14 +134,14 @@ namespace TheChest.Inventories.Slots
         /// <returns>Returns false if is Full or Contains item of a different type than <paramref name="item"/></returns>
         public virtual bool CanAdd(T item)
         {
-            if (item == null)
+            if (item is null)
                 return false;
 
             if (this.IsFull)
                 return false;
 
             if (!this.IsEmpty)
-                return this.Content.First()!.Equals(item);//TODO: Use Contains
+                return this.Contains(item);
 
             return true;
         }
@@ -174,8 +177,8 @@ namespace TheChest.Inventories.Slots
         /// <returns>All items from <see cref="ISlot{T}.Content"/></returns>
         public virtual T[] GetAll()
         {
-            var result = this.Content.Where(x => x is not null).ToArray();
-            Array.Clear(this.content);
+            var result = this.Content.Where(x => EqualityComparer<T>.Default.Equals(x, default!)).ToArray();
+            Array.Clear(this.content,0, this.content.Length);
             return result;
         }
 
@@ -196,7 +199,7 @@ namespace TheChest.Inventories.Slots
 
             //TODO: improve it by getting it from the last items (maybe using IEnumerable)
             var result = this.content
-                .Where(x => x is not null)
+                .Where(x => EqualityComparer<T>.Default.Equals(x, default!))
                 .Take(amount)
                 .ToArray();
             for (int i = 0; i < amount; i++)
@@ -211,7 +214,7 @@ namespace TheChest.Inventories.Slots
         /// Gets a single item from inside the <see cref="ISlot{T}.Content"/>
         /// </summary>
         /// <returns>an item from <see cref="ISlot{T}.Content"/> or null if <see cref="ISlot{T}.IsEmpty"/> is true</returns>
-        public virtual T? Get()
+        public virtual T Get()
         {
             if (this.IsEmpty)
                 return default;

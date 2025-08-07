@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Slots.Interfaces;
+﻿using System;
+using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots.Interfaces
 {
@@ -86,7 +87,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Gets a single item from the slot
         /// </summary>
         /// <returns>an item from the slot</returns>
-        T? Get();
+        T Get();
         /// <summary>
         /// Gets an amount of items from the slot.
         /// </summary>

@@ -13,7 +13,7 @@ namespace TheChest.Inventories.Slots
         /// Creates a basic inventory slot with an item
         /// </summary>
         /// <param name="currentItem">item that belongs to this slot</param>
-        public InventorySlot(T? currentItem = default) : base(currentItem) { }
+        public InventorySlot(T currentItem = default!) : base(currentItem) { }
 
         /// <inheritdoc />
         public virtual bool Add(T item)
@@ -28,7 +28,7 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc />
-        public virtual T? Get()
+        public virtual T Get()
         {
             var content = this.Content;
             this.Content = default;
@@ -36,7 +36,7 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc />
-        public virtual T? Replace(T item)
+        public virtual T Replace(T item)
         {
             var content = this.Content;
             this.Content = item;
