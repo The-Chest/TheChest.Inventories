@@ -3,7 +3,7 @@
     /// <summary>
     /// Data for the Event args on <see cref="StackInventoryMoveEventHandler{T}"/> event.
     /// </summary>
-    /// <typeparam name="T">Type of <paramref name="Item"/></typeparam>
+    /// <typeparam name="T">Type of <paramref name="Items"/></typeparam>
     /// <param name="Items"></param>
     /// <param name="FromIndex"></param>
     /// <param name="ToIndex"></param>

@@ -277,7 +277,7 @@ namespace TheChest.Inventories.Containers
         /// Gets an amount of items from an specific slot the inventory
         /// </summary>
         /// <remarks>
-        /// The method fires <see cref="OnGet"/> event when any amount of <paramref name="item"/> is returned from the inventory.
+        /// The method fires <see cref="OnGet"/> event when any amount of item is returned from <paramref name="index"/> of the inventory.
         /// </remarks>
         /// <param name="index">Slot item index to be returned</param>
         /// <param name="amount">Amount to be returned (or the max available)</param>
