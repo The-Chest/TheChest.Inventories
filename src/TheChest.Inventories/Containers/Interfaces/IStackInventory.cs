@@ -27,7 +27,7 @@ namespace TheChest.Inventories.Containers.Interfaces
 
         #region IStackInventory
         /// <summary>
-        /// Gets an <see cref="item"/> inside a slot
+        /// Gets an item from inside a slot index
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
@@ -123,7 +123,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Returns every item from the inventory
         /// </summary>
-        /// <returns>Returns an Array of <see cref="{T}"/></returns>
+        /// <returns>Returns an Array of items</returns>
         T[] Clear();
         #endregion
     }
