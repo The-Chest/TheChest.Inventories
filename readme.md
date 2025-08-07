@@ -28,9 +28,6 @@ The library provides a robust framework for managing inventories and slots in a 
 
 ### Installation
 
-#### Prerequisites
-* .NET 6.0 or later
-
 #### NuGet
 To install the library via NuGet, you need to add a NuGet package origin reference to the following URL:
 ```
