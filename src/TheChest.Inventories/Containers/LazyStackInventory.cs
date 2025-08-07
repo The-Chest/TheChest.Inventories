@@ -20,22 +20,6 @@ namespace TheChest.Inventories.Containers
         public event LazyStackInventoryMoveEventHandler<T>? OnMove;
 
         /// <summary>
-        /// Slots of the inventory
-        /// </summary>
-        protected new readonly IInventoryLazyStackSlot<T>[] slots;
-
-        /// <summary>
-        /// Gets an slot from the inventory
-        /// </summary>
-        /// <param name="index">index of the slot to be returned</param>
-        /// <returns></returns>
-        public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
-        
-        /// <inheritdoc/>
-        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public override IInventoryLazyStackSlot<T>[] Slots => this.slots;
-
-        /// <summary>
         /// Creates an Stackable Inventory with lazy behavior
         /// </summary>
         /// <param name="slots">An array of <see cref="IInventoryLazyStackSlot{T}"/></param>
@@ -44,6 +28,21 @@ namespace TheChest.Inventories.Containers
         {
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
+
+        /// <summary>
+        /// Slots of the inventory
+        /// </summary>
+        protected new readonly IInventoryLazyStackSlot<T>[] slots;
+        /// <summary>
+        /// Gets an slot from the inventory
+        /// </summary>
+        /// <param name="index">index of the slot to be returned</param>
+        /// <returns></returns>
+        public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];      
+        /// <inheritdoc/>
+        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
+        public override IInventoryLazyStackSlot<T>[] Slots => this.slots;
+
         /// <summary>
         /// Adds an item to the first available slot
         /// </summary>
