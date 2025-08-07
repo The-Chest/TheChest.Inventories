@@ -12,14 +12,26 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
     {
+        /// <inheritdoc/>
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
+        /// <inheritdoc/>
         public event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        /// <inheritdoc/>
         public event LazyStackInventoryMoveEventHandler<T>? OnMove;
 
+        /// <summary>
+        /// Slots of the inventory
+        /// </summary>
         protected new readonly IInventoryLazyStackSlot<T>[] slots;
 
+        /// <summary>
+        /// Gets an slot from the inventory
+        /// </summary>
+        /// <param name="index">index of the slot to be returned</param>
+        /// <returns></returns>
         public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
         
+        /// <inheritdoc/>
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventoryLazyStackSlot<T>[] Slots => this.slots;
 
@@ -269,7 +281,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <param name="index">Slot item index to be returned</param>
         /// <param name="amount">Amount to be returned (or the max available)</param>
-        /// <returns>An array of <see cref="{T}"/></returns>
+        /// <returns>An array of items</returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual T[] Get(int index, int amount)
         {

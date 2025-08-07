@@ -12,10 +12,16 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class Inventory<T> : Container<T>, IInventory<T>
     {
+        /// <summary>
+        /// An array of <see cref="IInventorySlot{T}"/> that holds the slots of this inventory
+        /// </summary>
         protected new readonly IInventorySlot<T>[] slots;
 
+        /// <inheritdoc/>
         public event InventoryGetEventHandler<T>? OnGet;
+        /// <inheritdoc/>
         public event InventoryAddEventHandler<T>? OnAdd;
+        /// <inheritdoc/>
         public event InventoryMoveEventHandler<T>? OnMove;
 
         /// <summary>
@@ -27,18 +33,24 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
+        /// <summary>
+        /// Gets an <see cref="IInventorySlot{T}"/> from the inventory
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public override IInventorySlot<T> this[int index] => this.slots[index];
 
+        /// <summary>
+        /// Gets an array of <see cref="IInventorySlot{T}"/> from the inventory
+        /// </summary>
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
         public override IInventorySlot<T>[] Slots => this.slots.ToArray();
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
+        /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns>
         /// An array of <paramref name="items"/> that were not added to the inventory.
         /// </returns>
@@ -109,7 +121,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual T? AddAt(T item, int index, bool replace = true)
         {
             if (item is null)
@@ -190,7 +202,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
         /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Inventory{T}.Size"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual T? Get(int index)
         {
             if (index < 0 || index >= this.Size)
