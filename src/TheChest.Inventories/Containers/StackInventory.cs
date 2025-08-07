@@ -237,12 +237,11 @@ namespace TheChest.Inventories.Containers
             return added;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public T[] AddAt(T[] items, int index)
         {
             if (items.Length == 0)
-                throw new ArgumentException("No items to be added", nameof(items));
+                return items;
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             

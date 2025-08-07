@@ -2,22 +2,25 @@ namespace TheChest.Inventories.Tests.Containers
 {
     public partial class StackInventoryTests<T>
     {
-        [TestCase(-1)]
-        [TestCase(100)]
-        public void AddItemsWithReplaceAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
+        [TestCase(-1, true)]
+        [TestCase(-1, false)]
+        [TestCase(100, true)]
+        [TestCase(100, false)]
+        public void AddItemsWithReplaceAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, bool replace)
         {
             var items = this.itemFactory.CreateMany(20);
             var inventory = this.containerFactory.EmptyContainer(20);
 
-            Assert.That(() => inventory.AddAt(items, index), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => inventory.AddAt(items, index, replace), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
-        [Test]
-        public void AddItemsWithReplaceAt_InvalidItem_ThrowsArgumentException()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void AddItemsWithReplaceAt_InvalidItem_ThrowsArgumentException(bool replace)
         {
             var inventory = this.containerFactory.EmptyContainer(20);
 
-            Assert.That(() => inventory.AddAt(Array.Empty<T>(), 0), Throws.ArgumentException);
+            Assert.That(() => inventory.AddAt(Array.Empty<T>(), 0, replace), Throws.ArgumentException);
         }
 
         [Test]
