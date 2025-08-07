@@ -216,6 +216,47 @@ namespace TheChest.Inventories.Containers
             return items;
         }
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        public bool AddAt(T item, int index)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index > this.Size || index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+
+            if (!slot.CanAdd(item))
+                return false;
+
+            var added = slot.Add(item);
+            if (added)
+                this.OnAdd?.Invoke(this, (new[] { item }, index));
+            
+            return added;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
+        public T[] AddAt(T[] items, int index)
+        {
+            if (items.Length == 0)
+                throw new ArgumentException("No items to be added", nameof(items));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            
+            var slot = this.slots[index];
+            if (!slot.CanAdd(items))
+                return items;
+
+            var notAddedItems = slot.Add(items);
+            if (notAddedItems.Length != items.Length)
+                this.OnAdd?.Invoke(this, (items[notAddedItems.Length..], index));
+
+            return notAddedItems;
+        }
+        /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when every item is retrieved from the inventory. 
         /// </remarks>
