@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
@@ -102,13 +103,13 @@ namespace TheChest.Inventories.Containers
                     var previousAmount = notAddedAmount;
                     notAddedAmount = slot.Add(item, previousAmount);
                     var addedAmount = previousAmount - notAddedAmount;
-                    events.Add(new(item, index, addedAmount));
+                    events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedAmount));
                     if (notAddedAmount == 0)
                         break;
                 }
             }
             if(events.Count > 0)
-                this.OnAdd?.Invoke(this, new(events));
+                this.OnAdd?.Invoke(this, new LazyStackInventoryAddEventArgs<T>(events));
 
             return notAddedAmount;
         }
@@ -183,13 +184,13 @@ namespace TheChest.Inventories.Containers
                 {
                     var slotItems = slot.GetAll();
                     if (slotItems.Length > 0)
-                        events.Add(new(slotItems[0], index, slotItems.Length));
+                        events.Add(new LazyStackInventoryGetItemEventData<T>(slotItems[0], index, slotItems.Length));
 
                     items.AddRange(slotItems);
                 }
             }
             if (events.Count > 0)
-                this.OnGet?.Invoke(this, new(events));
+                this.OnGet?.Invoke(this, new LazyStackInventoryGetEventArgs<T>(events));
 
             return items.ToArray();
         }
@@ -204,7 +205,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var item = this.slots[index].Get().FirstOrDefault();
-            if (item is not null)
+            if (!EqualityComparer<T>.Default.Equals(item, default!))
                 this.OnGet?.Invoke(this, (item, index, 1));
 
             return item;
@@ -225,7 +226,7 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var foundItem = slot.Get().FirstOrDefault();
-                    if(foundItem is not null)
+                    if(!EqualityComparer<T>.Default.Equals(foundItem, default!))
                         this.OnGet?.Invoke(this, (foundItem, index, 1));
 
                     return foundItem;
@@ -261,7 +262,7 @@ namespace TheChest.Inventories.Containers
                 {
                     var slotItems = slot.Get(amount);
                     if (slotItems.Length > 0)
-                        events.Add(new(slotItems[0], index, slotItems.Length));
+                        events.Add(new LazyStackInventoryGetItemEventData<T>(slotItems[0], index, slotItems.Length));
 
                     items.AddRange(slotItems);
                     amount -= slotItems.Length;
@@ -270,7 +271,7 @@ namespace TheChest.Inventories.Containers
                 }
             }
             if (events.Count > 0)
-                this.OnGet?.Invoke(this, new(events));
+                this.OnGet?.Invoke(this, new LazyStackInventoryGetEventArgs<T>(events));
 
             return items.ToArray();
         }
@@ -320,12 +321,12 @@ namespace TheChest.Inventories.Containers
                 {
                     var slotItems = slot.GetAll();
                     if (slotItems.Length > 0)
-                        events.Add(new(slotItems[0], index, slotItems.Length));
+                        events.Add(new LazyStackInventoryGetItemEventData<T>(slotItems[0], index, slotItems.Length));
                     items.AddRange(slotItems);
                 }
             }
             if (events.Count > 0)
-                this.OnGet?.Invoke(this, new(events));
+                this.OnGet?.Invoke(this, new LazyStackInventoryGetEventArgs<T>(events));
 
             return items.ToArray();
         }
@@ -392,30 +393,30 @@ namespace TheChest.Inventories.Containers
             var originItems = originSlot.GetAll();
             var originItem = originItems.FirstOrDefault();
 
-            if (originItem is not null)
+            if (!EqualityComparer<T>.Default.Equals(originItem, default!))
             {
                 var targetItems = targetSlot.Replace(originItem!, originItems.Length);
-                events.Add(new(originItem!, originItems.Length, origin, target));
+                events.Add(new LazyStackInventoryMoveItemEventData<T>(originItem!, originItems.Length, origin, target));
                 var targetItem = targetItems.FirstOrDefault();
 
-                if(targetItem is not null)
+                if(!EqualityComparer<T>.Default.Equals(targetItem, default!))
                 {
                     originSlot.Replace(targetItem!, targetItems.Length);
-                    events.Add(new(targetItem!, targetItems.Length, target, origin));
+                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem!, targetItems.Length, target, origin));
                 }
             }
             else
             {
                 var targetItems = targetSlot.GetAll();
                 var targetItem = targetItems.FirstOrDefault();
-                if (targetItem is not null)
+                if (!EqualityComparer<T>.Default.Equals(targetItem, default!))
                 {
                     originSlot.Add(targetItem!, targetItems.Length);
-                    events.Add(new(targetItem!, targetItems.Length, target, origin)); 
+                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem!, targetItems.Length, target, origin)); 
                 }
             }
 
-            this.OnMove?.Invoke(this, new(events.ToArray()));
+            this.OnMove?.Invoke(this, new LazyStackInventoryMoveEventArgs<T>(events.ToArray()));
         }
     }
 }

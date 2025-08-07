@@ -320,12 +320,12 @@ namespace TheChest.Inventories.Containers
 
             var events = new List<InventoryMoveItemEventData<T>>();
             if (!EqualityComparer<T>.Default.Equals(item, default!))
-                events.Add(new(item, origin, target));
+                events.Add(new InventoryMoveItemEventData<T>(item, origin, target));
 
             if (!EqualityComparer<T>.Default.Equals(oldItem, default!))
             {
                 this.slots[origin].Replace(oldItem);
-                events.Add(new(oldItem, target, origin));
+                events.Add(new InventoryMoveItemEventData<T>(oldItem, target, origin));
             }
             this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }

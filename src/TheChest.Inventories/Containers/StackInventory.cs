@@ -127,7 +127,7 @@ namespace TheChest.Inventories.Containers
                 }
 
                 var notAddedItems = slot.Add(items);
-                events.Add(new(items[notAddedItems.Length..], index));
+                events.Add(new StackInventoryAddItemEventData<T>(items[notAddedItems.Length..], index));
                 items = notAddedItems;
                 if (items.Length == 0)
                     break;
@@ -139,7 +139,7 @@ namespace TheChest.Inventories.Containers
                     break;
                 var slot = this.slots[index];
                 var notAddedItems = slot.Add(items);
-                events.Add(new(items[notAddedItems.Length..], index));
+                events.Add(new StackInventoryAddItemEventData<T>(items[notAddedItems.Length..], index));
                 items = notAddedItems;
             }
 
@@ -274,7 +274,7 @@ namespace TheChest.Inventories.Containers
             {
                 var slotItems = this.slots[i].GetAll();
                 if(slotItems.Length > 0)
-                    events.Add(new(slotItems, i));
+                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, i));
 
                 items.AddRange(slotItems);
             }
@@ -316,7 +316,7 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.GetAll();
-                    events.Add(new(slotItems, index));
+                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, index));
                     items.AddRange(slotItems);
                 }
             }
@@ -385,7 +385,7 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.Get(remainingAmount);
-                    events.Add(new(slotItems, i));
+                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, i));
                     items.AddRange(slotItems);
                     remainingAmount -= slotItems.Length;
                     if (remainingAmount <= 0)
@@ -454,12 +454,12 @@ namespace TheChest.Inventories.Containers
                 : this.slots[target].Replace(items);
 
             if (items.Length > 0)
-                events.Add(new(items, origin, target));
+                events.Add(new StackInventoryMoveItemEventData<T>(items, origin, target));
 
             if (oldItems.Length > 0)
             {
                 this.slots[origin].Replace(oldItems);
-                events.Add(new(oldItems, target, origin));
+                events.Add(new StackInventoryMoveItemEventData<T>(oldItems, target, origin));
             }
             this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
         }
