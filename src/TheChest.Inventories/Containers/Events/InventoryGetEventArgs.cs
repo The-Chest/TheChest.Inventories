@@ -1,12 +1,34 @@
-﻿namespace TheChest.Inventories.Containers.Events
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TheChest.Inventories.Containers.Events
 {
     /// <summary>
     /// Data for the Event args on <see cref="InventoryGetEventHandler{T}"/> event.
     /// </summary>
-    /// <typeparam name="T">Type of <paramref name="Item"/></typeparam>
-    /// <param name="Item"></param>
-    /// <param name="Index"></param>
-    public record struct InventoryGetItemEventData<T>(T Item, int Index);
+    /// <typeparam name="T"></typeparam>
+    public readonly struct InventoryGetItemEventData<T>
+    {
+        /// <summary>
+        /// Item that was requested from the inventory.
+        /// </summary>
+        public T Item { get; }
+        /// <summary>
+        /// Index from which the item was requested in the inventory.
+        /// </summary>
+        public int Index { get; }
+        /// <summary>
+        /// Creates data for the <see cref="InventoryGetEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="index"></param>
+        public InventoryGetItemEventData(T item, int index)
+        {
+            Item = item;
+            Index = index;
+        }
+    }
 
     /// <summary>
     /// Event arguments for the <see cref="InventoryGetEventHandler{T}"/> event.
@@ -34,7 +56,10 @@
         {
             return new InventoryGetEventArgs<T>(
                 new InventoryGetItemEventData<T>[] {
-                    new(data.Item, data.Index)
+                    new InventoryGetItemEventData<T>(
+                        item: data.Item, 
+                        index: data.Index
+                    )
                 }
             );
         }
@@ -48,8 +73,8 @@
                 data.Items.Select(
                 (item, i) =>
                     new InventoryGetItemEventData<T>(
-                        Item: item,
-                        Index: data.Indexes[i]
+                        item: item,
+                        index: data.Indexes[i]
                     )
                 ).ToArray()
             );

@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Containers.Interfaces;
+﻿using System;
+using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces

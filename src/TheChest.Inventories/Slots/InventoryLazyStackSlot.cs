@@ -1,4 +1,7 @@
-﻿using TheChest.Core.Slots;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TheChest.Core.Slots;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
@@ -15,17 +18,21 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// The content of the slot
         /// </summary>
-        protected new T? content;
+        protected new T content;
         /// <inheritdoc/>
-        public override T[] Content =>
+        public override IReadOnlyCollection<T> Content =>
             this.content is null ?
             Array.Empty<T>() :
             Enumerable.Repeat(this.content, this.StackAmount).ToArray();
 
         /// <inheritdoc/>
-        public override bool IsFull => this.content is not null && this.StackAmount == this.MaxStackAmount;
+        public override bool IsFull => 
+            !EqualityComparer<T>.Default.Equals(this.content, default!) && 
+            this.StackAmount == this.MaxStackAmount;
         /// <inheritdoc/>
-        public override bool IsEmpty => this.content is null || this.StackAmount == 0;
+        public override bool IsEmpty => 
+            this.content is null || 
+            this.StackAmount == 0;
 
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
@@ -33,7 +40,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="content">default item inside the slot</param>
         /// <param name="amount">amount of the <paramref name="amount"/></param>
         /// <param name="maxStackAmount">the max accepted amount of this slot</param>
-        public InventoryLazyStackSlot(T? content, int amount, int maxStackAmount) : base(content, amount, maxStackAmount)
+        public InventoryLazyStackSlot(T content, int amount, int maxStackAmount) : base(content, amount, maxStackAmount)
         {
             this.content = content;
             this.StackAmount = amount;
@@ -54,7 +61,7 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="item">The value to be set to <see cref="StackSlot{T}.content"/></param>
         /// <param name="amount">The value to be set to <see cref="StackSlot{T}.StackAmount"/></param>
-        protected void SetContent(T? item, int amount)
+        protected void SetContent(T item, int amount)
         {
             this.content = item;
             this.StackAmount = amount;
@@ -156,7 +163,7 @@ namespace TheChest.Inventories.Slots
                 return Enumerable.Repeat(item!, left).ToArray();
             }
 
-            var slotItems = this.Content;
+            var slotItems = this.Content.ToArray();
             this.SetContent(item,amount);
             return slotItems;
         }
@@ -177,7 +184,7 @@ namespace TheChest.Inventories.Slots
 
             if(this.StackAmount < amount)
             {
-                var items = this.Content;
+                var items = this.Content.ToArray();
                 this.Clear();
                 return items;
             }
@@ -192,7 +199,7 @@ namespace TheChest.Inventories.Slots
             if (this.IsEmpty)
                 return Array.Empty<T>();
 
-            var items = this.Content;
+            var items = this.Content.ToArray();
             this.Clear();
             return items;
         }

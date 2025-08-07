@@ -1,13 +1,40 @@
-﻿namespace TheChest.Inventories.Containers.Events
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TheChest.Inventories.Containers.Events
 {
     /// <summary>
     /// Data for the Event args on <see cref="InventoryMoveEventHandler{T}"/> event.
     /// </summary>
-    /// <typeparam name="T">Type of <paramref name="Item"/></typeparam>
-    /// <param name="Item"></param>
-    /// <param name="FromIndex"></param>
-    /// <param name="ToIndex"></param>
-    public record struct InventoryMoveItemEventData<T>(T Item, int FromIndex, int ToIndex);
+    /// <typeparam name="T"></typeparam>
+    public readonly struct InventoryMoveItemEventData<T>
+    {
+        /// <summary>
+        /// Item that was moved in the inventory.
+        /// </summary>
+        public T Item { get; }
+        /// <summary>
+        /// Index from which the item was moved in the inventory.
+        /// </summary>
+        public int FromIndex { get; }
+        /// <summary>
+        /// Index to which the item was moved in the inventory.
+        /// </summary>
+        public int ToIndex { get; }
+        /// <summary>
+        /// Creates data for the <see cref="InventoryMoveEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="fromIndex"></param>
+        /// <param name="toIndex"></param>
+        public InventoryMoveItemEventData(T item, int fromIndex, int toIndex)
+        {
+            Item = item;
+            FromIndex = fromIndex;
+            ToIndex = toIndex;
+        }
+    }
 
     /// <summary>
     /// Event arguments for the <see cref="InventoryMoveEventHandler{T}"/> event.
@@ -39,7 +66,11 @@
             return new InventoryMoveEventArgs<T>(
                 new InventoryMoveItemEventData<T>[1]
                 {
-                    new(data.Item, data.OriginIndex, data.TargetIndex),
+                    new InventoryMoveItemEventData<T>(                        
+                        item: data.Item,
+                        fromIndex: data.OriginIndex,
+                        toIndex: data.TargetIndex
+                     ),
                 }
             );
         }
@@ -55,9 +86,9 @@
             return new InventoryMoveEventArgs<T>(
                 data.Select(
                     item => new InventoryMoveItemEventData<T>(
-                        Item: item.Item,
-                        FromIndex: item.OriginIndex,
-                        ToIndex: item.TargetIndex
+                        item: item.Item,
+                        fromIndex: item.OriginIndex,
+                        toIndex: item.TargetIndex
                     )
                 ).ToArray()
             );

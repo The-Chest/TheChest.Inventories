@@ -1,13 +1,39 @@
-﻿namespace TheChest.Inventories.Containers.Events.Stack
+﻿using System;
+using System.Collections.Generic;
+
+namespace TheChest.Inventories.Containers.Events.Stack
 {
     /// <summary>
     /// Data for the Event args on <see cref="StackInventoryMoveEventHandler{T}"/> event.
     /// </summary>
-    /// <typeparam name="T">Type of <paramref name="Items"/></typeparam>
-    /// <param name="Items"></param>
-    /// <param name="FromIndex"></param>
-    /// <param name="ToIndex"></param>
-    public record struct StackInventoryMoveItemEventData<T>(T[] Items, int FromIndex, int ToIndex);
+    /// <typeparam name="T"></typeparam>
+    public readonly struct StackInventoryMoveItemEventData<T>
+    {
+        /// <summary>
+        /// Items that were moved in the inventory.
+        /// </summary>
+        public T[] Items { get; }
+        /// <summary>
+        /// Index of the items in the inventory before the move operation.
+        /// </summary>
+        public int FromIndex { get; }
+        /// <summary>
+        /// Index of the items in the inventory after the move operation.
+        /// </summary>
+        public int ToIndex { get; }
+        /// <summary>
+        /// Creates data for the <see cref="StackInventoryMoveEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="fromIndex"></param>
+        /// <param name="toIndex"></param>
+        public StackInventoryMoveItemEventData(T[] items, int fromIndex, int toIndex)
+        {
+            this.Items = items;
+            this.FromIndex = fromIndex;
+            this.ToIndex = toIndex;
+        }
+    }
 
     /// <summary>
     /// Event arguments for the <see cref="StackInventoryMoveEventHandler{T}"/> event.
@@ -38,7 +64,7 @@
             return new StackInventoryMoveEventArgs<T>(
                 new StackInventoryMoveItemEventData<T>[1]
                 {
-                    new(data.Items, data.OriginIndex, data.TargetIndex),
+                    new StackInventoryMoveItemEventData<T>(data.Items, data.OriginIndex, data.TargetIndex),
                 }
             );
         }

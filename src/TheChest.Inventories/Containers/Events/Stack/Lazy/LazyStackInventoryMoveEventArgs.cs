@@ -1,4 +1,7 @@
-﻿namespace TheChest.Inventories.Containers.Events.Stack.Lazy
+﻿using System;
+using System.Collections.Generic;
+
+namespace TheChest.Inventories.Containers.Events.Stack.Lazy
 {
     /// <summary>
     /// Data for the Event args on <see cref="LazyStackInventoryMoveEventHandler{T}"/> event.
@@ -8,7 +11,39 @@
     /// <param name="Amount"></param>
     /// <param name="FromIndex"></param>
     /// <param name="ToIndex"></param>
-    public record struct LazyStackInventoryMoveItemEventData<T>(T Item, int Amount, int FromIndex, int ToIndex);
+    public readonly struct LazyStackInventoryMoveItemEventData<T>
+    {
+        /// <summary>
+        /// Item that was moved in the inventory.
+        /// </summary>
+        public T Item { get; }
+        /// <summary>
+        /// Amount of items that were moved in the inventory.
+        /// </summary>
+        public int Amount { get; }
+        /// <summary>
+        /// Index of the item in the inventory before the move operation.
+        /// </summary>
+        public int FromIndex { get; }
+        /// <summary>
+        /// Index of the item in the inventory after the move operation.
+        /// </summary>
+        public int ToIndex { get; }
+        /// <summary>
+        /// Creates data for the <see cref="LazyStackInventoryMoveEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="amount"></param>
+        /// <param name="fromIndex"></param>
+        /// <param name="toIndex"></param>
+        public LazyStackInventoryMoveItemEventData(T item, int amount, int fromIndex, int toIndex)
+        {
+            Item = item;
+            Amount = amount;
+            FromIndex = fromIndex;
+            ToIndex = toIndex;
+        }
+    }
 
     /// <summary>
     /// Event arguments for the <see cref="LazyStackInventoryMoveEventHandler{T}"/> event.
@@ -39,7 +74,7 @@
             return new LazyStackInventoryMoveEventArgs<T>(
                 new LazyStackInventoryMoveItemEventData<T>[1]
                 {
-                    new(data.Item, data.Amount, data.OriginIndex, data.TargetIndex),
+                    new LazyStackInventoryMoveItemEventData<T>(data.Item, data.Amount, data.OriginIndex, data.TargetIndex),
                 }
             );
         }
