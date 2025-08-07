@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers.Events;
+﻿using System;
+using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -25,13 +26,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>An item inside of the <paramref name="index"/> Slot</returns>
-        T? Get(int index);
+        T Get(int index);
         /// <summary>
         /// Search an item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
         /// <returns>First item found that is equal <paramref name="item"/></returns>
-        T? Get(T item);
+        T Get(T item);
         /// <summary>
         /// Search an amount of items in the inventory
         /// </summary>
@@ -73,7 +74,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="replace">Flag that decide if the item on <paramref name="index"/> (if exists) will be replaced</param>
         /// <returns>The item from param that couldn't be added or the replaced item that were inside the slot</returns>
         [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        T? AddAt(T item, int index, bool replace);
+        T AddAt(T item, int index, bool replace);
         /// <summary>
         /// Adds an item in a specific slot
         /// </summary>

@@ -1,4 +1,6 @@
-﻿using TheChest.Core.Containers;
+﻿using System;
+using System.Collections.Generic;
+using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Interfaces;
@@ -38,10 +40,10 @@ namespace TheChest.Inventories.Containers
         /// </summary>
         /// <param name="index">index of the slot to be returned</param>
         /// <returns></returns>
-        public override IInventoryLazyStackSlot<T> this[int index] => this.slots[index];      
+        public new IInventoryLazyStackSlot<T> this[int index] => this.slots[index];      
         /// <inheritdoc/>
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public override IInventoryLazyStackSlot<T>[] Slots => this.slots;
+        public new IInventoryLazyStackSlot<T>[] Slots => this.slots;
 
         /// <summary>
         /// Adds an item to the first available slot
@@ -196,7 +198,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
-        public virtual T? Get(int index)
+        public virtual T Get(int index)
         {
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -212,7 +214,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnGet"/> event when <paramref name="item"/> is returned from the inventory.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual T? Get(T item)
+        public virtual T Get(T item)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));

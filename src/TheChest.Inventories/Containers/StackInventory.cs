@@ -1,4 +1,7 @@
-﻿using TheChest.Core.Containers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
@@ -29,12 +32,12 @@ namespace TheChest.Inventories.Containers
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IInventoryStackSlot<T> this[int index] => this.slots[index];
+        public new IInventoryStackSlot<T> this[int index] => this.slots[index];
         /// <summary>
         /// Gets all slots in the inventory as an array of <see cref="IInventoryStackSlot{T}"/>.
         /// </summary>
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public override IInventoryStackSlot<T>[] Slots => this.slots.ToArray();
+        public new IInventoryStackSlot<T>[] Slots => this.slots.ToArray();
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
@@ -327,13 +330,13 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when one item from <paramref name="index"/> are retrieved.
         /// </remarks>
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
-        public virtual T? Get(int index)
+        public virtual T Get(int index)
         {
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
             
             var item = this.slots[index].Get();
-            if(item is not null)
+            if(!EqualityComparer<T>.Default.Equals(item, default!))
                 this.OnGet?.Invoke(this, (new[]{ item }, index));
             return item;
         }
@@ -342,7 +345,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual T? Get(T item)
+        public virtual T Get(T item)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
@@ -353,7 +356,7 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var result = slot.Get();
-                    if(result is not null)
+                    if(!EqualityComparer<T>.Default.Equals(item, default!))
                         this.OnGet?.Invoke(this, (new[]{ result }, index));
                     return result;
                 }
@@ -450,10 +453,10 @@ namespace TheChest.Inventories.Containers
                 ? this.slots[target].GetAll()
                 : this.slots[target].Replace(items);
 
-            if (items is not null)
+            if (items.Length > 0)
                 events.Add(new(items, origin, target));
 
-            if (oldItems is not null && oldItems.Length > 0)
+            if (oldItems.Length > 0)
             {
                 this.slots[origin].Replace(oldItems);
                 events.Add(new(oldItems, target, origin));

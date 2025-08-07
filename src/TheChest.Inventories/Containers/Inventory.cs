@@ -1,4 +1,7 @@
-﻿using TheChest.Core.Containers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TheChest.Core.Containers;
 using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
@@ -38,12 +41,12 @@ namespace TheChest.Inventories.Containers
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public override IInventorySlot<T> this[int index] => this.slots[index];
+        public new IInventorySlot<T> this[int index] => this.slots[index];
         /// <summary>
         /// Gets an array of <see cref="IInventorySlot{T}"/> from the inventory
         /// </summary>
         [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public override IInventorySlot<T>[] Slots => this.slots.ToArray();
+        public new IInventorySlot<T>[] Slots => this.slots.ToArray();
 
         /// <inheritdoc/>
         /// <remarks>
@@ -120,14 +123,14 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         [Obsolete("This will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        public virtual T? AddAt(T item, int index, bool replace)
+        public virtual T AddAt(T item, int index, bool replace)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            T? result = default;
+            T result = default;
             if (replace)
             {
                 result = this.slots[index].Replace(item);
@@ -172,7 +175,7 @@ namespace TheChest.Inventories.Containers
             for (int i = 0; i < this.Size; i++)
             {
                 var item = this.slots[i].Get();
-                if(item is not null)
+                if(!EqualityComparer<T>.Default.Equals(item, default!))
                 {
                     indexes.Add(i);
                     items.Add(item);
@@ -215,14 +218,14 @@ namespace TheChest.Inventories.Containers
         /// The method fires the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        public virtual T? Get(int index)
+        public virtual T Get(int index)
         {
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var item = this.slots[index].Get();
 
-            if(item is not null)
+            if(!EqualityComparer<T>.Default.Equals(item, default!))
                 this.OnGet?.Invoke(this, (item, index));
 
             return item;
@@ -232,7 +235,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires the <see cref="OnGet"/> event when <paramref name="item"/> is found.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual T? Get(T item)
+        public virtual T Get(T item)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
@@ -316,10 +319,10 @@ namespace TheChest.Inventories.Containers
             var oldItem = this.slots[target].Replace(item);
 
             var events = new List<InventoryMoveItemEventData<T>>();
-            if (item is not null)
+            if (!EqualityComparer<T>.Default.Equals(item, default!))
                 events.Add(new(item, origin, target));
 
-            if (oldItem is not null)
+            if (!EqualityComparer<T>.Default.Equals(oldItem, default!))
             {
                 this.slots[origin].Replace(oldItem);
                 events.Add(new(oldItem, target, origin));
