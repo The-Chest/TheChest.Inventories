@@ -103,7 +103,7 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
         {
             if(item == null)
@@ -117,9 +117,9 @@ namespace TheChest.Inventories.Slots
 
             return false;
         }
-       
+
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">when <see cref="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
         [Obsolete("Use Add(T item) instead to avoid reference issues. This method will be removed.")]
         public void Add(ref T item)
         {
