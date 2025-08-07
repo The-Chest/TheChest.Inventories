@@ -66,9 +66,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         bool Add(T item);
         /// <summary>
         /// Adds an item in a specific slot
-        /// <para>
-        /// The param <paramref name="replace"/> might be changed to default to false in the future.
-        /// </para>
+        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T, int)"/> instead.</para>
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>
