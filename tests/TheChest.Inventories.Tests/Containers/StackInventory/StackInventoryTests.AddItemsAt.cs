@@ -21,19 +21,19 @@
         }
 
         [Test]
-        public void AddItemsAt_EmptySlot_ReplaceEnabled_AddsToStack()
+        public void AddItemsAt_EmptySlot_AddsToStack()
         {
             var index = this.random.Next(0, 20);
             var inventory = this.containerFactory.EmptyContainer(20);
 
             var items = this.itemFactory.CreateMany(10);
-            inventory.AddAt(items, index, replace: true);
+            inventory.AddAt(items, index);
 
             Assert.That(inventory[index].Content, Is.EqualTo(items));
         }
 
         [Test]
-        public void AddItemsAt_EmptySlot_ReplaceEnabled_CallsOnAddEvent()
+        public void AddItemsAt_EmptySlot_CallsOnAddEvent()
         {
             var index = this.random.Next(0, 20);
             var inventory = this.containerFactory.EmptyContainer(20);
@@ -48,23 +48,23 @@
                     Assert.That(firstEvent.Index, Is.EqualTo(index));
                 });
             };
-            inventory.AddAt(items, index, replace: true);
+            inventory.AddAt(items, index);
         }
 
         [Test]
-        public void AddItemsAt_EmptySlot_ReplaceEnabled_ReturnsEmpty()
+        public void AddItemsAt_EmptySlot_ReturnsEmpty()
         {
             var index = this.random.Next(0, 20);
             var inventory = this.containerFactory.EmptyContainer(20);
 
             var items = this.itemFactory.CreateMany(10);
-            var result = inventory.AddAt(items, index, replace: true);
+            var result = inventory.AddAt(items, index);
 
             Assert.That(result, Is.Empty);
         }
 
         [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ReplaceDisabled_DoNotReplaceItemsFromSlot()
+        public void AddItemsAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateRandom();
@@ -72,13 +72,12 @@
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
 
             var items = this.itemFactory.CreateMany(amount);
-            inventory.AddAt(items, index, replace: false);
-
-            Assert.That(inventory[index].Content, Has.All.EqualTo(slotItem));
+            inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when is not possible to Add.");
+            inventory.AddAt(items, index);
         }
 
         [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ReplaceDisabled_DoesNotCallOnAddEvent()
+        public void AddItemsAt_SlotWithDifferentItem_ReturnsItemsFromParams()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateRandom();
@@ -86,75 +85,13 @@
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
 
             var items = this.itemFactory.CreateMany(amount);
-            inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when is not possible to Add or Replace.");
-            inventory.AddAt(items, index, replace: false);
-        }
-
-        [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ReplaceDisabled_ReturnsItemsFromParams()
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-
-            var items = this.itemFactory.CreateMany(amount);
-            var result = inventory.AddAt(items, index, replace: false);
+            var result = inventory.AddAt(items, index);
 
             Assert.That(result, Is.EqualTo(items));
         }
 
         [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ReplaceEnabled_ReturnsItemsFromSlot()
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-
-            var items = this.itemFactory.CreateMany(amount);
-            var result = inventory.AddAt(items, index, replace: true);
-
-            Assert.That(result, Has.All.EqualTo(slotItem));
-        }
-
-        [Test]
-        public void AddItemsAt_SlotWithDifferentItems_ReplaceEnabled_ReplacesItems()
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-
-            var items = this.itemFactory.CreateMany(amount);
-            inventory.AddAt(items, index, replace: true);
-
-            Assert.That(inventory[index].Content, Is.EqualTo(items));
-        }
-
-        [Test]
-        public void AddItemsAt_SlotWithDifferentItems_ReplaceEnabled_CallsOnAddEvent()
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-
-            var items = this.itemFactory.CreateMany(amount);
-            inventory.OnAdd += (sender, e) => {
-                Assert.That(e.Data, Has.Count.EqualTo(1));
-                Assert.Multiple(() =>
-                {
-                    var firstEvent = e.Data.First();
-                    Assert.That(firstEvent.Items, Is.EqualTo(items));
-                    Assert.That(firstEvent.Index, Is.EqualTo(index));
-                });
-            };
-            inventory.AddAt(items, index, replace: true);
-        }
-
-        [Test]
-        public void AddItemsAt_SlotWithSameItem_ReplaceEnabled_AddsToStack()
+        public void AddItemsAt_SlotWithSameItem_AddsToStack()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
@@ -164,7 +101,7 @@
             inventory.Get(index, 2); 
 
             var items = this.itemFactory.CreateMany(2);
-            inventory.AddAt(items, index, replace: true);
+            inventory.AddAt(items, index);
 
             Assert.Multiple(() =>
             {
@@ -175,7 +112,7 @@
         }
 
         [Test]
-        public void AddItemsAt_FullSlotSlotWithSameItem_ReplaceEnabled_ReturnsParamItems()
+        public void AddItemsAt_FullSlotSlotWithSameItem_ReturnsNotAddedItemsFromParam()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
@@ -184,58 +121,13 @@
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
 
             var items = this.itemFactory.CreateMany(amount);
-            var result = inventory.AddAt(items, index, replace: true);
+            var result = inventory.AddAt(items, index);
 
             Assert.That(result, Is.EqualTo(items));
         }
 
         [Test]
-        public void AddItemsAt_SlotWithSameItem_ReplaceDisabled_AddsToStack()
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateDefault();
-
-            var amount = this.random.Next(5, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index, 2);
-
-            var items = this.itemFactory.CreateMany(2);
-            inventory.AddAt(items, index, replace: false);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory[index].IsFull, Is.True);
-                Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content, Is.Not.Null);
-                Assert.That(inventory[index].Content!.Reverse().Take(2), Is.EqualTo(items));
-            });
-        }
-
-        [Test]
-        public void AddItemsAt_SlotWithSameItem_ReplaceDisabled_CallsOnAddEvent()
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateDefault();
-
-            var amount = this.random.Next(5, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-            inventory.Get(index, 2);
-
-            var items = this.itemFactory.CreateMany(2);
-            inventory.OnAdd += (sender, e) => {
-                Assert.That(e.Data, Has.Count.EqualTo(1));
-                Assert.Multiple(() =>
-                {
-                    var firstEvent = e.Data.First();
-                    Assert.That(firstEvent.Items, Is.EqualTo(items));
-                    Assert.That(firstEvent.Index, Is.EqualTo(index));
-                });
-            };
-            inventory.AddAt(items, index, replace: false);
-        }
-
-        [Test]
-        public void AddItemsAt_FullSlotWithSameItem_ReplaceDisabled_ReturnsParamItems()
+        public void AddItemsAt_FullSlotWithSameItem_DoNotAddsToStack()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
@@ -244,30 +136,13 @@
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
 
             var items = this.itemFactory.CreateMany(10);
-            var result = inventory.AddAt(items, index, replace: false);
-
-            Assert.That(result, Is.EqualTo(items));
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void AddItemsAt_FullSlotWithSameItem_DoNotAddsToStack(bool replace)
-        {
-            var index = this.random.Next(0, 20);
-            var slotItem = this.itemFactory.CreateDefault();
-
-            var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
-
-            var items = this.itemFactory.CreateMany(10);
-            inventory.AddAt(items, index, replace);
+            inventory.AddAt(items, index);
 
             Assert.That(inventory[index].Content, Has.No.AnyOf(items));
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void AddItemsAt_FullSlotWithSameItem_DoesNotCallOnAddEvent(bool replace)
+        [Test]
+        public void AddItemsAt_FullSlotWithSameItem_DoesNotCallOnAddEvent()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
@@ -276,13 +151,12 @@
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
 
             var items = this.itemFactory.CreateMany(10);
-            inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when is not possible to Add or Replace.");
-            inventory.AddAt(items, index, replace);
+            inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when is not possible to Add.");
+            inventory.AddAt(items, index);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void AddItemsAt_FullSlotWithSameItem_ReturnsNotAddedItems(bool replace)
+        [Test]
+        public void AddItemsAt_FullSlotWithSameItem_ReturnsNotAddedItems()
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
@@ -290,7 +164,7 @@
             var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
 
             var items = this.itemFactory.CreateMany(10);
-            var result = inventory.AddAt(items, index, replace);
+            var result = inventory.AddAt(items, index);
 
             Assert.That(result, Is.Not.Empty.And.EqualTo(items));
         }
