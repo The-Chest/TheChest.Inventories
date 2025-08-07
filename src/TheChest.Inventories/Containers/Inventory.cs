@@ -119,7 +119,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        [Obsolete("This will be removed in the future versions. Use it without replace param")]
+        [Obsolete("This will be removed in the future versions. Use AddAt(T item, int index) instead")]
         public virtual T? AddAt(T item, int index, bool replace)
         {
             if (item is null)
