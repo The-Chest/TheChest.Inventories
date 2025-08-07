@@ -1,13 +1,39 @@
-﻿namespace TheChest.Inventories.Containers.Events.Stack.Lazy
+﻿using System;
+using System.Collections.Generic;
+
+namespace TheChest.Inventories.Containers.Events.Stack.Lazy
 {
     /// <summary>
     /// Data for the Event args on <see cref="LazyStackInventoryAddEventHandler{T}"/> event.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="Item"></param>
-    /// <param name="Index"></param>
-    /// <param name="Amount"></param>
-    public record struct LazyStackInventoryAddItemEventData<T>(T Item, int Index, int Amount);
+    public readonly struct LazyStackInventoryAddItemEventData<T>
+    {
+        /// <summary>
+        /// Item that was added to the inventory.
+        /// </summary>
+        public T Item { get; }
+        /// <summary>
+        /// Index of the item in the inventory where it was added.
+        /// </summary>
+        public int Index { get; }
+        /// <summary>
+        /// Amount of items that were added to the inventory.
+        /// </summary>
+        public int Amount { get; }
+        /// <summary>
+        /// Creates a new instance of <see cref="LazyStackInventoryAddItemEventData{T}"/>.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="index"></param>
+        /// <param name="amount"></param>
+        public LazyStackInventoryAddItemEventData(T item, int index, int amount)
+        {
+            this.Item = item;
+            this.Index = index;
+            this.Amount = amount;
+        }
+    }
 
     /// <summary>
     /// Event arguments for the <see cref="LazyStackInventoryAddEventHandler{T}"/> event.
@@ -34,11 +60,11 @@
         public static implicit operator LazyStackInventoryAddEventArgs<T>((T Item, int Index, int Amount) data)
         {
             return new LazyStackInventoryAddEventArgs<T>(
-                new LazyStackInventoryAddItemEventData<T>[] {
-                    new(
-                        Item: data.Item,
-                        Index: data.Index,
-                        Amount: data.Amount
+                new LazyStackInventoryAddItemEventData<T>[1] {
+                    new LazyStackInventoryAddItemEventData<T>(
+                        item: data.Item,
+                        index: data.Index,
+                        amount: data.Amount
                     )
                 }
             );

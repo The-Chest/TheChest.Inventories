@@ -1,4 +1,7 @@
-﻿namespace TheChest.Inventories.Containers.Events.Stack
+﻿using System;
+using System.Collections.Generic;
+
+namespace TheChest.Inventories.Containers.Events.Stack
 {
     /// <summary>
     /// Data for the Event args on <see cref="StackInventoryAddEventHandler{T}"/> event.
@@ -6,7 +9,27 @@
     /// <typeparam name="T"></typeparam>
     /// <param name="Items"></param>
     /// <param name="Index"></param>
-    public record struct StackInventoryAddItemEventData<T>(T[] Items, int Index);
+    public readonly struct StackInventoryAddItemEventData<T>
+    {
+        /// <summary>
+        /// Items that were added to the inventory.
+        /// </summary>
+        public T[] Items { get; }
+        /// <summary>
+        /// Index where the items were added.
+        /// </summary>
+        public int Index { get; }
+        /// <summary>
+        /// Creates data for the <see cref="StackInventoryAddEventHandler{T}"/> event.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="index"></param>
+        public StackInventoryAddItemEventData(T[] items, int index)
+        {
+            Items = items;
+            Index = index;
+        }
+    }
 
     /// <summary>
     /// Event arguments for the <see cref="StackInventoryAddEventHandler{T}"/> event.
@@ -33,10 +56,10 @@
         public static implicit operator StackInventoryAddEventArgs<T>((T[] Items, int Index) data)
         {
             return new StackInventoryAddEventArgs<T>(
-                new StackInventoryAddItemEventData<T>[] {
-                    new(
-                        Items: data.Items,
-                        Index: data.Index
+                new StackInventoryAddItemEventData<T>[1] {
+                    new StackInventoryAddItemEventData<T>(
+                        items: data.Items,
+                        index: data.Index
                     )
                 }
             );
