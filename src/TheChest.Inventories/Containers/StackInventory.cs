@@ -30,7 +30,6 @@ namespace TheChest.Inventories.Containers
         /// <param name="index"></param>
         /// <returns></returns>
         public override IInventoryStackSlot<T> this[int index] => this.slots[index];
-
         /// <summary>
         /// Gets all slots in the inventory as an array of <see cref="IInventoryStackSlot{T}"/>.
         /// </summary>
@@ -92,7 +91,6 @@ namespace TheChest.Inventories.Containers
 
             return false;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// <para>
@@ -147,14 +145,14 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> of the inventory. 
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        public virtual T[] AddAt(T item, int index, bool replace = true)
+        [Obsolete("This will be removed in the future versions. Use AddAt(T item, int index) instead")]
+        public virtual T[] AddAt(T item, int index, bool replace)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
@@ -181,7 +179,6 @@ namespace TheChest.Inventories.Containers
 
             return new T[1] { item };
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// <para>
@@ -190,7 +187,8 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
-        public virtual T[] AddAt(T[] items, int index, bool replace = true)
+        [Obsolete("This will be removed in the future versions. Use AddAt(T[] items, int index) instead")]
+        public virtual T[] AddAt(T[] items, int index, bool replace)
         {
             if(items.Length == 0)
                 throw new ArgumentException("No items to be added", nameof(items));
@@ -217,7 +215,6 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when every item is retrieved from the inventory. 
@@ -243,7 +240,6 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
@@ -259,7 +255,6 @@ namespace TheChest.Inventories.Containers
                 this.OnGet?.Invoke(this, (items, index));
             return items;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
@@ -287,7 +282,6 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when one item from <paramref name="index"/> are retrieved.
@@ -303,7 +297,6 @@ namespace TheChest.Inventories.Containers
                 this.OnGet?.Invoke(this, (new[]{ item }, index));
             return item;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
@@ -327,7 +320,6 @@ namespace TheChest.Inventories.Containers
             }
             return default;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items in an <paramref name="amount"/> from the inventory that contains <paramref name="item"/> are retrieved.
@@ -361,7 +353,6 @@ namespace TheChest.Inventories.Containers
                 this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));    
             return items.ToArray();
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items in an <paramref name="amount"/> from the <paramref name="index"/> are retrieved.
@@ -381,7 +372,6 @@ namespace TheChest.Inventories.Containers
                 this.OnGet?.Invoke(this, (items, index));
             return items;
         }
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual int GetCount(T item)
@@ -399,7 +389,6 @@ namespace TheChest.Inventories.Containers
             }
             return amount;
         }
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
         public virtual void Move(int origin, int target)
