@@ -12,7 +12,6 @@ The library provides a robust framework for managing inventories and slots in a 
 - **Slot-Based System**: Items are stored and managed in slots, with interfaces and implementations for inventory slots.
 - **Extensible Interfaces**: Allows for custom implementations and extensions of the inventory system.
 - **Core Operations**: Add, retrieve and move  items from inventories and slots.
-- **Error Handling**: Includes exception handling for invalid operations.
 
 ## Project Structure
 
