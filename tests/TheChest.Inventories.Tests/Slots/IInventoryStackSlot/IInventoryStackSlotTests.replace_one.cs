@@ -8,9 +8,7 @@
             var slotItems = this.itemFactory.CreateMany(10);
             var slot = this.slotFactory.FullSlot(slotItems);
 
-            var item = default(T);
-
-            Assert.That(() => slot.Replace(ref item!), Throws.ArgumentNullException);
+            Assert.That(() => slot.Replace(default(T)!), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -21,7 +19,7 @@
             var item = this.itemFactory.CreateDefault();
             var expectedResult = new T[1];
             Array.Fill(expectedResult, item);
-            slot.Replace(ref item);
+            slot.Replace(item);
 
             Assert.That(slot.Content, Has.Count.EqualTo(1).And.EqualTo(expectedResult));
         }
@@ -32,7 +30,7 @@
             var slot = this.slotFactory.EmptySlot();
 
             var item = this.itemFactory.CreateDefault();
-            var result = slot.Replace(ref item);
+            var result = slot.Replace(item);
 
             Assert.That(result, Is.Empty);
         }
@@ -44,7 +42,7 @@
             var slot = this.slotFactory.WithItems(items);
 
             var replacingItem = this.itemFactory.CreateRandom();
-            var result = slot.Replace(ref replacingItem);
+            var result = slot.Replace(replacingItem);
 
             Assert.That(result, Is.EqualTo(items));
         }
@@ -59,7 +57,7 @@
             var expectedResult = new T[1];
             Array.Fill(expectedResult, replacingItem);
 
-            slot.Replace(ref replacingItem);
+            slot.Replace(replacingItem);
 
             Assert.That(slot.Content, Is.EqualTo(expectedResult));
         }
@@ -71,7 +69,7 @@
             var slot = this.slotFactory.WithItems(items);
 
             var replacingItem = this.itemFactory.CreateDefault();
-            var result = slot.Replace(ref replacingItem);
+            var result = slot.Replace(replacingItem);
 
             Assert.That(result, Is.EqualTo(items));
         }
@@ -86,7 +84,7 @@
             var expectedResult = new T[1];
             Array.Fill(expectedResult, replacingItem);
 
-            slot.Replace(ref replacingItem);
+            slot.Replace(replacingItem);
 
             Assert.That(slot.Content, Is.EqualTo(expectedResult));
         }

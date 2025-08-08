@@ -144,7 +144,7 @@ namespace TheChest.Inventories.Containers
             }
 
             if(events.Count > 0)
-                this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events));
+                this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
 
             return items;
         }
@@ -393,7 +393,7 @@ namespace TheChest.Inventories.Containers
                 }
             }
             if(events.Count > 0)
-                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));    
+                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events.ToArray()));    
             return items.ToArray();
         }
         /// <inheritdoc/>

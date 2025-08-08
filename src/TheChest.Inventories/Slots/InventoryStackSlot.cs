@@ -1,10 +1,10 @@
 ﻿using System;
-using TheChest.Inventories.Slots.Interfaces;
+using System.Linq;
+using System.Collections.Generic;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Core.Slots.Extensions;
-using System.Linq;
-using System.Collections.Generic;
+using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
 {
@@ -50,7 +50,6 @@ namespace TheChest.Inventories.Slots
 
             items = items[addAmount..];
         }
-       
         /// <summary>
         /// Adds an item inside the Content with no previous validation.
         /// </summary>
@@ -92,19 +91,6 @@ namespace TheChest.Inventories.Slots
 
             return items;
         }
-
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
-        /// </remarks>
-        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
-        [Obsolete("Use Add(T[] items) instead to avoid reference issues. This method will be removed.")]
-        public void Add(ref T[] items)
-        {
-            this.Add(items);
-            items = default;
-        }
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
@@ -120,16 +106,6 @@ namespace TheChest.Inventories.Slots
 
             return false;
         }
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
-        [Obsolete("Use Add(T item) instead to avoid reference issues. This method will be removed.")]
-        public void Add(ref T item)
-        {
-            this.Add(item);
-            item = default;
-        }
-
         /// <inheritdoc/>
         /// <returns>Returns false if is Full or Contains item of a different type than <paramref name="item"/></returns>
         public virtual bool CanAdd(T item)
@@ -145,7 +121,6 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-
         /// <inheritdoc/>.
         /// <remarks>
         /// Uses <see cref="IInventoryStackSlot{T}.CanAdd(T)"/> for the validation for each item inside <paramref name="items"/>.
@@ -170,7 +145,6 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-
         /// <summary>
         /// Gets and removes all items from <see cref="ISlot{T}.Content"/>
         /// </summary>
@@ -181,7 +155,6 @@ namespace TheChest.Inventories.Slots
             Array.Clear(this.content,0, this.content.Length);
             return result;
         }
-
         /// <summary>
         /// Gets an removes amount of items from <see cref="ISlot{T}.Content"/>.
         /// If is bigger than <see cref="IStackSlot{T}.StackAmount"/> it returns the maximum amount possible.
@@ -209,7 +182,6 @@ namespace TheChest.Inventories.Slots
 
             return result;
         }
-
         /// <summary>
         /// Gets a single item from inside the <see cref="ISlot{T}.Content"/>
         /// </summary>
@@ -221,7 +193,6 @@ namespace TheChest.Inventories.Slots
 
             return this.Get(1).FirstOrDefault();
         }
-
         /// <inheritdoc/>
         /// <returns>false if the array is bigger than <see cref="IStackSlot{T}.MaxStackAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
@@ -243,7 +214,6 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-
         /// <inheritdoc/>
         /// <returns>false if the param <paramref name="item"/> is null</returns>
         public virtual bool CanReplace(T item)
@@ -253,7 +223,6 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-
         /// <inheritdoc/>
         /// <returns>The current items from <see cref="ISlot{T}.Content"/> or <paramref name="items"/> if is not possible to replace</returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
@@ -291,7 +260,6 @@ namespace TheChest.Inventories.Slots
             this.AddItems(ref result);
             return items;
         }
-
         /// <inheritdoc/>
         /// <param name="item">the item that will be attempt to replace</param>
         /// <returns>null if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
@@ -316,26 +284,6 @@ namespace TheChest.Inventories.Slots
 
             this.AddItems(ref result);
             return new T[1]{ item };
-        }
-
-        /// <inheritdoc/>
-        /// <param name="item">the item that will be attempt to replace</param>
-        /// <returns>null if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
-        [Obsolete("Use Replace(T item) instead to avoid reference issues. This method will be removed.")]
-        public T[] Replace(ref T item)
-        {
-            return this.Replace(item);
-        }
-
-        /// <inheritdoc/>
-        /// <returns>The current items from <see cref="ISlot{T}.Content"/> or <paramref name="items"/> if is not possible to replace</returns>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
-        /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
-        [Obsolete("Use Replace(T[] items) instead to avoid reference issues. This method will be removed.")]
-        public T[] Replace(ref T[] items)
-        {
-            return this.Replace(items);
         }
     }
 }
