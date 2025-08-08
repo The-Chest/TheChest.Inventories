@@ -317,25 +317,5 @@ namespace TheChest.Inventories.Slots
             this.AddItems(ref result);
             return new T[1]{ item };
         }
-
-        /// <inheritdoc/>
-        /// <param name="item">the item that will be attempt to replace</param>
-        /// <returns>null if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
-        [Obsolete("Use Replace(T item) instead to avoid reference issues. This method will be removed.")]
-        public T[] Replace(ref T item)
-        {
-            return this.Replace(item);
-        }
-
-        /// <inheritdoc/>
-        /// <returns>The current items from <see cref="ISlot{T}.Content"/> or <paramref name="items"/> if is not possible to replace</returns>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
-        /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
-        [Obsolete("Use Replace(T[] items) instead to avoid reference issues. This method will be removed.")]
-        public T[] Replace(ref T[] items)
-        {
-            return this.Replace(items);
-        }
     }
 }

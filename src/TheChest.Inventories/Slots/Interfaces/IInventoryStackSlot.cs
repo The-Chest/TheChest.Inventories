@@ -62,13 +62,6 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="items">items that will replace items from slots</param>
         /// <returns>old items from the slot if the replacement is possible</returns>
-        [Obsolete("Use Replace(T[] items) instead to avoid reference issues. This method will be removed.")]
-        T[] Replace(ref T[] items);
-        /// <summary>
-        /// Replaces the items from the slot to <paramref name="items"/>
-        /// </summary>
-        /// <param name="items">items that will replace items from slots</param>
-        /// <returns>old items from the slot if the replacement is possible</returns>
         T[] Replace(T[] items);
         /// <summary>
         /// Replaces the items from the slot to one <paramref name="item"/>
@@ -76,13 +69,6 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="item">The item that will replace items from slots</param>
         /// <returns>the old items from the slot</returns>
         T[] Replace(T item);
-        /// <summary>
-        /// Replaces the items from the slot to one <paramref name="item"/>
-        /// </summary>
-        /// <param name="item">the item that will replace items from slots</param>
-        /// <returns>returns the old items from the slot</returns>
-        [Obsolete("Use Replace(T item) instead to avoid reference issues. This method will be removed.")]
-        T[] Replace(ref T item);
         /// <summary>
         /// Gets a single item from the slot
         /// </summary>

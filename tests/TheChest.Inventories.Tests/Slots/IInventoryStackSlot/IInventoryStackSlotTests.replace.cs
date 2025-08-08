@@ -10,7 +10,7 @@
 
             var items = Array.Empty<T>();
 
-            Assert.That(() => slot.Replace(ref items), Throws.ArgumentException);
+            Assert.That(() => slot.Replace(items), Throws.ArgumentException);
         }
 
         [Test]
@@ -20,7 +20,7 @@
 
             var items = this.itemFactory.CreateMany(10);
             var expectedResult = (T[])items.Clone();
-            slot.Replace(ref items);
+            slot.Replace(items);
 
             Assert.That(slot.Content, Is.EquivalentTo(expectedResult));
         }
@@ -31,7 +31,7 @@
             var slot = this.slotFactory.EmptySlot();
 
             var items = this.itemFactory.CreateMany(10);
-            var result = slot.Replace(ref items);
+            var result = slot.Replace(items);
 
             Assert.That(result, Is.Empty);
         }
@@ -43,7 +43,7 @@
 
             var items = this.itemFactory.CreateMany(11);
 
-            Assert.That(() => slot.Replace(ref items), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => slot.Replace(items), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -53,7 +53,7 @@
             var slot = this.slotFactory.WithItems(items);
 
             var replacingItems = this.itemFactory.CreateManyRandom(5);
-            var result = slot.Replace(ref replacingItems);
+            var result = slot.Replace(replacingItems);
 
             Assert.That(result, Is.EqualTo(items));
         }
@@ -67,7 +67,7 @@
             var replacingItems = this.itemFactory.CreateManyRandom(5);
             var expectedResult = (T[])replacingItems.Clone();
 
-            slot.Replace(ref replacingItems);
+            slot.Replace(replacingItems);
 
             Assert.That(slot.Content, Is.EqualTo(expectedResult));
         }
@@ -79,7 +79,7 @@
             var slot = this.slotFactory.WithItems(items);
 
             var replacingItems = this.itemFactory.CreateMany(5);
-            var result = slot.Replace(ref replacingItems);
+            var result = slot.Replace(replacingItems);
 
             Assert.That(result, Is.EqualTo(items));
         }
@@ -93,7 +93,7 @@
             var replacingItems = this.itemFactory.CreateMany(5);
             var expectedResult = (T[])replacingItems.Clone();
 
-            slot.Replace(ref replacingItems);
+            slot.Replace(replacingItems);
 
             Assert.That(slot.Content, Is.EqualTo(expectedResult));
         }
