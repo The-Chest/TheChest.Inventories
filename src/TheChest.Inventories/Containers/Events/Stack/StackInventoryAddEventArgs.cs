@@ -7,8 +7,6 @@ namespace TheChest.Inventories.Containers.Events.Stack
     /// Data for the Event args on <see cref="StackInventoryAddEventHandler{T}"/> event.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="Items"></param>
-    /// <param name="Index"></param>
     public readonly struct StackInventoryAddItemEventData<T>
     {
         /// <summary>

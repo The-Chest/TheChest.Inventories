@@ -6,11 +6,7 @@ namespace TheChest.Inventories.Containers.Events.Stack.Lazy
     /// <summary>
     /// Data for the Event args on <see cref="LazyStackInventoryMoveEventHandler{T}"/> event.
     /// </summary>
-    /// <typeparam name="T">Type of <paramref name="Item"/></typeparam>
-    /// <param name="Item"></param>
-    /// <param name="Amount"></param>
-    /// <param name="FromIndex"></param>
-    /// <param name="ToIndex"></param>
+    /// <typeparam name="T"></typeparam>
     public readonly struct LazyStackInventoryMoveItemEventData<T>
     {
         /// <summary>
