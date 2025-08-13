@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
-using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
