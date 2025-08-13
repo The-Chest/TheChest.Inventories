@@ -40,10 +40,7 @@ namespace TheChest.Inventories.Containers
         /// </summary>
         /// <param name="index">index of the slot to be returned</param>
         /// <returns></returns>
-        public new IInventoryLazyStackSlot<T> this[int index] => this.slots[index];      
-        /// <inheritdoc/>
-        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public new IInventoryLazyStackSlot<T>[] Slots => this.slots;
+        public new IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
 
         /// <summary>
         /// Adds an item to the first available slot

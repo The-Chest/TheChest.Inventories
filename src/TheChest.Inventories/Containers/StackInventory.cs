@@ -32,11 +32,6 @@ namespace TheChest.Inventories.Containers
         /// <param name="index"></param>
         /// <returns></returns>
         public new IInventoryStackSlot<T> this[int index] => this.slots[index];
-        /// <summary>
-        /// Gets all slots in the inventory as an array of <see cref="IInventoryStackSlot{T}"/>.
-        /// </summary>
-        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public new IInventoryStackSlot<T>[] Slots => this.slots.ToArray();
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
