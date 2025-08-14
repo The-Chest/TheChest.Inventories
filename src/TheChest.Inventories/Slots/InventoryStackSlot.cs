@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
-using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
@@ -151,7 +150,9 @@ namespace TheChest.Inventories.Slots
         /// <returns>All items from <see cref="ISlot{T}.Content"/></returns>
         public virtual T[] GetAll()
         {
-            var result = this.Content.Where(x => !EqualityComparer<T>.Default.Equals(x, default!)).ToArray();
+            var result = this.content
+                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
+                .ToArray();
             Array.Clear(this.content,0, this.content.Length);
             return result;
         }
