@@ -28,7 +28,7 @@ namespace TheChest.Inventories.Slots
         /// It's recommended to use <see cref="IInventoryStackSlot{T}.Add(T[])"/> or <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> to ensure no invalid items are added
         /// </para>
         /// </summary>
-        /// <param name="items">items to be added to <see cref="ISlot{T}.Content"/> (and the reference will be removed after)</param>
+        /// <param name="items">items to be added to the slot (and the reference will be removed after)</param>
         protected virtual void AddItems(ref T[] items)
         {
             var availableAmount = this.MaxStackAmount - this.StackAmount;
@@ -52,7 +52,7 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Adds an item inside the Content with no previous validation.
         /// </summary>
-        /// <param name="item">item to be added to <see cref="ISlot{T}.Content"/></param>
+        /// <param name="item">item to be added to content</param>
         protected virtual void AddItem(ref T item)
         {
             for (int i = 0; i < this.MaxStackAmount; i++)
@@ -70,7 +70,7 @@ namespace TheChest.Inventories.Slots
         /// <remarks>
         /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
         /// </remarks>
-        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside <see cref="ISlot{T}.Content"/></exception>
+        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside the slot</exception>
         public virtual T[] Add(T[] items)
         {
             //TODO: improve this method validations
@@ -145,9 +145,9 @@ namespace TheChest.Inventories.Slots
             return true;
         }
         /// <summary>
-        /// Gets and removes all items from <see cref="ISlot{T}.Content"/>
+        /// Gets and removes all items from slot
         /// </summary>
-        /// <returns>All items from <see cref="ISlot{T}.Content"/></returns>
+        /// <returns>All items from slot</returns>
         public virtual T[] GetAll()
         {
             var result = this.content
@@ -157,11 +157,11 @@ namespace TheChest.Inventories.Slots
             return result;
         }
         /// <summary>
-        /// Gets an removes amount of items from <see cref="ISlot{T}.Content"/>.
+        /// Gets an removes amount of items from slot.
         /// If is bigger than <see cref="IStackSlot{T}.StackAmount"/> it returns the maximum amount possible.
         /// </summary>
-        /// <param name="amount">Amount of items to get from <see cref="ISlot{T}.Content"/></param>
-        /// <returns>An array with the max amount possible from <see cref="ISlot{T}.Content"/></returns>
+        /// <param name="amount">Amount of items to get from slot</param>
+        /// <returns>An array with the max amount possible from slot</returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(int amount)
         {
@@ -184,9 +184,9 @@ namespace TheChest.Inventories.Slots
             return result;
         }
         /// <summary>
-        /// Gets a single item from inside the <see cref="ISlot{T}.Content"/>
+        /// Gets a single item from inside the slot
         /// </summary>
-        /// <returns>an item from <see cref="ISlot{T}.Content"/> or null if <see cref="ISlot{T}.IsEmpty"/> is true</returns>
+        /// <returns>an item from slot or null if <see cref="ISlot{T}.IsEmpty"/> is true</returns>
         public virtual T Get()
         {
             if (this.IsEmpty)
@@ -225,7 +225,7 @@ namespace TheChest.Inventories.Slots
             return true;
         }
         /// <inheritdoc/>
-        /// <returns>The current items from <see cref="ISlot{T}.Content"/> or <paramref name="items"/> if is not possible to replace</returns>
+        /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
         /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
         public virtual T[] Replace(T[] items)

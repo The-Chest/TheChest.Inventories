@@ -40,14 +40,14 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         protected void Clear()
         {
-            this.content = default;
+            this.content = default!;
             this.StackAmount = 0;
         }
         /// <summary>
         /// Gets the content of the slot as an array with the amount of items inside the slot
         /// </summary>
         /// <param name="amount">Amount of items to be returned</param>
-        /// <returns>Returns an array of items from the field <see cref="InventoryLazyStackSlot{T}.content"/></returns>
+        /// <returns>Returns an array of items from the slot</returns>
         protected T[] GetContent(int amount)
         {
             if (this.IsEmpty)
@@ -63,9 +63,9 @@ namespace TheChest.Inventories.Slots
             return Enumerable.Repeat(this.content!, amount).ToArray();
         }
         /// <summary>
-        /// Sets the values of <see cref="InventoryLazyStackSlot{T}.Content"/> and <see cref="StackSlot{T}.StackAmount"/>
+        /// Sets the values of content and <see cref="StackSlot{T}.StackAmount"/>
         /// </summary>
-        /// <param name="item">The value to be set to <see cref="StackSlot{T}.content"/></param>
+        /// <param name="item">The value to be set to content</param>
         /// <param name="amount">The value to be set to <see cref="StackSlot{T}.StackAmount"/></param>
         protected void SetContent(T item, int amount)
         {
