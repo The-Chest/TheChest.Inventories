@@ -60,7 +60,10 @@
 
             inventory.GetAll(slotItems[0]);
 
-            Assert.That(inventory.Slots.Any(x => x.Content?.Contains(slotItems[0]) ?? false), Is.False);
+            Assert.That(
+                inventory.GetSlots().Any(x => x.GetContents()?.Contains(slotItems[0]) ?? false), 
+                Is.False
+            );
         }
 
         [Test]

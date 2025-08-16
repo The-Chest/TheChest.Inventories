@@ -34,7 +34,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index, replace: true);
 
-            Assert.That(inventory[index].Content, Has.One.EqualTo(item));
+            Assert.That(inventory[index].GetContents(), Has.One.EqualTo(item));
         }
 
         [Test]
@@ -80,7 +80,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index, replace: false);
 
-            Assert.That(inventory[index].Content, Has.No.AnyOf(item));
+            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(item));
         }
 
         [Test]
@@ -151,7 +151,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index, replace: true);
 
-            Assert.That(inventory[index].Content, Has.One.AnyOf(item));
+            Assert.That(inventory[index].GetContents(), Has.One.AnyOf(item));
         }
 
         [Test]
@@ -270,7 +270,7 @@
 
             inventory.AddAt(item, index, false);
 
-            Assert.That(inventory[index].Content, Has.No.AnyOf(item));
+            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(item));
         }
 
         [Test]

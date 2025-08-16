@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Containers
 
             inventory.Add(items);
 
-            Assert.That(inventory[0].Content, Is.EqualTo(items));
+            Assert.That(inventory[0].GetContents(), Is.EqualTo(items));
         }
 
         [Test]
@@ -68,7 +68,12 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(amount);
             inventory.Add(items);
 
-            Assert.That(inventory.Slots, Has.One.Matches<IStackSlot<T>>(x => x.StackAmount == maxSize && x.Content!.Contains(item)));
+            Assert.That(
+                inventory.GetSlots(), 
+                Has.One.Matches<IStackSlot<T>>(
+                    x => x.GetContents()!.Contains(item) && x.StackAmount == maxSize
+                )
+            );
         }
 
         [Test]
@@ -111,12 +116,16 @@ namespace TheChest.Inventories.Tests.Containers
             inventory.Add(items);
 
             Assert.That(
-                inventory.Slots, 
-                Has.Exactly(2).Matches<IStackSlot<T>>(x => x.StackAmount == maxSize && x.Content!.Contains(item))
+                inventory.GetSlots(), 
+                Has.Exactly(2).Matches<IStackSlot<T>>(
+                    x => x.StackAmount == maxSize && x.GetContents()!.Contains(item)
+                )
             );
             Assert.That(
-                inventory.Slots,
-                Has.Exactly(1).Matches<IStackSlot<T>>(x => x.StackAmount == amount && x.Content!.Contains(item))
+                inventory.GetSlots(),
+                Has.Exactly(1).Matches<IStackSlot<T>>(
+                    x => x.StackAmount == amount && x.GetContents()!.Contains(item)
+                )
             );
         }
 
@@ -132,7 +141,12 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(amount);
             inventory.Add(items);
 
-            Assert.That(inventory.Slots, Has.One.Matches<IStackSlot<T>>(x => x.StackAmount == 1 && x.Content!.Contains(item)));
+            Assert.That(
+                inventory.GetSlots(), 
+                Has.One.Matches<IStackSlot<T>>(
+                    x => x.StackAmount == 1 && x.GetContents()!.Contains(item)
+                )
+            );
         }
 
         [Test]
@@ -172,8 +186,8 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].Content, Is.EqualTo(items.Take(10)));
-                Assert.That(inventory[1].Content, Is.EqualTo(items.Skip(10)));
+                Assert.That(inventory[0].GetContents(), Is.EqualTo(items.Take(10)));
+                Assert.That(inventory[1].GetContents(), Is.EqualTo(items.Skip(10)));
             });
         }
 
