@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventorySlotTests<T>
     {
@@ -32,7 +34,7 @@
 
             slot.Get();
 
-            Assert.That(slot.Content, Is.Null);
+            Assert.That(slot.GetContent(), Is.Null);
         }
     }
 }
