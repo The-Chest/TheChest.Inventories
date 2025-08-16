@@ -36,7 +36,7 @@ namespace TheChest.Inventories.Tests.Slots
             {
                 Assert.That(slot.IsEmpty, Is.False);
                 Assert.That(slot.StackAmount, Is.EqualTo(amount));
-                Assert.That(slot.GetContents(), Has.All.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
             });
         }
 
@@ -67,7 +67,7 @@ namespace TheChest.Inventories.Tests.Slots
             Assert.Multiple(() =>
             {
                 Assert.That(slot.StackAmount, Is.EqualTo(newAmount));
-                Assert.That(slot.GetContents(), Has.All.EqualTo(newItem));
+                Assert.That(slot.GetContent(), Is.EqualTo(newItem));
             });
         }
 

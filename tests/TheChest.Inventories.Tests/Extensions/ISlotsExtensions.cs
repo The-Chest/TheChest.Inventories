@@ -24,7 +24,7 @@ namespace TheChest.Inventories.Tests.Extensions
                 throw new ArgumentNullException(nameof(slot));
 
             var field = slot.GetContentField();
-            var fieldType = field.FieldType.GetGenericArguments()[0];
+            var fieldType = field.FieldType;
             if (fieldType != typeof(T) && !typeof(T).IsAssignableFrom(fieldType))
                 throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T)}'.");
 
@@ -37,7 +37,7 @@ namespace TheChest.Inventories.Tests.Extensions
                 throw new ArgumentNullException(nameof(slot));
 
             var field = slot.GetContentField();
-            var fieldType = field.FieldType.GetGenericArguments()[0];
+            var fieldType = field.FieldType;
             if (fieldType != typeof(T[]) && !typeof(T[]).IsAssignableFrom(fieldType))
                 throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T[])}'.");
 

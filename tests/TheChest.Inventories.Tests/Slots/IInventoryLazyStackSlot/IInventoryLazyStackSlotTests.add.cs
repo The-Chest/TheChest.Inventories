@@ -46,7 +46,7 @@ namespace TheChest.Inventories.Tests.Slots
             var newItem = this.itemFactory.CreateRandom();
             slot.Add(newItem, 1);
 
-            Assert.That(slot.GetContents(), Has.No.AnyOf(newItem));
+            Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
         }
 
         [Test]

@@ -39,7 +39,7 @@ namespace TheChest.Inventories.Tests.Slots
             
             Assert.Multiple(() =>
             {
-                Assert.That(slot.GetContents(), Is.Empty);
+                Assert.That(slot.GetContent(), Is.Null);
                 Assert.That(slot.IsEmpty, Is.True);
             });
         }

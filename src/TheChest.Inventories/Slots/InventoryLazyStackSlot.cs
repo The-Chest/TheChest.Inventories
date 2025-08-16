@@ -52,7 +52,7 @@ namespace TheChest.Inventories.Slots
         {
             if (this.IsEmpty)
                 return Array.Empty<T>();
-            if (this.StackAmount < amount)
+            if (this.StackAmount <= amount)
             {
                 var items = Enumerable.Repeat(this.content, this.stackAmount).ToArray();
                 this.Clear();
