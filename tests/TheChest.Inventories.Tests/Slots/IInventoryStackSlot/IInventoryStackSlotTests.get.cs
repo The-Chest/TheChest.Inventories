@@ -1,6 +1,4 @@
-﻿using TheChest.Inventories.Tests.Extensions;
-
-namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -26,14 +24,14 @@ namespace TheChest.Inventories.Tests.Slots
         }
 
         [Test]
-        public void Get_FullSlot_RemovesItemFromSlot()
+        public void Get_FullSlot_RemovesOneItemFromSlot()
         {
             var items = this.itemFactory.CreateMany(20);
             var slot = this.slotFactory.FullSlot(items);
 
             slot.Get();
 
-            Assert.That(slot.GetContents(), Has.Length.EqualTo(19));
+            Assert.That(slot.GetContents(), Has.Exactly(1).Null);
         }
     }
 }

@@ -94,7 +94,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
         public virtual bool Add(T item)
         {
-            if(item == null)
+            if(item is null)
                 throw new ArgumentNullException(nameof(item));
 
             if (this.CanAdd(item))
@@ -176,10 +176,8 @@ namespace TheChest.Inventories.Slots
                 .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
                 .Take(amount)
                 .ToArray();
-            for (int i = 0; i < amount; i++)
-            {
-                this.content[i] = default!;
-            }
+
+            Array.Clear(this.content, 0, amount);
 
             return result;
         }
@@ -190,7 +188,7 @@ namespace TheChest.Inventories.Slots
         public virtual T Get()
         {
             if (this.IsEmpty)
-                return default;
+                return default!;
 
             return this.Get(1).FirstOrDefault();
         }

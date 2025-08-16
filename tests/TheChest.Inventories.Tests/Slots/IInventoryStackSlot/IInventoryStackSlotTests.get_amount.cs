@@ -22,7 +22,7 @@ namespace TheChest.Inventories.Tests.Slots
 
             slot.Get(10);
 
-            Assert.That(slot.GetContents(), Is.EquivalentTo(items[10..20]));
+            Assert.That(slot.GetContents()[10..20], Is.EquivalentTo(items[10..20]));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace TheChest.Inventories.Tests.Slots
 
             slot.Get(10);
 
-            Assert.That(slot.GetContents(), Is.Empty);
+            Assert.That(slot.GetContents(), Is.All.Null);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace TheChest.Inventories.Tests.Slots
 
             slot.Get(30);
 
-            Assert.That(slot.GetContents(), Is.Empty);
+            Assert.That(slot.GetContents(), Has.All.Null);
         }
 
         [Test]

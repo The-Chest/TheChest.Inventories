@@ -43,10 +43,11 @@ namespace TheChest.Inventories.Tests.Slots
             var slot = this.slotFactory.WithItems(items, 10);
         
             var item = this.itemFactory.CreateDefault();
-            var expecteditem = items.Append(item).ToArray();
+            var expectedItems = items.Append(item).ToArray();
+            
             slot.Add(item);
 
-            Assert.That(slot.GetContents(), Is.EqualTo(expecteditem));
+            Assert.That(slot.GetContents()[0..6], Is.EqualTo(expectedItems));
         }
 
         [Test]
