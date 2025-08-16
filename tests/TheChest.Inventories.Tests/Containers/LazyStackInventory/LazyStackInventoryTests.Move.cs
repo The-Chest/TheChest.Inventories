@@ -42,14 +42,14 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory[origin].Content;
-            var ItemFromTarget = inventory[target].Content;
+            var itemFromOrigin = inventory[origin].GetContent();
+            var ItemFromTarget = inventory[target].GetContent();
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[origin].Content, Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory[target].Content, Is.EqualTo(itemFromOrigin));
+                Assert.That(inventory[origin].GetContent(), Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory[target].GetContent(), Is.EqualTo(itemFromOrigin));
             });
         }
 
@@ -63,8 +63,8 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory[origin].Content!.FirstOrDefault();
-            var ItemFromTarget = inventory[target].Content!.FirstOrDefault();
+            var itemFromOrigin = inventory[origin].GetContent();
+            var ItemFromTarget = inventory[target].GetContent();
             inventory.OnMove += (o, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(2));
@@ -100,11 +100,11 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].Content, Is.Empty);
+                Assert.That(inventory[0].GetContent(), Is.Empty);
                 Assert.That(inventory[0].IsEmpty, Is.True);
             });
             Assert.Multiple(() => {
-                Assert.That(inventory[1].Content, Has.All.EqualTo(item));
+                Assert.That(inventory[1].GetContent(), Has.All.EqualTo(item));
                 Assert.That(inventory[1].StackAmount, Is.EqualTo(1));
             });
         }
@@ -147,12 +147,12 @@
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() => {
-                Assert.That(inventory[0].Content, Has.All.EqualTo(item));
+                Assert.That(inventory[0].GetContent(), Has.All.EqualTo(item));
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(1));
             });
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[1].Content, Is.Empty);
+                Assert.That(inventory[1].GetContent(), Is.Empty);
                 Assert.That(inventory[1].IsEmpty, Is.True);
             });
         }

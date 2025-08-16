@@ -44,7 +44,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[index].IsEmpty, Is.True);
-                Assert.That(inventory[index].Content, Is.Empty);
+                Assert.That(inventory[index].GetContent(), Is.Null);
             });
         }
 

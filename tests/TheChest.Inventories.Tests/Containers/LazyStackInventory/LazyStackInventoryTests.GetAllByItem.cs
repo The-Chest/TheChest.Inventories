@@ -57,7 +57,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.GetAll(item);
 
-            Assert.That(inventory.Slots, Has.None.EqualTo(item));
+            Assert.That(inventory.GetSlots(), Has.None.EqualTo(item));
         }
 
         [Test]
