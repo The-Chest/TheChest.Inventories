@@ -194,7 +194,10 @@ namespace TheChest.Inventories.Slots
 
             return this.Get(1).FirstOrDefault();
         }
+        /// <summary>
         /// <inheritdoc/>
+        /// </summary>
+        /// <param name="items"><inheritdoc/></param>
         /// <returns>false if the array is bigger than <see cref="IStackSlot{T}.MaxStackAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
         {
@@ -215,7 +218,10 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+        /// <summary>
         /// <inheritdoc/>
+        /// </summary>
+        /// <param name="item"><inheritdoc/></param>
         /// <returns>false if the param <paramref name="item"/> is null</returns>
         public virtual bool CanReplace(T item)
         {
@@ -224,10 +230,13 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+        /// <summary>
         /// <inheritdoc/>
-        /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
+        /// </summary>
+        /// <param name="items"><inheritdoc/></param>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
         /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
+        /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
         public virtual T[] Replace(T[] items)
         {
             if (items.Length == 0)
@@ -261,7 +270,9 @@ namespace TheChest.Inventories.Slots
             this.AddItems(ref result);
             return items;
         }
+        /// <summary>
         /// <inheritdoc/>
+        /// </summary>
         /// <param name="item">the item that will be attempt to replace</param>
         /// <returns>null if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
