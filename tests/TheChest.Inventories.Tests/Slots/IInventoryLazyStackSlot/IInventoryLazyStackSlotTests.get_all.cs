@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public abstract partial class IInventoryLazyStackSlotTests<T>
     {
@@ -37,7 +39,7 @@
             
             Assert.Multiple(() =>
             {
-                Assert.That(slot.Content, Is.Empty);
+                Assert.That(slot.GetContents(), Is.Empty);
                 Assert.That(slot.IsEmpty, Is.True);
             });
         }
