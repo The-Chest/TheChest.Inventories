@@ -31,14 +31,14 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory[origin].Content;
-            var ItemFromTarget = inventory[target].Content;
+            var itemFromOrigin = inventory[origin].GetContent();
+            var ItemFromTarget = inventory[target].GetContent();
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[origin].Content, Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory[target].Content, Is.EqualTo(itemFromOrigin));
+                Assert.That(inventory[origin].GetContent(), Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory[target].GetContent(), Is.EqualTo(itemFromOrigin));
             });
         }
 
@@ -51,8 +51,8 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory[origin].Content;
-            var ItemFromTarget = inventory[target].Content;
+            var itemFromOrigin = inventory[origin].GetContent();
+            var ItemFromTarget = inventory[target].GetContent();
             inventory.OnMove += (sender, args) =>
             {
                 var dataArray = args.Data.ToArray();
@@ -89,7 +89,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[0].IsEmpty, Is.True);
-                Assert.That(inventory[1].Content, Is.EqualTo(item));
+                Assert.That(inventory[1].GetContent(), Is.EqualTo(item));
             });
         }
 
@@ -127,7 +127,7 @@
             inventory.Move(0, 1);
 
             Assert.Multiple(() => {
-                Assert.That(inventory[0].Content, Is.EqualTo(item));
+                Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
                 Assert.That(inventory[1].IsEmpty, Is.True);
             });
         }

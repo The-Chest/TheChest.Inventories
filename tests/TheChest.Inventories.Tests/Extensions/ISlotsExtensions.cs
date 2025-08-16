@@ -3,7 +3,7 @@ using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Inventories.Tests.Extensions
 {
-    public static class ContentReflectionExtensions
+    public static class ISlotsExtensions
     {
         private static FieldInfo GetContentField<T>(this ISlot<T> slot)
         {
@@ -24,7 +24,7 @@ namespace TheChest.Inventories.Tests.Extensions
                 throw new ArgumentNullException(nameof(slot));
 
             var field = slot.GetContentField();
-            var fieldType = field.FieldType.GetGenericArguments().First().GetType();
+            var fieldType = field.FieldType.GetGenericArguments()[0];
             if (fieldType != typeof(T) && !typeof(T).IsAssignableFrom(fieldType))
                 throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T)}'.");
 
@@ -37,7 +37,7 @@ namespace TheChest.Inventories.Tests.Extensions
                 throw new ArgumentNullException(nameof(slot));
 
             var field = slot.GetContentField();
-            var fieldType = field.FieldType.GetGenericArguments().First().GetType();
+            var fieldType = field.FieldType.GetGenericArguments()[0];
             if (fieldType != typeof(T[]) && !typeof(T[]).IsAssignableFrom(fieldType))
                 throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T[])}'.");
 

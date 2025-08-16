@@ -64,12 +64,12 @@
             var size = this.random.Next(10, 20);
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
-            var slots = inventory.Slots.ToArray();
+            var slots = inventory.GetSlots()?.ToArray();
 
             var randomItem = this.itemFactory.CreateRandom();
             inventory.GetAll(randomItem);
 
-            Assert.That(inventory.Slots, Is.EqualTo(slots));
+            Assert.That(inventory.GetSlots(), Is.EqualTo(slots));
         }
 
         [Test]

@@ -35,7 +35,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, randomIndex, replace);
 
-            Assert.That(inventory[randomIndex].Content, Is.EqualTo(item));
+            Assert.That(inventory[randomIndex].GetContent(), Is.EqualTo(item));
         }
 
         [TestCase(true)]
@@ -86,8 +86,8 @@
             Assert.Multiple(() =>
             {
                 var randomSlot = inventory[randomIndex];
-                Assert.That(randomSlot.Content, Is.EqualTo(item));
-                Assert.That(randomSlot.Content, Is.Not.EqualTo(oldItem));
+                Assert.That(randomSlot.GetContent(), Is.EqualTo(item));
+                Assert.That(randomSlot.GetContent(), Is.Not.EqualTo(oldItem));
             });
         }
 
@@ -132,8 +132,8 @@
             Assert.Multiple(() =>
             {
                 var randomSlot = inventory[randomIndex];
-                Assert.That(randomSlot.Content, Is.Not.EqualTo(item));
-                Assert.That(randomSlot.Content, Is.EqualTo(oldItem));
+                Assert.That(randomSlot.GetContent(), Is.Not.EqualTo(item));
+                Assert.That(randomSlot.GetContent(), Is.EqualTo(oldItem));
             });
         }
 
