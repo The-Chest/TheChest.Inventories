@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -22,7 +24,7 @@
             var expectedResult = (T[])items.Clone();
             slot.Replace(items);
 
-            Assert.That(slot.Content, Is.EquivalentTo(expectedResult));
+            Assert.That(slot.GetContents(), Is.EquivalentTo(expectedResult));
         }
 
         [Test]
@@ -69,7 +71,7 @@
 
             slot.Replace(replacingItems);
 
-            Assert.That(slot.Content, Is.EqualTo(expectedResult));
+            Assert.That(slot.GetContents(), Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -95,7 +97,7 @@
 
             slot.Replace(replacingItems);
 
-            Assert.That(slot.Content, Is.EqualTo(expectedResult));
+            Assert.That(slot.GetContents(), Is.EqualTo(expectedResult));
         }
     }
 }
