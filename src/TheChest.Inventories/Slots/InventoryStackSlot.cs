@@ -177,7 +177,11 @@ namespace TheChest.Inventories.Slots
                 .Take(amount)
                 .ToArray();
 
-            Array.Clear(this.content, 0, amount);
+            Array.Clear(
+                this.content, 
+                this.content.Length - amount,
+                amount
+            );
 
             return result;
         }

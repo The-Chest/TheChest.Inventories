@@ -140,7 +140,7 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[slotIndex].GetContents(), Has.All.EqualTo(item));
+                Assert.That(inventory[slotIndex].GetContents(), Has.Exactly(2).EqualTo(item));
                 Assert.That(inventory[slotIndex].StackAmount, Is.EqualTo(2));
             });
         }
