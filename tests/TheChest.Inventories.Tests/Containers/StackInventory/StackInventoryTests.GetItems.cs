@@ -69,7 +69,7 @@
 
             inventory.Get(item, stackSize);
 
-            Assert.That(inventory.Slots.Any(x => x.Content?.Contains(item) ?? false), Is.False);
+            Assert.That(inventory.GetSlots().Any(x => x.GetContents()?.Contains(item) ?? false), Is.False);
         }
 
         [Test]

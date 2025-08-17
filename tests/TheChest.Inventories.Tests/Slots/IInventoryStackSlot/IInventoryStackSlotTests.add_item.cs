@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -19,7 +21,7 @@
             var item = this.itemFactory.CreateDefault();
             slot.Add(item);
 
-            Assert.That(slot.Content, Has.No.AnyOf(item));
+            Assert.That(slot.GetContents(), Has.No.AnyOf(item));
         }
 
         [Test]
@@ -31,7 +33,7 @@
             var expecteditem = new T[1] { item };
             slot.Add(item);
 
-            Assert.That(slot.Content, Has.One.EqualTo(expecteditem[0]));
+            Assert.That(slot.GetContents(), Has.One.EqualTo(expecteditem[0]));
         }
 
         [Test]
@@ -41,10 +43,11 @@
             var slot = this.slotFactory.WithItems(items, 10);
         
             var item = this.itemFactory.CreateDefault();
-            var expecteditem = items.Append(item).ToArray();
+            var expectedItems = items.Append(item).ToArray();
+            
             slot.Add(item);
 
-            Assert.That(slot.Content, Is.EqualTo(expecteditem));
+            Assert.That(slot.GetContents()[0..6], Is.EqualTo(expectedItems));
         }
 
         [Test]
@@ -56,7 +59,7 @@
             var item = this.itemFactory.CreateRandom();
             slot.Add(item);
 
-            Assert.That(slot.Content, Is.Not.Contains(item));
+            Assert.That(slot.GetContents(), Is.Not.Contains(item));
         }
     }
 }

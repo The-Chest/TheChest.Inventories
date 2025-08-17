@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].Content, Has.All.EqualTo(item));
+                Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
                 Assert.That(inventory[0].IsEmpty, Is.False);
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(amount));
             });
@@ -114,9 +114,9 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.Slots,
+                Assert.That(inventory.GetSlots(),
                     Has.All.Matches<IStackSlot<T>>(
-                        slot => slot.IsFull && slot.Content!.All(item => item.Equals(randomItem))
+                        slot => slot.IsFull && randomItem!.Equals(slot.GetContent())
                     )
                 );
             });
@@ -175,10 +175,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.Slots,
+                Assert.That(inventory.GetSlots(),
                     Has.One.Matches<IStackSlot<T>>(
                         slot =>
-                            slot.Content!.All(content => content?.Equals(item) ?? false) &&
+                            item!.Equals(slot.GetContent()) &&
                             slot.StackAmount == amount - (amount - stackSize)
                     )
                 );

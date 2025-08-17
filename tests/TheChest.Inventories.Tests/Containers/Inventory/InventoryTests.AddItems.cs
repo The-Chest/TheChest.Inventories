@@ -48,7 +48,7 @@
             var items = new T[10];
             inventory.Add(items);
 
-            Assert.That(inventory.Slots.All(slot => slot.IsEmpty), Is.True);
+            Assert.That(inventory.GetSlots()?.All(slot => slot.IsEmpty), Is.True);
         }
 
         [Test]
@@ -93,8 +93,8 @@
  
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].Content, Is.EqualTo(items[1]));
-                Assert.That(inventory[randomItemSize - 1].Content, Is.EqualTo(items[randomItemSize - 2]));
+                Assert.That(inventory[0].GetContent(), Is.EqualTo(items[1]));
+                Assert.That(inventory[randomItemSize - 1].GetContent(), Is.EqualTo(items[randomItemSize - 2]));
             });
         }
 
@@ -156,7 +156,10 @@
             var items = this.itemFactory.CreateMany(randomSize);
             inventory.Add(items);
 
-            Assert.That(inventory.Slots.Skip(0).Take(randomSize).Select(x => x.Content), Is.EqualTo(items));
+            Assert.That(
+                inventory.GetSlots()?.Take(randomSize).Select(x => x.GetContent()), 
+                Is.EqualTo(items)
+            );
         }
 
         [Test]

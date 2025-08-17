@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -25,7 +27,7 @@
             var expectedItems = (T[])addingItems[0..maxAmount].Clone();
             slot.Add(addingItems);
 
-            Assert.That(slot.Content, Is.EqualTo(expectedItems));
+            Assert.That(slot.GetContents(), Is.EqualTo(expectedItems));
         }
 
         [Test]
@@ -38,7 +40,7 @@
             var addingItems = this.itemFactory.CreateMany(randomSize);
             slot.Add(addingItems);
 
-            Assert.That(slot.Content, Is.EqualTo(items));
+            Assert.That(slot.GetContents(), Is.EqualTo(items));
         }
 
         [Test]

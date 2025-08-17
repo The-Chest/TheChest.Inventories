@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
-using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
@@ -42,11 +41,6 @@ namespace TheChest.Inventories.Containers
         /// <param name="index"></param>
         /// <returns></returns>
         public new IInventorySlot<T> this[int index] => this.slots[index];
-        /// <summary>
-        /// Gets an array of <see cref="IInventorySlot{T}"/> from the inventory
-        /// </summary>
-        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public new IInventorySlot<T>[] Slots => this.slots.ToArray();
 
         /// <inheritdoc/>
         /// <remarks>

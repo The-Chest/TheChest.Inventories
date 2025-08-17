@@ -58,7 +58,7 @@
             Assert.Multiple(() =>
             {
                 var slot = inventory[randomIndex];
-                Assert.That(slot.Content, Has.All.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsEmpty, Is.False);
                 Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
             });
@@ -92,7 +92,7 @@
             Assert.Multiple(() =>
             {
                 var slot = inventory[randomIndex];
-                Assert.That(slot.Content, Has.All.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsEmpty, Is.False);
                 Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
             });
@@ -114,7 +114,7 @@
             Assert.Multiple(() =>
             {
                 var slot = inventory[randomIndex];
-                Assert.That(slot.Content, Has.All.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsFull, Is.True);
                 Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
             });
@@ -165,7 +165,10 @@
             var amount = stackSize;
             inventory.AddAt(item, index, amount, false);
 
-            Assert.That(inventory[index].Content, Has.None.EqualTo(item).And.Length.EqualTo(amount));
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory[index].GetContent(), Is.Not.EqualTo(item));
+            });
         }
 
         [Test]
@@ -181,7 +184,12 @@
             var amount = stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, Has.Count.EqualTo(stackSize).And.All.EqualTo(item));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory[index].GetContent(), Is.EqualTo(item));
+                Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize));
+            });
         }
 
         [Test]
@@ -214,8 +222,8 @@
             inventory.AddAt(item, index, amount, true);
 
             Assert.That(
-                inventory[index].Content, 
-                Has.None.EqualTo(item)    
+                inventory[index].GetContent(), 
+                Is.Not.EqualTo(item)    
             );
         }
 
@@ -251,7 +259,11 @@
             var amount = stackSize;
             inventory.AddAt(item, index, amount, true);
 
-            Assert.That(inventory[index].Content, Has.Count.EqualTo(stackSize).And.All.EqualTo(item));
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory[index].GetContent(), Is.EqualTo(item));
+                Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize));
+            });
         }
 
         [Test]

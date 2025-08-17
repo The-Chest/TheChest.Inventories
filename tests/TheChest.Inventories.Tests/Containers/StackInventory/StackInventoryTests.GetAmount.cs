@@ -8,14 +8,20 @@
         {
             var item = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.Get(item, amount), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(
+                () => inventory.Get(item, amount), 
+                Throws.InstanceOf<ArgumentOutOfRangeException>()
+            );
         }
 
         [Test]
         public void GetAmount_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.Get(default(T)!, 10), Throws.InstanceOf<ArgumentNullException>());
+            Assert.That(
+                () => inventory.Get(default(T)!, 10), 
+                Throws.InstanceOf<ArgumentNullException>()
+            );
         }
 
         [Test]

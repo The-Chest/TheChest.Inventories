@@ -24,14 +24,14 @@
         }
 
         [Test]
-        public void Get_FullSlot_RemovesItemFromSlot()
+        public void Get_FullSlot_RemovesOneItemFromSlot()
         {
             var items = this.itemFactory.CreateMany(20);
             var slot = this.slotFactory.FullSlot(items);
 
             slot.Get();
 
-            Assert.That(slot.Content, Has.Count.EqualTo(19));
+            Assert.That(slot.GetContents(), Has.Exactly(1).Null);
         }
     }
 }

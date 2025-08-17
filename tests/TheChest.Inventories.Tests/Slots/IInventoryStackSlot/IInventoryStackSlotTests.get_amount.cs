@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -20,7 +22,7 @@
 
             slot.Get(10);
 
-            Assert.That(slot.Content, Is.EquivalentTo(items[10..20]));
+            Assert.That(slot.GetContents()[10..20], Is.EquivalentTo(items[10..20]));
         }
 
         [Test]
@@ -42,7 +44,7 @@
 
             slot.Get(10);
 
-            Assert.That(slot.Content, Is.Empty);
+            Assert.That(slot.GetContents(), Is.All.Null);
         }
 
         [Test]
@@ -64,7 +66,7 @@
 
             slot.Get(30);
 
-            Assert.That(slot.Content, Is.Empty);
+            Assert.That(slot.GetContents(), Has.All.Null);
         }
 
         [Test]

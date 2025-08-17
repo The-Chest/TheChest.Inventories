@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryLazyStackSlotTests<T>
     {
@@ -44,7 +46,7 @@
             var newItem = this.itemFactory.CreateRandom();
             slot.Add(newItem, 1);
 
-            Assert.That(slot.Content, Has.No.AnyOf(newItem));
+            Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
         }
 
         [Test]

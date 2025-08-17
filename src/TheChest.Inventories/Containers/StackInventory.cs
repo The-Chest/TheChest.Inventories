@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
-using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
@@ -33,11 +32,6 @@ namespace TheChest.Inventories.Containers
         /// <param name="index"></param>
         /// <returns></returns>
         public new IInventoryStackSlot<T> this[int index] => this.slots[index];
-        /// <summary>
-        /// Gets all slots in the inventory as an array of <see cref="IInventoryStackSlot{T}"/>.
-        /// </summary>
-        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public new IInventoryStackSlot<T>[] Slots => this.slots.ToArray();
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots

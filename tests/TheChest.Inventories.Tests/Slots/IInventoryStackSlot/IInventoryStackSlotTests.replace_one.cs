@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿using TheChest.Inventories.Tests.Extensions;
+
+namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -14,14 +16,16 @@
         [Test]
         public void ReplaceOne_EmptySlot_AddsItem()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var slotSize = this.random.Next(1, 20);
+            var slot = this.slotFactory.EmptySlot(slotSize);
 
             var item = this.itemFactory.CreateDefault();
-            var expectedResult = new T[1];
-            Array.Fill(expectedResult, item);
+            var expectedResult = new T[slotSize];
+            expectedResult[0] = item;
+
             slot.Replace(item);
 
-            Assert.That(slot.Content, Has.Count.EqualTo(1).And.EqualTo(expectedResult));
+            Assert.That(slot.GetContents(), Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -50,16 +54,17 @@
         [Test]
         public void ReplaceOne_ItemDifferentFromSlot_AddsItemsToSlot()
         {
-            var items = this.itemFactory.CreateMany(5);
-            var slot = this.slotFactory.WithItems(items);
+            var slotSize = this.random.Next(1, 20);
+            var items = this.itemFactory.CreateMany(slotSize);
+            var slot = this.slotFactory.WithItems(items, slotSize);
 
             var replacingItem = this.itemFactory.CreateRandom();
-            var expectedResult = new T[1];
-            Array.Fill(expectedResult, replacingItem);
+            var expectedResult = new T[slotSize];
+            expectedResult[0] = replacingItem;
 
             slot.Replace(replacingItem);
 
-            Assert.That(slot.Content, Is.EqualTo(expectedResult));
+            Assert.That(slot.GetContents(), Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -77,16 +82,15 @@
         [Test]
         public void ReplaceOne_ItemEqualToSlot_AddsItemsToSlot()
         {
+            var slotSize = this.random.Next(6, 20);
             var items = this.itemFactory.CreateMany(5);
-            var slot = this.slotFactory.WithItems(items);
+            var slot = this.slotFactory.WithItems(items, slotSize);
 
             var replacingItem = this.itemFactory.CreateDefault();
-            var expectedResult = new T[1];
-            Array.Fill(expectedResult, replacingItem);
 
             slot.Replace(replacingItem);
 
-            Assert.That(slot.Content, Is.EqualTo(expectedResult));
+            Assert.That(slot.GetContents(), Has.Exactly(1).EqualTo(replacingItem));
         }
     }
 }

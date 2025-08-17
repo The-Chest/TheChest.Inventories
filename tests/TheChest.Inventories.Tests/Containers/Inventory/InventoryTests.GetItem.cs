@@ -51,7 +51,7 @@
 
             inventory.Get(item);
 
-            Assert.That(inventory[0].Content, Is.Null);
+            Assert.That(inventory[0].GetContent(), Is.Null);
         }
 
         [Test]

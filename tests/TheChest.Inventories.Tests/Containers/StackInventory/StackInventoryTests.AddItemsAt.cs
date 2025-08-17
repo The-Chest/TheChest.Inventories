@@ -21,7 +21,7 @@
             var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index);
 
-            Assert.That(inventory[index].Content, Is.EqualTo(items));
+            Assert.That(inventory[index].GetContents(), Is.EqualTo(items));
         }
 
         [Test]
@@ -99,7 +99,7 @@
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content?.Reverse().Take(2), Is.EqualTo(items));
+                Assert.That(inventory[index].GetContents()?.Reverse().Take(2), Is.EqualTo(items));
             });
         }
 
@@ -130,7 +130,7 @@
             var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index);
 
-            Assert.That(inventory[index].Content, Has.No.AnyOf(items));
+            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(items));
         }
 
         [Test]

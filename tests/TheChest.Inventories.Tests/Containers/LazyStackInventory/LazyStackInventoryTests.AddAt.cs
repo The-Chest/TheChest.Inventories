@@ -41,7 +41,7 @@
             Assert.Multiple(() =>
             {
                 var slot = inventory[randomIndex];
-                Assert.That(slot.Content, Has.All.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsEmpty, Is.False);
                 Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
             });
@@ -97,7 +97,7 @@
             Assert.Multiple(() =>
             {
                 var slot = inventory[randomIndex];
-                Assert.That(slot.Content, Has.All.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsFull, Is.True);
                 Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
             });
@@ -155,7 +155,7 @@
             var randomIndex = this.random.Next(0, size);
             inventory.AddAt(item, randomIndex, stackSize);
 
-            Assert.That(inventory[randomIndex].Content, Has.None.EqualTo(item));
+            Assert.That(inventory[randomIndex].GetContent(), Is.Not.EqualTo(item));
         }
 
         [Test]

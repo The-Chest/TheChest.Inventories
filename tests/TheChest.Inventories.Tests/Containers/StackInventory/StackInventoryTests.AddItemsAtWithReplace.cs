@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index, replace: true);
 
-            Assert.That(inventory[index].Content, Is.EqualTo(items));
+            Assert.That(inventory[index].GetContents(), Is.EqualTo(items));
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(amount);
             inventory.AddAt(items, index, replace: false);
 
-            Assert.That(inventory[index].Content, Has.All.EqualTo(slotItem));
+            Assert.That(inventory[index].GetContents(), Has.All.EqualTo(slotItem));
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(amount);
             inventory.AddAt(items, index, replace: true);
 
-            Assert.That(inventory[index].Content, Is.EqualTo(items));
+            Assert.That(inventory[index].GetContents(), Is.EqualTo(items));
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace TheChest.Inventories.Tests.Containers
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content?.Reverse().Take(2), Is.EqualTo(items));
+                Assert.That(inventory[index].GetContents()?.Reverse().Take(2), Is.EqualTo(items));
             });
         }
 
@@ -205,12 +205,12 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(2);
             inventory.AddAt(items, index, replace: false);
 
+            Assert.That(inventory[index].GetContents(), Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[index].IsFull, Is.True);
                 Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
-                Assert.That(inventory[index].Content, Is.Not.Null);
-                Assert.That(inventory[index].Content!.Reverse().Take(2), Is.EqualTo(items));
+                Assert.That(inventory[index].GetContents().Reverse().Take(2), Is.EqualTo(items));
             });
         }
 
@@ -265,7 +265,7 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index, replace);
 
-            Assert.That(inventory[index].Content, Has.No.AnyOf(items));
+            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(items));
         }
 
         [TestCase(true)]

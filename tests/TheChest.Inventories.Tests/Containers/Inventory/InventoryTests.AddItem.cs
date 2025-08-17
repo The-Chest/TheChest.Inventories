@@ -24,7 +24,7 @@ namespace TheChest.Inventories.Tests.Containers
                 var firstSlot = inventory[0];
 
                 Assert.That(firstSlot.IsEmpty, Is.False);
-                Assert.That(firstSlot.Content, Is.EqualTo(item));
+                Assert.That(firstSlot.GetContent(), Is.EqualTo(item));
             });
         }
 
@@ -62,15 +62,16 @@ namespace TheChest.Inventories.Tests.Containers
             var size = this.random.Next(10, 20);
             var items = this.itemFactory.CreateMany(size / 2);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
-            var firstAvailableSlot = inventory.Slots.First(slot => slot.IsEmpty);
+            var firstAvailableSlot = inventory.GetSlots()?.First(slot => slot.IsEmpty);
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
 
+            Assert.That(firstAvailableSlot, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(firstAvailableSlot.IsEmpty, Is.False);
-                Assert.That(firstAvailableSlot.Content, Is.EqualTo(item));
+                Assert.That(firstAvailableSlot.GetContent(), Is.EqualTo(item));
             });
         }
 
@@ -84,7 +85,12 @@ namespace TheChest.Inventories.Tests.Containers
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
 
-            Assert.That(inventory.Slots, Is.All.Matches<IInventorySlot<T>>(x => x.IsFull && !x.Content!.Equals(item)));
+            Assert.That(
+                inventory.GetSlots(), 
+                Is.All.Matches<IInventorySlot<T>>(
+                    x => x.IsFull && !x.GetContent()!.Equals(item)
+                )
+            );
         }
 
         [Test]

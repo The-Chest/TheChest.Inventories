@@ -37,13 +37,13 @@
             var targetIndex = 10;
 
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
-            var targetItems = inventory[targetIndex].Content;
+            var targetItems = inventory[targetIndex].GetContents();
 
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[originIndex].Content, Is.EqualTo(targetItems));
+                Assert.That(inventory[originIndex].GetContents(), Is.EqualTo(targetItems));
                 Assert.That(inventory[targetIndex].IsEmpty, Is.True);
             });
         }
@@ -62,14 +62,14 @@
             var targetIndex = 10;
 
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
-            var originItems = inventory[originIndex].Content;
+            var originItems = inventory[originIndex].GetContents();
 
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[originIndex].IsEmpty, Is.True);
-                Assert.That(inventory[targetIndex].Content, Is.EqualTo(originItems));
+                Assert.That(inventory[targetIndex].GetContents(), Is.EqualTo(originItems));
             });
         }
 
@@ -87,15 +87,15 @@
             var targetIndex = 10;
 
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
-            var originItems = inventory[originIndex].Content;
-            var targetItems = inventory[originIndex].Content;
+            var originItems = inventory[originIndex].GetContents();
+            var targetItems = inventory[originIndex].GetContents();
 
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[originIndex].Content, Is.EqualTo(targetItems));
-                Assert.That(inventory[targetIndex].Content, Is.EqualTo(originItems));
+                Assert.That(inventory[originIndex].GetContents(), Is.EqualTo(targetItems));
+                Assert.That(inventory[targetIndex].GetContents(), Is.EqualTo(originItems));
             });
         }
 
@@ -113,15 +113,15 @@
             var targetIndex = 10;
 
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
-            var originItems = inventory[originIndex].Content;
-            var targetItems = inventory[originIndex].Content;
+            var originItems = inventory[originIndex].GetContents();
+            var targetItems = inventory[originIndex].GetContents();
 
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[originIndex].Content, Is.EqualTo(targetItems));
-                Assert.That(inventory[targetIndex].Content, Is.EqualTo(originItems));
+                Assert.That(inventory[originIndex].GetContents(), Is.EqualTo(targetItems));
+                Assert.That(inventory[targetIndex].GetContents(), Is.EqualTo(originItems));
             });
         }
 
@@ -139,8 +139,8 @@
             var targetIndex = 10;
 
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
-            var originItems = inventory[originIndex].Content;
-            var targetItems = inventory[originIndex].Content;
+            var originItems = inventory[originIndex].GetContents();
+            var targetItems = inventory[originIndex].GetContents();
             inventory.OnMove += (o, e) =>
             {
                 Assert.That(o, Is.EqualTo(inventory));
