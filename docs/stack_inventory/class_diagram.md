@@ -20,7 +20,6 @@ direction TB
         class StackInventory~T~ {
             - IInventoryStackSlot~T~[] slots
             + IInventoryStackSlot~T~ this[int index]
-            + IInventoryStackSlot~T~[] Slots
             + StackInventory(IInventoryStackSlot~T~[] slots)
             + bool Add(T item)
             + T[] AddAt(T item, int index, bool replace = true)
@@ -95,7 +94,7 @@ direction BT
 
 namespace TheChest.Core {
     class StackSlot~T~ {
-        + T[] Content
+        - T[] content
         + int MaxStackAmount
         + int StackAmount
         + bool IsEmpty

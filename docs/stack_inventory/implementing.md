@@ -39,7 +39,7 @@ public class MyStackSlot : IInventoryStackSlot<int>
 {
     protected readonly int[] contents;
     public int Content[] => this.contents;
-    public bool IsFull => this.Content > 0;
+    public bool IsFull => this.content.Length > 0;
 
     public MyStackSlot(int[] contents)
     {

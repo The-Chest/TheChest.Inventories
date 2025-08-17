@@ -23,7 +23,6 @@ namespace TheChest.Inventories.Containers {
         - IInventoryLazyStackSlot~T~[] slots
         + LazyStackInventory(IInventoryLazyStackSlot~T~[] slots)
         + IInventoryLazyStackSlot~T~ this[int index]
-        + IInventoryLazyStackSlot~T~[] Slots
         + bool Add(T item)
         + int Add(T item, int amount)
         + T[] AddAt(T item, int index, int amount, bool replace)
@@ -93,7 +92,7 @@ direction TB
 
 namespace TheChest.Core {
     class LazyStackSlot~T~ {
-        + T? Content
+        - T? content
         + int MaxStackAmount
         + int StackAmount
         + bool IsEmpty

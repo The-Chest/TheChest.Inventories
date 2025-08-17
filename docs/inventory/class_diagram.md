@@ -38,7 +38,6 @@ direction TB
         class Inventory~T~ {
 	        - IInventorySlot~T~[] slots
 	        + IInventorySlot~T~ this[int index]
-	        + IInventorySlot~T~[] Slots
 	        + ~~event~~ OnGet: InventoryGetEventHandler 
 	        + ~~event~~ OnAdd: InventoryAddEventHandler 
             + ~~event~~ OnMove: InventoryMoveEventHandler 
@@ -89,7 +88,7 @@ direction BT
 
 namespace TheChest.Core {
     class Slot~T~ {
-        + T? Content
+        - T? content
         + bool IsEmpty
         + bool IsFull
         + Slot(T? currentItem = default)

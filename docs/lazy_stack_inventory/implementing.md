@@ -40,14 +40,13 @@ public class MyLazyStackInventory : ILazyStackInventory<int>
 ```csharp
 public class MySlot : InventoryLazyStackSlot<int>
 {
-    public int Content { get; private set; }
     public int StackAmount { get; private set; }
     public int MaxStackAmount { get; private set; }
     public bool IsFull => this.content > 0 || this.StackAmount == this.MaxStackAmount;
 
     public InventoryLazyStackSlot(int item, int amount, int maxStackAmount) 
     {
-        this.Content = item;
+        this.content = item;
         this.StackAmount = amount;
         this.MaxStackAmount = maxStackAmount;
     }
