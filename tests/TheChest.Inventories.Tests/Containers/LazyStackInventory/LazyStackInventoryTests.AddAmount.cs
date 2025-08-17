@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContent(), Has.All.EqualTo(item));
+                Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
                 Assert.That(inventory[0].IsEmpty, Is.False);
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(amount));
             });

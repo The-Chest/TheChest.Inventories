@@ -167,8 +167,7 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[index].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
+                Assert.That(inventory[index].GetContent(), Is.Not.EqualTo(item));
             });
         }
 

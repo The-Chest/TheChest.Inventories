@@ -100,11 +100,11 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContent(), Is.Empty);
+                Assert.That(inventory[0].GetContent(), Is.Null);
                 Assert.That(inventory[0].IsEmpty, Is.True);
             });
             Assert.Multiple(() => {
-                Assert.That(inventory[1].GetContent(), Has.All.EqualTo(item));
+                Assert.That(inventory[1].GetContent(), Is.EqualTo(item));
                 Assert.That(inventory[1].StackAmount, Is.EqualTo(1));
             });
         }
@@ -147,12 +147,12 @@
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() => {
-                Assert.That(inventory[0].GetContent(), Has.All.EqualTo(item));
+                Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
                 Assert.That(inventory[0].StackAmount, Is.EqualTo(1));
             });
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[1].GetContent(), Is.Empty);
+                Assert.That(inventory[1].GetContent(), Is.Null);
                 Assert.That(inventory[1].IsEmpty, Is.True);
             });
         }

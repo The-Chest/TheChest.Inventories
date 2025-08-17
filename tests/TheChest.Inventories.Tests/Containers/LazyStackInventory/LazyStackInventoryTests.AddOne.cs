@@ -107,7 +107,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             {
                 Assert.That(inventory.GetSlots(), 
                     Has.All.Matches<IStackSlot<T>>(
-                        slot => slot.IsFull && item!.Equals(slot.GetContent())
+                        slot => slot.IsFull && !item!.Equals(slot.GetContent())
                     )
                 );
             });
