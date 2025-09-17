@@ -41,7 +41,10 @@ namespace TheChest.Inventories.Slots
             for (int i = 0; i < this.MaxAmount; i++)
             {
                 if (this.content[i] is null)
+                {
                     this.content[i] = items[itemIndex++];
+                    this.amount++;
+                }
 
                 if (itemIndex == addAmount)
                     break;
@@ -55,11 +58,12 @@ namespace TheChest.Inventories.Slots
         /// <param name="item">item to be added to content</param>
         protected virtual void AddItem(ref T item)
         {
-            for (int i = 0; i < this.Amount; i++)
+            for (int i = 0; i < this.MaxAmount; i++)
             {
                 if (this.content[i] is null)
                 {
                     this.content[i] = item;
+                    this.amount++;
                     break;
                 }
             }
@@ -144,17 +148,53 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+
+        /// <summary>
+        /// Gets and removes amount of items from slot with no previous validation.
+        /// </summary>
+        /// <param name="amount">Amount to be returned</param>
+        /// <returns>An list with the size of <paramref name="amount"/> or the max possible</returns>
+        protected virtual T[] GetItems(int amount)
+        {
+            //TODO: improve it by getting it from the last items (maybe using IEnumerable)
+            var result = this.content
+                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
+                .Take(amount)
+                .ToArray();
+            
+            Array.Clear(
+                this.content,
+                //this.content.Length - amount,
+                0,
+                amount
+            );
+
+            this.amount -= result.Length;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets and removes a single item from slot with no previous validation.
+        /// </summary>
+        /// <returns>One item or null if not found</returns>
+        protected virtual T GetItem()
+        {
+            var item = this.content.FirstOrDefault();
+            Array.Clear(this.content, 0, 1);
+            if (item is null)
+                return default!;
+
+            this.amount--;
+            return item!;
+        }
         /// <summary>
         /// Gets and removes all items from slot
         /// </summary>
         /// <returns>All items from slot</returns>
         public virtual T[] GetAll()
         {
-            var result = this.content
-                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
-                .ToArray();
-            Array.Clear(this.content,0, this.content.Length);
-            return result;
+            return this.GetItems(this.Amount);
         }
         /// <summary>
         /// Gets an removes amount of items from slot.
@@ -171,19 +211,7 @@ namespace TheChest.Inventories.Slots
             if (amount >= this.Amount)
                 return this.GetAll();
 
-            //TODO: improve it by getting it from the last items (maybe using IEnumerable)
-            var result = this.content
-                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
-                .Take(amount)
-                .ToArray();
-
-            Array.Clear(
-                this.content, 
-                this.content.Length - amount,
-                amount
-            );
-
-            return result;
+            return this.GetItems(amount);
         }
         /// <summary>
         /// Gets a single item from inside the slot
@@ -194,7 +222,7 @@ namespace TheChest.Inventories.Slots
             if (this.IsEmpty)
                 return default!;
 
-            return this.Get(1).FirstOrDefault();
+            return this.GetItem();
         }
         /// <summary>
         /// <inheritdoc/>
@@ -250,7 +278,7 @@ namespace TheChest.Inventories.Slots
             var firstItem = items[0]!;
             for (int i = 1; i < items.Length; i++)
             {
-                if (!firstItem.Equals(items[i]))//TODO: use Contains
+                if (!firstItem.Equals(items[i]))
                 {
                     throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
                 }
