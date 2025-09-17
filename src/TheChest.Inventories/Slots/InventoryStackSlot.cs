@@ -31,14 +31,14 @@ namespace TheChest.Inventories.Slots
         /// <param name="items">items to be added to the slot (and the reference will be removed after)</param>
         protected virtual void AddItems(ref T[] items)
         {
-            var availableAmount = this.MaxStackAmount - this.StackAmount;
+            var availableAmount = this.MaxAmount - this.Amount;
 
             var addAmount = items.Length > availableAmount ? 
                 availableAmount : 
                 items.Length;
 
             var itemIndex = 0;
-            for (int i = 0; i < this.MaxStackAmount; i++)
+            for (int i = 0; i < this.MaxAmount; i++)
             {
                 if (this.content[i] is null)
                     this.content[i] = items[itemIndex++];
@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="item">item to be added to content</param>
         protected virtual void AddItem(ref T item)
         {
-            for (int i = 0; i < this.MaxStackAmount; i++)
+            for (int i = 0; i < this.Amount; i++)
             {
                 if (this.content[i] is null)
                 {
@@ -158,7 +158,7 @@ namespace TheChest.Inventories.Slots
         }
         /// <summary>
         /// Gets an removes amount of items from slot.
-        /// If is bigger than <see cref="IStackSlot{T}.StackAmount"/> it returns the maximum amount possible.
+        /// If is bigger than <see cref="IStackSlot{T}.Amount"/> it returns the maximum amount possible.
         /// </summary>
         /// <param name="amount">Amount of items to get from slot</param>
         /// <returns>An array with the max amount possible from slot</returns>
@@ -168,7 +168,7 @@ namespace TheChest.Inventories.Slots
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            if (amount >= this.StackAmount)
+            if (amount >= this.Amount)
                 return this.GetAll();
 
             //TODO: improve it by getting it from the last items (maybe using IEnumerable)
@@ -200,12 +200,12 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
-        /// <returns>false if the array is bigger than <see cref="IStackSlot{T}.MaxStackAmount"/> or is empty</returns>
+        /// <returns>false if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
         {
             if (items.Length == 0)
                 return false;
-            if (items.Length > this.MaxStackAmount)
+            if (items.Length > this.MaxAmount)
                 return false;
 
             var firstItem = items[0]!;
@@ -236,7 +236,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// </summary>
         /// <param name="items"><inheritdoc/></param>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxStackAmount"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
         /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
         /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
         public virtual T[] Replace(T[] items)
@@ -244,7 +244,7 @@ namespace TheChest.Inventories.Slots
             if (items.Length == 0)
                 throw new ArgumentException("Cannot replace the slot for empty item array", nameof(items));
 
-            if (items.Length > this.MaxStackAmount)
+            if (items.Length > this.Amount)
                 throw new ArgumentOutOfRangeException(nameof(items));
 
             var firstItem = items[0]!;
