@@ -272,7 +272,7 @@ namespace TheChest.Inventories.Slots
             if (items.Length == 0)
                 throw new ArgumentException("Cannot replace the slot for empty item array", nameof(items));
 
-            if (items.Length > this.Amount)
+            if (items.Length > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(items));
 
             var firstItem = items[0]!;
