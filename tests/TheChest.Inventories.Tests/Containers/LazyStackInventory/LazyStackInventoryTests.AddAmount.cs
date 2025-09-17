@@ -35,7 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             {
                 Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
                 Assert.That(inventory[0].IsEmpty, Is.False);
-                Assert.That(inventory[0].StackAmount, Is.EqualTo(amount));
+                Assert.That(inventory[0].Amount, Is.EqualTo(amount));
             });
         }
 
@@ -179,7 +179,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Has.One.Matches<IStackSlot<T>>(
                         slot =>
                             item!.Equals(slot.GetContent()) &&
-                            slot.StackAmount == amount - (amount - stackSize)
+                            slot.Amount == amount - (amount - stackSize)
                     )
                 );
             });

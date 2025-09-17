@@ -71,7 +71,7 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.That(
                 inventory.GetSlots(), 
                 Has.One.Matches<IStackSlot<T>>(
-                    x => x.GetContents()!.Contains(item) && x.StackAmount == maxSize
+                    x => x.GetContents()!.Contains(item) && x.Amount == maxSize
                 )
             );
         }
@@ -118,13 +118,13 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.That(
                 inventory.GetSlots(), 
                 Has.Exactly(2).Matches<IStackSlot<T>>(
-                    x => x.StackAmount == maxSize && x.GetContents()!.Contains(item)
+                    x => x.Amount == maxSize && x.GetContents()!.Contains(item)
                 )
             );
             Assert.That(
                 inventory.GetSlots(),
                 Has.Exactly(1).Matches<IStackSlot<T>>(
-                    x => x.StackAmount == amount && x.GetContents()!.Contains(item)
+                    x => x.Amount == amount && x.GetContents()!.Contains(item)
                 )
             );
         }
@@ -144,7 +144,7 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.That(
                 inventory.GetSlots(), 
                 Has.One.Matches<IStackSlot<T>>(
-                    x => x.StackAmount == 1 && x.GetContents()!.Contains(item)
+                    x => x.Amount == 1 && x.GetContents()!.Contains(item)
                 )
             );
         }

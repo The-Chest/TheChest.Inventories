@@ -13,7 +13,7 @@ namespace TheChest.Inventories.Tests.Slots
             var addingItems = this.itemFactory.CreateManyRandom(randomSize);
             slot.Add(addingItems);
 
-            Assert.That(slot.StackAmount, Is.EqualTo(randomSize));
+            Assert.That(slot.Amount, Is.EqualTo(randomSize));
         }
 
         [Test]

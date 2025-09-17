@@ -1,6 +1,4 @@
-﻿using TheChest.Inventories.Tests.Extensions;
-
-namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryLazyStackSlotTests<T> 
     {
@@ -35,7 +33,7 @@ namespace TheChest.Inventories.Tests.Slots
             Assert.Multiple(() =>
             {
                 Assert.That(slot.IsEmpty, Is.False);
-                Assert.That(slot.StackAmount, Is.EqualTo(amount));
+                Assert.That(slot.Amount, Is.EqualTo(amount));
                 Assert.That(slot.GetContent(), Is.EqualTo(item));
             });
         }
@@ -53,7 +51,7 @@ namespace TheChest.Inventories.Tests.Slots
         }
 
         [Test]
-        public void Replace_SlotWithItems_ReplaceSContent()
+        public void Replace_SlotWithItems_ReplacesContent()
         {
             var initialItem = this.itemFactory.CreateDefault();
             var maxAmount = this.random.Next(11, 20);
@@ -62,11 +60,11 @@ namespace TheChest.Inventories.Tests.Slots
 
             var newItem = this.itemFactory.CreateRandom();
             int newAmount = this.random.Next(1, 10);
-            var result = slot.Replace(newItem, newAmount);
+            slot.Replace(newItem, newAmount);
 
             Assert.Multiple(() =>
             {
-                Assert.That(slot.StackAmount, Is.EqualTo(newAmount));
+                Assert.That(slot.Amount, Is.EqualTo(newAmount));
                 Assert.That(slot.GetContent(), Is.EqualTo(newItem));
             });
         }

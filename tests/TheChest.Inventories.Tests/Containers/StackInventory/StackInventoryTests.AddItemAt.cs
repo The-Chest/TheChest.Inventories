@@ -111,11 +111,11 @@
             var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
             inventory.Get(index);
 
-            var stackSize = inventory[index].StackAmount;
+            var stackSize = inventory[index].Amount;
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index);
 
-            Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize + 1));
+            Assert.That(inventory[index].Amount, Is.EqualTo(stackSize + 1));
         }
 
         [Test]

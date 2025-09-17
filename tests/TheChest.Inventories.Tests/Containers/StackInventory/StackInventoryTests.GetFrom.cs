@@ -49,7 +49,7 @@
 
             inventory.Get(index);
 
-            Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize - 1));
+            Assert.That(inventory[index].Amount, Is.EqualTo(stackSize - 1));
         }
 
         [Test]

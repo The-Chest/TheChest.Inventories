@@ -31,7 +31,7 @@
 
             inventory.Get(expectedItem);
 
-            Assert.That(inventory[0].StackAmount, Is.EqualTo(amount - 1));
+            Assert.That(inventory[0].Amount, Is.EqualTo(amount - 1));
         }
 
         [Test]

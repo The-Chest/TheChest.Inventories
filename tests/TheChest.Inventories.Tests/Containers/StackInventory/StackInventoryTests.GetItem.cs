@@ -51,7 +51,7 @@
 
             inventory.Get(slotItem);
 
-            Assert.That(inventory[0].StackAmount, Is.EqualTo(stackSize - 1));
+            Assert.That(inventory[0].Amount, Is.EqualTo(stackSize - 1));
         }
 
         [Test]
