@@ -1,6 +1,4 @@
-﻿using TheChest.Inventories.Tests.Extensions;
-
-namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
@@ -70,7 +68,7 @@ namespace TheChest.Inventories.Tests.Slots
         }
 
         [Test]
-        public void GetAmount_AmountBiggerThanSlotMaxAmount_ReturnsAllItemsFromSlot()
+        public void GetAmount_SlotWithLessItemsThanRequested_ReturnsAllItemsFromSlot()
         {
             var items = this.itemFactory.CreateMany(20);
             var slot = this.slotFactory.WithItems(items, 20);
@@ -81,6 +79,19 @@ namespace TheChest.Inventories.Tests.Slots
         }
 
         [Test]
+        public void GetAmount_SlotWithLessItemsThanRequested_DecreasesAmountToZero()
+        {
+            var slotSize = this.random.Next(11, 20);
+            var itemSize = this.random.Next(1, 10);
+            var items = this.itemFactory.CreateMany(itemSize);
+            var slot = this.slotFactory.WithItems(items, slotSize);
+
+            var amount = itemSize + this.random.Next(1, 10);
+            slot.Get(amount);
+            Assert.That(slot.Amount, Is.EqualTo(0));
+        }
+
+        [Test]
         public void GetAmount_EmptySlot_ReturnsEmptyArray()
         {
             var slot = this.slotFactory.EmptySlot(20);
@@ -88,6 +99,18 @@ namespace TheChest.Inventories.Tests.Slots
             var result = slot.Get(10);
 
             Assert.That(result, Is.EquivalentTo(Array.Empty<T>()));
+        }
+
+        [Test]
+        public void GetAmount_FullSlot_DecreasesAmount()
+        {
+            var slotSize = this.random.Next(11, 20);
+            var items = this.itemFactory.CreateMany(slotSize);
+            var slot = this.slotFactory.FullSlot(items);
+
+            var amount = this.random.Next(1, 10);
+            slot.Get(amount);
+            Assert.That(slot.Amount, Is.EqualTo(slotSize - amount));
         }
     }
 }
