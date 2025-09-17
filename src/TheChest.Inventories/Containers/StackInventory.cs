@@ -121,7 +121,12 @@ namespace TheChest.Inventories.Containers
                 }
 
                 var notAddedItems = slot.Add(items);
-                events.Add(new StackInventoryAddItemEventData<T>(items[notAddedItems.Length..], index));
+                events.Add(
+                    new StackInventoryAddItemEventData<T>(
+                        items.Skip(notAddedItems.Length).ToArray(),
+                        index
+                    )
+                );
                 items = notAddedItems;
                 if (items.Length == 0)
                     break;
@@ -133,7 +138,12 @@ namespace TheChest.Inventories.Containers
                     break;
                 var slot = this.slots[index];
                 var notAddedItems = slot.Add(items);
-                events.Add(new StackInventoryAddItemEventData<T>(items[notAddedItems.Length..], index));
+                events.Add(
+                    new StackInventoryAddItemEventData<T>(
+                        items.Skip(notAddedItems.Length).ToArray(),
+                        index
+                    )
+                );
                 items = notAddedItems;
             }
 
@@ -197,7 +207,7 @@ namespace TheChest.Inventories.Containers
 
             if (slot.CanAdd(items)) {
                 var notAddedItems = slot.Add(items);
-                this.OnAdd?.Invoke(this, (items[notAddedItems.Length..], index));
+                this.OnAdd?.Invoke(this, (items.Skip(notAddedItems.Length).ToArray(), index));
                 return notAddedItems;
             }
 
@@ -248,7 +258,7 @@ namespace TheChest.Inventories.Containers
 
             var notAddedItems = slot.Add(items);
             if (notAddedItems.Length != items.Length)
-                this.OnAdd?.Invoke(this, (items[notAddedItems.Length..], index));
+                this.OnAdd?.Invoke(this, (items.Skip(notAddedItems.Length).ToArray(), index));
 
             return notAddedItems;
         }
