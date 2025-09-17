@@ -14,6 +14,15 @@
         }
 
         [Test]
+        public void GetAll_DecreasesAmountToZero()
+        {
+            var items = this.itemFactory.CreateMany(10);
+            var slot = this.slotFactory.FullSlot(items);
+            slot.GetAll();
+            Assert.That(slot.Amount, Is.EqualTo(0));
+        }
+
+        [Test]
         public void GetAll_FullSlot_ReturnsAllItemFromFullSlot()
         {
             var items = this.itemFactory.CreateMany(20);

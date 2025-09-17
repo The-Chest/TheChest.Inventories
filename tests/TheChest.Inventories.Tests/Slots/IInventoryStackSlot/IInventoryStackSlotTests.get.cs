@@ -33,5 +33,15 @@
 
             Assert.That(slot.GetContents(), Has.Exactly(1).Null);
         }
+
+        [Test]
+        public void Get_FullSlot_DecreasesAmountByOne()
+        {
+            var slotSize = this.random.Next(2, 20);
+            var items = this.itemFactory.CreateMany(slotSize);
+            var slot = this.slotFactory.FullSlot(items);
+            slot.Get();
+            Assert.That(slot.Amount, Is.EqualTo(slotSize - 1));
+        }
     }
 }

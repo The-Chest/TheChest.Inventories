@@ -107,7 +107,7 @@ namespace TheChest.Inventories.Tests.Slots
             var newItem = this.itemFactory.CreateDefault();
             slot.Add(newItem, newAmount);
 
-            Assert.That(slot.StackAmount, Is.EqualTo(amount + newAmount));
+            Assert.That(slot.Amount, Is.EqualTo(amount + newAmount));
         }
     }
 }

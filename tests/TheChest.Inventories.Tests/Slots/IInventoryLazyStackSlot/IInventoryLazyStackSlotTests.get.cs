@@ -72,7 +72,7 @@
             var getAmount = this.random.Next(1, amount);
             slot.Get(getAmount);
 
-            Assert.That(slot.StackAmount, Is.EqualTo(amount - getAmount));
+            Assert.That(slot.Amount, Is.EqualTo(amount - getAmount));
         }
     }
 }

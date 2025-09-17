@@ -1,48 +1,7 @@
-﻿using TheChest.Inventories.Tests.Extensions;
-
-namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots
 {
     public partial class IInventoryStackSlotTests<T>
     {
-        [Test]
-        public void AddItems_EmptySlot_WithLessItemsThanMaxAmount_AddsAllItems()
-        {
-            var randomSize = this.random.Next(1,20);
-            var slot = this.slotFactory.EmptySlot(randomSize);
-
-            var addingItems = this.itemFactory.CreateManyRandom(randomSize);
-            slot.Add(addingItems);
-
-            Assert.That(slot.StackAmount, Is.EqualTo(randomSize));
-        }
-
-        [Test]
-        public void AddItems_EmptySlot_WithMoreItemsThanMaxAmount_AddsAllItems()
-        {
-            var maxAmount = this.random.Next(1, 20);
-            var slot = this.slotFactory.EmptySlot(maxAmount);
-
-            var randomSize = this.random.Next(maxAmount + 1, 20);
-            var addingItems = this.itemFactory.CreateManyRandom(randomSize);
-            var expectedItems = (T[])addingItems[0..maxAmount].Clone();
-            slot.Add(addingItems);
-
-            Assert.That(slot.GetContents(), Is.EqualTo(expectedItems));
-        }
-
-        [Test]
-        public void AddItems_FullSlot_WithAnyAmountOfItems_DoNotAdd()
-        {
-            var randomSize = this.random.Next(1, 20);
-            var items = this.itemFactory.CreateMany(randomSize);
-            var slot = this.slotFactory.FullSlot(items);
-
-            var addingItems = this.itemFactory.CreateMany(randomSize);
-            slot.Add(addingItems);
-
-            Assert.That(slot.GetContents(), Is.EqualTo(items));
-        }
-
         [Test]
         public void AddItems_AddingDifferentItems_ThrowsArgumentException()
         {
@@ -89,6 +48,68 @@ namespace TheChest.Inventories.Tests.Slots
             var addingItems = Array.Empty<T>();
 
             Assert.That(() => slot.Add(addingItems), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void AddItems_EmptySlot_WithLessItemsThanMaxAmount_AddsAllItems()
+        {
+            var randomSize = this.random.Next(1,20);
+            var slot = this.slotFactory.EmptySlot(randomSize);
+
+            var addingItems = this.itemFactory.CreateManyRandom(randomSize);
+            slot.Add(addingItems);
+
+            Assert.That(slot.Amount, Is.EqualTo(randomSize));
+        }
+
+        [Test]
+        public void AddItems_EmptySlot_WithMoreItemsThanMaxAmount_AddsAllItems()
+        {
+            var maxAmount = this.random.Next(1, 20);
+            var slot = this.slotFactory.EmptySlot(maxAmount);
+
+            var randomSize = this.random.Next(maxAmount + 1, 20);
+            var addingItems = this.itemFactory.CreateManyRandom(randomSize);
+            var expectedItems = (T[])addingItems[0..maxAmount].Clone();
+            slot.Add(addingItems);
+
+            Assert.That(slot.GetContents(), Is.EqualTo(expectedItems));
+        }
+
+        [Test]
+        public void Add_PartiallyFilledSlot_IncreasesAmount()
+        {
+            var initialAmount = this.random.Next(1, 10);
+            var maxAmount = this.random.Next(11, 20);
+            var initialItems = this.itemFactory.CreateMany(initialAmount);
+            var slot = this.slotFactory.WithItems(initialItems, maxAmount);
+            var itemsToAdd = this.itemFactory.CreateMany(maxAmount - initialAmount);
+            slot.Add(itemsToAdd);
+            Assert.That(slot.Amount, Is.EqualTo(maxAmount));
+        }
+
+        [Test]
+        public void Add_FullSlot_DoesNotAdd()
+        {
+            var randomSize = this.random.Next(1, 20);
+            var items = this.itemFactory.CreateMany(randomSize);
+            var slot = this.slotFactory.FullSlot(items);
+
+            var addingItems = this.itemFactory.CreateMany(randomSize);
+            slot.Add(addingItems);
+
+            Assert.That(slot.GetContents(), Is.EqualTo(items));
+        }
+
+        [Test]
+        public void Add_FullSlot_DoesNotIncreaseAmount()
+        {
+            var maxAmount = 5;
+            var items = this.itemFactory.CreateMany(maxAmount);
+            var slot = this.slotFactory.FullSlot(items);
+            var item = this.itemFactory.CreateDefault();
+            slot.Add(item);
+            Assert.That(slot.Amount, Is.EqualTo(maxAmount));
         }
     }
 }

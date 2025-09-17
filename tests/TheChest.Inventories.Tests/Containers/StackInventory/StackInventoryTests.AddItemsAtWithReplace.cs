@@ -172,7 +172,7 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[index].IsFull, Is.True);
-                Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
+                Assert.That(inventory[index].Amount, Is.EqualTo(amount));
                 Assert.That(inventory[index].GetContents()?.Reverse().Take(2), Is.EqualTo(items));
             });
         }
@@ -209,7 +209,7 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[index].IsFull, Is.True);
-                Assert.That(inventory[index].StackAmount, Is.EqualTo(amount));
+                Assert.That(inventory[index].Amount, Is.EqualTo(amount));
                 Assert.That(inventory[index].GetContents().Reverse().Take(2), Is.EqualTo(items));
             });
         }

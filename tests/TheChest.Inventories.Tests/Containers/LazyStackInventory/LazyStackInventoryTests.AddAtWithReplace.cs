@@ -60,7 +60,7 @@
                 var slot = inventory[randomIndex];
                 Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsEmpty, Is.False);
-                Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
+                Assert.That(slot.Amount, Is.EqualTo(stackSize));
             });
         }
 
@@ -94,7 +94,7 @@
                 var slot = inventory[randomIndex];
                 Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsEmpty, Is.False);
-                Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
+                Assert.That(slot.Amount, Is.EqualTo(stackSize));
             });
         }
 
@@ -116,7 +116,7 @@
                 var slot = inventory[randomIndex];
                 Assert.That(slot.GetContent(), Is.EqualTo(item));
                 Assert.That(slot.IsFull, Is.True);
-                Assert.That(slot.StackAmount, Is.EqualTo(stackSize));
+                Assert.That(slot.Amount, Is.EqualTo(stackSize));
             });
         }
 
@@ -188,7 +188,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[index].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize));
+                Assert.That(inventory[index].Amount, Is.EqualTo(stackSize));
             });
         }
 
@@ -262,7 +262,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(inventory[index].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[index].StackAmount, Is.EqualTo(stackSize));
+                Assert.That(inventory[index].Amount, Is.EqualTo(stackSize));
             });
         }
 

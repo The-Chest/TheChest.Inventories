@@ -421,7 +421,7 @@ namespace TheChest.Inventories.Containers
             {
                 if (this.slots[i].Contains(item))
                 {
-                    amount += this.slots[i].StackAmount;
+                    amount += this.slots[i].Amount;
                 }
             }
             return amount;

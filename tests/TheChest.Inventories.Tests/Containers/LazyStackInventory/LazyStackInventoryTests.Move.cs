@@ -105,7 +105,7 @@
             });
             Assert.Multiple(() => {
                 Assert.That(inventory[1].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[1].StackAmount, Is.EqualTo(1));
+                Assert.That(inventory[1].Amount, Is.EqualTo(1));
             });
         }
 
@@ -148,7 +148,7 @@
 
             Assert.Multiple(() => {
                 Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[0].StackAmount, Is.EqualTo(1));
+                Assert.That(inventory[0].Amount, Is.EqualTo(1));
             });
             Assert.Multiple(() =>
             {
