@@ -116,35 +116,6 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        [Obsolete("This will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        public virtual T AddAt(T item, int index, bool replace)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            T result = default;
-            if (replace)
-            {
-                result = this.slots[index].Replace(item);
-                this.OnAdd?.Invoke(this, (item, index));//TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
-            }
-            else
-            {
-                var added = this.AddAt(item, index);
-                if (!added)
-                    result = item;
-            }
-
-            return result;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public bool AddAt(T item, int index)
         {
             if (item is null)
