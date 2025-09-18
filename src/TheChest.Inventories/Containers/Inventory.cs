@@ -25,6 +25,8 @@ namespace TheChest.Inventories.Containers
         public event InventoryAddEventHandler<T>? OnAdd;
         /// <inheritdoc/>
         public event InventoryMoveEventHandler<T>? OnMove;
+        /// <inheritdoc/>
+        public event InventoryReplaceEventHandler<T>? OnReplace;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -305,6 +307,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var oldItem = this.slots[index].Replace(item);
+            this.OnReplace?.Invoke(this, (index, oldItem, item));
 
             return oldItem;
         }

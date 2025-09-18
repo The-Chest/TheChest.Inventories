@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Inventories.Containers.Events;
+﻿using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -73,6 +72,10 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>true if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
 
+        /// <summary>
+        /// Raised when an item is replaced in a specific slot
+        /// </summary>
+        event InventoryReplaceEventHandler<T>? OnReplace;
         /// <summary>
         /// Replaces an item in a specific slot
         /// </summary>
