@@ -19,12 +19,13 @@ direction TB
         class IInventory~T~ {
 	        + ~~event~~ OnGet: InventoryGetEventHandler 
 	        + ~~event~~ OnAdd: InventoryAddEventHandler 
+	        + ~~event~~ OnMove: InventoryMoveEventHandler 
+	        + ~~event~~ OnReplace: InventoryReplaceEventHandler 
             + T? Get(int index)
 	        + T[] GetAll(T item)
 	        + T[] Clear()
 	        + bool Add(T item)
 	        + T[] Add(params T[] items)
-	        + T? AddAt(T item, int index, bool replace)
 	        + bool AddAt(T item, int index)
 	        + void Move(int origin, int target)
 	        + int GetCount(T item)
@@ -40,11 +41,11 @@ direction TB
 	        + IInventorySlot~T~ this[int index]
 	        + ~~event~~ OnGet: InventoryGetEventHandler 
 	        + ~~event~~ OnAdd: InventoryAddEventHandler 
-            + ~~event~~ OnMove: InventoryMoveEventHandler 
+	        + ~~event~~ OnMove: InventoryMoveEventHandler 
+	        + ~~event~~ OnReplace: InventoryReplaceEventHandler 
 	        + Inventory(IInventorySlot~T~[] slots)
             + T[] Add(params T[] items)
 	        + bool Add(T item)
-	        + T? AddAt(T item, int index, bool replace)
 	        + bool AddAt(T item, int index)
 	        + T[] Clear()
 	        + T[] GetAll(T item)
