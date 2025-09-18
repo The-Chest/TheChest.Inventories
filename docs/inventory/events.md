@@ -151,9 +151,9 @@ public delegate void InventoryReplaceEventHandler<T>(object? sender, InventoryRe
 | sender                    | `object`                                                  | Inventory responsible for firing the event                |
 | args                      | `InventoryReplaceEventArgs`                               | Class that holds data of the event                        |
 | args.Data                 | `IReadOnlyCollection<InventoryReplaceItemEventData<T>>`   | An array with all items and its respective indexes        |
-| args.Data[].OldItems[]    | `Generic`                                                 | The items that were inside the slot at `Index` previously |
-| args.Data[].NewItems[]    | `Generic`                                                 | The items that are now inside the slot at `Index`         |
-| args.Data[].Index         | `Integer`                                                 | Index that the `OldItems` were replaced fo the `NewItems` |
+| args.Data[].OldItem       | `Generic`                                                 | The item that is inside the slot at `Index` previously    |
+| args.Data[].NewItem       | `Generic`                                                 | The item that is now inside the slot at `Index`           |
+| args.Data[].Index         | `Integer`                                                 | Index that the `OldItem` is replaced for the `NewItems`   |
 
 ### Example
 
@@ -172,17 +172,9 @@ var inventory = new Inventory<string>(slots);
 inventory.OnReplace += (sender, args) =>
 {
     foreach(var action in args.Data){
-        Console.WriteLine($"Items removed from index {action.Index}:");
-        foreach(var oldItems in action.OldItems){
-            Console.WriteLine($"- Item : {oldItems}");
-        }
-
-        Console.WriteLine($"Items added to index {action.Index}:");
-        foreach(var newItems in action.NewItems){
-            Console.WriteLine($"- Item : {newItems}");
-        }
+        Console.WriteLine($"Item {action.OldItem} on index {action.Index} was replaced for {action.NewItem}");
     }
 };
 
-inventory.Replace(0, new string[] { "NewItem_1", "NewItem_2" });
+inventory.Replace("NewItem_1", 0);
 ```
