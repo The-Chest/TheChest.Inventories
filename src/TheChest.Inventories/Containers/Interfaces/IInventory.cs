@@ -16,10 +16,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
         event InventoryGetEventHandler<T>? OnGet;
-        /// <summary>
-        /// Raised when an amount of item is added to an index of the inventory
-        /// </summary>
-        event InventoryAddEventHandler<T>? OnAdd;
 
         /// <summary>
         /// Gets an item inside a slot
@@ -54,6 +50,10 @@ namespace TheChest.Inventories.Containers.Interfaces
         int GetCount(T item);
 
         /// <summary>
+        /// Raised when an amount of item is added to an index of the inventory
+        /// </summary>
+        event InventoryAddEventHandler<T>? OnAdd;
+        /// <summary>
         /// Adds and array of items in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
@@ -72,5 +72,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">Slot where the item will be added</param>
         /// <returns>true if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
+
+        /// <summary>
+        /// Replaces an item in a specific slot
+        /// </summary>
+        /// <param name="item">The item that will now ocupy the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the <paramref name="item"/> will ocupy</param>
+        /// <returns>The old item from the slot on <paramref name="index"/></returns>
+        T Replace(T item, int index);
     }
 }
