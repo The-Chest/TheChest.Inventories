@@ -134,3 +134,56 @@ inventory.OnMove += (sender, args) =>
 
 inventory.Move(0, 1);//the method has no return
 ```
+
+## StackInventoryReplaceEventHandler
+
+Fires when any amount of item is replaced in a slot on the inventory.
+
+### Signature
+```csharp
+public delegate void StackInventoryReplaceEventHandler<T>(object? sender, StackInventoryReplaceEventArgs<T> e);
+```
+
+### EventArgs
+
+| Property                  | Type                                                      | Description                                               |
+|---------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
+| sender                    | `object`                                                  | Inventory responsible for firing the event                |
+| args                      | `InventoryReplaceEventArgs`                               | Class that holds data of the event                        |
+| args.Data                 | `IReadOnlyCollection<InventoryReplaceItemEventData<T>>`   | An array with all items and its respective indexes        |
+| args.Data[].OldItems[]    | `Generic`                                                 | The items that were inside the slot at `Index` previously |
+| args.Data[].NewItems[]    | `Generic`                                                 | The items that are now inside the slot at `Index`         |
+| args.Data[].Index         | `Integer`                                                 | Index that the `OldItems` were replaced for the `NewItems`|
+
+### Example
+
+```csharp
+using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventorySlot<string>[10];
+for (int i = 0; i < slots.Length - 1; i++)
+{
+    slots[i] = new InventorySlot<string>($"Item_{i}");
+}
+
+var inventory = new Inventory<string>(slots);
+
+inventory.OnReplace += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"Items removed from index {action.Index}:");
+        foreach(var oldItems in action.OldItems){
+            Console.WriteLine($"- Item : {oldItems}");
+        }
+
+        Console.WriteLine($"Items added to index {action.Index}:");
+        foreach(var newItems in action.NewItems){
+            Console.WriteLine($"- Item : {newItems}");
+        }
+    }
+};
+
+inventory.Replace(new string[] { "NewItem_1", "NewItem_2" }, 0);
+```
+

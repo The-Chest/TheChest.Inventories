@@ -36,6 +36,7 @@ direction TB
             + T[] Get(int index, int amount)
             + int GetCount(T item)
             + void Move(int origin, int target)
+            + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
             + bool CanAdd(T item)
@@ -67,6 +68,7 @@ direction TB
             + T[] Get(int index, int amount)
             + int GetCount(T item)
             + void Move(int origin, int target)
+            + T[] Replace(T[] items, int index)
         }
     }
 	<<abstract>> StackContainer

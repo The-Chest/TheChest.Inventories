@@ -12,21 +12,16 @@ public class MyStackInventory : IStackInventory<int>{
         this.slots = slots;
     }
 
-    public bool Add(int item){
+    public bool Add(int item)
+    {
         if(item < 1)
             return false;
-
         if(this.slot[item].IsFull)
             return false;
+        if(!this.slot[item].CanAdd(item))
+            return false;
 
-        for(int i = 0; i < this.slot[item].Content.Length; i++){
-            if(this.slot[item].Content[i] <0 || this.slot[item].Content[i] == null){
-                this.slot[item].Content[i] = item;
-                return true;
-            }
-        }
-
-        return false;
+        return this.slot[item].Add(item);
     }
     /// all other methods will need to be implemented too
 }
@@ -38,7 +33,6 @@ public class MyStackInventory : IStackInventory<int>{
 public class MyStackSlot : IInventoryStackSlot<int>
 {
     protected readonly int[] contents;
-    public int Content[] => this.contents;
     public bool IsFull => this.content.Length > 0;
 
     public MyStackSlot(int[] contents)
