@@ -87,26 +87,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>An array with of items</returns>
         T[] GetAll(int index);
         /// <summary>
-        /// <para>Adds an item in a specific slot</para>
-        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T, int)"/> instead.</para>
-        /// </summary>
-        /// <param name="item">item to be added</param>
-        /// <param name="index">slot where the item will be added</param>
-        /// <param name="replace"></param>
-        /// <returns>The item that couldn't be added or the replaced item if <paramref name="replace"/> is true</returns>
-        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        T[] AddAt(T item, int index, bool replace);
-        /// <summary>
-        /// <para>Adds an array of item inside the inventory</para>
-        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T[], int)"/> instead.</para>
-        /// </summary>
-        /// <param name="items">Array of item of the same type wich will be added to inventory</param>
-        /// <param name="index">Wich slot the items will be added</param>
-        /// <param name="replace">Defines if the current Slot item will be replaced by the <paramref name="items"/> param</param>
-        /// <returns>An array of items replaced or couldn't be added</returns>
-        [Obsolete("This method will be removed in the future versions. Use AddAt(T[] items, int index) instead")]
-        T[] AddAt(T[] items, int index, bool replace);
-        /// <summary>
         /// Adds an item in a specific slot
         /// </summary>
         /// <param name="item">item to be added</param>

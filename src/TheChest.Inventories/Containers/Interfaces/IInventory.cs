@@ -67,16 +67,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         bool Add(T item);
         /// <summary>
         /// Adds an item in a specific slot
-        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T, int)"/> instead.</para>
-        /// </summary>
-        /// <param name="item">Item to be added</param>
-        /// <param name="index">Slot where the item will be added</param>
-        /// <param name="replace">Flag that decide if the item on <paramref name="index"/> (if exists) will be replaced</param>
-        /// <returns>The item from param that couldn't be added or the replaced item that were inside the slot</returns>
-        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        T AddAt(T item, int index, bool replace);
-        /// <summary>
-        /// Adds an item in a specific slot
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>
