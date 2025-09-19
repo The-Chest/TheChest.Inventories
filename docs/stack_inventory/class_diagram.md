@@ -21,21 +21,24 @@ direction TB
             - IInventoryStackSlot~T~[] slots
             + IInventoryStackSlot~T~ this[int index]
             + StackInventory(IInventoryStackSlot~T~[] slots)
+	        + ~~event~~ OnGet: StackInventoryGetEventHandler~T~ 
+	        + ~~event~~ OnAdd: StackInventoryAddEventHandler~T~ 
+	        + ~~event~~ OnMove: StackInventoryMoveEventHandler~T~ 
+	        + ~~event~~ OnReplace: StackInventoryReplaceEventHandler~T~ 
             + bool Add(T item)
-            + T[] AddAt(T item, int index, bool replace = true)
             + bool AddAt(T item, int index)
             + T[] Add(params T[] items)
-            + T[] AddAt(T[] items, int index, bool replace = true)
             + T[] AddAt(T[] items, int index)
             + T[] Clear()
-            + T[] GetAll(int index)
-            + T[] GetAll(T item)
             + T? Get(int index)
             + T? Get(T item)
             + T[] Get(T item, int amount)
             + T[] Get(int index, int amount)
+            + T[] GetAll(int index)
+            + T[] GetAll(T item)
             + int GetCount(T item)
             + void Move(int origin, int target)
+            + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
             + bool CanAdd(T item)
@@ -52,21 +55,24 @@ direction TB
             + bool Contains(T item)
         }
         class IStackInventory~T~ {
+	        + ~~event~~ OnGet: StackInventoryGetEventHandler~T~ 
+	        + ~~event~~ OnAdd: StackInventoryAddEventHandler~T~ 
+	        + ~~event~~ OnMove: StackInventoryMoveEventHandler~T~ 
+	        + ~~event~~ OnReplace: StackInventoryReplaceEventHandler~T~ 
             + bool Add(T item)
             + bool AddAt(T item, int index)
-            + T[] AddAt(T item, int index, bool replace = true)
             + T[] Add(params T[] items)
             + T[] AddAt(T[] items, int index)
-            + T[] AddAt(T[] items, int index, bool replace = true)
-            + T[] Clear()
-            + T[] GetAll(int index)
-            + T[] GetAll(T item)
             + T? Get(int index)
             + T? Get(T item)
             + T[] Get(T item, int amount)
             + T[] Get(int index, int amount)
+            + T[] GetAll(int index)
+            + T[] GetAll(T item)
             + int GetCount(T item)
+            + T[] Clear()
             + void Move(int origin, int target)
+            + T[] Replace(T[] items, int index)
         }
     }
 	<<abstract>> StackContainer
@@ -94,13 +100,6 @@ direction BT
 
 namespace TheChest.Core {
     class StackSlot~T~ {
-        - T[] content
-        + int MaxStackAmount
-        + int StackAmount
-        + bool IsEmpty
-        + bool IsFull
-        + StackSlot(T[] items)
-        + StackSlot(T[] items, int maxStackAmount)
     }
 }
 <<abstract>> StackSlot

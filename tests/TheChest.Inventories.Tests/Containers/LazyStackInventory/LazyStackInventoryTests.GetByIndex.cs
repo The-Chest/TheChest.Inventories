@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {

@@ -17,16 +17,18 @@ direction TB
 	}
 	namespace TheChest.Inventories {
         class IInventory~T~ {
-	        + ~~event~~ OnGet: InventoryGetEventHandler 
-	        + ~~event~~ OnAdd: InventoryAddEventHandler 
+	        + ~~event~~ OnGet: InventoryGetEventHandler~T~ 
+	        + ~~event~~ OnAdd: InventoryAddEventHandler~T~ 
+	        + ~~event~~ OnMove: InventoryMoveEventHandler~T~ 
+	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
             + T? Get(int index)
 	        + T[] GetAll(T item)
 	        + T[] Clear()
 	        + bool Add(T item)
 	        + T[] Add(params T[] items)
-	        + T? AddAt(T item, int index, bool replace)
 	        + bool AddAt(T item, int index)
 	        + void Move(int origin, int target)
+	        + T Replace(T item, int index)
 	        + int GetCount(T item)
         }
         class IInventorySlot~T~ {
@@ -38,13 +40,13 @@ direction TB
         class Inventory~T~ {
 	        - IInventorySlot~T~[] slots
 	        + IInventorySlot~T~ this[int index]
-	        + ~~event~~ OnGet: InventoryGetEventHandler 
-	        + ~~event~~ OnAdd: InventoryAddEventHandler 
-            + ~~event~~ OnMove: InventoryMoveEventHandler 
+	        + ~~event~~ OnGet: InventoryGetEventHandler~T~ 
+	        + ~~event~~ OnAdd: InventoryAddEventHandler~T~ 
+	        + ~~event~~ OnMove: InventoryMoveEventHandler~T~ 
+	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
 	        + Inventory(IInventorySlot~T~[] slots)
             + T[] Add(params T[] items)
 	        + bool Add(T item)
-	        + T? AddAt(T item, int index, bool replace)
 	        + bool AddAt(T item, int index)
 	        + T[] Clear()
 	        + T[] GetAll(T item)
@@ -52,6 +54,7 @@ direction TB
 	        + T? Get(T item)
 	        + T[] Get(T item, int amount)
 	        + int GetCount(T item)
+	        + T Replace(T item, int index)
 	        + void Move(int origin, int target)
         }
         class IInteractiveContainer~T~{
@@ -88,10 +91,6 @@ direction BT
 
 namespace TheChest.Core {
     class Slot~T~ {
-        - T? content
-        + bool IsEmpty
-        + bool IsFull
-        + Slot(T? currentItem = default)
     }
 }
 <<abstract>> Slot

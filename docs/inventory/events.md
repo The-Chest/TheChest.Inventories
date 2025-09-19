@@ -134,3 +134,47 @@ inventory.Move(0, 1);
 //This will fire an event with the one item moved (the index 9 is empty)
 inventory.Move(9, 2);
 ```
+
+## InventoryReplaceEventHandler
+
+Fires when an item is replaced from an index on the inventory.
+
+### Signature
+```csharp
+public delegate void InventoryReplaceEventHandler<T>(object? sender, InventoryReplaceEventArgs<T> e);
+```
+
+### EventArgs
+
+| Property                  | Type                                                      | Description                                               |
+|---------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
+| sender                    | `object`                                                  | Inventory responsible for firing the event                |
+| args                      | `InventoryReplaceEventArgs`                               | Class that holds data of the event                        |
+| args.Data                 | `IReadOnlyCollection<InventoryReplaceItemEventData<T>>`   | An array with all items and its respective indexes        |
+| args.Data[].OldItem       | `Generic`                                                 | The item that is inside the slot at `Index` previously    |
+| args.Data[].NewItem       | `Generic`                                                 | The item that is now inside the slot at `Index`           |
+| args.Data[].Index         | `Integer`                                                 | Index that the `OldItem` is replaced for the `NewItems`   |
+
+### Example
+
+```csharp
+using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots.Interfaces;
+
+var slots = new InventorySlot<string>[10];
+for (int i = 0; i < slots.Length - 1; i++)
+{
+    slots[i] = new InventorySlot<string>($"Item_{i}");
+}
+
+var inventory = new Inventory<string>(slots);
+
+inventory.OnReplace += (sender, args) =>
+{
+    foreach(var action in args.Data){
+        Console.WriteLine($"Item {action.OldItem} on index {action.Index} was replaced for {action.NewItem}");
+    }
+};
+
+inventory.Replace("NewItem_1", 0);
+```

@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Core.Containers.Interfaces;
+﻿using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -22,7 +21,10 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
         event LazyStackInventoryMoveEventHandler<T>? OnMove;
-
+        /// <summary>
+        /// Raised when an amount of item is replaced on an index of the inventory
+        /// </summary>
+        event LazyStackInventoryReplaceEventHandler<T>? OnReplace;
         #region ILazyStackInventory
         /// <summary>
         /// Gets an item from inside a slot
@@ -92,6 +94,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">amount of the item</param>
         /// <returns>Returns the amount of items that couldn't be added</returns>
         int AddAt(T item, int index, int amount);
+        /// <summary>
+        /// Replaces an amount of items in a specific slot
+        /// </summary>
+        /// <param name="item">Item to be added to the index <paramref name="index"/></param>
+        /// <param name="index">Index of the slot where the item will be placed</param>
+        /// <param name="amount">Amount of the item to be placed</param>
+        /// <returns>The item that was replaced by <paramref name="item"/></returns>
+        T[] Replace(T item, int index, int amount);
         #endregion
 
         #region IInteractive

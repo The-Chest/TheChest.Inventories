@@ -25,6 +25,8 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryGetEventHandler<T>? OnGet;
         /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T>? OnMove;
+        /// <inheritdoc/>
+        public event StackInventoryReplaceEventHandler<T>? OnReplace;
 
         /// <summary>
         /// Gets the <see cref="IInventoryStackSlot{T}"/> at the specified index.
@@ -396,6 +398,24 @@ namespace TheChest.Inventories.Containers
                 events.Add(new StackInventoryMoveItemEventData<T>(oldItems, target, origin));
             }
             this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
+        public virtual T[] Replace(T[] items, int index)
+        {
+            if (items.Length == 0)
+                return items;
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+            if (!slot.CanReplace(items))
+                return items;
+
+            var oldItems = slot.Replace(items);
+            this.OnReplace?.Invoke(this, (index, oldItems, items));
+
+            return oldItems;
         }
     }
 }

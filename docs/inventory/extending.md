@@ -25,14 +25,14 @@ public class MyInventory : Inventory<int>
 ```csharp
 public class MySlot : InventorySlot<int>
 {
-    public MySlot(int currentItem = 0) : base(currentItem) { }
+    public MySlot(int content = 0) : base(content) { }
 
     public virtual bool Add(int item)
     {
         if(this.IsFull || item <= 0){
             return false;
         }
-        this.Content = item;
+        this.content = item;
         return true;
     }
 

@@ -25,6 +25,10 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
         event StackInventoryMoveEventHandler<T>? OnMove;
+        /// <summary>
+        /// Raised when an item is removed from an index of the inventory
+        /// </summary>
+        event StackInventoryReplaceEventHandler<T>? OnReplace;
 
         #region IStackInventory
         /// <summary>
@@ -70,6 +74,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
+        /// <summary>
+        /// Replaces items in a specific slot
+        /// </summary>
+        /// <param name="items">The items that will now ocupy the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the <paramref name="items"/> will ocupy</param>
+        /// <returns>The old items from the slot on <paramref name="index"/></returns>
+        T[] Replace(T[] items, int index);
         #endregion
 
         #region IInventory

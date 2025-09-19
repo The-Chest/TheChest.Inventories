@@ -31,15 +31,16 @@ public class MyInventory : IInventory<int>{
 ```csharp
 public class MySlot : IInventorySlot<int>
 {
-    public int Content { get; private set; } = 0;
-    public bool IsFull => this.Content > 0;
+    private int content;
+    public int Content => this.content;
+    public bool IsFull => this.content > 0;
 
     public virtual bool Add(T item)
     {
         if(this.IsFull){
             return false;
         }
-        this.Content = item;
+        this.content = item;
         return true;
     }
 
