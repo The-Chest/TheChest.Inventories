@@ -20,6 +20,8 @@ namespace TheChest.Inventories.Containers
         public event LazyStackInventoryAddEventHandler<T>? OnAdd;
         /// <inheritdoc/>
         public event LazyStackInventoryMoveEventHandler<T>? OnMove;
+        /// <inheritdoc/>
+        public event LazyStackInventoryReplaceEventHandler<T>? OnReplace;
 
         /// <summary>
         /// Creates an Stackable Inventory with lazy behavior
@@ -198,7 +200,7 @@ namespace TheChest.Inventories.Containers
                 }
             }
 
-            return default;
+            return default!;
         }
         /// <summary>
         /// Gets an amount of items from the inventory
@@ -382,6 +384,28 @@ namespace TheChest.Inventories.Containers
             }
 
             this.OnMove?.Invoke(this, new LazyStackInventoryMoveEventArgs<T>(events.ToArray()));
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        public T[] Replace(T item, int index, int amount)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+            var replacedItems = slot.Replace(item, amount);
+
+            if (replacedItems.Length > 0)
+                this.OnReplace?.Invoke(this, (replacedItems[0], replacedItems.Length, item, amount, index));
+            else
+                this.OnReplace?.Invoke(this, (default!, 0, item, amount, index));
+
+            return replacedItems;
         }
     }
 }
