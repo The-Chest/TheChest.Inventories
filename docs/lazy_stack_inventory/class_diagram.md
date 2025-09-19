@@ -21,11 +21,14 @@ namespace TheChest.Core {
 namespace TheChest.Inventories.Containers {
     class LazyStackInventory~T~ {
         - IInventoryLazyStackSlot~T~[] slots
-        + LazyStackInventory(IInventoryLazyStackSlot~T~[] slots)
         + IInventoryLazyStackSlot~T~ this[int index]
+        + LazyStackInventory(IInventoryLazyStackSlot~T~[] slots)
+	    + ~~event~~ OnGet: LazyStackInventoryGetEventHandler~T~ 
+	    + ~~event~~ OnAdd: LazyStackInventoryAddEventHandler~T~
+	    + ~~event~~ OnMove: LazyStackInventoryMoveEventHandler~T~ 
+	    + ~~event~~ OnReplace: LazyStackInventoryReplaceEventHandler~T~ 
         + bool Add(T item)
         + int Add(T item, int amount)
-        + T[] AddAt(T item, int index, int amount, bool replace)
         + int AddAt(T item, int index, int amount)
         + T[] Clear()
         + T? Get(int index)
@@ -36,6 +39,7 @@ namespace TheChest.Inventories.Containers {
         + T[] GetAll(int index)
         + int GetCount(T item)
         + void Move(int origin, int target)
+        + T[] Replace(T item, int index, int amount)
     }
 }
 
@@ -54,6 +58,10 @@ namespace TheChest.Inventories.Slots.Interfaces {
 
 namespace TheChest.Inventories.Containers.Interfaces {
     class ILazyStackInventory~T~ {
+	    + ~~event~~ OnGet: LazyStackInventoryGetEventHandler~T~ 
+	    + ~~event~~ OnAdd: LazyStackInventoryAddEventHandler~T~ 
+	    + ~~event~~ OnMove: LazyStackInventoryMoveEventHandler~T~ 
+	    + ~~event~~ OnReplace: LazyStackInventoryReplaceEventHandler~T~ 
         + T? Get(int index)
         + T? Get(T item)
         + T[] Get(T item, int amount)
@@ -64,9 +72,9 @@ namespace TheChest.Inventories.Containers.Interfaces {
         + T[] GetAll(int index)
         + int Add(T item, int amount)
         + int AddAt(T item, int index, int amount)
-        + T[] AddAt(T item, int index, int amount, bool replace)
         + void Move(int origin, int target)
         + T[] Clear()
+        + T[] Replace(T item, int index, int amount)
     }
 }
 <<interface>> ILazyStackInventory
@@ -92,13 +100,6 @@ direction TB
 
 namespace TheChest.Core {
     class LazyStackSlot~T~ {
-        - T? content
-        + int MaxStackAmount
-        + int StackAmount
-        + bool IsEmpty
-        + bool IsFull
-        + LazyStackSlot(T? currentItem = default)
-        + LazyStackSlot(T? currentItem = default, int maxStackAmount = 1)
     }
 }
 <<abstract>> LazyStackSlot
