@@ -401,7 +401,7 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
-        public T[] Replace(T[] items, int index)
+        public virtual T[] Replace(T[] items, int index)
         {
             if (items.Length == 0)
                 return items;

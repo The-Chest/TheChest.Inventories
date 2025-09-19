@@ -388,7 +388,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
-        public T[] Replace(T item, int index, int amount)
+        public virtual T[] Replace(T item, int index, int amount)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
