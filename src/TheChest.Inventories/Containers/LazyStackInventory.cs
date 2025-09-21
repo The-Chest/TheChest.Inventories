@@ -12,7 +12,7 @@ namespace TheChest.Inventories.Containers
     /// Generic Inventory with <see cref="ILazyStackInventory{T}"/> implementation
     /// </summary>
     /// <typeparam name="T">An item type</typeparam>
-    public class LazyStackInventory<T> : StackContainer<T>, ILazyStackInventory<T>
+    public class LazyStackInventory<T> : LazyStackContainer<T>, ILazyStackInventory<T>
     {
         /// <inheritdoc/>
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
