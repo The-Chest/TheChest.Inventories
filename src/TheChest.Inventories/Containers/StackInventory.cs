@@ -157,7 +157,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        public bool AddAt(T item, int index)
+        public virtual bool AddAt(T item, int index)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
@@ -177,7 +177,7 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
-        public T[] AddAt(T[] items, int index)
+        public virtual T[] AddAt(T[] items, int index)
         {
             if (items.Length == 0)
                 return items;
