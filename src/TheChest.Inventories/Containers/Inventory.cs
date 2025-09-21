@@ -297,16 +297,34 @@ namespace TheChest.Inventories.Containers
             this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }
         /// <inheritdoc/>>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual T Replace(T item, int index)
         {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var oldItem = this.slots[index].Replace(item);
+            var slot = this.slots[index];
+            if (item is null)
+            {
+                if (slot.IsEmpty)
+                    return default!;
+                
+                return slot.Get();
+            }
+
+            if (slot.IsEmpty)
+            {
+                var added = slot.Add(item);
+                if (added)
+                {
+                    this.OnReplace?.Invoke(this, (index, default!, item));
+                    return default!;
+                }
+                
+                return item;
+            }
+
+            var oldItem = slot.Replace(item);
             this.OnReplace?.Invoke(this, (index, oldItem, item));
 
             return oldItem;
