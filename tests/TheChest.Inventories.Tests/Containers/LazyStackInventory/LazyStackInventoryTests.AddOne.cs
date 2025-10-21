@@ -73,7 +73,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             {
                 Assert.That(
                     inventory.GetSlots(),
-                    Has.One.Matches<IStackSlot<T>>(
+                    Has.One.Matches<ILazyStackSlot<T>>(
                         slot =>
                             item!.Equals(slot.GetContent()) && 
                             slot.Amount == 1
@@ -106,7 +106,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             Assert.Multiple(() =>
             {
                 Assert.That(inventory.GetSlots(), 
-                    Has.All.Matches<IStackSlot<T>>(
+                    Has.All.Matches<ILazyStackSlot<T>>(
                         slot => slot.IsFull && !item!.Equals(slot.GetContent())
                     )
                 );
