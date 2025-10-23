@@ -29,7 +29,7 @@ namespace TheChest.Inventories.Tests.Extensions
         public static IStackSlot<T>[]? GetSlots<T>(this IStackInventory<T> inventory)
             => inventory.GetSlotsFieldOrProperty() as IStackSlot<T>[];
 
-        public static IStackSlot<T>[]? GetSlots<T>(this ILazyStackInventory<T> inventory)
-            => inventory.GetSlotsFieldOrProperty() as IStackSlot<T>[];
+        public static ILazyStackSlot<T>[]? GetSlots<T>(this ILazyStackInventory<T> inventory)
+            => inventory.GetSlotsFieldOrProperty() as ILazyStackSlot<T>[];
     }
 }
