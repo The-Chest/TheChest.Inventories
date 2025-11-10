@@ -13,7 +13,7 @@
         }
 
         [Test]
-        public void Replace_EmptyItems_ReturnsEmptyArray()
+        public void Replace_EmptyItems_ThrowsArgumentOutOfRangeException()
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
@@ -21,13 +21,14 @@
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
-            var result = inventory.Replace(Array.Empty<T>(), randomIndex);
-
-            Assert.That(result, Is.Empty);
+            Assert.That(() => 
+                inventory.Replace(Array.Empty<T>(), randomIndex), 
+                Throws.TypeOf<ArgumentException>()
+            );
         }
 
         [Test]
-        public void Replace_EmptyItems_DoesNotReplace()
+        public void Replace_NullItems_DoesNotReplace()
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
@@ -35,23 +36,10 @@
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
-            inventory.Replace(Array.Empty<T>(), randomIndex);
-
-            Assert.That(inventory[randomIndex].GetContents(), Has.All.EqualTo(item));
-        }
-
-        [Test]
-        public void Replace_EmptyItems_DoesNotCallOnReplaceEvent()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
-
-            var randomIndex = this.random.Next(0, size);
-            inventory.OnReplace += 
-                (sender, args) => Assert.Fail("OnReplace event should not be called when replacing empty items");
-            inventory.Replace(Array.Empty<T>(), randomIndex);
+            Assert.That(() =>
+                inventory.Replace(null!, randomIndex),
+                Throws.TypeOf<ArgumentNullException>()
+            );
         }
 
         [Test]
