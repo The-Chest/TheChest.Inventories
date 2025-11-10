@@ -96,5 +96,56 @@
             };
             inventory.Replace(newItems, randomIndex);
         }
+
+        [Test]
+        public void Replace_EmptySlot_ReplacesItemsInSlot()
+        {
+            var stackSize = this.random.Next(10, 20);
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            inventory.Replace(newItems, randomIndex);
+
+            Assert.That(inventory[randomIndex].GetContents(), Is.EqualTo(newItems));
+        }
+
+        [Test]
+        public void Replace_EmptySlot_ReturnsEmptyArray()
+        {
+            var stackSize = this.random.Next(10, 20);
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(this.random.Next(1, 20));
+            var result = inventory.Replace(newItems, randomIndex);
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void Replace_EmptySlot_CallsOnReplaceEvent()
+        {
+            var stackSize = this.random.Next(10, 20);
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.FullContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            inventory.OnReplace += (sender, args) =>
+            {
+                Assert.That(sender, Is.EqualTo(inventory));
+                var data = args.Data.Single();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(data.Index, Is.EqualTo(randomIndex));
+                    Assert.That(data.OldItems, Is.Empty);
+                    Assert.That(data.NewItems, Is.EqualTo(newItems));
+                });
+            };
+            inventory.Replace(newItems, randomIndex);
+        }
     }
 }
