@@ -119,7 +119,7 @@
             var inventory = this.containerFactory.EmptyContainer(size, stackSize);
 
             var randomIndex = this.random.Next(0, size);
-            var newItems = this.itemFactory.CreateManyRandom(this.random.Next(1, 20));
+            var newItems = this.itemFactory.CreateManyRandom(this.random.Next(1, stackSize));
             var result = inventory.Replace(newItems, randomIndex);
 
             Assert.That(result, Is.Empty);

@@ -306,14 +306,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var slot = this.slots[index];
-            if (item is null)
-            {
-                if (slot.IsEmpty)
-                    return default!;
-                
-                return slot.Get();
-            }
-
             if (slot.IsEmpty)
             {
                 var added = slot.Add(item);
