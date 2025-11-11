@@ -1,7 +1,7 @@
 # v0.12.0
 
 ## What's Changed
-* Project now using `TheChest.Core v1.12.1`
+* Project now using `TheChest.Core v0.12.1`
 * `InventoryLazyStackSlot` now implements `ILazyStackSlot`
 * `LazyStackInventory` now implements `ILazyStackContainer`
 

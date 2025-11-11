@@ -14,7 +14,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup Label="Dependencies">
-		<PackageReference Include="TheChest.Core" Version="0.10.0" />
+		<PackageReference Include="TheChest.Core" Version="0.12.1" />
 	</ItemGroup>
 	<ItemGroup Label="Package">
 		<None Include="..\..\LICENSE">
