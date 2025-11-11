@@ -297,7 +297,7 @@ namespace TheChest.Inventories.Containers
                     return result;
                 }
             }
-            return default;
+            return default!;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -349,6 +349,7 @@ namespace TheChest.Inventories.Containers
             var items = this.slots[index].Get(amount);
             if(items.Length > 0)
                 this.OnGet?.Invoke(this, (items, index));
+            
             return items;
         }
         /// <inheritdoc/>
@@ -400,11 +401,15 @@ namespace TheChest.Inventories.Containers
             this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
         }
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
+        /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
         public virtual T[] Replace(T[] items, int index)
         {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
-                return items;
+                throw new ArgumentException("Cannot replace using an empty item array", nameof(items));
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
