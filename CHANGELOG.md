@@ -1,3 +1,20 @@
+# v0.12.1
+
+## What's Fixed
+* `StackInventory.Replace(T[] items, int index)` now throws 
+  * `ArgumentNullException` when `items` is null
+  * `ArgumentException` when `items` length is zero
+  * `ArgumentOutOfRangeException` when `index` is bigger than the Inventory size or smaller than zero
+
+## Known issues
+* [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
+* [#129](https://github.com/The-Chest/TheChest.Inventories/issues/129) - No Add/Replace/Move validations
+* Index in Inventory/Container properties might be removed or become obsolete
+* Event system may need an improvement on creation/dispatch
+  * No changes to the Event API is being planned yet
+
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.0...v0.12.1
+
 # v0.12.0
 
 ## What's Changed
@@ -6,7 +23,6 @@
 * `LazyStackInventory` now implements `ILazyStackContainer`
 
 ## Known issues
-* [#37](https://github.com/The-Chest/TheChest.Inventories/issues/37) - `InventoryLazyStackSlot.Replace` needs to receive an array of item instead of an item and the amount number
 * [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
 * [#129](https://github.com/The-Chest/TheChest.Inventories/issues/129) - No Add/Replace/Move validations
 * Index in Inventory properties might be removed or become obsolete
@@ -24,7 +40,6 @@
   * `LazyStackInventory`
 
 ## Known issues
-* [#37](https://github.com/The-Chest/TheChest.Inventories/issues/37) - `InventoryLazyStackSlot.Replace` needs to receive an array of item instead of an item and the amount number
 * [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
 * [#129](https://github.com/The-Chest/TheChest.Inventories/issues/129) - No Add/Replace/Move validations
 * Index in Inventory properties might be removed or become obsolete
