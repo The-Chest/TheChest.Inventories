@@ -1,7 +1,7 @@
 using System.Reflection;
 using TheChest.Core.Slots.Interfaces;
 
-namespace TheChest.Inventories.Tests.Extensions
+namespace TheChest.Inventories.Tests.Slots.Extensions
 {
     public static class ISlotsExtensions
     {
