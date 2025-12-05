@@ -216,7 +216,7 @@ namespace TheChest.Inventories.Containers
                 }
             }
             
-            return default;
+            return default!;
         }
         /// <inheritdoc/>
         /// <remarks>

@@ -1,3 +1,27 @@
+# v0.12.2
+
+## What's Fixed
+* `StackInventory.Move` 
+  * Improvements
+    * Now it doesn't try to move items when the source and destination index are the same
+    * The amount of items from the source slot needs to be equal the slot target amount and vice versa
+  * Unit tests fixed to use the correct parameters
+
+## Known issues
+* [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
+* [#129](https://github.com/The-Chest/TheChest.Inventories/issues/129) - No Add/Replace/Move validations on Containers
+* Unit tests are getting complex and need a refactor
+* Index in Inventory/Container properties might be removed or become obsolete
+* `StackInventory<T>.Move` method is too complex and needs a refactor
+* Event system will need an improvement on creation/dispatch
+  * The new Event API is being planned
+
+## What's next
+* [#136](https://github.com/The-Chest/TheChest.Inventories/issues/136) - Improve library's packing
+* [#144](https://github.com/The-Chest/TheChest.Inventories/issues/144) - Update to `TheChest.Core v0.14.0`
+
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.1...v0.12.2
+
 # v0.12.1
 
 ## What's Fixed
