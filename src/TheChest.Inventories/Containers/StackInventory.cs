@@ -363,9 +363,7 @@ namespace TheChest.Inventories.Containers
             for (int i = 0; i < this.Size; i++)
             {
                 if (this.slots[i].Contains(item))
-                {
                     amount += this.slots[i].Amount;
-                }
             }
             return amount;
         }
@@ -375,30 +373,51 @@ namespace TheChest.Inventories.Containers
         {
             if (origin < 0 || origin >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(origin));
-
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
-
-            if(origin == target)
+            if (origin == target)
                 return;
-            //TODO: compare the size of both slots are equivalent
 
-            var items = this.slots[origin].GetAll();
+            var slotOrigin = this.slots[origin];
+            var slotTarget = this.slots[target];
+
+            //TODO: improve these checks
+            if (slotOrigin.IsEmpty && slotTarget.IsEmpty)
+                return;
+            if (slotOrigin.MaxAmount != slotTarget.MaxAmount)
+                return;
+
+            var originItems = slotOrigin.GetAll();
+            var targetItems = slotTarget.GetAll();
+
             var events = new List<StackInventoryMoveItemEventData<T>>();
 
-            var oldItems = items.Length == 0
-                ? this.slots[target].GetAll()
-                : this.slots[target].Replace(items);
-
-            if (items.Length > 0)
-                events.Add(new StackInventoryMoveItemEventData<T>(items, origin, target));
-
-            if (oldItems.Length > 0)
+            if (originItems.Length > 0 && slotTarget.CanAdd(originItems))
             {
-                this.slots[origin].Replace(oldItems);
-                events.Add(new StackInventoryMoveItemEventData<T>(oldItems, target, origin));
+                slotTarget.Add(originItems);
+                events.Add(
+                    new StackInventoryMoveItemEventData<T>(
+                        originItems, 
+                        origin, 
+                        target
+                    )
+                );
             }
-            this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
+
+            if (targetItems.Length > 0 && slotOrigin.CanAdd(targetItems))
+            {
+                slotOrigin.Add(targetItems);
+                events.Add(
+                    new StackInventoryMoveItemEventData<T>(
+                        targetItems, 
+                        target,
+                        origin
+                    )
+                );
+            }
+
+            if(events.Count > 0)
+                this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
