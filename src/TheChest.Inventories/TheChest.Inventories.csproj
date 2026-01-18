@@ -78,4 +78,8 @@
 			<Pack>True</Pack>
 		</None>
 	</ItemGroup>
+	
+	<ItemGroup Label="Dependencies">
+		<PackageReference Include="TheChest.Core" Version="0.12.1" />
+	</ItemGroup>
 </Project>
