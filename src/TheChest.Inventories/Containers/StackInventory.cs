@@ -423,6 +423,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
         /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When the amount of <paramref name="items"/> to replace exceeds the stack size of the slot on <paramref name="index"/>.</exception>
         public virtual T[] Replace(T[] items, int index)
         {
             if (items is null)
@@ -434,7 +435,7 @@ namespace TheChest.Inventories.Containers
 
             var slot = this.slots[index];
             if (!slot.CanReplace(items))
-                return items;
+                throw new InvalidOperationException("The amount of items to replace exceeds the stack size of the slot.");
 
             var oldItems = slot.Replace(items);
             this.OnReplace?.Invoke(this, (index, oldItems, items));

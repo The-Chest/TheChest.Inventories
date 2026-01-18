@@ -41,6 +41,24 @@
         }
 
         [Test]
+        public void Replace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
+        {
+            var oldItem = this.itemFactory.CreateDefault();
+            var size = this.random.Next(2, 20);
+            var stackSize = this.random.Next(1, 10);
+            var inventory = this.containerFactory.FullContainer(size, stackSize, oldItem);
+
+            var newItem = this.itemFactory.CreateRandom();
+            var index = this.random.Next(0, size - 1);
+
+            Assert.That(() =>
+                inventory.Replace(newItem, index, stackSize + 1),
+                Throws.InvalidOperationException
+                    .With.Message.EqualTo("The amount of items to replace exceeds the stack size of the slot.")
+            );
+        }
+
+        [Test]
         public void Replace_SlotWithItems_ReplacesItemOnSlot()
         {
             var oldItem = this.itemFactory.CreateDefault();
