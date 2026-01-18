@@ -75,7 +75,7 @@
 
             inventory.Get(slotItem, stackSize);
 
-            Assert.That(inventory[0].IsEmpty, Is.True);
+            Assert.That(inventory.GetSlot(0)!.IsEmpty, Is.True);
         }
 
         [Test]
@@ -114,8 +114,8 @@
             
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].Amount, Is.EqualTo(0));
-                Assert.That(inventory[1].Amount, Is.EqualTo(2));
+                Assert.That(inventory.GetSlot(0)!.Amount, Is.EqualTo(0));
+                Assert.That(inventory.GetSlot(1)!.Amount, Is.EqualTo(2));
             });
         }
 

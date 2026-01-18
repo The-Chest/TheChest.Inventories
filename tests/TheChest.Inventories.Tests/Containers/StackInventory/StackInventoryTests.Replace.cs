@@ -71,7 +71,7 @@
             var newItems = this.itemFactory.CreateManyRandom(stackSize);
             inventory.Replace(newItems, randomIndex);
 
-            Assert.That(inventory[randomIndex].GetContents(), Is.EqualTo(newItems));
+            Assert.That(inventory.GetItems(randomIndex), Is.EqualTo(newItems));
         }
 
         [Test]
@@ -127,7 +127,7 @@
             var newItems = this.itemFactory.CreateManyRandom(stackSize);
             inventory.Replace(newItems, randomIndex);
 
-            Assert.That(inventory[randomIndex].GetContents(), Is.EqualTo(newItems));
+            Assert.That(inventory.GetItems(randomIndex), Is.EqualTo(newItems));
         }
 
         [Test]

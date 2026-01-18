@@ -14,8 +14,9 @@ namespace TheChest.Inventories.Tests.Containers
             
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContents(), Has.One.EqualTo(item));
-                Assert.That(inventory[0].Amount, Is.EqualTo(1));
+                var firstSlot = inventory.GetSlot(0);
+                Assert.That(firstSlot!.GetContents(), Has.One.EqualTo(item));
+                Assert.That(firstSlot!.Amount, Is.EqualTo(1));
             });
         }
 
@@ -126,8 +127,9 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[expectedIndex].GetContents(), Has.One.EqualTo(item));
-                Assert.That(inventory[expectedIndex].Amount, Is.EqualTo(1));
+                var slot = inventory.GetSlot(expectedIndex);
+                Assert.That(slot.GetContents(), Has.One.EqualTo(item));
+                Assert.That(slot.Amount, Is.EqualTo(1));
             });
         }
 
@@ -147,8 +149,9 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[slotIndex].GetContents(), Has.Exactly(2).EqualTo(item));
-                Assert.That(inventory[slotIndex].Amount, Is.EqualTo(2));
+                var slot = inventory.GetSlot(slotIndex);
+                Assert.That(slot.GetContents(), Has.Exactly(2).EqualTo(item));
+                Assert.That(slot.Amount, Is.EqualTo(2));
             });
         }
 

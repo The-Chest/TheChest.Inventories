@@ -29,7 +29,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index);
 
-            Assert.That(inventory[index].GetContents(), Has.One.EqualTo(item));
+            Assert.That(inventory.GetItems(index), Has.One.EqualTo(item));
         }
 
         [Test]
@@ -81,7 +81,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index);
 
-            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(item));
+            Assert.That(inventory.GetItems(index), Has.No.AnyOf(item));
         }
 
         [Test]
@@ -116,11 +116,11 @@
             var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
             inventory.Get(index);
 
-            var stackSize = inventory[index].Amount;
+            var stackSize = inventory.GetSlot(index).Amount;
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index);
 
-            Assert.That(inventory[index].Amount, Is.EqualTo(stackSize + 1));
+            Assert.That(inventory.GetSlot(index).Amount, Is.EqualTo(stackSize + 1));
         }
 
         [Test]
@@ -176,7 +176,7 @@
 
             inventory.AddAt(item, index);
 
-            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(item));
+            Assert.That(inventory.GetItems(index), Has.No.AnyOf(item));
         }
 
         [Test]

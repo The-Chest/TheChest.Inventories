@@ -93,8 +93,8 @@
  
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContent(), Is.EqualTo(items[1]));
-                Assert.That(inventory[randomItemSize - 1].GetContent(), Is.EqualTo(items[randomItemSize - 2]));
+                Assert.That(inventory.GetItem(0), Is.EqualTo(items[1]));
+                Assert.That(inventory.GetItem(randomItemSize - 1), Is.EqualTo(items[randomItemSize - 2]));
             });
         }
 

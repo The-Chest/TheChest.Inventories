@@ -31,7 +31,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.Replace(item, randomIndex);
 
-            Assert.That(inventory[randomIndex].GetContent(), Is.EqualTo(item));
+            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(item));
         }
 
         [Test]
@@ -84,7 +84,7 @@
             var newItem = this.itemFactory.CreateRandom();
             inventory.Replace(newItem, randomIndex);
 
-            Assert.That(inventory[randomIndex].GetContent(), Is.EqualTo(newItem));
+            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(newItem));
         }
 
         [Test]

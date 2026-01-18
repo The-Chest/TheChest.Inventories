@@ -42,14 +42,14 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory[origin].GetContent();
-            var ItemFromTarget = inventory[target].GetContent();
+            var itemFromOrigin = inventory.GetItem(origin);
+            var ItemFromTarget = inventory.GetItem(target);
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[origin].GetContent(), Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory[target].GetContent(), Is.EqualTo(itemFromOrigin));
+                Assert.That(inventory.GetItem(origin), Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory.GetItem(target), Is.EqualTo(itemFromOrigin));
             });
         }
 
@@ -63,8 +63,8 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory[origin].GetContent();
-            var ItemFromTarget = inventory[target].GetContent();
+            var itemFromOrigin = inventory.GetItem(origin);
+            var ItemFromTarget = inventory.GetItem(target);
 
             var raised = false;
             inventory.OnMove += (o, args) =>
@@ -105,12 +105,14 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContent(), Is.Null);
-                Assert.That(inventory[0].IsEmpty, Is.True);
+                var firstSlot = inventory.GetSlot(0);
+                Assert.That(firstSlot!.GetContent(), Is.Null);
+                Assert.That(firstSlot!.IsEmpty, Is.True);
             });
             Assert.Multiple(() => {
-                Assert.That(inventory[1].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[1].Amount, Is.EqualTo(1));
+                var secondSlot = inventory.GetSlot(1);
+                Assert.That(secondSlot.GetContent(), Is.EqualTo(item));
+                Assert.That(secondSlot.Amount, Is.EqualTo(1));
             });
         }
 
@@ -157,13 +159,17 @@
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() => {
-                Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[0].Amount, Is.EqualTo(1));
+                var firstSlot = inventory.GetSlot(0);
+
+                Assert.That(firstSlot!.GetContent(), Is.EqualTo(item));
+                Assert.That(firstSlot!.Amount, Is.EqualTo(1));
             });
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[1].GetContent(), Is.Null);
-                Assert.That(inventory[1].IsEmpty, Is.True);
+                var secondSlot = inventory.GetSlot(1);
+              
+                Assert.That(secondSlot!.GetContent(), Is.Null);
+                Assert.That(secondSlot!.IsEmpty, Is.True);
             });
         }
 

@@ -80,6 +80,6 @@
 	</ItemGroup>
 	
 	<ItemGroup Label="Dependencies">
-		<PackageReference Include="TheChest.Core" Version="0.12.1" />
+		<PackageReference Include="TheChest.Core" Version="0.14.0" />
 	</ItemGroup>
 </Project>

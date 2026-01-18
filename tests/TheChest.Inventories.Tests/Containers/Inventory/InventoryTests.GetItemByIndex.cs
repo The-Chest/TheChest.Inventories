@@ -43,7 +43,7 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.EqualTo(item));
-                Assert.That(inventory[randomIndex].IsEmpty, Is.True);
+                Assert.That(inventory.GetSlot(randomIndex).IsEmpty, Is.True);
             });
         }
 

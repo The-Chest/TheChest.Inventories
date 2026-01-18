@@ -264,8 +264,8 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[originIndex].GetContents(), Is.EqualTo(targetItems));
-                Assert.That(inventory[targetIndex].GetContents(), Is.EqualTo(originItems));
+                Assert.That(inventory.GetItems(originIndex), Is.EqualTo(targetItems));
+                Assert.That(inventory.GetItems(targetIndex), Is.EqualTo(originItems));
             });
         }
         [Test]

@@ -21,7 +21,7 @@
             var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index);
 
-            Assert.That(inventory[index].GetContents(), Is.EqualTo(items));
+            Assert.That(inventory.GetItems(index), Is.EqualTo(items));
         }
 
         [Test]
@@ -104,9 +104,10 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[index].IsFull, Is.True);
-                Assert.That(inventory[index].Amount, Is.EqualTo(amount));
-                Assert.That(inventory[index].GetContents()?.Reverse().Take(2), Is.EqualTo(items));
+                var slot = inventory.GetSlot(index);
+                Assert.That(slot!.IsFull, Is.True);
+                Assert.That(slot!.Amount, Is.EqualTo(amount));
+                Assert.That(slot!.GetContents()?.Reverse().Take(2), Is.EqualTo(items));
             });
         }
 
@@ -137,7 +138,7 @@
             var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index);
 
-            Assert.That(inventory[index].GetContents(), Has.No.AnyOf(items));
+            Assert.That(inventory.GetItems(index), Has.No.AnyOf(items));
         }
 
         [Test]
