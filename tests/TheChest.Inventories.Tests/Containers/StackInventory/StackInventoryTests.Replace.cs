@@ -27,8 +27,22 @@
             );
         }
 
-        //TODO: add tests to slot with more items than stack size
-        //TODO: add tests to calls and does not call OnReplace event
+        [Test]
+        public void Replace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var stackSize = this.random.Next(10, 20);
+            var size = this.random.Next(10, 20);
+            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var randomIndex = this.random.Next(0, size);
+            var items = this.itemFactory.CreateMany(stackSize + 1);
+
+            Assert.That(() =>
+                inventory.Replace(items, randomIndex),
+                Throws.InvalidOperationException
+                    .With.Message.EqualTo("The amount of items to replace exceeds the stack size of the slot.")
+            );
+        }
 
         [Test]
         public void Replace_NullItems_DoesNotReplace()
