@@ -1,3 +1,25 @@
+# v0.12.3
+
+## What's Fixed
+* `StackInventory.Replace` and `LazyStackInventory.Replace` now throws 
+  * `InvalidOperationException` when trying to replace items with a bigger amount than the slot's `MaxStackAmount`
+
+## Known issues
+* [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
+* [#129](https://github.com/The-Chest/TheChest.Inventories/issues/129) - No Add/Replace/Move validations on Containers
+* [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) - Move methods are not throwing exceptions for state validation 
+* Unit tests are getting complex and need a refactor
+* `Index` in Inventory/Container properties might be removed
+* `StackInventory<T>.Move` method is too complex and needs a refactor
+* Event system will need an improvement on creation/dispatch
+  * The new Event API is being planned
+
+## What's next
+* [#136](https://github.com/The-Chest/TheChest.Inventories/issues/136) - Improve library's packing
+* [#141](https://github.com/The-Chest/TheChest.Inventories/issues/141) - Update to use `TheChest.Core v0.14.0`
+
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.2...v0.12.3
+
 # v0.12.2
 
 ## What's Fixed
@@ -18,7 +40,7 @@
 
 ## What's next
 * [#136](https://github.com/The-Chest/TheChest.Inventories/issues/136) - Improve library's packing
-* [#141](https://github.com/The-Chest/TheChest.Inventories/issues/141) - Update to `TheChest.Core v0.14.0`
+* [#141](https://github.com/The-Chest/TheChest.Inventories/issues/141) - Update to use `TheChest.Core v0.14.0`
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.1...v0.12.2
 
