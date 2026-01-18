@@ -22,7 +22,9 @@
         public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
         {
             var inventory = this.containerFactory.EmptyContainer();
+
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            
             inventory.Get(0);
         }
 
@@ -60,6 +62,8 @@
             var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
 
             var index = this.random.Next(0, 20);
+
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
                 Assert.Multiple(() =>
@@ -69,8 +73,12 @@
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1));
                     Assert.That(firstEvent.Index, Is.EqualTo(index));
                 });
+                raised = true;
             };
+
             inventory.Get(index);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

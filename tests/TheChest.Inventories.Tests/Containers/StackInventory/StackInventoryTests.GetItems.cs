@@ -34,8 +34,9 @@
         public void GetItems_ItemNotFound_DoesNotCallOnGetEvent()
         {
             var inventory = this.containerFactory.EmptyContainer();
-            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             var item = this.itemFactory.CreateDefault();
+            
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             inventory.Get(item, 1);
         }
 
@@ -81,6 +82,8 @@
                 .Append(item)
                 .ToList();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
+            
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -89,8 +92,12 @@
                     Assert.That(args.Data, Has.Count.EqualTo(1));
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
                 });
+                raised = true;
             };
+
             inventory.Get(item, stackSize);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]

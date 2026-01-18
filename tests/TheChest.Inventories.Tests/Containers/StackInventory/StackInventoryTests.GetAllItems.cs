@@ -23,7 +23,9 @@
         {
             var item = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.EmptyContainer();
+            
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            
             inventory.GetAll(item);
         }
 
@@ -76,6 +78,7 @@
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -83,12 +86,15 @@
                     var firstEvent = args.Data.FirstOrDefault();
                     Assert.That(args.Data, Has.Count.EqualTo(inventorySize / 2));
                     Assert.That(firstEvent.Items, Has.All.EqualTo(slotItems[0]));
-                    // TODO: improve this test by improving container creation
+                    // TODO: improve this test by improving container creation using "WithItem" method
                     // Creating a better factory will allow to create an inventory with ordered items
                     // Assert.That(firstEvent.Index, Is.EqualTo(10));
                 });
+                raised = true;
             };
             inventory.GetAll(slotItems[0]);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

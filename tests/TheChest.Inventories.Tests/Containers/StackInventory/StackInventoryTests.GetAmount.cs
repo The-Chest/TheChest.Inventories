@@ -38,7 +38,9 @@
         {
             var item = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.EmptyContainer();
+
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            
             inventory.Get(item, 10);
         }
 
@@ -83,6 +85,8 @@
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.Multiple(() =>
                 {
@@ -91,8 +95,11 @@
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(stackSize));
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                 });
+                raised = true;
             };  
             inventory.Get(slotItem, stackSize);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]
@@ -119,6 +126,8 @@
             var stackSize = this.random.Next(3, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(2));
                 Assert.Multiple(() =>
@@ -135,9 +144,12 @@
                     Assert.That(secondEvent.Items, Has.Length.EqualTo(stackSize - 2));
                     Assert.That(secondEvent.Index, Is.EqualTo(1));
                 });
+                raised = true;
             };
 
             inventory.Get(slotItem, stackSize + (stackSize - 2));
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }
