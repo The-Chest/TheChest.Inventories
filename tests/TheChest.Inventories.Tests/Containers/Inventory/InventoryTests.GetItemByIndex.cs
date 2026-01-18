@@ -24,8 +24,10 @@ namespace TheChest.Inventories.Tests.Containers
             var size = this.random.Next(10, 20);
             var inventory = this.containerFactory.EmptyContainer();
             var index = this.random.Next(0, size);
-            inventory.Get(index);
+
             inventory.OnGet += (sender, args) => Assert.Fail("Get(int index) should not be called if no item is found");
+            
+            inventory.Get(index);
         }
 
         [Test]
@@ -65,6 +67,7 @@ namespace TheChest.Inventories.Tests.Containers
             var inventory = this.containerFactory.FullContainer(size, item);
 
             var randomIndex = this.random.Next(0, size);
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.That(
@@ -72,8 +75,12 @@ namespace TheChest.Inventories.Tests.Containers
                     Has.Count.EqualTo(1)
                         .And.All.EqualTo(new InventoryGetItemEventData<T>(item, randomIndex))
                 );
+                raised = true;
             };
-            inventory.Get(randomIndex);
+
+            inventory.Get(randomIndex); 
+            
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

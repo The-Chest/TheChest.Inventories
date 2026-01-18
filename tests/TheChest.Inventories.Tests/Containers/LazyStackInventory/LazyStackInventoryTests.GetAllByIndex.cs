@@ -57,6 +57,7 @@
             var inventory = this.containerFactory.FullContainer(size, stackSize, expectedItem);
 
             var index = this.random.Next(0, size);
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
 
@@ -67,8 +68,12 @@
                     Assert.That(firstEvent.Index, Is.EqualTo(index));
                     Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
                 });
+                raised = true;
             };
+
             inventory.GetAll(index);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]

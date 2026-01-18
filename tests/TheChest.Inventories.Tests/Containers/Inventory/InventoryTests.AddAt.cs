@@ -42,6 +42,8 @@
 
             var randomIndex = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -49,8 +51,12 @@
                     Assert.That(sender, Is.EqualTo(inventory));
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
                 });
+                raised = true;
             };
+
             inventory.AddAt(item, randomIndex);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]

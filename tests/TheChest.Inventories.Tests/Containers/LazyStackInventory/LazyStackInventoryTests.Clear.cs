@@ -19,7 +19,9 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         public void Clear_EmptyInventory_CallsOnGetEvent()
         {
             var inventory = this.containerFactory.EmptyContainer();
+            
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty inventory");
+            
             inventory.Clear();
         }
 
@@ -44,6 +46,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var item = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(size));
                 Assert.Multiple(() =>
@@ -51,8 +54,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
                     Assert.That(args.Data.Select(x => x.Amount), Has.All.EqualTo(stackSize));
                 });
+                raised = true;
             };
             inventory.Clear();
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]

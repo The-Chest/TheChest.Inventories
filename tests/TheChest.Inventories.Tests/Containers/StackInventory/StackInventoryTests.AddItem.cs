@@ -24,6 +24,8 @@ namespace TheChest.Inventories.Tests.Containers
         {
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.EmptyContainer();
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -33,8 +35,11 @@ namespace TheChest.Inventories.Tests.Containers
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                 });
+                raised = true;
             };
             inventory.Add(item);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -72,6 +77,7 @@ namespace TheChest.Inventories.Tests.Containers
             var expectedIndex = this.random.Next(0, size);
             inventory.GetAll(expectedIndex);
 
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -81,9 +87,11 @@ namespace TheChest.Inventories.Tests.Containers
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     Assert.That(firstEvent.Index, Is.EqualTo(expectedIndex));
                 });
+                raised = true;
             };
-
             inventory.Add(item);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]
@@ -113,6 +121,7 @@ namespace TheChest.Inventories.Tests.Containers
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
             var expectedIndex = this.random.Next(0, size);
             inventory.GetAll(expectedIndex);
+
             inventory.Add(item);
 
             Assert.Multiple(() =>
@@ -130,10 +139,8 @@ namespace TheChest.Inventories.Tests.Containers
                 .Append(this.itemFactory.CreateDefault())
                 .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(20, 10, items);
-            var slotIndex = Array.IndexOf(
-                inventory.GetSlots(), 
-                inventory.GetSlots().First(x => x.GetContents()?.Contains(item) ?? false)
-            );
+            var slots = inventory.GetSlots()!;
+            var slotIndex = Array.IndexOf(slots, slots.First(x => x.GetContents()?.Contains(item) ?? false));
             inventory.Get(slotIndex, 9);
 
             inventory.Add(item);

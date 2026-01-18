@@ -13,8 +13,10 @@
         public void GetItem_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var inventory = this.containerFactory.EmptyContainer();
-            inventory.Get(this.itemFactory.CreateRandom());
+
             inventory.OnGet += (sender, args) => Assert.Fail("Get(T item) should not be called if no item is found");
+
+            inventory.Get(this.itemFactory.CreateRandom());
         }
 
         [Test]
@@ -62,13 +64,18 @@
             var sameItems = this.itemFactory.CreateManyRandom(size / 2);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
 
+            var raised = false;
             var randomItem = sameItems[0];
             inventory.OnGet += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
                 Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(randomItem));
+                raised = true;
             };
-            inventory.Get(randomItem);
+
+            inventory.Get(sameItems[0]);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

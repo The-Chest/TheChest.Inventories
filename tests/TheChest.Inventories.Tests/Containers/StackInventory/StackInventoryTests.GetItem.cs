@@ -60,6 +60,8 @@
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -69,8 +71,12 @@
                     Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                 });
+                raised = true;
             };
+
             inventory.Get(slotItem);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]

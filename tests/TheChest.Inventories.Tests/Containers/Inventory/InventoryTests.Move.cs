@@ -53,6 +53,8 @@
             var target = 1;
             var itemFromOrigin = inventory[origin].GetContent();
             var ItemFromTarget = inventory[target].GetContent();
+
+            var raised = false;
             inventory.OnMove += (sender, args) =>
             {
                 var dataArray = args.Data.ToArray();
@@ -71,9 +73,12 @@
                     Assert.That(dataArray[1].FromIndex, Is.EqualTo(1));
                     Assert.That(dataArray[1].ToIndex, Is.EqualTo(0));
                 });
+                raised = true;
             };
 
             inventory.Move(origin, target);
+
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
 
         [Test]
@@ -101,6 +106,7 @@
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
 
+            var raised = false;
             inventory.OnMove += (sender, args) =>
             {
                 var dataArray = args.Data.ToArray();
@@ -112,8 +118,12 @@
                     Assert.That(dataArray[0].FromIndex, Is.EqualTo(0));
                     Assert.That(dataArray[0].ToIndex, Is.EqualTo(1));
                 });
+                raised = true;
             };
+
             inventory.Move(0, 1);
+
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
 
         [Test]
@@ -140,6 +150,7 @@
             var item = this.itemFactory.CreateRandom();
             inventory.AddAt(item, 1);
 
+            var raised = false;
             inventory.OnMove += (sender, args) =>
             {
                 var dataArray = args.Data.ToArray();
@@ -151,8 +162,11 @@
                     Assert.That(dataArray[0].FromIndex, Is.EqualTo(1));
                     Assert.That(dataArray[0].ToIndex, Is.EqualTo(0));
                 });
+                raised = true;
             };
             inventory.Move(0, 1);
+
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
     }
 }

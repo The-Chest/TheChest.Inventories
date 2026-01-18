@@ -46,6 +46,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
             var amount = size * stackSize * 2;
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(size));
                 Assert.Multiple(() =>
@@ -54,8 +55,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(args.Data.Select(x => x.Index), Has.All.InRange(0, size));
                     Assert.That(args.Data.Select(x => x.Amount), Has.All.EqualTo(stackSize));
                 });
+                raised = true;
             };
             inventory.Get(item, amount);
+           
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]
@@ -80,6 +84,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var multiplier = this.random.Next(2, size);
             var amount = stackSize * multiplier;
             
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(multiplier));
                 Assert.Multiple(() =>
@@ -88,8 +93,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(args.Data.Select(x => x.Index), Has.All.InRange(0, size));
                     Assert.That(args.Data.Select(x => x.Amount), Has.All.EqualTo(stackSize));
                 });
+                raised = true;
             };
+
             inventory.Get(item, amount);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]
@@ -111,10 +120,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var randomItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(20, 1, randomItem);
 
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for non-existing item.");
+            
             var amount = this.random.Next(2, 20);
             var item = this.itemFactory.CreateDefault();
-
-            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for non-existing item.");
             inventory.Get(item, amount);
         }
     }

@@ -135,6 +135,7 @@
                 .ToArray();
 
             var countIndex = 1;
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -142,8 +143,11 @@
                     Assert.That(sender, Is.EqualTo(inventory));
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(items[countIndex++]));
                 });
+                raised = true;
             };
             inventory.Add(items);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -207,6 +211,7 @@
             var addSize = emptySlotsSize + 1;
             var manyAdded = this.itemFactory.CreateManyRandom(addSize);
             var countIndex = 1;
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -214,8 +219,11 @@
                     Assert.That(sender, Is.EqualTo(inventory));
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(manyAdded[countIndex++]));
                 });
+                raised = true;
             };
             inventory.Add(manyAdded);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -271,6 +279,7 @@
 
             var items = this.itemFactory.CreateManyRandom(size);
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if no items are added");
+            
             inventory.Add(items);
         }
 

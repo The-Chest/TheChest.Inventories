@@ -54,12 +54,17 @@
             var item = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, item);
 
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(inventorySize));
                 Assert.That(args.Data.SelectMany(x => x.Items), Has.All.EqualTo(item));
+                raised = true;
             };
+
             inventory.Clear();
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]

@@ -6,7 +6,9 @@
         public void Clear_EmptyInventory_ReturnsEmptyArray()
         {
             var inventory = this.containerFactory.EmptyContainer();
+
             var result = inventory.Clear();
+
             Assert.That(result, Is.Empty);
         }
 
@@ -15,6 +17,7 @@
         {
             var inventory = this.containerFactory.EmptyContainer();
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
+            
             inventory.Clear();
         }
 
@@ -22,11 +25,13 @@
         public void Clear_FullInventory_ReturnsEveryItemFromInventory()
         {
             var size = this.random.Next(10, 20);
-            var items = this.itemFactory.CreateManyRandom(size / 2).Concat(
-                this.itemFactory.CreateMany(size / 2)
-            ).ToArray();
+            var items = this.itemFactory.CreateManyRandom(size / 2)
+                .Concat(this.itemFactory.CreateMany(size / 2))
+                .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+
             var result = inventory.Clear();
+
             Assert.That(result, Is.EquivalentTo(items));
         }
 
@@ -34,17 +39,21 @@
         public void Clear_FullInventory_CallsOnGetEvent()
         {
             var size = this.random.Next(10, 20);
-            var items = this.itemFactory.CreateManyRandom(size / 2).Concat(
-                this.itemFactory.CreateMany(size / 2)
-            ).ToArray();
+            var items = this.itemFactory.CreateManyRandom(size / 2)
+                .Concat(this.itemFactory.CreateMany(size / 2))
+                .ToArray();
             var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
 
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(items.Length));
                 Assert.That(args.Data.Select(x => x.Item), Is.EquivalentTo(items));
+                raised = true;
             };
             inventory.Clear();
+
+            Assert.That(raised, Is.True);
         }
     }
 }

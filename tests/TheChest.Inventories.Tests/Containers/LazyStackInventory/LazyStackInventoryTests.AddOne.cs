@@ -44,6 +44,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         {
             var inventory = this.containerFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -54,8 +56,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                     Assert.That(firstEvent.Amount, Is.EqualTo(1));
                 });
+                raised = true;
             };  
+
             inventory.Add(item);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -119,8 +125,9 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var items = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(10, 5, items);
 
-            var item = this.itemFactory.CreateDefault();
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when inventory is full.");
+            
+            var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
         }
     }
