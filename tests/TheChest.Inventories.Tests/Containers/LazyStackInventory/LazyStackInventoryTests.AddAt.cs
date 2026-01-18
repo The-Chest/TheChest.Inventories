@@ -68,6 +68,7 @@
             var item = this.itemFactory.CreateDefault();
 
             var index = this.random.Next(0, size);
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -78,8 +79,11 @@
                     Assert.That(firstEvent.Index, Is.EqualTo(index));
                     Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
                 });
+                raised = true;
             };
             inventory.AddAt(item, index, stackSize);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -114,6 +118,7 @@
             var randomIndex = this.random.Next(0, size);
             var amount = this.random.Next(1, 10) + stackSize;
 
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -124,8 +129,11 @@
                     Assert.That(firstEvent.Index, Is.EqualTo(randomIndex));
                     Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
                 });
+                raised = true;
             };
             inventory.AddAt(item, randomIndex, amount);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -166,10 +174,10 @@
             var randomItems = this.itemFactory.CreateManyRandom(size);
             var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
 
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when adding to a slot with a different item.");
+            
             var item = this.itemFactory.CreateDefault();
             var randomIndex = this.random.Next(0, size);
-
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when adding to a slot with a different item.");
             inventory.AddAt(item, randomIndex, stackSize);
         }
 

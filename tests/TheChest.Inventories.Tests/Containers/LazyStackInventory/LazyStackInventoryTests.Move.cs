@@ -65,6 +65,8 @@
             var target = 1;
             var itemFromOrigin = inventory[origin].GetContent();
             var ItemFromTarget = inventory[target].GetContent();
+
+            var raised = false;
             inventory.OnMove += (o, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(2));
@@ -83,8 +85,11 @@
                     Assert.That(secondEvent.FromIndex, Is.EqualTo(target));
                     Assert.That(secondEvent.ToIndex, Is.EqualTo(origin));
                 });
+                raised = true;
             };
             inventory.Move(origin, target);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]
@@ -119,6 +124,8 @@
             var originIndex = 0;
             var targetIndex = 1;
             inventory.Add(item);
+
+            var raised = false;
             inventory.OnMove += (o, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -129,15 +136,18 @@
                     Assert.That(firstEvent.FromIndex, Is.EqualTo(originIndex));
                     Assert.That(firstEvent.ToIndex, Is.EqualTo(targetIndex));
                 });
+                raised = true;
             };
             inventory.Move(originIndex, targetIndex);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]
         public void Move_EmptyOrigin_MovesItem()
         {
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
+            var inventory = this.containerfactory.EmptyContainer(2, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;
@@ -161,13 +171,14 @@
         public void Move_EmptyOrigin_CallsOnMoveEventOnlyWithTarget()
         {
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
+            var inventory = this.containerfactory.EmptyContainer(2, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;
             var targetIndex = 1;
             inventory.AddAt(item, targetIndex, 1);
 
+            var raised = false;
             inventory.OnMove += (o, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -178,8 +189,11 @@
                     Assert.That(firstEvent.FromIndex, Is.EqualTo(targetIndex));
                     Assert.That(firstEvent.ToIndex, Is.EqualTo(originIndex));
                 });
+                raised = true;
             };
             inventory.Move(originIndex, targetIndex);
+
+            Assert.That(raised, Is.True);
         }
     }
 }

@@ -46,6 +46,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, 5);
+
+            var raised = false;
             inventory.OnAdd += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
                 Assert.Multiple(() =>
@@ -55,8 +57,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                     Assert.That(firstEvent.Amount, Is.EqualTo(amount));
                 });
+                raised = true;
             };
+
             inventory.Add(item, amount);
+        
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -93,10 +99,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var stackSize = this.random.Next(1, 10);
             var randomItem = this.itemFactory.CreateRandom();
             var inventory = this.containerFactory.FullContainer(size, stackSize, randomItem);
-
+            
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when inventory is full.");
+            
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, 5);
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when inventory is full.");
             inventory.Add(item, amount);
         }
 
@@ -147,6 +154,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -157,8 +166,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(firstEvent.Index, Is.InRange(0, size));
                     Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
                 });
+                raised = true;
             };
+
             inventory.Add(item, amount);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
