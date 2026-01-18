@@ -1,7 +1,5 @@
 ﻿namespace TheChest.Inventories.Tests.Containers
 {
-    //TODO: find a way to create a complex inventory for this test 
-    // with multiple items in each slot
     public partial class StackInventoryTests<T>
     {
         [TestCase(-1)]
@@ -41,6 +39,8 @@
             var inventory = this.containerFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -50,8 +50,11 @@
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     Assert.That(firstEvent.Index, Is.EqualTo(index));
                 });
+                raised = true;
             };
             inventory.AddAt(item, index);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]
@@ -100,6 +103,7 @@
 
             var item = this.itemFactory.CreateDefault();
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
+            
             inventory.AddAt(item, index);
         }
 
@@ -127,6 +131,8 @@
             inventory.Get(index);
 
             var item = this.itemFactory.CreateDefault();
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -136,8 +142,11 @@
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     Assert.That(firstEvent.Index, Is.EqualTo(index));
                 });
+                raised = true;
             };
             inventory.AddAt(item, index);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]

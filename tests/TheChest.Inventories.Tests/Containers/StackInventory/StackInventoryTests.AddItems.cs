@@ -87,6 +87,7 @@ namespace TheChest.Inventories.Tests.Containers
             var amount = maxSize;
             var items = this.itemFactory.CreateMany(amount);
 
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(2));
@@ -100,8 +101,11 @@ namespace TheChest.Inventories.Tests.Containers
                     var secondEvent = args.Data.Skip(1).First();
                     Assert.That(secondEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(items[^1]));
                 });
+                raised = true;
             };
             inventory.Add(items);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]
@@ -115,14 +119,15 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(maxSize + amount);
             inventory.Add(items);
 
+            var inventorySlots = inventory.GetSlots();
             Assert.That(
-                inventory.GetSlots(), 
+                inventorySlots, 
                 Has.Exactly(2).Matches<IStackSlot<T>>(
                     x => x.Amount == maxSize && x.GetContents()!.Contains(item)
                 )
             );
             Assert.That(
-                inventory.GetSlots(),
+                inventorySlots,
                 Has.Exactly(1).Matches<IStackSlot<T>>(
                     x => x.Amount == amount && x.GetContents()!.Contains(item)
                 )
