@@ -34,6 +34,8 @@ namespace TheChest.Inventories.Tests.Containers
             var inventory = this.containerFactory.EmptyContainer();
 
             var item = this.itemFactory.CreateDefault();
+
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -41,8 +43,11 @@ namespace TheChest.Inventories.Tests.Containers
                     Assert.That(sender, Is.EqualTo(inventory));
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
                 });
+                raised = true;
             }; 
+
             inventory.Add(item);
+            Assert.That(raised, Is.True);
         }
 
         [Test]

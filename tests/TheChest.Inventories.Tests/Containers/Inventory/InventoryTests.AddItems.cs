@@ -135,6 +135,7 @@
                 .ToArray();
 
             var countIndex = 1;
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -142,8 +143,10 @@
                     Assert.That(sender, Is.EqualTo(inventory));
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(items[countIndex++]));
                 });
+                raised = true;
             };
             inventory.Add(items);
+            Assert.That(raised, Is.True);
         }
 
         [Test]
