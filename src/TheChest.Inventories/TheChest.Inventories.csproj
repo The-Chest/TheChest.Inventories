@@ -8,22 +8,26 @@
 	<PropertyGroup Label="Package">
 		<IsPackable>true</IsPackable>
 		<PackageIcon>icon.png</PackageIcon>
+		<PackageTags>container;slot;inventory;inventory-system;collection</PackageTags>
 		<PackageProjectUrl>https://www.nuget.org/packages/TheChest.Inventories/</PackageProjectUrl>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageReleaseNotes>See CHANGELOG.md for details.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Repository">
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<RepositoryUrl>https://github.com/The-Chest/TheChest.Inventories</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>master</RepositoryBranch>
+		<RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Compiler">
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<DebugType>portable</DebugType>
 		<Optimize>true</Optimize>
 	</PropertyGroup>
@@ -41,13 +45,13 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Assembly">
-		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-		<SignAssembly>False</SignAssembly>
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+		<SignAssembly>false</SignAssembly>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Analysis">
-		<EnableNETAnalyzers>False</EnableNETAnalyzers>
-		<EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
 		<AnalysisLevel>none</AnalysisLevel>
 	</PropertyGroup>
 
