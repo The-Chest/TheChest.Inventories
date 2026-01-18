@@ -52,9 +52,10 @@
                 });
                 raised = true;
             };
+
             inventory.AddAt(item, index);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -146,7 +147,7 @@
             };
             inventory.AddAt(item, index);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -188,6 +189,7 @@
             var item = this.itemFactory.CreateDefault();
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
+            
             inventory.AddAt(item, index);
         }
 

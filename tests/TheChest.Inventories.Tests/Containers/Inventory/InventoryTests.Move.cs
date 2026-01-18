@@ -77,7 +77,8 @@
             };
 
             inventory.Move(origin, target);
-            Assert.That(raised, Is.True);
+
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
 
         [Test]
@@ -119,8 +120,10 @@
                 });
                 raised = true;
             };
+
             inventory.Move(0, 1);
-            Assert.That(raised, Is.True);
+
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
 
         [Test]
@@ -163,7 +166,7 @@
             };
             inventory.Move(0, 1);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
     }
 }

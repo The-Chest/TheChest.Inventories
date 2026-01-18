@@ -26,6 +26,7 @@ namespace TheChest.Inventories.Tests.Containers
             var index = this.random.Next(0, size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("Get(int index) should not be called if no item is found");
+            
             inventory.Get(index);
         }
 
@@ -77,8 +78,9 @@ namespace TheChest.Inventories.Tests.Containers
                 raised = true;
             };
 
-            inventory.Get(randomIndex);
-            Assert.That(raised, Is.True);
+            inventory.Get(randomIndex); 
+            
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

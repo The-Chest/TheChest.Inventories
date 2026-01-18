@@ -43,6 +43,7 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateMany(10);
             var inventory = this.containerFactory.EmptyContainer();
 
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -52,8 +53,11 @@ namespace TheChest.Inventories.Tests.Containers
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(items.Length).And.EqualTo(items));
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                 });
+                raised = true;
             };
             inventory.Add(items);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -105,7 +109,7 @@ namespace TheChest.Inventories.Tests.Containers
             };
             inventory.Add(items);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]

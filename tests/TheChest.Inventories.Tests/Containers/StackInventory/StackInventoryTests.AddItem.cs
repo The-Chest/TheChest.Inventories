@@ -39,7 +39,7 @@ namespace TheChest.Inventories.Tests.Containers
             };
             inventory.Add(item);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]

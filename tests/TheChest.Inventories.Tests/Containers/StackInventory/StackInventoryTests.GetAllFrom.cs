@@ -85,7 +85,7 @@
 
             inventory.GetAll(index);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

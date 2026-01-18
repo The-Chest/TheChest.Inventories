@@ -56,7 +56,7 @@
 
             inventory.AddAt(item, randomIndex);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]

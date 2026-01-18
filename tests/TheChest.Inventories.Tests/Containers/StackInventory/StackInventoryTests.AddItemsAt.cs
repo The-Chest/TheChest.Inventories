@@ -43,9 +43,10 @@
                 });
                 raised = true;
             };
+
             inventory.AddAt(items, index);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -148,9 +149,9 @@
             var amount = this.random.Next(1, 10);
             var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
 
-            var items = this.itemFactory.CreateMany(10);
             inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when is not possible to Add.");
             
+            var items = this.itemFactory.CreateMany(10);
             inventory.AddAt(items, index);
         }
 

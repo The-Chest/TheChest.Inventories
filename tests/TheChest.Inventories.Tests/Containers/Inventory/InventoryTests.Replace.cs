@@ -69,7 +69,8 @@
             };
 
             inventory.Replace(item, randomIndex);
-            Assert.That(raised, Is.True);
+
+            Assert.That(raised, Is.True, "OnReplace event was not raised");
         }
 
         [Test]
@@ -123,7 +124,7 @@
             };
             inventory.Replace(newItem, randomIndex);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnReplace event was not raised");
         }
     }
 }

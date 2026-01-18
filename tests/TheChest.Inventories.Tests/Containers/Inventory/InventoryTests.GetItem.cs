@@ -14,9 +14,9 @@
         {
             var inventory = this.containerFactory.EmptyContainer();
 
-            inventory.Get(this.itemFactory.CreateRandom());
-
             inventory.OnGet += (sender, args) => Assert.Fail("Get(T item) should not be called if no item is found");
+
+            inventory.Get(this.itemFactory.CreateRandom());
         }
 
         [Test]
@@ -75,7 +75,7 @@
 
             inventory.Get(sameItems[0]);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

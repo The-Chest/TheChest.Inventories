@@ -91,7 +91,7 @@
             };
             inventory.GetAll(sameItems[0]);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }

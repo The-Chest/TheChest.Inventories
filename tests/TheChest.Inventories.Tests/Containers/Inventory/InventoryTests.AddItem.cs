@@ -47,7 +47,8 @@ namespace TheChest.Inventories.Tests.Containers
             }; 
 
             inventory.Add(item);
-            Assert.That(raised, Is.True);
+
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
@@ -105,8 +106,9 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, items);
 
-            var item = this.itemFactory.CreateRandom();
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
+            
+            var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
         }
 
