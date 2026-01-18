@@ -58,17 +58,29 @@ namespace TheChest.Inventories.Containers
             if(item is null)
                 throw new ArgumentNullException(nameof(item));
 
+            var fallbackIndex = -1;
             for (int index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (slot.CanAdd(item))
+                if (!slot.CanAdd(item))
+                    continue;
+
+                if (slot.Contains(item))
                 {
                     var notAdded = slot.Add(item);
-                    if (notAdded == 0)
-                        this.OnAdd?.Invoke(this, (item, index, 1));
-
-                    return notAdded == 0; 
+                    this.OnAdd?.Invoke(this, (item, index, 1));
+                    return notAdded == 0;
                 }
+
+                if (fallbackIndex == -1)
+                    fallbackIndex = index;
+            }
+
+            if (fallbackIndex != -1)
+            {
+                var notAdded = this.slots[fallbackIndex].Add(item);
+                this.OnAdd?.Invoke(this, (item, fallbackIndex, 1));
+                return notAdded == 0;
             }
 
             return false;
