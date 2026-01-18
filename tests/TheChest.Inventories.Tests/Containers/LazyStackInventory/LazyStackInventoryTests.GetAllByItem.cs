@@ -21,6 +21,7 @@
             var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, items);
 
             var item = this.itemFactory.CreateDefault();
+            var raised = false;
             inventory.OnGet += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(validItems.Length));
@@ -29,8 +30,12 @@
                     Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(item));
                     Assert.That(args.Data.Select(x => x.Amount), Has.All.InRange(1, stackSize));
                 });
+                raised = true;
             };
+
             inventory.GetAll(item);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]
@@ -68,8 +73,9 @@
             var invalidRandomItems = this.itemFactory.CreateManyRandom(inventorySize);
             var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, invalidRandomItems);
 
-            var item = this.itemFactory.CreateDefault();
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for an empty slot.");
+            
+            var item = this.itemFactory.CreateDefault();
             inventory.GetAll(item);
         }
 
@@ -84,7 +90,7 @@
             var item = this.itemFactory.CreateDefault();
             var result = inventory.GetAll(item);
 
-            Assert.That(result, Is.Empty, "Expected an empty array when no matching items are found.");
+            Assert.That(result, Is.Empty'');
         }
     }
 }

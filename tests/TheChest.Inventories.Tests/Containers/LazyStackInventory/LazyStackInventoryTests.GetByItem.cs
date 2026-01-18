@@ -42,6 +42,7 @@
             var inventory = this.containerFactory.FullContainer(10, amount, items);
             var expectedItem = this.itemFactory.CreateDefault();
 
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
                 var firstEvent = args.Data.First();
@@ -51,8 +52,12 @@
                     Assert.That(firstEvent.Index, Is.EqualTo(0));
                     Assert.That(firstEvent.Amount, Is.EqualTo(1));
                 });
+                raised = true;
             };
+
             inventory.Get(expectedItem);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]

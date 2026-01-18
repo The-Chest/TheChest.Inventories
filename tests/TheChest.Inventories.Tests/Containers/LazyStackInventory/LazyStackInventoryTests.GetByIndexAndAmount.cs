@@ -47,6 +47,7 @@
             var index = this.random.Next(0, 20);
             var amount = this.random.Next(1, 10);
 
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(sender, Is.EqualTo(inventory));
                 var firstData = args.Data.FirstOrDefault();
@@ -56,8 +57,11 @@
                     Assert.That(firstData.Index, Is.EqualTo(index));
                     Assert.That(firstData.Amount, Is.EqualTo(amount));
                 });
+                raised = true;
             };
             inventory.Get(index, amount);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [Test]
@@ -84,6 +88,7 @@
             var index = this.random.Next(0, 20);
             var amount = this.random.Next(maxAvailabeSize + 1, maxAvailabeSize + 10);
 
+            var raised = false;
             inventory.OnGet += (sender, args) => {
                 Assert.That(sender, Is.EqualTo(inventory));
                 var firstData = args.Data.FirstOrDefault();
@@ -93,8 +98,12 @@
                     Assert.That(firstData.Index, Is.EqualTo(index));
                     Assert.That(firstData.Amount, Is.EqualTo(maxAvailabeSize));
                 });
+                raised = true;
             };
+
             inventory.Get(index, amount);
+
+            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
         [TestCase(-1, 1)]
