@@ -57,8 +57,9 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[index].IsEmpty, Is.True);
-                Assert.That(inventory[index].GetContents(), Has.All.Null);
+                var slot = inventory.GetSlot(index);
+                Assert.That(slot!.IsEmpty, Is.True);
+                Assert.That(slot!.GetContents(), Has.All.Null);
             });
         }
 

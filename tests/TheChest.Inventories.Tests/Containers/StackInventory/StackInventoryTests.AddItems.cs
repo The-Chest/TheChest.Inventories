@@ -1,4 +1,6 @@
-﻿using TheChest.Core.Slots.Interfaces;
+﻿using System;
+using System.Reflection;
+using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Inventories.Tests.Containers
 {
@@ -34,7 +36,7 @@ namespace TheChest.Inventories.Tests.Containers
 
             inventory.Add(items);
 
-            Assert.That(inventory[0].GetContents(), Is.EqualTo(items));
+            Assert.That(inventory.GetItems(0), Is.EqualTo(items));
         }
 
         [Test]
@@ -195,8 +197,8 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContents(), Is.EqualTo(items.Take(10)));
-                Assert.That(inventory[1].GetContents(), Is.EqualTo(items.Skip(10)));
+                Assert.That(inventory.GetItems(0), Is.EqualTo(items.Take(10)));
+                Assert.That(inventory.GetItems(1), Is.EqualTo(items.Skip(10)));
             });
         }
 

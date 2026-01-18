@@ -8,7 +8,10 @@ namespace TheChest.Inventories.Tests.Containers.Extensions
         internal static ILazyStackSlot<T>[]? GetSlots<T>(this ILazyStackInventory<T> inventory)
             => inventory.GetSlotsFieldOrProperty() as ILazyStackSlot<T>[];
 
-        internal static T[]? GetItems<T>(this ILazyStackInventory<T> inventory, int index)
-            => inventory.GetSlots()![index].GetContents();
+        internal static ILazyStackSlot<T>? GetSlot<T>(this ILazyStackInventory<T> inventory, int index)
+            => inventory.GetSlots()![index];
+
+        internal static T? GetItem<T>(this ILazyStackInventory<T> inventory, int index)
+            => inventory.GetSlots()![index].GetContent();
     }
 }

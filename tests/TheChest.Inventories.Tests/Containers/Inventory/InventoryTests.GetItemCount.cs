@@ -30,7 +30,7 @@
 
             inventory.GetCount(items[0]);
 
-            Assert.That(inventory[0].GetContent(), Is.EqualTo(items[0]));
+            Assert.That(inventory.GetItem(0), Is.EqualTo(items[0]));
         }
 
         [Test]

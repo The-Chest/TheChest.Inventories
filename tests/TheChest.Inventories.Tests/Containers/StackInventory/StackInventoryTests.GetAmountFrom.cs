@@ -64,7 +64,7 @@
             var removeAmount = this.random.Next(1, stackSize);
             inventory.Get(index, removeAmount);
 
-            Assert.That(inventory[index].Amount, Is.EqualTo(stackSize - removeAmount));
+            Assert.That(inventory.GetSlot(index)!.Amount, Is.EqualTo(stackSize - removeAmount));
         }
 
         [Test]
@@ -119,7 +119,7 @@
             var amount = this.random.Next(stackSize + 1, stackSize * 2);
             inventory.Get(index, amount);
 
-            Assert.That(inventory[index].Amount, Is.Zero);
+            Assert.That(inventory.GetSlot(index)!.Amount, Is.Zero);
         }
 
         [Test]

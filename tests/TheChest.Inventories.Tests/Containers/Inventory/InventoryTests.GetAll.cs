@@ -44,7 +44,7 @@
             var randomItem = items[index];
             inventory.GetAll(randomItem);
 
-            Assert.That(inventory[index].IsEmpty, Is.True);
+            Assert.That(inventory.GetSlots()![index].IsEmpty, Is.True);
         }
 
         [Test]

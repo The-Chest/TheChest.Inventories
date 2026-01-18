@@ -1,4 +1,5 @@
 ﻿using TheChest.Core.Slots.Interfaces;
+using TheChest.Inventories.Tests.Containers.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
@@ -33,9 +34,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory[0].GetContent(), Is.EqualTo(item));
-                Assert.That(inventory[0].IsEmpty, Is.False);
-                Assert.That(inventory[0].Amount, Is.EqualTo(amount));
+                var slot = inventory.GetSlot(0);
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
+                Assert.That(slot.IsEmpty, Is.False);
+                Assert.That(slot.Amount, Is.EqualTo(amount));
             });
         }
 

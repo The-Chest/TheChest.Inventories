@@ -21,9 +21,10 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                var firstSlot = inventory[0];
+                var firstSlot = inventory.GetSlot(0);
 
-                Assert.That(firstSlot.IsEmpty, Is.False);
+                Assert.That(firstSlot, Is.Not.Null);
+                Assert.That(firstSlot!.IsEmpty, Is.False);
                 Assert.That(firstSlot.GetContent(), Is.EqualTo(item));
             });
         }

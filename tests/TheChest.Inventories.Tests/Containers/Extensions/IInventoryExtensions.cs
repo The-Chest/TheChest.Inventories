@@ -8,6 +8,9 @@ namespace TheChest.Inventories.Tests.Containers.Extensions
         internal static ISlot<T>[]? GetSlots<T>(this IInventory<T> inventory)
             => inventory.GetSlotsFieldOrProperty() as ISlot<T>[];
 
+        internal static ISlot<T>? GetSlot<T>(this IInventory<T> inventory, int index)
+            => inventory.GetSlots()![index];
+
         internal static T? GetItem<T>(this IInventory<T> inventory, int index)
             => inventory.GetSlots()![index].GetContent();
     }
