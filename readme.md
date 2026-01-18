@@ -79,31 +79,6 @@ var lazyStackInventory = new LazyStackInventory<string>(lazyStackSlots);
 stackInventory.Add("StackableItem", "StackableItem");
 ```
 
-### Creating a custom Inventory
-If you need more control, you can implement the interfaces or extend classes.
-
-- **`Inventory<T>`**
-    - [docs/inventory/implementing](/docs/inventory/implementing.md)
-    - [docs/inventory/extending](/docs/inventory/extending.md)
-- **`StackInventory<T>`**
-    - [docs/stack_inventory/implementing](/docs/stack_inventory/implementing.md)
-    - [docs/stack_inventory/extending](/docs/stack_inventory/extending.md)
-- **`LazyStackInventory<T>`**
-    - [docs/lazy_stack_inventory/implementing](/docs/lazy_stack_inventory/implementing.md)
-    - [docs/lazy_stack_inventory/extending](/docs/lazy_stack_inventory/extending.md) 
-
-## Docs 
-
-- **`Inventory<T>`**
-    - [docs/inventory/class_diagram](/docs/inventory/class_diagram.md)
-    - [docs/inventory/events](/docs/inventory/events.md)
-- **`StackInventory<T>`**
-    - [docs/stack_inventory/class_diagram](/docs/stack_inventory/class_diagram.md)
-    - [docs/stack_inventory/events](/docs/stack_inventory/events.md)
-- **`LazyStackInventory<T>`**
-    - [docs/lazy_stack_inventory/class_diagram](/docs/lazy_stack_inventory/class_diagram.md)
-    - [docs/lazy_stack_inventory/events](/docs/lazy_stack_inventory/events.md)
-
 ## Future Plans
 
 The plans for future versions of the project are in this [GitHub Project Board](https://github.com/orgs/The-Chest/projects/19/views/2).

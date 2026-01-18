@@ -1,35 +1,85 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup Label="Package">
+	<PropertyGroup Label="Information">
 		<Title>The Chest Inventories</Title>
 		<Description>Provides generic collections to inventory management systems.</Description>
 		<Authors>The Chest</Authors>
-		<RepositoryUrl>https://github.com/The-Chest/TheChest.Inventories</RepositoryUrl>
-		<PackageProjectUrl>https://www.nuget.org/packages/TheChest.Inventories/</PackageProjectUrl>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<IncludeSymbols>True</IncludeSymbols>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
+
+	<PropertyGroup Label="Package">
+		<IsPackable>true</IsPackable>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageTags>container;slot;inventory;inventory-system;collection</PackageTags>
+		<PackageProjectUrl>https://www.nuget.org/packages/TheChest.Inventories/</PackageProjectUrl>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageReleaseNotes>See CHANGELOG.md for details.</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Repository">
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<RepositoryUrl>https://github.com/The-Chest/TheChest.Inventories</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>master</RepositoryBranch>
+		<RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
+	</PropertyGroup>
+
 	<PropertyGroup Label="Compiler">
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<Nullable>enable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DebugType>portable</DebugType>
+		<Optimize>true</Optimize>
 	</PropertyGroup>
-	<ItemGroup Label="Dependencies">
-		<PackageReference Include="TheChest.Core" Version="0.12.1" />
-	</ItemGroup>
+
+	<PropertyGroup Label="Symbols">
+		<IncludeSymbols>true</IncludeSymbols>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+
+	<PropertyGroup Label="CI">
+		<Deterministic>true</Deterministic>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Assembly">
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+		<SignAssembly>false</SignAssembly>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Analysis">
+		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+		<AnalysisLevel>none</AnalysisLevel>
+	</PropertyGroup>
+
 	<ItemGroup Label="Package">
+		<None Include="..\..\icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\..\LICENSE">
-			<Pack>False</Pack>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
+
 	<ItemGroup Label="Docs">
 		<None Include="..\..\README.md">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
+			<Pack>False</Pack>
 		</None>
 		<None Include="..\..\CHANGELOG.md">
-			<Pack>False</Pack>
-			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
 		</None>
+	</ItemGroup>
+	
+	<ItemGroup Label="Dependencies">
+		<PackageReference Include="TheChest.Core" Version="0.12.1" />
 	</ItemGroup>
 </Project>
