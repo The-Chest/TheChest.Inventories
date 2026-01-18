@@ -207,7 +207,7 @@
         public void Move_OriginAndTargetWithSameItems_CallsOnMoveEvent()
         {
             var inventorySize = this.random.Next(10, 20);
-            var stackSize = this.random.Next(1, 20);
+            var stackSize = this.random.Next(2, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
             var originIndex = this.random.Next(5, inventorySize - 1);

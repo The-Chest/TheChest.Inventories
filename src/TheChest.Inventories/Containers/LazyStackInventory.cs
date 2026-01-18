@@ -58,17 +58,29 @@ namespace TheChest.Inventories.Containers
             if(item is null)
                 throw new ArgumentNullException(nameof(item));
 
+            var fallbackIndex = -1;
             for (int index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (slot.CanAdd(item))
+                if (!slot.CanAdd(item))
+                    continue;
+
+                if (slot.Contains(item))
                 {
                     var notAdded = slot.Add(item);
-                    if (notAdded == 0)
-                        this.OnAdd?.Invoke(this, (item, index, 1));
-
-                    return notAdded == 0; 
+                    this.OnAdd?.Invoke(this, (item, index, 1));
+                    return notAdded == 0;
                 }
+
+                if (fallbackIndex == -1)
+                    fallbackIndex = index;
+            }
+
+            if (fallbackIndex != -1)
+            {
+                var notAdded = this.slots[fallbackIndex].Add(item);
+                this.OnAdd?.Invoke(this, (item, fallbackIndex, 1));
+                return notAdded == 0;
             }
 
             return false;
@@ -92,21 +104,41 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             var notAddedAmount = amount;
-            var events = new List<LazyStackInventoryAddItemEventData<T>>();
+            var events = new List<LazyStackInventoryAddItemEventData<T>>(amount);
+            var fallbackIndexes = new List<int>(amount);
             for (int index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (slot.CanAdd(item))
-                {
+                if (!slot.CanAdd(item))
+                    continue;
+
+                if (slot.Contains(item)) {
                     var previousAmount = notAddedAmount;
                     notAddedAmount = slot.Add(item, previousAmount);
                     var addedAmount = previousAmount - notAddedAmount;
                     events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedAmount));
-                    if (notAddedAmount == 0)
-                        break;
                 }
+
+                if (notAddedAmount == 0)
+                    break;
+
+                if (fallbackIndexes.Count <= amount)
+                    fallbackIndexes.Add(index);
             }
-            if(events.Count > 0)
+
+            foreach (var index in fallbackIndexes)
+            {
+                if (notAddedAmount == 0)
+                    break;
+                var slot = this.slots[index];
+
+                var previousAmount = notAddedAmount;
+                notAddedAmount = slot.Add(item, previousAmount);
+                var addedAmount = previousAmount - notAddedAmount;
+                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedAmount));
+            }
+
+            if (events.Count > 0)
                 this.OnAdd?.Invoke(this, new LazyStackInventoryAddEventArgs<T>(events));
 
             return notAddedAmount;
