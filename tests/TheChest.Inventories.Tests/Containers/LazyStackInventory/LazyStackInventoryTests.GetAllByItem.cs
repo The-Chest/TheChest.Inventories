@@ -90,7 +90,7 @@
             var item = this.itemFactory.CreateDefault();
             var result = inventory.GetAll(item);
 
-            Assert.That(result, Is.Empty'');
+            Assert.That(result, Is.Empty);
         }
     }
 }

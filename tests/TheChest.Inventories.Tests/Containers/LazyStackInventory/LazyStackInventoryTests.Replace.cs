@@ -66,6 +66,7 @@
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
 
+            var raised = false;
             inventory.OnReplace += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -80,8 +81,11 @@
                     Assert.That(eventData.OldItem, Is.EqualTo(oldItem));
                     Assert.That(eventData.OldAmount, Is.EqualTo(stackSize));
                 });
+                raised = true;
             };
             inventory.Replace(newItem, index, stackSize);
+
+            Assert.That(raised, Is.True, "OnReplace event was not raised");
         }
 
         [Test]
@@ -137,6 +141,7 @@
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
 
+            var raised = false;
             inventory.OnReplace += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(1));
@@ -151,8 +156,12 @@
                     Assert.That(eventData.OldItem, Is.Null);
                     Assert.That(eventData.OldAmount, Is.Zero);
                 });
+                raised = true;
             };
+
             inventory.Replace(newItem, index, stackSize);
+
+            Assert.That(raised, Is.True, "OnReplace event was not raised");
         }
     }
 }

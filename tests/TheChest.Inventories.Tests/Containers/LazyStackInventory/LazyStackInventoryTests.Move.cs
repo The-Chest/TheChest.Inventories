@@ -89,7 +89,7 @@
             };
             inventory.Move(origin, target);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
 
         [Test]
@@ -140,14 +140,14 @@
             };
             inventory.Move(originIndex, targetIndex);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
 
         [Test]
         public void Move_EmptyOrigin_MovesItem()
         {
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerfactory.EmptyContainer(2, stackSize);
+            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;
@@ -171,7 +171,7 @@
         public void Move_EmptyOrigin_CallsOnMoveEventOnlyWithTarget()
         {
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerfactory.EmptyContainer(2, stackSize);
+            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;
@@ -193,7 +193,7 @@
             };
             inventory.Move(originIndex, targetIndex);
 
-            Assert.That(raised, Is.True);
+            Assert.That(raised, Is.True, "OnMove event was not raised");
         }
     }
 }
