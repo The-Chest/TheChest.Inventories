@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup Label="Information">
 		<Title>The Chest Inventories</Title>
 		<Description>Provides generic collections to inventory management systems.</Description>
@@ -64,14 +64,14 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\..\README.md">
+		<None Include="..\..\readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup Label="Docs">
-		<None Include="..\..\README.md">
+		<None Include="..\..\readme.md">
 			<Pack>False</Pack>
 		</None>
 		<None Include="..\..\CHANGELOG.md">
