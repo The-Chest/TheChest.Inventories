@@ -1,3 +1,23 @@
+# v0.13.0
+
+## What's Changed
+* Project is now using `TheChest.Core v0.14.0`
+* Improvements in library's nuget packing
+
+## Known issues
+* [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
+* Unit tests are getting complex and need a refactor
+* `Index` in Inventory/Container properties might be removed
+* `StackInventory<T>.Move` method is too complex and needs a refactor
+* Event system will need an improvement on creation/dispatch
+  * The new Event API is being planned
+
+## What's next
+* [#129](https://github.com/The-Chest/TheChest.Inventories/issues/129) - Add `CanAdd`, `CanReplace` and `CanMove` methods on Containers
+* [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) - Change Move methods to throw exceptions for state validation 
+* [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) - Change Add methods to throw exceptions for state validation 
+* [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) - Change Replace methods to throw exceptions for state validation 
+
 # v0.12.4
 
 ## What's Fixed
