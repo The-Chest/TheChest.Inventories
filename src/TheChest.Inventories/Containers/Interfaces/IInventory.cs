@@ -51,19 +51,21 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
-        event InventoryAddEventHandler<T>? OnAdd;
+        event InventoryAddEventHandler<T> OnAdd;
+
         /// <summary>
         /// Checks if <paramref name="item"/> can be added to any slot on inventory.
         /// </summary>
         /// <param name="item">The item to evaluate for addition to the inventory.</param>
-        /// <returns>true if the item can be added; otherwise, false.</returns>
+        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
         bool CanAdd(T item);
         /// <summary>
-        /// Adds and array of items in a avaliable slot
+        /// Checks if <paramref name="items"/> can be added to any slot on inventory.
         /// </summary>
-        /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <returns>The items from param that were not possible to add</returns>
-        T[] Add(T[] items);
+        /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
+        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        bool CanAdd(T[] items);
+
         /// <summary>
         /// <para> 
         /// Adds an item in a avaliable slot 
