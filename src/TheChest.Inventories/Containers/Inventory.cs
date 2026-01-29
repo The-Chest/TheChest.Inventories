@@ -37,13 +37,6 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
-        /// <summary>
-        /// Gets an <see cref="IInventorySlot{T}"/> from the inventory
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public new IInventorySlot<T> this[int index] => this.slots[index];
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual bool CanAdd(T item)
