@@ -53,13 +53,27 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         event InventoryAddEventHandler<T>? OnAdd;
         /// <summary>
+        /// Checks if <paramref name="item"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="item">The item to evaluate for addition to the inventory.</param>
+        /// <returns>true if the item can be added; otherwise, false.</returns>
+        bool CanAdd(T item);
+        /// <summary>
         /// Adds and array of items in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns>The items from param that were not possible to add</returns>
         T[] Add(T[] items);
         /// <summary>
+        /// <para> 
         /// Adds an item in a avaliable slot 
+        /// </para>
+        /// <para>
+        /// This method return will change to void in future versions. 
+        /// </para>
+        /// <para>
+        /// Use <see cref="CanAdd(T)"/> to check if the item can be added before calling this method.
+        /// </para>
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>true if the <paramref name="item"/> could be added</returns>
