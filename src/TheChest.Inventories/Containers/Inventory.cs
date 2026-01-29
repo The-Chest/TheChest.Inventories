@@ -54,7 +54,7 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null or has one item null</exception>
-        public virtual bool CanAdd(T[] items)
+        public virtual bool CanAdd(params T[] items)
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
@@ -86,6 +86,28 @@ namespace TheChest.Inventories.Containers
             return false;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        public virtual bool Add(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            for (int i = 0; i < this.Size ; i ++)
+            {
+                var added = this.slots[i].Add(item);
+                if (added)
+                {
+                    this.OnAdd?.Invoke(this, (item, i)); 
+                    return true;
+                }
+            }
+
+            return false;
+        }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
@@ -131,28 +153,6 @@ namespace TheChest.Inventories.Containers
                 return items.Skip(addedAmount).ToArray();
 
             return Array.Empty<T>();
-        }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual bool Add(T item)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            for (int i = 0; i < this.Size ; i ++)
-            {
-                var added = this.slots[i].Add(item);
-                if (added)
-                {
-                    this.OnAdd?.Invoke(this, (item, i)); 
-                    return true;
-                }
-            }
-
-            return false;
         }
         /// <inheritdoc/>
         /// <remarks>
