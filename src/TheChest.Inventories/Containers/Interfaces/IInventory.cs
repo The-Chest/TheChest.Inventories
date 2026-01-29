@@ -65,6 +65,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
         /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
         bool CanAdd(T[] items);
+        /// <summary>
+        /// Determines whether the specified item can be added at the given index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the
+        /// collection.</param>
+        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T item, int index);
 
         /// <summary>
         /// <para> 
@@ -81,7 +89,21 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>true if the <paramref name="item"/> could be added</returns>
         bool Add(T item);
         /// <summary>
+        /// Adds and array of items in a avaliable slot
+        /// </summary>
+        /// <param name="items">Array of items to be added to any avaliable slot found</param>
+        /// <returns>The items from param that were not possible to add</returns>
+        T[] Add(params T[] items);
+        /// <summary>
+        /// <para>
         /// Adds an item in a specific slot
+        /// </para>
+        /// <para>
+        /// This method return will change to void in future versions. 
+        /// </para>
+        /// <para>
+        /// Use <see cref="CanAddAt(T,int)"/> to check if the item can be added before calling this method.
+        /// </para>
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>

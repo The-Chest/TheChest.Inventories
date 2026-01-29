@@ -28,7 +28,6 @@ namespace TheChest.Inventories.Slots
         {
             if (!this.CanAdd(item))
                 return false;
-            }
 
             this.content = item;
             return true;
