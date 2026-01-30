@@ -52,7 +52,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
         event InventoryAddEventHandler<T> OnAdd;
-
         /// <summary>
         /// Checks if <paramref name="item"/> can be added to any slot on inventory.
         /// </summary>
