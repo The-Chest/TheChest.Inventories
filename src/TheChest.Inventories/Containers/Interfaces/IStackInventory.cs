@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
-        event StackInventoryAddEventHandler<T>? OnAdd;
+        event StackInventoryAddEventHandler<T> OnAdd;
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
@@ -111,6 +111,21 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">Index of the slot</param>
         /// <returns>An array with of items</returns>
         T[] GetAll(int index);
+
+        /// <summary>
+        /// Determines whether the specified item can be added at the given index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added.</param>
+        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T item, int index);
+        /// <summary>
+        /// Determines whether the specified items can be added at the given index.
+        /// </summary>
+        /// <param name="items">The array of items to evaluate for insertion. Cannot be null.</param>
+        /// <param name="index">The zero-based index at which to check if the items can be added.</param>
+        /// <returns>true if all of the items can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T[] items, int index);
         /// <summary>
         /// Adds an item in a specific slot
         /// </summary>

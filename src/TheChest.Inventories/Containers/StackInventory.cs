@@ -98,6 +98,37 @@ namespace TheChest.Inventories.Containers
             return canAddAmount == items.Length;
         }
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanAddAt(T item, int index)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanAdd(item);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null or has one item null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanAddAt(T[] items, int index)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] is null)
+                    throw new ArgumentNullException(nameof(items), "One of the items is null");
+            }
+
+            return this.slots[index].CanAdd(items);
+        }
+
+        /// <inheritdoc/>
         /// <remarks>
         /// <para>
         /// It searches for an <see cref="IInventoryStackSlot{T}"/> that already contains the same type of <paramref name="item"/>, 
