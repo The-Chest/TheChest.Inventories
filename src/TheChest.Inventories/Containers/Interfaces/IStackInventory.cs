@@ -62,18 +62,32 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">The item to de counted</param>
         /// <returns>The current amount of the item in the Inventory</returns>
         int GetCount(T item);
+
+        /// <summary>
+        /// Checks if <paramref name="item"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="item">The item to evaluate to add to the inventory.</param>
+        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        bool CanAdd(T item);
+        /// <summary>
+        /// Checks if <paramref name="items"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
+        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        bool CanAdd(params T[] items);
         /// <summary>
         /// Adds and array of item in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns></returns>
-        T[] Add(T[] items);
+        T[] Add(params T[] items);
         /// <summary>
         /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
+
         /// <summary>
         /// Replaces items in a specific slot
         /// </summary>

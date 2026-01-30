@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Containers
         protected new readonly IInventoryStackSlot<T>[] slots;
 
         /// <inheritdoc/>
-        public event StackInventoryAddEventHandler<T>? OnAdd;
+        public event StackInventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
         public event StackInventoryGetEventHandler<T>? OnGet;
         /// <inheritdoc/>
@@ -45,6 +45,58 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        public virtual bool CanAdd(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                if (this.slots[i].CanAdd(item))
+                    return true;
+            }
+
+            return false;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null or has one item null</exception>
+        public virtual bool CanAdd(params T[] items)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] is null)
+                    throw new ArgumentNullException(nameof(items), "One of the items is null");
+            }
+
+            if (items.Length == 0)
+                return false;
+            
+            var canAddAmount = 0;
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                var toAddItems = items.Skip(canAddAmount).Take(slot.MaxAmount).ToArray();
+
+                if (slot.Contains(items[canAddAmount]))
+                {
+                    var toAddAmount = slot.MaxAmount - slot.Amount;
+                    toAddItems = toAddItems.Take(toAddAmount).ToArray();
+                }
+
+                if (this.slots[i].CanAdd(toAddItems)){
+                    canAddAmount += toAddItems.Length;
+                    if (canAddAmount >= items.Length)
+                        break;
+                }
+            }
+            
+            return canAddAmount == items.Length;
+        }
         /// <inheritdoc/>
         /// <remarks>
         /// <para>
