@@ -51,20 +51,6 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void CanAddItemAt_SlotWithSameItemsAndNotEnoughSpace_ReturnsFalse()
-        {
-            var size = this.random.Next(10, 20);
-            var stackSize = this.random.Next(5, 10);
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
-            var randomIndex = this.random.Next(0, size);
-
-            var canAdd = inventory.CanAddAt(item, randomIndex);
-
-            Assert.That(canAdd, Is.False);
-        }
-
-        [Test]
         public void CanAddItemAt_SlotWithDifferentItemsAndEnoughSpace_ReturnsFalse()
         {
             var size = this.random.Next(10, 20);

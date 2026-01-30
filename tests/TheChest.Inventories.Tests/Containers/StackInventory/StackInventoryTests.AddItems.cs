@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using TheChest.Core.Slots.Interfaces;
+﻿using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Inventories.Tests.Containers
 {
