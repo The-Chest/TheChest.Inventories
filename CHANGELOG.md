@@ -1,3 +1,22 @@
+# v0.14.0
+
+## What's added
+* Validation methods to Inventories
+  * `CanAdd(T item)` - Checks if an item can be added to the Inventory
+  * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index in the Inventory
+  * `CanAdd(T[] items)` - Checks if multiple items can be added to the Inventory
+
+## Known issues
+* [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
+* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) - Inventory classes doenst have Try methods
+* Unit tests are getting complex and need a refactor
+* `Index` in Inventory/Container properties might be removed
+* `StackInventory<T>.Move` method is too complex and needs a refactor
+* Event system will need an improvement on creation/dispatch
+  * The new Event API is being planned
+
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
+
 # v0.13.0
 
 ## What's Changed
@@ -17,6 +36,8 @@
 * [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) - Change Move methods to throw exceptions for state validation 
 * [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) - Change Add methods to throw exceptions for state validation 
 * [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) - Change Replace methods to throw exceptions for state validation 
+
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.4...v0.13.0
 
 # v0.12.4
 

@@ -21,17 +21,30 @@ direction TB
 	        + ~~event~~ OnAdd: InventoryAddEventHandler~T~ 
 	        + ~~event~~ OnMove: InventoryMoveEventHandler~T~ 
 	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
-            + T? Get(int index)
+
 	        + T[] GetAll(T item)
+	        + T? Get(int index)
+	        + T? Get(T item)
+	        + T[] Get(T item, int amount)
+
 	        + T[] Clear()
+
+	        + bool CanAdd(T item)
+	        + bool CanAdd(params T[] items)
+	        + bool CanAddAt(T item)
+
 	        + bool Add(T item)
 	        + T[] Add(params T[] items)
 	        + bool AddAt(T item, int index)
+
 	        + void Move(int origin, int target)
+
 	        + T Replace(T item, int index)
+
 	        + int GetCount(T item)
         }
         class IInventorySlot~T~ {
+	        + bool CanAdd(T item)
 	        + bool Add(T item)
 	        + T? Get()
 	        + bool Contains(T item)
@@ -45,16 +58,26 @@ direction TB
 	        + ~~event~~ OnMove: InventoryMoveEventHandler~T~ 
 	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
 	        + Inventory(IInventorySlot~T~[] slots)
+
+			+ bool CanAdd(T item)
+	        + bool CanAdd(params T[] items)
+	        + bool CanAddAt(T item)
+
             + T[] Add(params T[] items)
 	        + bool Add(T item)
 	        + bool AddAt(T item, int index)
+
 	        + T[] Clear()
+
 	        + T[] GetAll(T item)
 	        + T? Get(int index)
 	        + T? Get(T item)
 	        + T[] Get(T item, int amount)
+
 	        + int GetCount(T item)
+
 	        + T Replace(T item, int index)
+
 	        + void Move(int origin, int target)
         }
         class IInteractiveContainer~T~{
@@ -97,6 +120,7 @@ namespace TheChest.Core {
 
 namespace TheChest.Inventories {
     class IInventorySlot~T~ {
+        + bool CanAdd(T item)
         + bool Add(T item)
         + T? Get()
         + bool Contains(T item)
@@ -104,6 +128,7 @@ namespace TheChest.Inventories {
     }
     class InventorySlot~T~ {
         + InventorySlot(T? currentItem = default)
+        + bool CanAdd(T item)
         + bool Add(T item)
         + bool Contains(T item)
         + T? Get()
