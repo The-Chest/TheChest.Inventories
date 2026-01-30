@@ -270,6 +270,7 @@ namespace TheChest.Inventories.Containers
 
             return notAddedItems;
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when every item is retrieved from the inventory. 
@@ -295,48 +296,7 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
-        /// </remarks>
-        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
-        public virtual T[] GetAll(int index)
-        {
-            if (index > this.Size || index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
 
-            var items =  this.slots[index].GetAll();
-            if(items.Length > 0)
-                this.OnGet?.Invoke(this, (items, index));
-            return items;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual T[] GetAll(T item)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            var items = new List<T>();
-            var events = new List<StackInventoryGetItemEventData<T>>();
-            for (int index = 0; index < this.Size; index++)
-            {
-                var slot = this.slots[index];
-                if (slot.Contains(item))
-                {
-                    var slotItems = slot.GetAll();
-                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, index));
-                    items.AddRange(slotItems);
-                }
-            }
-            if(events.Count > 0)
-                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
-
-            return items.ToArray();
-        }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when one item from <paramref name="index"/> are retrieved.
@@ -429,6 +389,49 @@ namespace TheChest.Inventories.Containers
             return items;
         }
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
+        /// </remarks>
+        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
+        public virtual T[] GetAll(int index)
+        {
+            if (index > this.Size || index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var items = this.slots[index].GetAll();
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items, index));
+            return items;
+        }
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        public virtual T[] GetAll(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            var items = new List<T>();
+            var events = new List<StackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
+            {
+                var slot = this.slots[index];
+                if (slot.Contains(item))
+                {
+                    var slotItems = slot.GetAll();
+                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, index));
+                    items.AddRange(slotItems);
+                }
+            }
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
+
+            return items.ToArray();
+        }
+
+        /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
         public virtual int GetCount(T item)
         {
@@ -443,6 +446,7 @@ namespace TheChest.Inventories.Containers
             }
             return amount;
         }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
         public virtual void Move(int origin, int target)
@@ -495,6 +499,7 @@ namespace TheChest.Inventories.Containers
             if(events.Count > 0)
                 this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
         }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
         /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
