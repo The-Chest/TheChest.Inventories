@@ -29,13 +29,6 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryReplaceEventHandler<T>? OnReplace;
 
         /// <summary>
-        /// Gets the <see cref="IInventoryStackSlot{T}"/> at the specified index.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public new IInventoryStackSlot<T> this[int index] => this.slots[index];
-
-        /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
         /// </summary>
         /// <param name="slots">An array of <see cref="IInventoryStackSlot{T}"/></param>
