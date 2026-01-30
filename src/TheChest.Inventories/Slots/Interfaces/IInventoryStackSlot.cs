@@ -32,6 +32,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="items">items to be added to the slot</param>
         /// <returns>The items that were not added to the slot</returns>
         T[] Add(T[] items);
+
         /// <summary>
         /// Checks if is possible to replace an item
         /// </summary>
@@ -56,6 +57,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="item">The item that will replace items from slots</param>
         /// <returns>the old items from the slot</returns>
         T[] Replace(T item);
+
         /// <summary>
         /// Gets a single item from the slot
         /// </summary>

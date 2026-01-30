@@ -71,45 +71,6 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <remarks>
-        /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
-        /// </remarks>
-        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside the slot</exception>
-        public virtual T[] Add(T[] items)
-        {
-            //TODO: improve this method validations
-            if (items.Length == 0)
-                throw new ArgumentException("Cannot add empty list of items", nameof(items));
-
-            for (int i = 1; i < items.Length; i++)
-            {
-                if (!items[0]!.Equals(items[i]))
-                    throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
-
-                if (!this.IsEmpty && !this.Contains(items[i]))
-                    throw new ArgumentException($"Param \"items\" must have every item equal to the Current item on the Slot ({i})", nameof(items));
-            }           
-
-            this.AddItems(ref items);
-
-            return items;
-        }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
-        public virtual bool Add(T item)
-        {
-            if(item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            if (this.CanAdd(item))
-            {
-                this.AddItem(ref item);
-                return true;
-            }
-
-            return false;
-        }
-        /// <inheritdoc/>
         /// <returns>Returns false if is Full or Contains item of a different type than <paramref name="item"/></returns>
         public virtual bool CanAdd(T item)
         {
@@ -148,6 +109,45 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
+        /// </remarks>
+        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside the slot</exception>
+        public virtual T[] Add(T[] items)
+        {
+            //TODO: improve this method validations
+            if (items.Length == 0)
+                throw new ArgumentException("Cannot add empty list of items", nameof(items));
+
+            for (int i = 1; i < items.Length; i++)
+            {
+                if (!items[0]!.Equals(items[i]))
+                    throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
+
+                if (!this.IsEmpty && !this.Contains(items[i]))
+                    throw new ArgumentException($"Param \"items\" must have every item equal to the Current item on the Slot ({i})", nameof(items));
+            }           
+
+            this.AddItems(ref items);
+
+            return items;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
+        public virtual bool Add(T item)
+        {
+            if(item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            if (this.CanAdd(item))
+            {
+                this.AddItem(ref item);
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Gets and removes amount of items from slot with no previous validation.
@@ -173,7 +173,6 @@ namespace TheChest.Inventories.Slots
 
             return result;
         }
-
         /// <summary>
         /// Gets and removes a single item from slot with no previous validation.
         /// </summary>
@@ -188,6 +187,7 @@ namespace TheChest.Inventories.Slots
             this.amount--;
             return item!;
         }
+
         /// <summary>
         /// Gets and removes all items from slot
         /// </summary>
@@ -224,6 +224,7 @@ namespace TheChest.Inventories.Slots
 
             return this.GetItem();
         }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
