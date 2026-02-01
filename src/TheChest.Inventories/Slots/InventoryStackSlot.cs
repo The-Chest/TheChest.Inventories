@@ -71,7 +71,6 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <returns>Returns false if is Full or Contains item of a different type than <paramref name="item"/></returns>
         public virtual bool CanAdd(T item)
         {
             if (item is null)
@@ -85,22 +84,28 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-        /// <inheritdoc/>.
-        /// <remarks>
-        /// Uses <see cref="IInventoryStackSlot{T}.CanAdd(T)"/> for the validation for each item inside <paramref name="items"/>.
-        /// </remarks>
+        /// <inheritdoc/>
         public virtual bool CanAdd(T[] items)
         {
-            if (items.Length == 0)
+            if (items == null || items.Length == 0)
                 return false;
 
             if (this.IsFull)
                 return false;
 
-            var firstItem = items[0]!;
-            for (int i = 0; i < items.Length; i++)
+            if (this.amount + items.Length > this.maxAmount)
+                return false;
+
+            var firstItem = items[0];
+            if (firstItem is null)
+                return false;
+
+            if (!this.IsEmpty && !this.Contains(firstItem))
+                return false;
+
+            for (int i = 1; i < items.Length; i++)
             {
-                if (!this.CanAdd(items[i]))
+                if (items[i] is null)
                     return false;
 
                 if(!firstItem.Equals(items[i]))
@@ -162,12 +167,7 @@ namespace TheChest.Inventories.Slots
                 .Take(amount)
                 .ToArray();
             
-            Array.Clear(
-                this.content,
-                //this.content.Length - amount,
-                0,
-                amount
-            );
+            Array.Clear(this.content, 0, amount);
 
             this.amount -= result.Length;
 
