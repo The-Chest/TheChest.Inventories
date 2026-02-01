@@ -2,9 +2,19 @@
 
 ## What's added
 * Validation methods to Inventories
-  * `CanAdd(T item)` - Checks if an item can be added to the Inventory
-  * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index in the Inventory
-  * `CanAdd(T[] items)` - Checks if multiple items can be added to the Inventory
+  * `Inventory<T>` 
+    * `CanAdd(T item)` - Checks if an item can be added
+    * `CanAdd(T[] items)` - Checks if multiple items can be added
+    * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
+  * `StackInventory<T>` 
+    * `CanAdd(T item)` - Checks if an item can be added
+    * `CanAdd(T[] items)` - Checks if multiple items can be added
+    * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
+    * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
+  * `LazyStackInventory<T>` 
+    * To Be Added
+## What's removed
+  * `Inventory<T>[int index]` and `StackInventory<T>[int index]` are no longer available
 
 ## Known issues
 * [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
@@ -12,6 +22,11 @@
 * Unit tests are getting complex and need a refactor
 * `Index` in Inventory/Container properties might be removed
 * `StackInventory<T>.Move` method is too complex and needs a refactor
+* Linq usages in the library
+* Inventory classes have too many methods
+  * It'll be changed by making 
+    * multiple interfaces for different use cases
+    * extension methods for some features
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 
