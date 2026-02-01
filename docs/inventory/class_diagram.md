@@ -31,7 +31,7 @@ direction TB
 
 	        + bool CanAdd(T item)
 	        + bool CanAdd(params T[] items)
-	        + bool CanAddAt(T item)
+	        + bool CanAddAt(T item, int index)
 
 	        + bool Add(T item)
 	        + T[] Add(params T[] items)
@@ -59,9 +59,9 @@ direction TB
 	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
 	        + Inventory(IInventorySlot~T~[] slots)
 
-			+ bool CanAdd(T item)
+	        + bool CanAdd(T item)
 	        + bool CanAdd(params T[] items)
-	        + bool CanAddAt(T item)
+	        + bool CanAddAt(T item, int index)
 
             + T[] Add(params T[] items)
 	        + bool Add(T item)
