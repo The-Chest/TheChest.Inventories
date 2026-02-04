@@ -71,7 +71,17 @@ namespace TheChest.Inventories.Slots
             item = default!;
         }
 
+        /// <summary>
         /// <inheritdoc/>
+        /// </summary>
+        /// <remarks>
+        /// This method checks whether the slot is full or already contains the specified item. 
+        /// <para>
+        /// Override this method to customize the criteria for adding <paramref name="item"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="item"><inheritdoc/></param>
+        /// <returns>true if the item can be added to the slot; otherwise, false.</returns>
         public virtual bool CanAdd(T item)
         {
             if (item is null)
@@ -85,7 +95,20 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+        /// <summary>
         /// <inheritdoc/>
+        /// </summary>
+        /// <remarks>
+        /// This method checks that the slot is not full, that the number of items does not
+        /// exceed the available capacity, and that all items are non-null and equal to each other.  
+        /// If the slot is not empty, the items must also match the type of items already contained.   
+        /// The method does not modify <paramref name="items"/>.
+        /// <para>
+        /// Override this method to customize the criteria for adding items.
+        /// </para>
+        /// </remarks>
+        /// <param name="items"><inheritdoc/></param>
+        /// <returns>true if all items can be added to the slot; otherwise, false.</returns>
         public virtual bool CanAdd(T[] items)
         {
             if (items == null || items.Length == 0)
@@ -133,7 +156,7 @@ namespace TheChest.Inventories.Slots
 
                 if (!this.IsEmpty && !this.Contains(items[i]))
                     throw new ArgumentException($"Param \"items\" must have every item equal to the Current item on the Slot ({i})", nameof(items));
-            }           
+            } 
 
             this.AddItems(ref items);
 
