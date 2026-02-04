@@ -161,7 +161,7 @@ namespace TheChest.Inventories.Slots
             return items;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
             if(item is null)
@@ -199,7 +199,7 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Gets and removes a single item from slot with no previous validation.
         /// </summary>
-        /// <returns>One item or null if not found</returns>
+        /// <returns>One item or <see langword="null"/> if not found</returns>
         protected virtual T GetItem()
         {
             var item = this.content.FirstOrDefault();
@@ -239,7 +239,7 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Gets a single item from inside the slot
         /// </summary>
-        /// <returns>an item from slot or null if <see cref="ISlot{T}.IsEmpty"/> is true</returns>
+        /// <returns>an item from slot or <see langword="null"/> if <see cref="ISlot{T}.IsEmpty"/> is true</returns>
         public virtual T Get()
         {
             if (this.IsEmpty)
@@ -276,7 +276,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// </summary>
         /// <param name="item"><inheritdoc/></param>
-        /// <returns>false if the param <paramref name="item"/> is null</returns>
+        /// <returns>false if the param <paramref name="item"/> is <see langword="null"/></returns>
         public virtual bool CanReplace(T item)
         {
             if (item is null)
@@ -328,8 +328,8 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// </summary>
         /// <param name="item">the item that will be attempt to replace</param>
-        /// <returns>null if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is null</exception>
+        /// <returns><see langword="null"/> if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
+        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] Replace(T item)
         {
             if(item is null)

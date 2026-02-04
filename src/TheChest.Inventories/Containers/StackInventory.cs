@@ -39,7 +39,7 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool CanAdd(T item)
         {
             if (item is null)
@@ -54,7 +54,7 @@ namespace TheChest.Inventories.Containers
             return false;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null or has one item null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
         public virtual bool CanAdd(params T[] items)
         {
             if (items is null)
@@ -88,7 +88,7 @@ namespace TheChest.Inventories.Containers
             return canAddAmount == items.Length;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
         public virtual bool CanAddAt(T item, int index)
         {
@@ -100,7 +100,7 @@ namespace TheChest.Inventories.Containers
             return this.slots[index].CanAdd(item);
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null or has one item null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
         public virtual bool CanAddAt(T[] items, int index)
         {
@@ -130,7 +130,7 @@ namespace TheChest.Inventories.Containers
         /// </para>
         /// </remarks>
         /// <returns>true if is possible to add the items</returns>
-        /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
             if (item is null)
@@ -249,7 +249,7 @@ namespace TheChest.Inventories.Containers
             return items;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual bool AddAt(T item, int index)
         {
@@ -334,7 +334,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
             if (item is null)
@@ -358,7 +358,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items in an <paramref name="amount"/> from the inventory that contains <paramref name="item"/> are retrieved.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] Get(T item, int amount)
         {
             if (amount <= 0)
@@ -425,7 +425,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] GetAll(T item)
         {
             if (item is null)
@@ -450,7 +450,7 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
             if (item is null)
@@ -519,7 +519,7 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
         /// <exception cref="InvalidOperationException">When the amount of <paramref name="items"/> to replace exceeds the stack size of the slot on <paramref name="index"/>.</exception>

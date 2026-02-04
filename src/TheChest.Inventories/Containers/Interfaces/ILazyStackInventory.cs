@@ -36,7 +36,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
-        /// <returns>Returns the first item found or null</returns>
+        /// <returns>Returns the first item found</returns>
         T Get(T item);
         /// <summary>
         /// Search an amount of items in the inventory

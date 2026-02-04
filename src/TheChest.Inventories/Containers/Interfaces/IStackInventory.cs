@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
-        /// <returns>Returns the first item found or null</returns>
+        /// <returns>Returns the first item found</returns>
         T Get(T item);
         /// <summary>
         /// Search an amount of items in the inventory
@@ -122,7 +122,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Determines whether the specified items can be added at the given index.
         /// </summary>
-        /// <param name="items">The array of items to evaluate for insertion. Cannot be null.</param>
+        /// <param name="items">The array of items to evaluate for insertion</param>
         /// <param name="index">The zero-based index at which to check if the items can be added.</param>
         /// <returns>true if all of the items can be added at the specified index; otherwise, false.</returns>
         bool CanAddAt(T[] items, int index);

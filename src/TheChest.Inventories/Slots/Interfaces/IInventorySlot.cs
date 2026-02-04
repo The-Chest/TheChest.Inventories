@@ -29,7 +29,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <summary>
         /// Returns an item from slot
         /// </summary>
-        /// <returns>Returns an item of the slot, if <see cref="ISlot{T}.IsEmpty"/> is true, then returns null</returns>
+        /// <returns>Returns an item of the slot</returns>
         T Get();
     }
 }
