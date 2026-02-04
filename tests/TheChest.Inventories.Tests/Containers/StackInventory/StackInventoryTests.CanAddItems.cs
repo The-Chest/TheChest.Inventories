@@ -48,7 +48,7 @@
             var stackSize = this.random.Next(2, 5);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
-            var randomAmount = this.random.Next(1, size);
+            var randomAmount = this.random.Next(2, size);
             inventory.Get(item, randomAmount - 1);
 
             var items = this.itemFactory.CreateMany(randomAmount);

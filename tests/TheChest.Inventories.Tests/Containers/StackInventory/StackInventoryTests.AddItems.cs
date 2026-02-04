@@ -159,11 +159,12 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_AddsToAvailableSlots()
+        public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_CallsOnAddEventOnTwoSlots()
         {
             var items = this.itemFactory.CreateMany(20);
             var inventory = this.containerFactory.EmptyContainer();
 
+            var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.That(args.Data, Has.Count.EqualTo(2));
@@ -181,12 +182,16 @@ namespace TheChest.Inventories.Tests.Containers
                     Assert.That(secondEvent.Items, Has.Length.EqualTo(10).And.EqualTo(items.Skip(10)));
                     Assert.That(secondEvent.Index, Is.EqualTo(1));
                 });
+                raised = true;
             };
+
             inventory.Add(items);
+            
+            Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
         [Test]
-        public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_CallsOnAddEvent()
+        public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_AddsToTwoAvailableSlots()
         {
             var items = this.itemFactory.CreateMany(20);
             var inventory = this.containerFactory.EmptyContainer();
@@ -221,6 +226,7 @@ namespace TheChest.Inventories.Tests.Containers
             var inventory = this.containerFactory.FullContainer(20, 2, slotItem);
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
+            
             inventory.Add(items);
         }
 

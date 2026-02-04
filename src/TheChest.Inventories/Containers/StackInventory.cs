@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Containers
@@ -59,7 +60,6 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
-
             for (int i = 0; i < items.Length; i++)
             {
                 if (items[i] is null)
@@ -68,18 +68,16 @@ namespace TheChest.Inventories.Containers
 
             if (items.Length == 0)
                 return false;
-            
+
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
             {
                 var slot = this.slots[i];
-                var toAddItems = items.Skip(canAddAmount).Take(slot.MaxAmount).ToArray();
-
-                if (slot.Contains(items[canAddAmount]))
-                {
-                    var toAddAmount = slot.MaxAmount - slot.Amount;
-                    toAddItems = toAddItems.Take(toAddAmount).ToArray();
-                }
+                //TODO: improve this logic readability and remove Linq usage
+                var toAddItems = items
+                    .Skip(canAddAmount)
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
 
                 if (this.slots[i].CanAdd(toAddItems)){
                     canAddAmount += toAddItems.Length;
@@ -179,53 +177,74 @@ namespace TheChest.Inventories.Containers
         /// <returns>Items from params that were not added to the inventory</returns>
         public virtual T[] Add(params T[] items)
         {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 return items;
 
-            var fallbackIndexes = new List<int>();
-            var events = new List<StackInventoryAddItemEventData<T>>();
+            var fallbackIndexes = new List<int>(items.Length);
+            var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
+
             for (var index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (!slot.CanAdd(items))
+                var itemsToAdd = items
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
+
+                if (!slot.CanAdd(itemsToAdd))
                     continue;
 
                 if (!slot.Contains(items[0]))
                 {
-                    if(fallbackIndexes.Count <= items.Length)
+                    if (fallbackIndexes.Count <= items.Length)
                         fallbackIndexes.Add(index);
 
                     continue;
                 }
 
-                var notAddedItems = slot.Add(items);
+                var notAddedItems = slot.Add(itemsToAdd);
+                var addedItemsCount = itemsToAdd.Length - notAddedItems.Length;
+                if (addedItemsCount == 0)
+                    continue;
+
                 events.Add(
                     new StackInventoryAddItemEventData<T>(
-                        items.Skip(notAddedItems.Length).ToArray(),
+                        items.Take(addedItemsCount).ToArray(),
                         index
                     )
                 );
-                items = notAddedItems;
+                
+                items = items.Skip(addedItemsCount).ToArray();
                 if (items.Length == 0)
                     break;
             }
 
             foreach (var index in fallbackIndexes)
             {
-                if (items.Length == 0)
-                    break;
                 var slot = this.slots[index];
-                var notAddedItems = slot.Add(items);
+                var itemsToAdd = items
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
+
+                var notAddedItems = slot.Add(itemsToAdd);
+                var addedItemsCount = itemsToAdd.Length - notAddedItems.Length;
+                if (addedItemsCount == 0)
+                    continue;
+
                 events.Add(
                     new StackInventoryAddItemEventData<T>(
-                        items.Skip(notAddedItems.Length).ToArray(),
+                        items.Take(addedItemsCount).ToArray(),
                         index
                     )
                 );
-                items = notAddedItems;
+
+                items = items.Skip(addedItemsCount).ToArray();
+                if (items.Length == 0)
+                    break;
             }
 
-            if(events.Count > 0)
+            if (events.Count > 0)
                 this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
 
             return items;

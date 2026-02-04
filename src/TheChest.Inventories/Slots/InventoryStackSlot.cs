@@ -185,7 +185,8 @@ namespace TheChest.Inventories.Slots
         /// <returns>An list with the size of <paramref name="amount"/> or the max possible</returns>
         protected virtual T[] GetItems(int amount)
         {
-            //TODO: improve it by getting it from the last items (maybe using IEnumerable)
+            // TODO: improve it by getting it from the last items (maybe using IEnumerable)
+            // Turn it in a internal extension method
             var result = this.content
                 .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
                 .Take(amount)
