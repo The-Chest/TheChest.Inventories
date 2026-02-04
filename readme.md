@@ -1,5 +1,8 @@
 # TheChest.Inventories
 
+[![NuGet Version](https://img.shields.io/nuget/v/TheChest.Inventories)](https://www.nuget.org/packages/TheChest.Inventories)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=The-Chest_TheChest.Inventories&metric=coverage)](https://sonarcloud.io/summary/new_code?id=The-Chest_TheChest.Inventories)
+
 TheChest.Inventories is a library designed to manage inventories and slots for generic item collections. It provides a flexible and extensible framework for handling inventory systems, including support for stacked items, slot-based management.
 
 ## How does it work
