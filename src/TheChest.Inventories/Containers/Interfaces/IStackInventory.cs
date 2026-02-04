@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
-        event StackInventoryAddEventHandler<T>? OnAdd;
+        event StackInventoryAddEventHandler<T> OnAdd;
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
-        /// <returns>Returns the first item found or null</returns>
+        /// <returns>Returns the first item found</returns>
         T Get(T item);
         /// <summary>
         /// Search an amount of items in the inventory
@@ -62,18 +62,32 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">The item to de counted</param>
         /// <returns>The current amount of the item in the Inventory</returns>
         int GetCount(T item);
+
+        /// <summary>
+        /// Checks if <paramref name="item"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="item">The item to evaluate to add to the inventory.</param>
+        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        bool CanAdd(T item);
+        /// <summary>
+        /// Checks if <paramref name="items"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
+        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        bool CanAdd(params T[] items);
         /// <summary>
         /// Adds and array of item in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns></returns>
-        T[] Add(T[] items);
+        T[] Add(params T[] items);
         /// <summary>
         /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
+
         /// <summary>
         /// Replaces items in a specific slot
         /// </summary>
@@ -97,6 +111,21 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">Index of the slot</param>
         /// <returns>An array with of items</returns>
         T[] GetAll(int index);
+
+        /// <summary>
+        /// Determines whether the specified item can be added at the given index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added.</param>
+        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T item, int index);
+        /// <summary>
+        /// Determines whether the specified items can be added at the given index.
+        /// </summary>
+        /// <param name="items">The array of items to evaluate for insertion</param>
+        /// <param name="index">The zero-based index at which to check if the items can be added.</param>
+        /// <returns>true if all of the items can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T[] items, int index);
         /// <summary>
         /// Adds an item in a specific slot
         /// </summary>

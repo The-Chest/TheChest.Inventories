@@ -20,20 +20,13 @@ namespace TheChest.Inventories.Containers
         protected new readonly IInventoryStackSlot<T>[] slots;
 
         /// <inheritdoc/>
-        public event StackInventoryAddEventHandler<T>? OnAdd;
+        public event StackInventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
         public event StackInventoryGetEventHandler<T>? OnGet;
         /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T>? OnMove;
         /// <inheritdoc/>
         public event StackInventoryReplaceEventHandler<T>? OnReplace;
-
-        /// <summary>
-        /// Gets the <see cref="IInventoryStackSlot{T}"/> at the specified index.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public new IInventoryStackSlot<T> this[int index] => this.slots[index];
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
@@ -43,6 +36,150 @@ namespace TheChest.Inventories.Containers
         public StackInventory(IInventoryStackSlot<T>[] slots) : base(slots) 
         {
             this.slots = slots;
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        public virtual bool CanAdd(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                if (this.slots[i].CanAdd(item))
+                    return true;
+            }
+
+            return false;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
+        public virtual bool CanAdd(params T[] items)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] is null)
+                    throw new ArgumentNullException(nameof(items), "One of the items is null");
+            }
+
+            if (items.Length == 0)
+                return false;
+
+            var canAddAmount = 0;
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                //TODO: improve this logic readability and remove Linq usage
+                var toAddItems = items
+                    .Skip(canAddAmount)
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
+
+                if (this.slots[i].CanAdd(toAddItems)){
+                    canAddAmount += toAddItems.Length;
+                    if (canAddAmount >= items.Length)
+                        break;
+                }
+            }
+            
+            return canAddAmount == items.Length;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanAddAt(T item, int index)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanAdd(item);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanAddAt(T[] items, int index)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] is null)
+                    throw new ArgumentNullException(nameof(items), "One of the items is null");
+            }
+
+            return this.slots[index].CanAdd(items);
+        }
+
+        /// <summary>
+        /// Attempts to add the specified items to the inventory slots at the given indexes, recording events for each successful addition.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method distributes items across the provided slot indexes, respecting each slot's available capacity. 
+        /// </para>
+        /// <para>
+        /// It is intended to be overridden in derived classes to customize item addition behavior. 
+        /// </para>
+        /// <para>
+        /// The method does not modify the original items array; instead, it returns a new array of remaining items if any could not be added.
+        /// </para>
+        /// </remarks>
+        /// <param name="indexes">
+        /// The collection of slot indexes where items should be added. Each index must refer to a valid slot in the inventory.
+        /// </param>
+        /// <param name="items">
+        /// The array of items to add to the specified slots. Items are distributed among the slots based on their available capacity.
+        /// </param>
+        /// <param name="events">
+        /// A reference to the list that will be populated with event data for each successful item addition. Events are appended for each slot that receives items.
+        /// </param>
+        /// <returns>
+        /// An array containing any items that could not be added to the specified slots due to capacity constraints.
+        /// The array will be empty if all items are added successfully.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexes"/> is <see langword="null"/>.</exception>
+        protected virtual T[] AddItems(IEnumerable<int> indexes, T[] items, ref List<StackInventoryAddItemEventData<T>> events)
+        {
+            if (indexes is null)
+                throw new ArgumentNullException(nameof(indexes));
+
+            if (items.Length == 0)
+                return items;
+
+            foreach (var index in indexes)
+            {
+                var slot = this.slots[index];
+                var itemsToAdd = items
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
+
+                var notAddedItems = slot.Add(itemsToAdd);
+                var addedItemsCount = itemsToAdd.Length - notAddedItems.Length;
+
+                if (addedItemsCount <= 0)
+                    continue;
+
+                events.Add(
+                    new StackInventoryAddItemEventData<T>(
+                        items.Take(addedItemsCount).ToArray(),
+                        index
+                    )
+                );
+
+                items = items.Skip(addedItemsCount).ToArray();
+                if (items.Length == 0)
+                    break;
+            }
+
+            return items;
         }
 
         /// <inheritdoc/>
@@ -57,7 +194,7 @@ namespace TheChest.Inventories.Containers
         /// </para>
         /// </remarks>
         /// <returns>true if is possible to add the items</returns>
-        /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
             if (item is null)
@@ -103,59 +240,47 @@ namespace TheChest.Inventories.Containers
         /// <returns>Items from params that were not added to the inventory</returns>
         public virtual T[] Add(params T[] items)
         {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 return items;
 
-            var fallbackIndexes = new List<int>();
-            var events = new List<StackInventoryAddItemEventData<T>>();
+            var mainIndexes = new List<int>(items.Length);
+            var fallbackIndexes = new List<int>(items.Length);
+            var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
+
             for (var index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (!slot.CanAdd(items))
+                var itemsToAdd = items
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
+                
+                if (!slot.CanAdd(itemsToAdd))
                     continue;
 
-                if (!slot.Contains(items[0]))
+                if (slot.Contains(items[0]))
                 {
-                    if(fallbackIndexes.Count <= items.Length)
-                        fallbackIndexes.Add(index);
+                    if(mainIndexes.Count <= items.Length)
+                        mainIndexes.Add(index);
 
                     continue;
                 }
 
-                var notAddedItems = slot.Add(items);
-                events.Add(
-                    new StackInventoryAddItemEventData<T>(
-                        items.Skip(notAddedItems.Length).ToArray(),
-                        index
-                    )
-                );
-                items = notAddedItems;
-                if (items.Length == 0)
-                    break;
+                if (fallbackIndexes.Count <= items.Length)
+                    fallbackIndexes.Add(index);
             }
 
-            foreach (var index in fallbackIndexes)
-            {
-                if (items.Length == 0)
-                    break;
-                var slot = this.slots[index];
-                var notAddedItems = slot.Add(items);
-                events.Add(
-                    new StackInventoryAddItemEventData<T>(
-                        items.Skip(notAddedItems.Length).ToArray(),
-                        index
-                    )
-                );
-                items = notAddedItems;
-            }
+            items = this.AddItems(mainIndexes, items, ref events);
+            items = this.AddItems(fallbackIndexes, items, ref events);
 
-            if(events.Count > 0)
+            if (events.Count > 0)
                 this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
 
             return items;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual bool AddAt(T item, int index)
         {
@@ -194,6 +319,7 @@ namespace TheChest.Inventories.Containers
 
             return notAddedItems;
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when every item is retrieved from the inventory. 
@@ -219,48 +345,7 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
-        /// </remarks>
-        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
-        public virtual T[] GetAll(int index)
-        {
-            if (index > this.Size || index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
 
-            var items =  this.slots[index].GetAll();
-            if(items.Length > 0)
-                this.OnGet?.Invoke(this, (items, index));
-            return items;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual T[] GetAll(T item)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            var items = new List<T>();
-            var events = new List<StackInventoryGetItemEventData<T>>();
-            for (int index = 0; index < this.Size; index++)
-            {
-                var slot = this.slots[index];
-                if (slot.Contains(item))
-                {
-                    var slotItems = slot.GetAll();
-                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, index));
-                    items.AddRange(slotItems);
-                }
-            }
-            if(events.Count > 0)
-                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
-
-            return items.ToArray();
-        }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when one item from <paramref name="index"/> are retrieved.
@@ -280,7 +365,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
             if (item is null)
@@ -304,7 +389,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items in an <paramref name="amount"/> from the inventory that contains <paramref name="item"/> are retrieved.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] Get(T item, int amount)
         {
             if (amount <= 0)
@@ -353,7 +438,50 @@ namespace TheChest.Inventories.Containers
             return items;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
+        /// </remarks>
+        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
+        public virtual T[] GetAll(int index)
+        {
+            if (index > this.Size || index < 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var items = this.slots[index].GetAll();
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items, index));
+            return items;
+        }
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from the inventory that contains <paramref name="item"/> are retrieved.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        public virtual T[] GetAll(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            var items = new List<T>();
+            var events = new List<StackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size; index++)
+            {
+                var slot = this.slots[index];
+                if (slot.Contains(item))
+                {
+                    var slotItems = slot.GetAll();
+                    events.Add(new StackInventoryGetItemEventData<T>(slotItems, index));
+                    items.AddRange(slotItems);
+                }
+            }
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
+
+            return items.ToArray();
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
             if (item is null)
@@ -367,6 +495,7 @@ namespace TheChest.Inventories.Containers
             }
             return amount;
         }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
         public virtual void Move(int origin, int target)
@@ -419,8 +548,9 @@ namespace TheChest.Inventories.Containers
             if(events.Count > 0)
                 this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
         }
+
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
         /// <exception cref="InvalidOperationException">When the amount of <paramref name="items"/> to replace exceeds the stack size of the slot on <paramref name="index"/>.</exception>

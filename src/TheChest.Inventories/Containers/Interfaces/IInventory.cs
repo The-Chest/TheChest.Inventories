@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Checks if <paramref name="item"/> can be added to any slot on inventory.
         /// </summary>
-        /// <param name="item">The item to evaluate for addition to the inventory.</param>
+        /// <param name="item">The item to evaluate to add to the inventory.</param>
         /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
         bool CanAdd(T item);
         /// <summary>
@@ -63,7 +63,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
         /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
-        bool CanAdd(T[] items);
+        bool CanAdd(params T[] items);
         /// <summary>
         /// Determines whether the specified item can be added at the given index.
         /// </summary>
@@ -74,15 +74,9 @@ namespace TheChest.Inventories.Containers.Interfaces
         bool CanAddAt(T item, int index);
 
         /// <summary>
-        /// <para> 
-        /// Adds an item in a avaliable slot 
-        /// </para>
-        /// <para>
-        /// This method return will change to void in future versions. 
-        /// </para>
-        /// <para>
-        /// Use <see cref="CanAdd(T)"/> to check if the item can be added before calling this method.
-        /// </para>
+        /// <para> Adds an item in a avaliable slot </para>
+        /// <para> This method return will change to void in future versions. </para>
+        /// <para> Use <see cref="CanAdd(T)"/> to check if the item can be added before calling this method.</para>
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>true if the <paramref name="item"/> could be added</returns>
@@ -94,15 +88,9 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>The items from param that were not possible to add</returns>
         T[] Add(params T[] items);
         /// <summary>
-        /// <para>
-        /// Adds an item in a specific slot
-        /// </para>
-        /// <para>
-        /// This method return will change to void in future versions. 
-        /// </para>
-        /// <para>
-        /// Use <see cref="CanAddAt(T,int)"/> to check if the item can be added before calling this method.
-        /// </para>
+        /// <para>Adds an item in a specific slot </para>
+        /// <para>This method return will change to void in future versions.</para>
+        /// <para>Use <see cref="CanAddAt(T,int)"/> to check if the item can be added before calling this method.</para>
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>

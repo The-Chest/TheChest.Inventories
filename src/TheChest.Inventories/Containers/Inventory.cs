@@ -38,7 +38,7 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool CanAdd(T item)
         {
             if (item is null)
@@ -53,7 +53,7 @@ namespace TheChest.Inventories.Containers
             return false;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null or has one item null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>
         public virtual bool CanAdd(params T[] items)
         {
             if (items is null)
@@ -86,7 +86,7 @@ namespace TheChest.Inventories.Containers
             return false;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
         public virtual bool CanAddAt(T item, int index)
         {
@@ -102,7 +102,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
             if (item is null)
@@ -170,7 +170,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual bool AddAt(T item, int index)
         {
@@ -214,7 +214,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when any amount of <paramref name="item"/> is found.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] GetAll(T item)
         {
             if(item is null)
@@ -258,7 +258,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when <paramref name="item"/> is found.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
             if (item is null)
@@ -279,7 +279,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when the maximum possible <paramref name="amount"/> of <paramref name="item"/> is found.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(T item, int amount)
         {
@@ -312,7 +312,7 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
             if (item is null)

@@ -31,7 +31,7 @@
         }
 
         [Test]
-        public void CanAddItems_ItemsAmountBiggerThanInventorySize_ReturnsTrue()
+        public void CanAddItems_ItemsAmountBiggerThanInventorySize_ReturnsFalse()
         {
             var size = this.random.Next(5, 10);
             var inventory = this.containerFactory.EmptyContainer(size);
@@ -75,7 +75,7 @@
             var size = this.random.Next(10, 20);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, item);
-            var randomAmount = this.random.Next(1, size);
+            var randomAmount = this.random.Next(5, size);
             inventory.Get(item, randomAmount - 1);
 
             var items = this.itemFactory.CreateMany(randomAmount);

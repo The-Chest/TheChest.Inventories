@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Slots.Interfaces;
@@ -15,15 +14,6 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">Item the Slot Accept</typeparam>
     public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
-        /// <inheritdoc/>
-        public override bool IsFull => 
-            !EqualityComparer<T>.Default.Equals(this.content, default!) && 
-            this.Amount == this.MaxAmount;
-        /// <inheritdoc/>
-        public override bool IsEmpty => 
-            this.content is null || 
-            this.Amount == 0;
-
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
@@ -99,7 +89,7 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero</exception>
         public virtual int Add(T item, int amount = 1)
         {
@@ -119,7 +109,7 @@ namespace TheChest.Inventories.Slots
         /// <remarks>
         /// If the slot is not empty and the item is equal to the current item it will return true
         /// </remarks>
-        /// <returns>true if <paramref name="item"/> is not null and <paramref name="amount"/> is bigger than zero and the slot is not full</returns>
+        /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and the slot is not full</returns>
         public virtual bool CanAdd(T item, int amount = 1)
         {
             if(item is null)
@@ -138,7 +128,7 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <returns>true if <paramref name="item"/> is not null and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
+        /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
         public virtual bool CanReplace(T item, int amount = 1)
         {
             if (item is null)
@@ -154,7 +144,7 @@ namespace TheChest.Inventories.Slots
         /// <remarks>
         /// If the slot is Empty, it'll try to add the max possible amount of items and returning the amount left
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
         public virtual T[] Replace(T item, int amount = 1)
         {

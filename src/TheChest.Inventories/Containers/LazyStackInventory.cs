@@ -27,7 +27,7 @@ namespace TheChest.Inventories.Containers
         /// Creates an Stackable Inventory with lazy behavior
         /// </summary>
         /// <param name="slots">An array of <see cref="IInventoryLazyStackSlot{T}"/></param>
-        /// <exception cref="ArgumentNullException">When <paramref name="slots"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="slots"/> is <see langword="null"/></exception>
         public LazyStackInventory(IInventoryLazyStackSlot<T>[] slots) : base(slots)
         {
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
@@ -52,7 +52,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <returns>True if <paramref name="item"/> is possible to be added to the inventory</returns>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
             if(item is null)
@@ -94,7 +94,7 @@ namespace TheChest.Inventories.Containers
         /// <param name="item">Item to be added to the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be added</param>
         /// <returns>Empty array when is succesfully added, otherwise it'll return an array with not added items</returns>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual int Add(T item, int amount)
         {
@@ -147,7 +147,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> .
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual int AddAt(T item, int index, int amount)
         {
@@ -213,7 +213,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when <paramref name="item"/> is returned from the inventory.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
             if (item is null)
@@ -243,7 +243,7 @@ namespace TheChest.Inventories.Containers
         /// <param name="item">Item to be searched on the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be returned</param>
         /// <returns>The amount of items searched (or the max it can return)</returns>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(T item, int amount)
         {
@@ -305,7 +305,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks> 
         /// <param name="item">Item to be searched</param>
         /// <returns>A list with all items founded in the inventory</returns>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] GetAll(T item)
         {
             if (item is null)
@@ -350,7 +350,7 @@ namespace TheChest.Inventories.Containers
         /// </summary>
         /// <param name="item">Item to be searched</param>
         /// <returns>The amount of the <paramref name="item"/> in the Inventory </returns>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
             if (item is null)
@@ -418,7 +418,7 @@ namespace TheChest.Inventories.Containers
             this.OnMove?.Invoke(this, new LazyStackInventoryMoveEventArgs<T>(events.ToArray()));
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         /// <exception cref="InvalidOperationException">When <paramref name="amount"/> exceeds the stack size of the slot on <paramref name="index"/>.</exception>
         public virtual T[] Replace(T item, int index, int amount)

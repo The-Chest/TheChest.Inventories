@@ -25,22 +25,35 @@ direction TB
 	        + ~~event~~ OnAdd: StackInventoryAddEventHandler~T~ 
 	        + ~~event~~ OnMove: StackInventoryMoveEventHandler~T~ 
 	        + ~~event~~ OnReplace: StackInventoryReplaceEventHandler~T~ 
+
+            + bool CanAdd(T item)
+	        + bool CanAdd(params T[] items)
+	        + bool CanAddAt(T item, int index)
+	        + bool CanAddAt(T[] items, int index)
+
             + bool Add(T item)
             + bool AddAt(T item, int index)
             + T[] Add(params T[] items)
             + T[] AddAt(T[] items, int index)
+
             + T[] Clear()
+
             + T? Get(int index)
             + T? Get(T item)
             + T[] Get(T item, int amount)
             + T[] Get(int index, int amount)
+
             + T[] GetAll(int index)
             + T[] GetAll(T item)
+
             + int GetCount(T item)
+
             + void Move(int origin, int target)
+
             + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
+            + int AvailableAmount 
             + bool CanAdd(T item)
             + bool CanAdd(T[] items)
             + void Add(T item)
@@ -59,19 +72,30 @@ direction TB
 	        + ~~event~~ OnAdd: StackInventoryAddEventHandler~T~ 
 	        + ~~event~~ OnMove: StackInventoryMoveEventHandler~T~ 
 	        + ~~event~~ OnReplace: StackInventoryReplaceEventHandler~T~ 
+
+            + bool CanAdd(T item)
+	        + bool CanAdd(params T[] items)
+	        + bool CanAddAt(T item, int index)
+	        + bool CanAddAt(T[] items, int index)
+
             + bool Add(T item)
             + bool AddAt(T item, int index)
             + T[] Add(params T[] items)
             + T[] AddAt(T[] items, int index)
+
             + T? Get(int index)
             + T? Get(T item)
             + T[] Get(T item, int amount)
             + T[] Get(int index, int amount)
             + T[] GetAll(int index)
             + T[] GetAll(T item)
+
             + int GetCount(T item)
+
             + T[] Clear()
+
             + void Move(int origin, int target)
+
             + T[] Replace(T[] items, int index)
         }
     }
