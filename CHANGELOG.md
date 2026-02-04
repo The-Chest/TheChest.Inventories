@@ -13,8 +13,8 @@
     * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
   * `LazyStackInventory<T>` 
     * To Be Added
-* Property `Available` to `IInventoryStackSlot<T>`
-  * In `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
+* Property `AvailableAmount` to `IInventoryStackSlot<T>`
+  * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
 
 ## What's fixed
   * Added more checks to `InventoryStackSlot<T>.CanAdd(T[] items)` 
