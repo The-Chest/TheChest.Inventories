@@ -13,9 +13,7 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">The item collection inside the slot accepts</typeparam>
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
     {
-        /// <summary>
-        /// Gets the amount that is currently available for use.
-        /// </summary>
+        /// <inheritdoc />
         public virtual int AvailableAmount => this.maxAmount - this.amount;
 
         /// <summary>

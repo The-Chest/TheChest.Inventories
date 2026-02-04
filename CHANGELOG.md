@@ -13,15 +13,21 @@
     * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
   * `LazyStackInventory<T>` 
     * To Be Added
+* Property `Available` to `IInventoryStackSlot<T>`
+  * In `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
+
+## What's fixed
+  * Added more checks to `InventoryStackSlot<T>.CanAdd(T[] items)` 
+    * if the param `items` + current amount in the slot is bigger than the slot's `MaxStackAmount`
+
 ## What's removed
   * `Inventory<T>[int index]` and `StackInventory<T>[int index]` are no longer available
+  * Property overrides of `IsFull` and `IsEmpty` on `InventoryLazyStackSlot`  
 
 ## Known issues
 * [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
-* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) - Inventory classes doenst have Try methods
 * Unit tests are getting complex and need a refactor
-* `Index` in Inventory/Container properties might be removed
-* `StackInventory<T>.Move` method is too complex and needs a refactor
+* `StackInventory<T>` class is too complex and needs some refactors 
 * Linq usages in the library
 * Inventory classes have too many methods
   * It'll be changed by making 
@@ -30,7 +36,12 @@
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 
-**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
+## What's next
+* [#113](https://github.com/The-Chest/TheChest.Inventories/issues/113) - Remove example project
+* [#147](https://github.com/The-Chest/TheChest.Inventories/issues/147) - Improve Repository's docs 
+* [#174](https://github.com/The-Chest/TheChest.Inventories/issues/174) - Update to use `TheChest.Core v0.15.2`
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
 
 # v0.13.0
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Slots.Interfaces;
@@ -15,15 +14,6 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">Item the Slot Accept</typeparam>
     public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
-        /// <inheritdoc/>
-        public override bool IsFull => 
-            !EqualityComparer<T>.Default.Equals(this.content, default!) && 
-            this.Amount == this.MaxAmount;
-        /// <inheritdoc/>
-        public override bool IsEmpty => 
-            this.content is null || 
-            this.Amount == 0;
-
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
