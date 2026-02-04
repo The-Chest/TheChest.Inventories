@@ -41,6 +41,7 @@ direction TB
             + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
+            + int AvailableAmount 
             + bool CanAdd(T item)
             + bool CanAdd(T[] items)
             + void Add(T item)

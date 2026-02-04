@@ -14,6 +14,11 @@ namespace TheChest.Inventories.Slots
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
     {
         /// <summary>
+        /// Gets the amount that is currently available for use.
+        /// </summary>
+        public virtual int AvailableAmount => this.maxAmount - this.amount;
+
+        /// <summary>
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
         public InventoryStackSlot(T[] items) : base(items) { }
@@ -31,11 +36,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="items">items to be added to the slot (and the reference will be removed after)</param>
         protected virtual void AddItems(ref T[] items)
         {
-            var availableAmount = this.MaxAmount - this.Amount;
-
-            var addAmount = items.Length > availableAmount ? 
-                availableAmount : 
-                items.Length;
+            var addAmount = items.Length > this.AvailableAmount ? this.AvailableAmount : items.Length;
 
             var itemIndex = 0;
             for (int i = 0; i < this.MaxAmount; i++)
@@ -93,7 +94,7 @@ namespace TheChest.Inventories.Slots
             if (this.IsFull)
                 return false;
 
-            if (this.amount + items.Length > this.maxAmount)
+            if (items.Length > this.AvailableAmount)
                 return false;
 
             var firstItem = items[0];

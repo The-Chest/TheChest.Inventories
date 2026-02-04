@@ -9,6 +9,12 @@ namespace TheChest.Inventories.Slots.Interfaces
     public interface IInventoryStackSlot<T> : IStackSlot<T>
     {
         /// <summary>
+        /// Gets the current available amount.
+        /// </summary>
+        /// <remarks>This property will be moved to <see cref="IStackSlot{T}"/></remarks>
+        int AvailableAmount { get; }
+
+        /// <summary>
         /// Checks if is possible to add one item to the slot
         /// </summary>
         /// <param name="item">item to be checked to add</param>
