@@ -121,31 +121,18 @@ namespace TheChest.Inventories.Containers
         /// <summary>
         /// Attempts to add the specified items to the inventory slots at the given indexes, recording events for each successful addition.
         /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This method distributes items across the provided slot indexes, respecting each slot's available capacity. 
-        /// </para>
-        /// <para>
-        /// It is intended to be overridden in derived classes to customize item addition behavior. 
-        /// </para>
-        /// <para>
-        /// The method does not modify the original items array; instead, it returns a new array of remaining items if any could not be added.
-        /// </para>
-        /// </remarks>
         /// <param name="indexes">
-        /// The collection of slot indexes where items should be added. Each index must refer to a valid slot in the inventory.
+        /// The collection of slot indexes that refer to a valid slot in the inventory where <paramref name="items"/> will be added
         /// </param>
-        /// <param name="items">
-        /// The array of items to add to the specified slots. Items are distributed among the slots based on their available capacity.
-        /// </param>
+        /// <param name="items">The array of items to add to the specified slots.</param>
         /// <param name="events">
-        /// A reference to the list that will be populated with event data for each successful item addition. Events are appended for each slot that receives items.
+        /// A reference to the list that will be populated with event data for each successful item addition.
         /// </param>
         /// <returns>
         /// An array containing any items that could not be added to the specified slots due to capacity constraints.
         /// The array will be empty if all items are added successfully.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexes"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="indexes"/> is <see langword="null"/>.</exception>
         protected virtual T[] AddItems(IEnumerable<int> indexes, T[] items, ref List<StackInventoryAddItemEventData<T>> events)
         {
             if (indexes is null)
@@ -184,14 +171,7 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <remarks>
-        /// <para>
-        /// It searches for an <see cref="IInventoryStackSlot{T}"/> that already contains the same type of <paramref name="item"/>, 
-        /// if it finds it, it adds it to that slot, 
-        /// else, it adds to the first empty slot.
-        /// </para>
-        /// <para>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory. 
-        /// </para>
         /// </remarks>
         /// <returns>true if is possible to add the items</returns>
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is <see langword="null"/></exception>
@@ -437,11 +417,13 @@ namespace TheChest.Inventories.Containers
             
             return items;
         }
-        /// <inheritdoc/>
+
+        /// <inheritdocs/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when all items from <paramref name="index"/> are retrieved.
         /// </remarks>
-        /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Inventory Size or smaller than zero</exception>
+        /// <param name="index">The zero-based index of the collection slot from which to retrieve items.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="index"/> is less than 0 or greater than Inventory's Size.</exception>
         public virtual T[] GetAll(int index)
         {
             if (index > this.Size || index < 0)
@@ -450,6 +432,7 @@ namespace TheChest.Inventories.Containers
             var items = this.slots[index].GetAll();
             if (items.Length > 0)
                 this.OnGet?.Invoke(this, (items, index));
+            
             return items;
         }
         /// <inheritdoc/>
