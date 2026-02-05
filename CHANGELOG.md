@@ -25,6 +25,7 @@
   * Property overrides of `IsFull` and `IsEmpty` on `InventoryLazyStackSlot`  
 
 ## Known issues
+* The Current Architecture is not stable for the final version
 * [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
 * Unit tests are getting complex and need a refactor
 * `StackInventory<T>` class is too complex and needs some refactors 
