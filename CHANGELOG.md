@@ -12,16 +12,25 @@
     * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
     * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
   * `LazyStackInventory<T>` 
-    * To Be Added
-* Property `AvailableAmount` to `IInventoryStackSlot<T>`
+    * `CanAdd(T item, int amount = 1)` - Checks if an amount of item can be added
+    * `CanAddAt(T item, int index, int amount = 1)` - Checks if an amount of item can be added to a specific index
+* Property `AvailableAmount` to `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot`
   * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
+* Extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 
+  * `GetAddOrderIndexes(T item)` - Returns the indexes of the slots in the order that they should be added to according to the stacking behavior of the slot array.
+  * The method is internal and is used in the `Add` methods of the Inventories
+
+## What's changed
+* `ILazyStackInventory` Add and Can Add Behavior
+  * `Add(T item)` now just calls `Add(T item, int amount)` with the amount of 1
+  * `Add(T item, int amount)` now tries to add only the amount of items that can be added to the slot instead of adding the whole amount or nothing
 
 ## What's fixed
-  * Added more checks to `InventoryStackSlot<T>.CanAdd(T[] items)` 
-    * if the param `items` + current amount in the slot is bigger than the slot's `MaxStackAmount`
+* Added more checks to `InventoryStackSlot<T>.CanAdd(T[] items)` 
+  * if the param `items` + current amount in the slot is bigger than the slot's `MaxStackAmount`
 
 ## What's removed
-  * `Inventory<T>[int index]` and `StackInventory<T>[int index]` are no longer available
+* `Inventory<T>[int index]` and `StackInventory<T>[int index]` are no longer available
   * Property overrides of `IsFull` and `IsEmpty` on `InventoryLazyStackSlot`  
 
 ## Known issues
