@@ -80,6 +80,21 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>An array with of items</returns>
         T[] GetAll(int index);
         /// <summary>
+        /// Determines whether the specified amount of <paramref name="item"/> can be added to the inventory.
+        /// </summary>
+        /// <param name="item">The item to evaluate for addition.</param>
+        /// <param name="amount">The number of units of the <paramref name="item"/> to check for addability.</param>
+        /// <returns>true if the <paramref name="item"/> can be added in the specified <paramref name="amount"/>; otherwise, false.</returns>
+        bool CanAdd(T item, int amount = 1);
+        /// <summary>
+        /// Determines whether the specified <paramref name="item"/> can be added at the given index in the inventory, for the specified <paramref name="amount"/>.
+        /// </summary>
+        /// <param name="item">The item to evaluate for addition to the inventory.</param>
+        /// <param name="index">The zero-based index at which to check if the <paramref name="item"/> can be added.</param>
+        /// <param name="amount">The number of times the <paramref name="item"/> is intended to be added at the specified <paramref name="index"/>. Must be greater than zero.</param>
+        /// <returns>true if the <paramref name="item"/> can be added at the specified <paramref name="index"/> for the given <paramref name="amount"/>; otherwise, false.</returns>
+        bool CanAddAt(T item, int index, int amount = 1);
+        /// <summary>
         /// Adds items inside the inventory
         /// </summary>
         /// <param name="item">Array of item of the same type wich will be added to inventory</param>
