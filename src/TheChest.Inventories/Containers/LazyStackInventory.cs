@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Slots.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Containers
@@ -14,10 +15,15 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : LazyStackContainer<T>, ILazyStackInventory<T>
     {
+        /// <summary>
+        /// Slots of the inventory
+        /// </summary>
+        protected new readonly IInventoryLazyStackSlot<T>[] slots;
+
         /// <inheritdoc/>
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
         /// <inheritdoc/>
-        public event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        public event LazyStackInventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
         public event LazyStackInventoryMoveEventHandler<T>? OnMove;
         /// <inheritdoc/>
@@ -33,16 +39,38 @@ namespace TheChest.Inventories.Containers
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
 
-        /// <summary>
-        /// Slots of the inventory
-        /// </summary>
-        protected new readonly IInventoryLazyStackSlot<T>[] slots;
-        /// <summary>
-        /// Gets an slot from the inventory
-        /// </summary>
-        /// <param name="index">index of the slot to be returned</param>
-        /// <returns></returns>
-        public new IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to 0.</exception>
+        public virtual bool CanAdd(T item, int amount = 1)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            for (int index = 0; index < this.Size; index++)
+            {
+                if(this.slots[index].CanAdd(item, amount))
+                    return true;
+            }
+
+            return false;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to 0, or if <paramref name="index"/> is less than 0 or greater than the current size of the inventory.</exception>
+        public virtual bool CanAddAt(T item, int index, int amount = 1)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanAdd(item, amount);
+        }
 
         /// <summary>
         /// Adds an item to the first available slot
@@ -55,35 +83,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
-            if(item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            var fallbackIndex = -1;
-            for (int index = 0; index < this.Size; index++)
-            {
-                var slot = this.slots[index];
-                if (!slot.CanAdd(item))
-                    continue;
-
-                if (slot.Contains(item))
-                {
-                    var notAdded = slot.Add(item);
-                    this.OnAdd?.Invoke(this, (item, index, 1));
-                    return notAdded == 0;
-                }
-
-                if (fallbackIndex == -1)
-                    fallbackIndex = index;
-            }
-
-            if (fallbackIndex != -1)
-            {
-                var notAdded = this.slots[fallbackIndex].Add(item);
-                this.OnAdd?.Invoke(this, (item, fallbackIndex, 1));
-                return notAdded == 0;
-            }
-
-            return false;
+            return this.Add(item, 1) == 0;
         }
         /// <summary>
         /// Adds an amount of items to the first available slot.
@@ -103,45 +103,32 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            var notAddedAmount = amount;
             var events = new List<LazyStackInventoryAddItemEventData<T>>(amount);
-            var fallbackIndexes = new List<int>(amount);
-            for (int index = 0; index < this.Size; index++)
+            var indexes = this.slots.GetAddOrderIndexes(item, amount);
+
+            foreach (var index in indexes)
             {
                 var slot = this.slots[index];
-                if (!slot.CanAdd(item))
+
+                var toAddAmount = amount > slot.AvailableAmount ? slot.AvailableAmount : amount;
+
+                var notAddedAmount = slot.Add(item, toAddAmount);
+                var addedItemsCount = toAddAmount - notAddedAmount;
+
+                if (addedItemsCount <= 0)
                     continue;
 
-                if (slot.Contains(item)) {
-                    var previousAmount = notAddedAmount;
-                    notAddedAmount = slot.Add(item, previousAmount);
-                    var addedAmount = previousAmount - notAddedAmount;
-                    events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedAmount));
-                }
+                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedItemsCount));
 
-                if (notAddedAmount == 0)
+                amount -= addedItemsCount;
+                if (amount == 0)
                     break;
-
-                if (fallbackIndexes.Count <= amount)
-                    fallbackIndexes.Add(index);
-            }
-
-            foreach (var index in fallbackIndexes)
-            {
-                if (notAddedAmount == 0)
-                    break;
-                var slot = this.slots[index];
-
-                var previousAmount = notAddedAmount;
-                notAddedAmount = slot.Add(item, previousAmount);
-                var addedAmount = previousAmount - notAddedAmount;
-                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedAmount));
             }
 
             if (events.Count > 0)
                 this.OnAdd?.Invoke(this, new LazyStackInventoryAddEventArgs<T>(events));
 
-            return notAddedAmount;
+            return amount;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -168,6 +155,7 @@ namespace TheChest.Inventories.Containers
 
             return amount;
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when all items are returned from the inventory.
@@ -193,6 +181,7 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
@@ -297,6 +286,7 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
+
         /// <summary>
         /// Gets all items of the selected type from all slots
         /// </summary>
@@ -345,6 +335,7 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
+
         /// <summary>
         /// Returns the amount of an item inside the inventory
         /// </summary>
@@ -367,6 +358,7 @@ namespace TheChest.Inventories.Containers
             }
             return count;
         }
+
         /// <summary>
         /// Moves an item from one slot to another
         /// </summary>

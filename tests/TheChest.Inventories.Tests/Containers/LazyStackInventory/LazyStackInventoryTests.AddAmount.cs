@@ -1,5 +1,4 @@
 ﻿using TheChest.Core.Slots.Interfaces;
-using TheChest.Inventories.Tests.Containers.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {

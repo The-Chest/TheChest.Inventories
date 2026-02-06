@@ -7,13 +7,16 @@ namespace TheChest.Inventories.Slots
 {
     /// <summary>
     /// Class with methods for a basic Inventory Stackable Slot with lazy behavior
-    /// <para>
-    /// Warning: this class has some properties that will soon be moved to <see cref="LazyStackSlot{T}"/> because of LazyStackSlot not being lazyyet.
-    /// </para>
     /// </summary>    
+    /// <remarks>
+    /// Warning: this class has some properties that will soon be moved to <see cref="LazyStackSlot{T}"/>.
+    /// </remarks>
     /// <typeparam name="T">Item the Slot Accept</typeparam>
     public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
+        /// <inheritdoc />
+        public virtual int AvailableAmount => this.maxAmount - this.amount;
+
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
@@ -26,33 +29,6 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <summary>
-        /// Clears the slot by removing the content and setting the amount to 0
-        /// </summary>
-        protected void Clear()
-        {
-            this.content = default!;
-            this.Amount = 0;
-        }
-        /// <summary>
-        /// Gets the content of the slot as an array with the amount of items inside the slot
-        /// </summary>
-        /// <param name="amount">Amount of items to be returned</param>
-        /// <returns>Returns an array of items from the slot</returns>
-        protected T[] GetContent(int amount)
-        {
-            if (this.IsEmpty)
-                return Array.Empty<T>();
-            if (this.Amount <= amount)
-            {
-                var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
-                this.Clear();
-                return items;
-            }
-            this.SetContent(this.content, this.Amount - amount);
-
-            return Enumerable.Repeat(this.content!, amount).ToArray();
-        }
-        /// <summary>
         /// Sets the values of content and <see cref="StackSlot{T}.Amount"/>
         /// </summary>
         /// <param name="item">The value to be set to content</param>
@@ -60,9 +36,8 @@ namespace TheChest.Inventories.Slots
         protected void SetContent(T item, int amount)
         {
             this.content = item;
-            this.Amount = amount;
+            this.amount = amount;
         }
-
         /// <summary>
         /// Adds an amount of items to the slot.
         /// <para>
@@ -72,7 +47,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="item">The item to be added </param>
         /// <param name="amount">The amount of items added</param>
         /// <returns>Return 0 if all items are fully added to slot, else will return the amount left</returns>
-        private int AddItems(T item, int amount = 1)
+        protected int AddItems(T item, int amount = 1)
         {
             var leftAmount = 0;
             if (this.Amount + amount > this.MaxAmount)
@@ -88,6 +63,24 @@ namespace TheChest.Inventories.Slots
             return leftAmount;
         }
 
+        /// <inheritdoc/>
+        /// <returns>true if <paramref name="item"/> is not <see langword="null"/>, <paramref name="amount"/> is bigger than zero and the slot is not full and either empty or contains the same item as <paramref name="item"/></returns>
+        public virtual bool CanAdd(T item, int amount = 1)
+        {
+            if (item is null)
+                return false;
+
+            if (this.IsFull)
+                return false;
+
+            if (amount <= 0 || amount > this.AvailableAmount)
+                return false;
+
+            if (!this.IsEmpty)
+                return this.content!.Equals(item);
+
+            return true;
+        }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero</exception>
@@ -105,28 +98,6 @@ namespace TheChest.Inventories.Slots
             return this.AddItems(item, amount);
         }
 
-        /// <inheritdoc/>.
-        /// <remarks>
-        /// If the slot is not empty and the item is equal to the current item it will return true
-        /// </remarks>
-        /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and the slot is not full</returns>
-        public virtual bool CanAdd(T item, int amount = 1)
-        {
-            if(item is null)
-                return false;
-
-            if (this.IsFull)
-                return false;
-
-            if (amount <= 0)
-                return false;
-
-            if (!this.IsEmpty)
-                return this.content!.Equals(item);
-
-            return true;
-        }
-
         /// <inheritdoc/>
         /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
         public virtual bool CanReplace(T item, int amount = 1)
@@ -139,7 +110,6 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-
         /// <inheritdoc/>
         /// <remarks>
         /// If the slot is Empty, it'll try to add the max possible amount of items and returning the amount left
@@ -165,6 +135,34 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <summary>
+        /// Clears the slot by removing the content and setting the amount to 0
+        /// </summary>
+        protected void Clear()
+        {
+            this.content = default!;
+            this.Amount = 0;
+        }
+        /// <summary>
+        /// Gets the content of the slot as an array with the amount of items inside the slot
+        /// </summary>
+        /// <param name="requestedAmount">Amount of items to be returned</param>
+        /// <returns>Returns an array of items from the slot</returns>
+        protected T[] GetContent(int requestedAmount)
+        {
+            if (this.IsEmpty)
+                return Array.Empty<T>();
+            if (this.Amount <= requestedAmount)
+            {
+                var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
+                this.Clear();
+                return items;
+            }
+            this.SetContent(this.content, this.Amount - requestedAmount);
+
+            return Enumerable.Repeat(this.content!, requestedAmount).ToArray();
+        }
+
+        /// <summary>
         /// Gets an amount of items from the slot
         /// </summary>
         /// <param name="amount">The choosen amount to be returned</param>
@@ -177,7 +175,6 @@ namespace TheChest.Inventories.Slots
 
             return this.GetContent(amount);
         }
-
         /// <inheritdoc/>
         public virtual T[] GetAll()
         {
