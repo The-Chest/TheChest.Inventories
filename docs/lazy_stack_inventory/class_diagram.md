@@ -22,23 +22,34 @@ namespace TheChest.Inventories.Containers {
     class LazyStackInventory~T~ {
         - IInventoryLazyStackSlot~T~[] slots
         + IInventoryLazyStackSlot~T~ this[int index]
+
         + LazyStackInventory(IInventoryLazyStackSlot~T~[] slots)
+
 	    + ~~event~~ OnGet: LazyStackInventoryGetEventHandler~T~ 
 	    + ~~event~~ OnAdd: LazyStackInventoryAddEventHandler~T~
 	    + ~~event~~ OnMove: LazyStackInventoryMoveEventHandler~T~ 
 	    + ~~event~~ OnReplace: LazyStackInventoryReplaceEventHandler~T~ 
+
+        + bool CanAdd(T item, int amount = 1)
+        + bool CanAddAt(T item, int index, int amount = 1)
+
         + bool Add(T item)
         + int Add(T item, int amount)
         + int AddAt(T item, int index, int amount)
+
         + T[] Clear()
+
         + T? Get(int index)
         + T? Get(T item)
         + T[] Get(T item, int amount)
         + T[] Get(int index, int amount)
         + T[] GetAll(T item)
         + T[] GetAll(int index)
+
         + int GetCount(T item)
+
         + void Move(int origin, int target)
+
         + T[] Replace(T item, int index, int amount)
     }
 }
