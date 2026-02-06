@@ -145,21 +145,21 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Gets the content of the slot as an array with the amount of items inside the slot
         /// </summary>
-        /// <param name="amount">Amount of items to be returned</param>
+        /// <param name="requestedAmount">Amount of items to be returned</param>
         /// <returns>Returns an array of items from the slot</returns>
-        protected T[] GetContent(int amount)
+        protected T[] GetContent(int requestedAmount)
         {
             if (this.IsEmpty)
                 return Array.Empty<T>();
-            if (this.Amount <= amount)
+            if (this.Amount <= requestedAmount)
             {
                 var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
                 this.Clear();
                 return items;
             }
-            this.SetContent(this.content, this.Amount - amount);
+            this.SetContent(this.content, this.Amount - requestedAmount);
 
-            return Enumerable.Repeat(this.content!, amount).ToArray();
+            return Enumerable.Repeat(this.content!, requestedAmount).ToArray();
         }
 
         /// <summary>
