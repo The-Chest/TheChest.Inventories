@@ -77,6 +77,6 @@
             var amount = this.random.Next(1, 5);
             
             Assert.That(inventory.CanAdd(item, amount), Is.True);
-        } 
+        }
     }
 }
