@@ -22,7 +22,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
         /// <inheritdoc/>
-        public event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        public event LazyStackInventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
         public event LazyStackInventoryMoveEventHandler<T>? OnMove;
         /// <inheritdoc/>

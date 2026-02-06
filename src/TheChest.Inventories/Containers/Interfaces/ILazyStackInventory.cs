@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
-        event LazyStackInventoryAddEventHandler<T>? OnAdd;
+        event LazyStackInventoryAddEventHandler<T> OnAdd;
         /// <summary>
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
