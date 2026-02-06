@@ -12,6 +12,11 @@ namespace TheChest.Inventories.Slots.Interfaces
     public interface IInventoryLazyStackSlot<T> : ILazyStackSlot<T>
     {
         /// <summary>
+        /// Gets the current available amount.
+        /// </summary>
+        /// <remarks>This property will be moved to <see cref="ILazyStackSlot{T}"/></remarks>
+        int AvailableAmount { get; }
+        /// <summary>
         /// Checks if the slot can add an amount of items
         /// </summary>
         /// <param name="item">item to be added to the slot</param>

@@ -7,13 +7,16 @@ namespace TheChest.Inventories.Slots
 {
     /// <summary>
     /// Class with methods for a basic Inventory Stackable Slot with lazy behavior
-    /// <para>
-    /// Warning: this class has some properties that will soon be moved to <see cref="LazyStackSlot{T}"/> because of LazyStackSlot not being lazyyet.
-    /// </para>
     /// </summary>    
+    /// <remarks>
+    /// Warning: this class has some properties that will soon be moved to <see cref="LazyStackSlot{T}"/>.
+    /// </remarks>
     /// <typeparam name="T">Item the Slot Accept</typeparam>
     public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
+        /// <inheritdoc />
+        public virtual int AvailableAmount => this.maxAmount - this.amount;
+
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
@@ -60,20 +63,17 @@ namespace TheChest.Inventories.Slots
             return leftAmount;
         }
 
-        /// <inheritdoc/>.
-        /// <remarks>
-        /// If the slot is not empty and the item is equal to the current item it will return true
-        /// </remarks>
-        /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and the slot is not full</returns>
+        /// <inheritdoc/>
+        /// <returns>true if <paramref name="item"/> is not <see langword="null"/>, <paramref name="amount"/> is bigger than zero and the slot is not full and either empty or contains the same item as <paramref name="item"/></returns>
         public virtual bool CanAdd(T item, int amount = 1)
         {
-            if(item is null)
+            if (item is null)
                 return false;
 
             if (this.IsFull)
                 return false;
 
-            if (amount <= 0)
+            if (amount <= 0 || amount > this.AvailableAmount)
                 return false;
 
             if (!this.IsEmpty)
