@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Slots.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Containers
@@ -59,6 +60,7 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
+
             for (int i = 0; i < items.Length; i++)
             {
                 if (items[i] is null)
@@ -72,13 +74,13 @@ namespace TheChest.Inventories.Containers
             for (int i = 0; i < this.Size; i++)
             {
                 var slot = this.slots[i];
-                //TODO: improve this logic readability and remove Linq usage
+                //TODO: improve this by remove Linq usage
                 var toAddItems = items
                     .Skip(canAddAmount)
                     .Take(slot.AvailableAmount)
                     .ToArray();
 
-                if (this.slots[i].CanAdd(toAddItems)){
+                if (slot.CanAdd(toAddItems)){
                     canAddAmount += toAddItems.Length;
                     if (canAddAmount >= items.Length)
                         break;
@@ -116,57 +118,6 @@ namespace TheChest.Inventories.Containers
             }
 
             return this.slots[index].CanAdd(items);
-        }
-
-        /// <summary>
-        /// Attempts to add the specified items to the inventory slots at the given indexes, recording events for each successful addition.
-        /// </summary>
-        /// <param name="indexes">
-        /// The collection of slot indexes that refer to a valid slot in the inventory where <paramref name="items"/> will be added
-        /// </param>
-        /// <param name="items">The array of items to add to the specified slots.</param>
-        /// <param name="events">
-        /// A reference to the list that will be populated with event data for each successful item addition.
-        /// </param>
-        /// <returns>
-        /// An array containing any items that could not be added to the specified slots due to capacity constraints.
-        /// The array will be empty if all items are added successfully.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">When <paramref name="indexes"/> is <see langword="null"/>.</exception>
-        protected virtual T[] AddItems(IEnumerable<int> indexes, T[] items, ref List<StackInventoryAddItemEventData<T>> events)
-        {
-            if (indexes is null)
-                throw new ArgumentNullException(nameof(indexes));
-
-            if (items.Length == 0)
-                return items;
-
-            foreach (var index in indexes)
-            {
-                var slot = this.slots[index];
-                var itemsToAdd = items
-                    .Take(slot.AvailableAmount)
-                    .ToArray();
-
-                var notAddedItems = slot.Add(itemsToAdd);
-                var addedItemsCount = itemsToAdd.Length - notAddedItems.Length;
-
-                if (addedItemsCount <= 0)
-                    continue;
-
-                events.Add(
-                    new StackInventoryAddItemEventData<T>(
-                        items.Take(addedItemsCount).ToArray(),
-                        index
-                    )
-                );
-
-                items = items.Skip(addedItemsCount).ToArray();
-                if (items.Length == 0)
-                    break;
-            }
-
-            return items;
         }
 
         /// <inheritdoc/>
@@ -225,34 +176,31 @@ namespace TheChest.Inventories.Containers
             if (items.Length == 0)
                 return items;
 
-            var mainIndexes = new List<int>(items.Length);
-            var fallbackIndexes = new List<int>(items.Length);
             var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
+            var indexes = this.slots.GetAddOrderIndexes(items);
 
-            for (var index = 0; index < this.Size; index++)
+            foreach (var index in indexes)
             {
                 var slot = this.slots[index];
-                var itemsToAdd = items
-                    .Take(slot.AvailableAmount)
-                    .ToArray();
-                
-                if (!slot.CanAdd(itemsToAdd))
+
+                var itemsToAdd = items.Take(slot.AvailableAmount).ToArray();
+                var notAddedItems = slot.Add(itemsToAdd);
+                var addedItemsCount = itemsToAdd.Length - notAddedItems.Length;
+
+                if (addedItemsCount <= 0)
                     continue;
 
-                if (slot.Contains(items[0]))
-                {
-                    if(mainIndexes.Count <= items.Length)
-                        mainIndexes.Add(index);
+                events.Add(
+                    new StackInventoryAddItemEventData<T>(
+                        items.Take(addedItemsCount).ToArray(),
+                        index
+                    )
+                );
 
-                    continue;
-                }
-
-                if (fallbackIndexes.Count <= items.Length)
-                    fallbackIndexes.Add(index);
+                items = items.Skip(addedItemsCount).ToArray();
+                if (items.Length == 0)
+                    break;
             }
-
-            items = this.AddItems(mainIndexes, items, ref events);
-            items = this.AddItems(fallbackIndexes, items, ref events);
 
             if (events.Count > 0)
                 this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
@@ -270,7 +218,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var slot = this.slots[index];
-
             if (!slot.CanAdd(item))
                 return false;
 
