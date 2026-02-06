@@ -14,6 +14,11 @@ namespace TheChest.Inventories.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class LazyStackInventory<T> : LazyStackContainer<T>, ILazyStackInventory<T>
     {
+        /// <summary>
+        /// Slots of the inventory
+        /// </summary>
+        protected new readonly IInventoryLazyStackSlot<T>[] slots;
+
         /// <inheritdoc/>
         public event LazyStackInventoryGetEventHandler<T>? OnGet;
         /// <inheritdoc/>
@@ -33,16 +38,38 @@ namespace TheChest.Inventories.Containers
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
 
-        /// <summary>
-        /// Slots of the inventory
-        /// </summary>
-        protected new readonly IInventoryLazyStackSlot<T>[] slots;
-        /// <summary>
-        /// Gets an slot from the inventory
-        /// </summary>
-        /// <param name="index">index of the slot to be returned</param>
-        /// <returns></returns>
-        public new IInventoryLazyStackSlot<T> this[int index] => this.slots[index];
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to 0.</exception>
+        public virtual bool CanAdd(T item, int amount = 1)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            for (int index = 0; index < this.Size; index++)
+            {
+                if(this.slots[index].CanAdd(item, amount))
+                    return true;
+            }
+
+            return false;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to 0, or if <paramref name="index"/> is less than 0 or greater than the current size of the inventory.</exception>
+        public virtual bool CanAddAt(T item, int index, int amount = 1)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanAdd(item, amount);
+        }
 
         /// <summary>
         /// Adds an item to the first available slot
@@ -168,6 +195,7 @@ namespace TheChest.Inventories.Containers
 
             return amount;
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when all items are returned from the inventory.
@@ -193,6 +221,7 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
@@ -297,6 +326,7 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
+
         /// <summary>
         /// Gets all items of the selected type from all slots
         /// </summary>
@@ -345,6 +375,7 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
+
         /// <summary>
         /// Returns the amount of an item inside the inventory
         /// </summary>
@@ -367,6 +398,7 @@ namespace TheChest.Inventories.Containers
             }
             return count;
         }
+
         /// <summary>
         /// Moves an item from one slot to another
         /// </summary>
