@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual bool CanAdd(T item)
         {
-            return !this.IsFull;
+            return !this.IsFull || !(item is null);
         }
         /// <inheritdoc />
         public virtual bool Add(T item)
@@ -39,6 +39,12 @@ namespace TheChest.Inventories.Slots
             var content = this.content;
             this.content = default;
             return content;    
+        }
+
+        /// <inheritdoc />
+        public virtual bool CanReplace(T item)
+        {
+            return !(item is null);
         }
         /// <inheritdoc />
         public virtual T Replace(T item)
