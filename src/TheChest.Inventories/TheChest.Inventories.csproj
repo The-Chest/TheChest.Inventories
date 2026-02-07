@@ -11,7 +11,7 @@
 		<PackageTags>container;slot;inventory;inventory-system;collection</PackageTags>
 		<PackageProjectUrl>https://www.nuget.org/packages/TheChest.Inventories/</PackageProjectUrl>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageReleaseNotes>See CHANGELOG.md for details.</PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -64,14 +64,14 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\..\readme.md">
+		<None Include="..\..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup Label="Docs">
-		<None Include="..\..\readme.md">
+		<None Include="..\..\README.md">
 			<Pack>False</Pack>
 		</None>
 		<None Include="..\..\CHANGELOG.md">
