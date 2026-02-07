@@ -46,9 +46,12 @@ direction TB
         class IInventorySlot~T~ {
 	        + bool CanAdd(T item)
 	        + bool Add(T item)
+
+			+ bool CanReplace(T item)
+	        + T Replace(T item)
+
 	        + T? Get()
 	        + bool Contains(T item)
-	        + T Replace(T item)
         }
         class Inventory~T~ {
 	        - IInventorySlot~T~[] slots

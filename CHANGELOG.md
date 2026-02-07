@@ -3,17 +3,26 @@
 ## What's added
 * Validation methods to Inventories
   * `Inventory<T>` 
-    * `CanAdd(T item)` - Checks if an item can be added
-    * `CanAdd(T[] items)` - Checks if multiple items can be added
-    * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
+    * Can Add 
+      * `CanAdd(T item)` - Checks if an item can be added
+      * `CanAdd(T[] items)` - Checks if multiple items can be added
+      * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
+    * Can Replace
+      * `CanReplace(T item, int index)` - Checks if an item can replace the item in a specific index 
   * `StackInventory<T>` 
-    * `CanAdd(T item)` - Checks if an item can be added
-    * `CanAdd(T[] items)` - Checks if multiple items can be added
-    * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
-    * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
+    * Can Add 
+      * `CanAdd(T item)` - Checks if an item can be added
+      * `CanAdd(T[] items)` - Checks if multiple items can be added
+      * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
+      * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
+    * Can Replace
+      * //TODO: Add CanReplace methods to StackInventory
   * `LazyStackInventory<T>` 
-    * `CanAdd(T item, int amount = 1)` - Checks if an amount of item can be added
-    * `CanAddAt(T item, int index, int amount = 1)` - Checks if an amount of item can be added to a specific index
+    * Can Add 
+      * `CanAdd(T item, int amount = 1)` - Checks if an amount of item can be added
+      * `CanAddAt(T item, int index, int amount = 1)` - Checks if an amount of item can be added to a specific index
+    * Can Replace
+      * //TODO: Add CanReplace methods to LazyStackInventory
 * Property `AvailableAmount` to `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot`
   * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
 * Extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 
