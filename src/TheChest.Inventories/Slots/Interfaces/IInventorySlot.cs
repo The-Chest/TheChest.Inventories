@@ -11,7 +11,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <summary>
         /// Checks whether the specified item can be added to the collection.
         /// </summary>
-        /// <param name="item">The item to evaluate for addition to the Slot.</param>
+        /// <param name="item">The item to be evaluated.</param>
         /// <returns>true if the item can be added; otherwise, false.</returns>
         bool CanAdd(T item);
         /// <summary>
@@ -20,12 +20,20 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="item">The item to be added</param>
         /// <returns>True if the value is successful added</returns>
         bool Add(T item);
+
+        /// <summary>
+        /// Checks whether the specified item can replace the content of the slot.
+        /// </summary>
+        /// <param name="item">The item to be evaluated.</param>
+        /// <returns>true if the item can be replaced; otherwise, false.</returns>
+        bool CanReplace(T item);
         /// <summary>
         /// Replaces the content of slot to item
         /// </summary>
         /// <param name="item">Item to replace</param>
         /// <returns>Old value of the slot</returns>
         T Replace(T item);
+
         /// <summary>
         /// Returns an item from slot
         /// </summary>
