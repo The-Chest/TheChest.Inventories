@@ -35,4 +35,4 @@ jobs:
         --no-restore --no-build
         --configuration Release
         --verbosity minimal
-        --settings tests/TheChest.Inventories.Tests/TestRunSettings.runsettings
+        --settings tests/TheChest.Inventories.Tests/TheChest.Inventories.runsettings
