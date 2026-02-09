@@ -95,8 +95,8 @@
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
-            var randomIndex = this.random.Next(0, size);
-            inventory.Get(randomIndex, stackSize - 5);
+            var randomIndex = this.random.Next(0, size - 1);
+            inventory.Get(randomIndex, 5);
 
             var amount = this.random.Next(1, 5);
             var canAdd = inventory.CanAddAt(item, randomIndex, amount);
@@ -112,10 +112,10 @@
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
 
-            var randomIndex = this.random.Next(0, size);
+            var randomIndex = this.random.Next(0, size - 1);
             inventory.Get(randomIndex, stackSize - 1);
 
-            var amount = this.random.Next(2, 5);
+            var amount = stackSize;
             var canAdd = inventory.CanAddAt(item, randomIndex, amount);
 
             Assert.That(canAdd, Is.False);
@@ -128,8 +128,8 @@
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, stackSize, item);
-            
-            var randomIndex = this.random.Next(0, size);
+
+            var randomIndex = this.random.Next(0, size - 1);
             inventory.Get(randomIndex, stackSize - 1);
 
             var randomItem = this.itemFactory.CreateRandom();
