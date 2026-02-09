@@ -1,0 +1,51 @@
+name: Publish library  
+
+on:
+  push:
+    branches: 
+      - 'master'
+    paths:
+      - 'src/*' 
+      - 'src/**'
+  pull_request:
+    types: 
+      - opened
+      - synchronize
+      - reopened
+    branches: 
+      - 'master'
+    paths:
+      - 'src/*' 
+      - 'src/**'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+    - name: Add NuGet source
+      run: dotnet nuget add source https://nuget.pkg.github.com/The-Chest/index.json 
+        --name github 
+        --username The-Chest 
+        --password "${{ secrets.NUGET_APIKEY }}" 
+        --store-password-in-clear-text 
+    - name: Write release version
+      run: |
+        VERSION=${GITHUB_REF_NAME#v}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+    - name: Restore dependencies
+      run: dotnet restore src/TheChest.Inventories
+    - name: Build project
+      run: dotnet build src/TheChest.Inventories 
+        --no-restore 
+        --configuration Release
+    - name: Run Tests
+      run: dotnet test 
+        --no-restore --no-build
+        --configuration Release
+        --verbose minimal
+        --settings tests/TheChest.Inventories.Tests/TestRunSettings.runsettings

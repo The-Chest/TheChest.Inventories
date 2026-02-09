@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<RunSettings>
+		<RunConfiguration>
+			<MaxCpuCount>0</MaxCpuCount>
+			<ResultsDirectory>.\TestResults</ResultsDirectory>
+			<TestSessionTimeout>5000</TestSessionTimeout>
+			<TreatNoTestsAsError>true</TreatNoTestsAsError>
+		</RunConfiguration>
+	</RunSettings>
+</configuration>
