@@ -1,4 +1,4 @@
-name: Publish library  
+name: Tests  
 
 on:
   push:
@@ -8,10 +8,7 @@ on:
       - 'src/*' 
       - 'src/**'
   pull_request:
-    types: 
-      - opened
-      - synchronize
-      - reopened
+    types: [opened, synchronize, reopened]
     branches: 
       - 'master'
     paths:
