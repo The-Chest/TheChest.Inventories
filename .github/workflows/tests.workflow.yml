@@ -27,7 +27,7 @@ jobs:
         --no-restore 
         --configuration Release
     - name: Run Tests
-      run: dotnet test tests/TheChest.Inventories.Tests
+      run: dotnet test src/TheChest.Inventories
         --configuration Release
         --verbosity minimal
         --settings tests/TheChest.Inventories.Tests/TheChest.Inventories.runsettings
