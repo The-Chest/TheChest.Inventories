@@ -1,12 +1,6 @@
 name: Tests  
 
 on:
-  push:
-    branches: 
-      - 'master'
-    paths:
-      - 'src/*' 
-      - 'src/**'
   pull_request:
     types: [opened, synchronize, reopened]
     branches: 
