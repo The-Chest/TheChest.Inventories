@@ -30,10 +30,6 @@ jobs:
         --username The-Chest 
         --password "${{ secrets.NUGET_APIKEY }}" 
         --store-password-in-clear-text 
-    - name: Write release version
-      run: |
-        VERSION=${GITHUB_REF_NAME#v}
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
     - name: Restore dependencies
       run: dotnet restore src/TheChest.Inventories
     - name: Build project

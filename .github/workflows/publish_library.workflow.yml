@@ -1,13 +1,9 @@
 name: Publish library  
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches: 
-      - 'master'
-    paths:
-      - 'src/*' 
-      - 'src/**'
+  push:
+     tags:        
+      - "**"
 
 jobs:
   build:
