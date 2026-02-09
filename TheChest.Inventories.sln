@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34024.191
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}"
 EndProject
@@ -43,6 +43,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lazy_stack_inventory", "laz
 		docs\lazy_stack_inventory\implementing.md = docs\lazy_stack_inventory\implementing.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3C358749-7C82-4444-8F8C-FE68D058170F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql.workflow.yml = .github\workflows\codeql.workflow.yml
+		.github\workflows\publish_library.workflow.yml = .github\workflows\publish_library.workflow.yml
+		.github\workflows\sonarcloud.yml = .github\workflows\sonarcloud.yml
+		.github\workflows\tests.workflow.yml = .github\workflows\tests.workflow.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +87,7 @@ Global
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{6E4E9365-6329-4D99-A987-3975D1D27AF4} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{F23C1317-F2B9-4C47-B2A0-1C9C0B57C495} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
+		{3C358749-7C82-4444-8F8C-FE68D058170F} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF9A167E-B926-4A99-B692-8A3566AB0996}

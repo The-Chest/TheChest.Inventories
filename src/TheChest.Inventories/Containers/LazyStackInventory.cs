@@ -146,14 +146,14 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var slot = this.slots[index];
-            if (slot.CanAdd(item, amount))
-            {
-                var notAdded = slot.Add(item, amount);
-                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
-                return notAdded;
-            }
+            if (!slot.CanAdd(item, amount))
+                return amount;
 
-            return amount;
+            var notAdded = slot.Add(item, amount);
+            if (notAdded < amount)
+                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
+            
+            return notAdded;
         }
 
         /// <inheritdoc/>

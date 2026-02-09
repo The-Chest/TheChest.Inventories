@@ -87,7 +87,7 @@
         }
 
         [Test]
-        public void AddAt_AvailableSlot_AddsMaxPossibleAmountOfItemToTheSlot()
+        public void AddAt_AmountBiggerThanSlotSize_DoesntAddItems()
         {
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
@@ -101,14 +101,13 @@
             Assert.Multiple(() =>
             {
                 var slot = inventory.GetSlot(randomIndex);
-                Assert.That(slot.GetContent(), Is.EqualTo(item));
-                Assert.That(slot.IsFull, Is.True);
-                Assert.That(slot.Amount, Is.EqualTo(stackSize));
+                Assert.That(slot.GetContent(), Is.Not.EqualTo(item));
+                Assert.That(slot.IsEmpty, Is.True);
             });
         }
 
         [Test]
-        public void AddAt_NotAllItemsAdded_CallsOnAddEvent()
+        public void AddAt_AmountBiggerThanSlotSize_DoesntCallsOnAddEvent()
         {
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
@@ -118,26 +117,13 @@
             var randomIndex = this.random.Next(0, size);
             var amount = this.random.Next(1, 10) + stackSize;
 
-            var raised = false;
-            inventory.OnAdd += (sender, args) =>
-            {
-                Assert.That(args.Data, Has.Count.EqualTo(1));
-                Assert.Multiple(() =>
-                {
-                    var firstEvent = args.Data.FirstOrDefault();
-                    Assert.That(firstEvent.Item, Is.EqualTo(item));
-                    Assert.That(firstEvent.Index, Is.EqualTo(randomIndex));
-                    Assert.That(firstEvent.Amount, Is.EqualTo(stackSize));
-                });
-                raised = true;
-            };
-            inventory.AddAt(item, randomIndex, amount);
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called.");
 
-            Assert.That(raised, Is.True, "OnAdd event was not raised");
+            inventory.AddAt(item, randomIndex, amount);
         }
 
         [Test]
-        public void AddAt_NotAllItemsAdded_ReturnsNotAddedAmount()
+        public void AddAt_AmountBiggerThanSlotSize_ReturnsAmount()
         {
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
@@ -148,7 +134,7 @@
             var amount = this.random.Next(1, 10) + stackSize;
             var notAddedCount = inventory.AddAt(item, randomIndex, amount);
 
-            Assert.That(notAddedCount, Is.EqualTo(amount - stackSize));
+            Assert.That(notAddedCount, Is.EqualTo(amount));
         }
 
         [Test]
