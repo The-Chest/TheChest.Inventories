@@ -24,6 +24,7 @@
 * `ILazyStackInventory` Add and Can Add Behavior
   * `Add(T item)` now just calls `Add(T item, int amount)` with the amount of 1
   * `Add(T item, int amount)` now tries to add only the amount of items that can be added to the slot instead of adding the whole amount or nothing
+  * `AddAt(T item, int index, int amount)` now doesn't add items if the `amount` is bigger than the slot's `MaxStackAmount`
 
 ## What's fixed
 * Added more checks to `InventoryStackSlot<T>.CanAdd(T[] items)` 
@@ -34,14 +35,13 @@
   * Property overrides of `IsFull` and `IsEmpty` on `InventoryLazyStackSlot`  
 
 ## Known issues
-* The Current Architecture is not stable for the final version
+* The Current Architecture is not stable for the final version yet
 * [#110](https://github.com/The-Chest/TheChest.Inventories/issues/110) - Interface unit tests are in the same class as implementation unit tests
-* Unit tests are getting complex and need a refactor
+* Unit tests are getting too complex and need a refactor 
 * `StackInventory<T>` class is too complex and needs some refactors 
-* Linq usages in the library
 * Inventory classes have too many methods
   * It'll be changed by making 
-    * multiple interfaces for different use cases
+    * multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67))
     * extension methods for some features
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
