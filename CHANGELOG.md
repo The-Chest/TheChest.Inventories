@@ -25,9 +25,9 @@
       * //TODO: Add CanReplace methods to LazyStackInventory
 * Property `AvailableAmount` to `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot`
   * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
-* Extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 
+* Internal extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 
   * `GetAddOrderIndexes(T item)` - Returns the indexes of the slots in the order that they should be added to according to the stacking behavior of the slot array.
-  * The method is internal and is used in the `Add` methods of the Inventories
+  * It is used in the `Add` methods of the Inventories
 
 ## What's changed
 * `ILazyStackInventory` Add and Can Add Behavior
@@ -49,9 +49,8 @@
 * Unit tests are getting too complex and need a refactor 
 * `StackInventory<T>` class is too complex and needs some refactors 
 * Inventory classes have too many methods
-  * It'll be changed by making 
-    * multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67))
-    * extension methods for some features
+  * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+  * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 
