@@ -23,17 +23,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>An item inside of the <paramref name="index"/> Slot</returns>
         T Get(int index);
         /// <summary>
-        /// Search an item from inventory
+        /// Gets an item inside the inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
         /// <returns>First item found that is equal <paramref name="item"/></returns>
         T Get(T item);
         /// <summary>
-        /// Search an amount of items in the inventory
+        /// Gets an amount of items in the inventory
         /// </summary>
         /// <param name="item">Item to be found</param>
         /// <param name="amount">Amount to be returned</param>
-        /// <returns>An array with the <paramref name="amount"/> of items equal to <paramref name="item"/> (or the max it can)</returns>
+        /// <returns>An array with the <paramref name="amount"/> of items equal to <paramref name="item"/></returns>
         T[] Get(T item, int amount);
         /// <summary>
         /// Get all Item of the selected type from all slots
@@ -49,17 +49,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         int GetCount(T item);
 
         /// <summary>
-        /// Raised when an amount of item is added to an index of the inventory
+        /// Raised when an amount of item is added to an index
         /// </summary>
         event InventoryAddEventHandler<T> OnAdd;
         /// <summary>
-        /// Checks if <paramref name="item"/> can be added to any slot on inventory.
+        /// Checks if <paramref name="item"/> can be added to any slot.
         /// </summary>
-        /// <param name="item">The item to evaluate to add to the inventory.</param>
+        /// <param name="item">The item to evaluate for addition to the inventory.</param>
         /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
         bool CanAdd(T item);
         /// <summary>
-        /// Checks if <paramref name="items"/> can be added to any slot on inventory.
+        /// Checks if <paramref name="items"/> can be added to any slot.
         /// </summary>
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
         /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
@@ -101,6 +101,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when an item is replaced in a specific slot
         /// </summary>
         event InventoryReplaceEventHandler<T>? OnReplace;
+        /// <summary>
+        /// Checks if an item can be replaced in a specific slot
+        /// </summary>
+        /// <param name="item">Item to be checked to ocupy the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the slot to be checked for replacement</param>
+        /// <returns>true if the <paramref name="item"/> can be replaced in the <paramref name="index"/> slot; otherwise, false.</returns>
+        bool CanReplace(T item, int index);
         /// <summary>
         /// Replaces an item in a specific slot
         /// </summary>

@@ -80,7 +80,7 @@ namespace TheChest.Inventories.Containers
                     canAddAmount++;
                     if (items.Length == canAddAmount)
                         return true;
-            }
+                }
             }
 
             return false;
@@ -356,7 +356,20 @@ namespace TheChest.Inventories.Containers
             this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }
 
-        /// <inheritdoc/>>
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanReplace(T item, int index)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanReplace(item);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual T Replace(T item, int index)
         {
