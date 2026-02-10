@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Containers
@@ -26,7 +27,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event InventoryMoveEventHandler<T>? OnMove;
         /// <inheritdoc/>
-        public event InventoryReplaceEventHandler<T>? OnReplace;
+        public event InventoryReplaceEventHandler<T> OnReplace;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -59,16 +60,14 @@ namespace TheChest.Inventories.Containers
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
 
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i] is null)
-                    throw new ArgumentNullException(nameof(items), "One of the items is null");
-            }
-
             if (items.Length == 0)
                 return false;
             if (items.Length > this.Size)
                 return false;
+
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
 
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
@@ -132,7 +131,12 @@ namespace TheChest.Inventories.Containers
         {
             if (items.Length == 0) 
                 return items;
-
+            /* 
+            TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+            */
+            
             var addedAmount = 0;
             var addedItems = new Dictionary<int, T>();
             var index = 0;

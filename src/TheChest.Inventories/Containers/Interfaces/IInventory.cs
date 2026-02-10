@@ -100,7 +100,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an item is replaced in a specific slot
         /// </summary>
-        event InventoryReplaceEventHandler<T>? OnReplace;
+        event InventoryReplaceEventHandler<T> OnReplace;
         /// <summary>
         /// Checks if an item can be replaced in a specific slot
         /// </summary>
