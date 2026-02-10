@@ -16,7 +16,7 @@
       * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
       * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
     * Can Replace
-      * //TODO: Add CanReplace methods to StackInventory
+      * `CanReplace(T[] items, int index)` - Checks if multiple items can replace the items in a specific index
   * `LazyStackInventory<T>` 
     * Can Add 
       * `CanAdd(T item, int amount = 1)` - Checks if an amount of item can be added

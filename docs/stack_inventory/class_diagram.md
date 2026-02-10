@@ -50,21 +50,26 @@ direction TB
 
             + void Move(int origin, int target)
 
+            + bool CanReplace(T[] items, int index)
             + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
             + int AvailableAmount 
+
             + bool CanAdd(T item)
             + bool CanAdd(T[] items)
             + void Add(T item)
             + void Add(T[] items)
+
             + bool CanReplace(T item)
             + bool CanReplace(T[] items)
             + T[] Replace(ref T[] items)
             + T[] Replace(ref T item)
+
             + T? Get()
             + T[] Get(int amount)
             + T[] GetAll()
+
             + bool Contains(T item)
         }
         class IStackInventory~T~ {
@@ -96,6 +101,7 @@ direction TB
 
             + void Move(int origin, int target)
 
+            + bool CanReplace(T[] items, int index)
             + T[] Replace(T[] items, int index)
         }
     }
@@ -134,30 +140,38 @@ namespace TheChest.Inventories {
         + bool CanAdd(T[] items)
         + void Add(T item)
         + void Add(T[] items)
+
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
+
         + T[] Replace(T item)
         + T[] Replace(T[] items)
+
         + T? Get()
         + T[] Get(int amount)
         + T[] GetAll()
+
         + bool Contains(T item)
     }
 
     class InventoryStackSlot~T~ {
         + InventoryStackSlot(T[] items)
         + InventoryStackSlot(T[] items, int maxStackAmount)
+        
         + void Add(T item)
         + void Add(T[] items)
         + bool CanAdd(T item)
         + bool CanAdd(T[] items)
+        
         + T[] GetAll()
         + T[] Get(int amount)
         + T? Get()
+        
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
         + T[] Replace(T item)
         + T[] Replace(T[] items)
+        
         + bool Contains(T item)
     }
 }
