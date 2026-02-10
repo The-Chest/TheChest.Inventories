@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Core.Containers.Interfaces;
+﻿using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events.Stack;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -28,7 +27,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an item is removed from an index of the inventory
         /// </summary>
-        event StackInventoryReplaceEventHandler<T>? OnReplace;
+        event StackInventoryReplaceEventHandler<T> OnReplace;
 
         #region IStackInventory
         /// <summary>
@@ -75,6 +74,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
         /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
         bool CanAdd(params T[] items);
+
         /// <summary>
         /// Adds and array of item in a avaliable slot
         /// </summary>
@@ -88,6 +88,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
 
+        /// <summary>
+        /// Checks if it's possible to replace the items in a specific slot with the given items
+        /// </summary>
+        /// <param name="items">The items that will check to be replaced the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the slot to be checked if can be replaced by <paramref name="items"/></param>
+        /// <returns>True if the <paramref name="items"/> can replace the slot on <paramref name="index"/>; otherwise, false.</returns>
+        bool CanReplace(T[] items, int index);
         /// <summary>
         /// Replaces items in a specific slot
         /// </summary>
@@ -126,6 +133,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">The zero-based index at which to check if the items can be added.</param>
         /// <returns>true if all of the items can be added at the specified index; otherwise, false.</returns>
         bool CanAddAt(T[] items, int index);
+
         /// <summary>
         /// Adds an item in a specific slot
         /// </summary>

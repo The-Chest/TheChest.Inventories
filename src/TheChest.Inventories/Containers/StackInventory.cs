@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -27,7 +28,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T>? OnMove;
         /// <inheritdoc/>
-        public event StackInventoryReplaceEventHandler<T>? OnReplace;
+        public event StackInventoryReplaceEventHandler<T> OnReplace;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
@@ -61,14 +62,11 @@ namespace TheChest.Inventories.Containers
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
 
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i] is null)
-                    throw new ArgumentNullException(nameof(items), "One of the items is null");
-            }
-
             if (items.Length == 0)
                 return false;
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null"); 
 
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
@@ -110,12 +108,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i] is null)
-                    throw new ArgumentNullException(nameof(items), "One of the items is null");
-            }
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
 
             return this.slots[index].CanAdd(items);
         }
@@ -175,6 +169,9 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 return items;
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
 
             var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
             var indexes = this.slots.GetAddOrderIndexes(items);
@@ -235,7 +232,10 @@ namespace TheChest.Inventories.Containers
                 return items;
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+
             var slot = this.slots[index];
             if (!slot.CanAdd(items))
                 return items;
@@ -484,17 +484,40 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
         /// <exception cref="InvalidOperationException">When the amount of <paramref name="items"/> to replace exceeds the stack size of the slot on <paramref name="index"/>.</exception>
+        public virtual bool CanReplace(T[] items, int index)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+ 
+            if (items.Length == 0)
+                return false;
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+
+            return this.slots[index].CanReplace(items);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When the amount of <paramref name="items"/> to replace exceeds the stack size of the slot on <paramref name="index"/>.</exception>
         public virtual T[] Replace(T[] items, int index)
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 throw new ArgumentException("Cannot replace using an empty item array", nameof(items));
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-
+            
             var slot = this.slots[index];
-            if (!slot.CanReplace(items))
+            if (items.Length > slot.MaxAmount)
                 throw new InvalidOperationException("The amount of items to replace exceeds the stack size of the slot.");
 
             var oldItems = slot.Replace(items);
