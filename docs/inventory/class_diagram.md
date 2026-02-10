@@ -39,6 +39,7 @@ direction TB
 
 	        + void Move(int origin, int target)
 
+	        + bool CanReplace(T item, int index)
 	        + T Replace(T item, int index)
 
 	        + int GetCount(T item)
@@ -56,18 +57,21 @@ direction TB
         class Inventory~T~ {
 	        - IInventorySlot~T~[] slots
 	        + IInventorySlot~T~ this[int index]
+
 	        + ~~event~~ OnGet: InventoryGetEventHandler~T~ 
 	        + ~~event~~ OnAdd: InventoryAddEventHandler~T~ 
 	        + ~~event~~ OnMove: InventoryMoveEventHandler~T~ 
 	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
-	        + Inventory(IInventorySlot~T~[] slots)
+	        
+			+ Inventory(IInventorySlot~T~[] slots)
 
 	        + bool CanAdd(T item)
-	        + bool CanAdd(params T[] items)
-	        + bool CanAddAt(T item, int index)
-
-            + T[] Add(params T[] items)
 	        + bool Add(T item)
+
+	        + bool CanAdd(params T[] items)
+            + T[] Add(params T[] items)
+
+	        + bool CanAddAt(T item, int index)
 	        + bool AddAt(T item, int index)
 
 	        + T[] Clear()
@@ -79,6 +83,7 @@ direction TB
 
 	        + int GetCount(T item)
 
+	        + bool CanReplace(T item, int index)
 	        + T Replace(T item, int index)
 
 	        + void Move(int origin, int target)
@@ -123,18 +128,27 @@ namespace TheChest.Core {
 
 namespace TheChest.Inventories {
     class IInventorySlot~T~ {
+        + bool Contains(T item)
+
         + bool CanAdd(T item)
         + bool Add(T item)
+
         + T? Get()
-        + bool Contains(T item)
+
+        + bool CanReplace(T item)
         + T Replace(T item)
     }
     class InventorySlot~T~ {
         + InventorySlot(T? currentItem = default)
+
+        + bool Contains(T item)
+
         + bool CanAdd(T item)
         + bool Add(T item)
-        + bool Contains(T item)
+
         + T? Get()
+
+        + bool CanReplace(T item)
         + T? Replace(T item)
     }
 }
