@@ -80,7 +80,7 @@ namespace TheChest.Inventories.Containers
                     canAddAmount++;
                     if (items.Length == canAddAmount)
                         return true;
-            }
+                }
             }
 
             return false;

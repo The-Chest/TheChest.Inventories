@@ -3,13 +3,13 @@
     public partial class IInventorySlotTests<T>
     {
         [Test]
-        public void CanReplace_Nullitem_ReturnsTrue()
+        public void CanReplace_NullItem_ReturnsFalse()
         {
             var slot = this.slotFactory.EmptySlot();
 
             var result = slot.CanReplace(default!);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         [Test]
