@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual bool CanAdd(T item)
         {
-            return !this.IsFull || !(item is null);
+            return !this.IsFull && !(item is null);
         }
         /// <inheritdoc />
         public virtual bool Add(T item)
