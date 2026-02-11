@@ -21,13 +21,13 @@ namespace TheChest.Inventories.Containers
         protected new readonly IInventoryLazyStackSlot<T>[] slots;
 
         /// <inheritdoc/>
-        public event LazyStackInventoryGetEventHandler<T>? OnGet;
+        public event LazyStackInventoryGetEventHandler<T> OnGet;
         /// <inheritdoc/>
         public event LazyStackInventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
-        public event LazyStackInventoryMoveEventHandler<T>? OnMove;
+        public event LazyStackInventoryMoveEventHandler<T> OnMove;
         /// <inheritdoc/>
-        public event LazyStackInventoryReplaceEventHandler<T>? OnReplace;
+        public event LazyStackInventoryReplaceEventHandler<T> OnReplace;
 
         /// <summary>
         /// Creates an Stackable Inventory with lazy behavior
@@ -408,6 +408,20 @@ namespace TheChest.Inventories.Containers
             }
 
             this.OnMove?.Invoke(this, new LazyStackInventoryMoveEventArgs<T>(events.ToArray()));
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        public virtual bool CanReplace(T item, int index, int amount = 1)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanReplace(item, amount);
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>

@@ -151,12 +151,14 @@ namespace TheChest.Inventories.Slots
         {
             if (this.IsEmpty)
                 return Array.Empty<T>();
+            
             if (this.Amount <= requestedAmount)
             {
                 var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
                 this.Clear();
                 return items;
             }
+            
             this.SetContent(this.content, this.Amount - requestedAmount);
 
             return Enumerable.Repeat(this.content!, requestedAmount).ToArray();
