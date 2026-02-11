@@ -1,6 +1,5 @@
 ﻿using System;
 using TheChest.Core.Containers.Interfaces;
-using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -11,11 +10,6 @@ namespace TheChest.Inventories.Containers.Interfaces
     [Obsolete("Do not inherit it directly, use IInventory<T> or IStackInventory<T> instead")]
     public interface IInteractiveContainer<T> : IContainer<T>
     {
-        /// <summary>
-        /// Raised when one item is moved from an index to other on the inventory
-        /// </summary>
-        event InventoryMoveEventHandler<T> OnMove;
-
         /// <summary>
         /// Moves an item from one index to another in the inventory
         /// </summary>

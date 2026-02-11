@@ -21,11 +21,11 @@ namespace TheChest.Inventories.Containers
         protected new readonly IInventorySlot<T>[] slots;
 
         /// <inheritdoc/>
-        public event InventoryGetEventHandler<T>? OnGet;
+        public event InventoryGetEventHandler<T> OnGet;
         /// <inheritdoc/>
         public event InventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
-        public event InventoryMoveEventHandler<T>? OnMove;
+        public event InventoryMoveEventHandler<T> OnMove;
         /// <inheritdoc/>
         public event InventoryReplaceEventHandler<T> OnReplace;
 

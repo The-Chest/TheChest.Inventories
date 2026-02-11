@@ -14,7 +14,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
-        event InventoryGetEventHandler<T>? OnGet;
+        event InventoryGetEventHandler<T> OnGet;
 
         /// <summary>
         /// Gets an item inside a slot
@@ -115,5 +115,10 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">The index of the <paramref name="item"/> will ocupy</param>
         /// <returns>The old item from the slot on <paramref name="index"/></returns>
         T Replace(T item, int index);
+
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
+        event InventoryMoveEventHandler<T> OnMove;
     }
 }
