@@ -8,7 +8,9 @@
       * `CanAdd(T[] items)` - Checks if multiple items can be added
       * `CanAddAt(T item, int index)` - Checks if an item can be added to a specific index
     * Can Replace
-      * `CanReplace(T item, int index)` - Checks if an item can replace the item in a specific index 
+      * `CanReplace(T item, int index)` - Checks if an item can replace the item in a specific index
+    * Can Move
+      * `CanMove(int origin, int target)` - Checks if an item can be moved from an index to another
   * `StackInventory<T>` 
     * Can Add 
       * `CanAdd(T item)` - Checks if an item can be added
@@ -17,12 +19,16 @@
       * `CanAddAt(T[] items, int index)` - Checks if multiple items can be added to a specific index
     * Can Replace
       * `CanReplace(T[] items, int index)` - Checks if multiple items can replace the items in a specific index
+    * Can Move
+      * `CanMove(int origin, int target)` - Checks if all items can be moved from an index to another
   * `LazyStackInventory<T>` 
     * Can Add 
       * `CanAdd(T item, int amount = 1)` - Checks if an amount of item can be added
       * `CanAddAt(T item, int index, int amount = 1)` - Checks if an amount of item can be added to a specific index
     * Can Replace
       * `CanReplace(T item, int index, int amount)` - Checks if an amount of item can replace the items in a specific index
+    * Can Move
+      * `CanMove(int origin, int target)` - Checks if if all items can be moved from an index to another
 * Property `AvailableAmount` to `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot`
   * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
 * Internal extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 
