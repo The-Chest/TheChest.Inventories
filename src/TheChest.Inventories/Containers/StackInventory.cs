@@ -24,9 +24,9 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event StackInventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
-        public event StackInventoryGetEventHandler<T>? OnGet;
+        public event StackInventoryGetEventHandler<T> OnGet;
         /// <inheritdoc/>
-        public event StackInventoryMoveEventHandler<T>? OnMove;
+        public event StackInventoryMoveEventHandler<T> OnMove;
         /// <inheritdoc/>
         public event StackInventoryReplaceEventHandler<T> OnReplace;
 

@@ -12,7 +12,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
-        event LazyStackInventoryGetEventHandler<T>? OnGet;
+        event LazyStackInventoryGetEventHandler<T> OnGet;
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
@@ -20,11 +20,12 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
-        event LazyStackInventoryMoveEventHandler<T>? OnMove;
+        event LazyStackInventoryMoveEventHandler<T> OnMove;
         /// <summary>
         /// Raised when an amount of item is replaced on an index of the inventory
         /// </summary>
-        event LazyStackInventoryReplaceEventHandler<T>? OnReplace;
+        event LazyStackInventoryReplaceEventHandler<T> OnReplace;
+
         #region ILazyStackInventory
         /// <summary>
         /// Gets an item from inside a slot
@@ -110,9 +111,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>Returns the amount of items that couldn't be added</returns>
         int AddAt(T item, int index, int amount);
         /// <summary>
+        /// Checks if an item can be replaced in a specific slot
+        /// </summary>
+        /// <param name="item">Item to check to replaced at the index <paramref name="index"/></param>
+        /// <param name="index">Index of the slot where the item will be placed</param>
+        /// <param name="amount">Amount of the item to be placed</param>
+        /// <returns>True if the item can be replaced at the index <paramref name="index"/> for the given <paramref name="amount"/>; otherwise, false.</returns>
+        bool CanReplace(T item, int index, int amount = 1);
+        /// <summary>
         /// Replaces an amount of items in a specific slot
         /// </summary>
-        /// <param name="item">Item to be added to the index <paramref name="index"/></param>
+        /// <param name="item">Item to be replaced to the index <paramref name="index"/></param>
         /// <param name="index">Index of the slot where the item will be placed</param>
         /// <param name="amount">Amount of the item to be placed</param>
         /// <returns>The item that was replaced by <paramref name="item"/></returns>

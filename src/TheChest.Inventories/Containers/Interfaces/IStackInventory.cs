@@ -19,11 +19,11 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
-        event StackInventoryGetEventHandler<T>? OnGet;
+        event StackInventoryGetEventHandler<T> OnGet;
         /// <summary>
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
-        event StackInventoryMoveEventHandler<T>? OnMove;
+        event StackInventoryMoveEventHandler<T> OnMove;
         /// <summary>
         /// Raised when an item is removed from an index of the inventory
         /// </summary>

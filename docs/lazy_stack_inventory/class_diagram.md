@@ -50,19 +50,23 @@ namespace TheChest.Inventories.Containers {
 
         + void Move(int origin, int target)
 
+        + bool CanReplace(T item, int index, int amount)
         + T[] Replace(T item, int index, int amount)
     }
 }
 
 namespace TheChest.Inventories.Slots.Interfaces {
     class IInventoryLazyStackSlot~T~ {
+        + bool Contains(T item)
+        
         + bool CanAdd(T item, int amount = 1)
         + int Add(T item, int amount = 1)
+
         + bool CanReplace(T item, int amount = 1)
         + T[] Replace(T item, int amount = 1)
+        
         + T[] Get(int amount = 1)
         + T[] GetAll()
-        + bool Contains(T item)
     }
 }
 <<interface>> IInventoryLazyStackSlot
@@ -73,18 +77,28 @@ namespace TheChest.Inventories.Containers.Interfaces {
 	    + ~~event~~ OnAdd: LazyStackInventoryAddEventHandler~T~ 
 	    + ~~event~~ OnMove: LazyStackInventoryMoveEventHandler~T~ 
 	    + ~~event~~ OnReplace: LazyStackInventoryReplaceEventHandler~T~ 
+        
         + T? Get(int index)
         + T? Get(T item)
         + T[] Get(T item, int amount)
         + T[] GetAll(T item)
         + int GetCount(T item)
-        + bool Add(T item)
+        
         + T[] Get(int index, int amount)
         + T[] GetAll(int index)
+        
+        + bool CanAdd(T item)
+        + bool CanAdd(T item, int amount)
+        + bool CanAddAt(T item, int index, int amount)
+
+        + bool Add(T item)
         + int Add(T item, int amount)
         + int AddAt(T item, int index, int amount)
+        
         + void Move(int origin, int target)
         + T[] Clear()
+        
+        + bool CanReplace(T item, int index, int amount)
         + T[] Replace(T item, int index, int amount)
     }
 }
@@ -128,13 +142,17 @@ namespace TheChest.Inventories {
     class InventoryLazyStackSlot~T~ {
         + InventoryLazyStackSlot(T? currentItem = default)
         + InventoryLazyStackSlot(T? currentItem = default, int maxStackAmount = 1)
+        
+        + bool Contains(T item)
+        
         + bool CanAdd(T item, int amount = 1)
         + int Add(T item, int amount = 1)
+        
         + bool CanReplace(T item, int amount = 1)
         + T[] Replace(T item, int amount = 1)
+        
         + T[] Get(int amount = 1)
         + T[] GetAll()
-        + bool Contains(T item)
     }
 }
 <<interface>> IInventoryLazyStackSlot

@@ -17,16 +17,14 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual int AvailableAmount => this.maxAmount - this.amount;
 
+        /// <inheritdoc/>
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
         /// <param name="content">default item inside the slot</param>
         /// <param name="amount">amount of the <paramref name="amount"/></param>
         /// <param name="maxStackAmount">the max accepted amount of this slot</param>
-        public InventoryLazyStackSlot(T content = default!, int amount = 1, int maxStackAmount = 1) : base(content, amount, maxStackAmount)
-        {
-            this.content = content;
-        }
+        public InventoryLazyStackSlot(T content = default!, int amount = 1, int maxStackAmount = 1) : base(content, amount, maxStackAmount) { }
 
         /// <summary>
         /// Sets the values of content and <see cref="StackSlot{T}.Amount"/>
@@ -151,12 +149,14 @@ namespace TheChest.Inventories.Slots
         {
             if (this.IsEmpty)
                 return Array.Empty<T>();
+            
             if (this.Amount <= requestedAmount)
             {
                 var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
                 this.Clear();
                 return items;
             }
+            
             this.SetContent(this.content, this.Amount - requestedAmount);
 
             return Enumerable.Repeat(this.content!, requestedAmount).ToArray();
