@@ -22,7 +22,7 @@
       * `CanAdd(T item, int amount = 1)` - Checks if an amount of item can be added
       * `CanAddAt(T item, int index, int amount = 1)` - Checks if an amount of item can be added to a specific index
     * Can Replace
-      * //TODO: Add CanReplace methods to LazyStackInventory
+      * `CanReplace(T item, int index, int amount)` - Checks if an amount of item can replace the items in a specific index
 * Property `AvailableAmount` to `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot`
   * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
 * Internal extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 
