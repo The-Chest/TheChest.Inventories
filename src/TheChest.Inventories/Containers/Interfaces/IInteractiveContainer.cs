@@ -11,6 +11,14 @@ namespace TheChest.Inventories.Containers.Interfaces
     public interface IInteractiveContainer<T> : IContainer<T>
     {
         /// <summary>
+        /// Checks if the specified item can be moved from the origin index to the target index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for movement.</param>
+        /// <param name="origin">The zero-based index representing the item's current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        bool CanMove(int origin, int target);
+        /// <summary>
         /// Moves an item from one index to another in the inventory
         /// </summary>
         /// <param name="origin">Selected item</param>
@@ -18,7 +26,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         void Move(int origin, int target);
 
         /// <summary>
-        /// Returns every item from inventory
+        /// Gets every item from inventory
         /// </summary>
         /// <returns>Returns an Array of items</returns>
         T[] Clear();

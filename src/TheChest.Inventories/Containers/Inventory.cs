@@ -334,6 +334,18 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
+        public virtual bool CanMove(int origin, int target)
+        {
+            if (origin < 0 || origin >= this.Size)
+                return false;
+            if (target < 0 || target >= this.Size)
+                return false;
+            if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
+                return false;
+
+            return true;
+        }
+        /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnMove"/> event.
         /// </remarks>
