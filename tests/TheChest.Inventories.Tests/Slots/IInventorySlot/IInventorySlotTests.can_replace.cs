@@ -36,7 +36,7 @@
         }
 
         [Test]
-        public void CanReplace_FullSlot_WithSameItemInstance_ReturnsTrue()
+        public void CanReplace_FullSlot_SameItem_ReturnsTrue()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.FullSlot(item);
@@ -47,7 +47,7 @@
         }
 
         [Test]
-        public void CanReplace_FullSlot_WithDifferentItemInstances_ReturnsTrue()
+        public void CanReplace_FullSlot_DifferentItem_ReturnsTrue()
         {
             var originalItem = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.FullSlot(originalItem);
