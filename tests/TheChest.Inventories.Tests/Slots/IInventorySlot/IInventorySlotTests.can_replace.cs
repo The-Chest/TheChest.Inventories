@@ -34,5 +34,28 @@
 
             Assert.That(result, Is.True);
         }
+
+        [Test]
+        public void CanReplace_FullSlot_WithSameItemInstance_ReturnsTrue()
+        {
+            var item = this.itemFactory.CreateRandom();
+            var slot = this.slotFactory.FullSlot(item);
+
+            var result = slot.CanReplace(item);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void CanReplace_FullSlot_WithDifferentItemInstances_ReturnsTrue()
+        {
+            var originalItem = this.itemFactory.CreateRandom();
+            var slot = this.slotFactory.FullSlot(originalItem);
+
+            var differentItem = this.itemFactory.CreateDefault();
+            var result = slot.CanReplace(differentItem);
+
+            Assert.That(result, Is.True);
+        }
     }
 }
