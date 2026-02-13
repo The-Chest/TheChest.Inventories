@@ -428,6 +428,27 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
+        public virtual bool CanMove(int origin, int target)
+        {
+            if (origin < 0 || origin >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(origin));
+            if (target < 0 || target >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(target));
+            
+            if (origin == target)
+                return false;
+            var slotOrigin = this.slots[origin];
+            var slotTarget = this.slots[target];
+
+            if (slotOrigin.IsEmpty && slotTarget.IsEmpty)
+                return false;
+            if (slotOrigin.MaxAmount != slotTarget.MaxAmount)
+                return false;
+
+            return true;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
         public virtual void Move(int origin, int target)
         {
             if (origin < 0 || origin >= this.Size)

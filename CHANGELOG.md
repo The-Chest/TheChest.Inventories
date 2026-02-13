@@ -28,7 +28,7 @@
     * Can Replace
       * `CanReplace(T item, int index, int amount)` - Checks if an amount of item can replace the items in a specific index
     * Can Move
-      * `CanMove(int origin, int target)` - Checks if if all items can be moved from an index to another
+      * `CanMove(int origin, int target)` - Checks if all items can be moved from an index to another
 * Property `AvailableAmount` to `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot`
   * On `InventoryStackSlot<T>` it returns the available space in the slot according to its `MaxStackAmount` and current `Amount`
 * Internal extension methods for `IInventoryStackSlot<T>` and `ILazyInventoryStackSlot` to `GetAddOrderIndexes` 

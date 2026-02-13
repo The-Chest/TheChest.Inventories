@@ -48,6 +48,7 @@ direction TB
 
             + int GetCount(T item)
 
+            + bool CanMove(int origin, int target)
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)
@@ -99,6 +100,7 @@ direction TB
 
             + T[] Clear()
 
+            + bool CanMove(int origin, int target)
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)
