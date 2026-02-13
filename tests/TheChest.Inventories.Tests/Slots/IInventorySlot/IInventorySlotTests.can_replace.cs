@@ -7,7 +7,7 @@
         {
             var slot = this.slotFactory.EmptySlot();
 
-            var result = slot.CanReplace(default!);
+            var result = slot.CanReplace(null!);
 
             Assert.That(result, Is.False);
         }
