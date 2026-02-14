@@ -91,12 +91,12 @@ jobs:
             });
             
             // DLL File
-            const dllName = `TheChest.Inventories`;
+            const dllName = `TheChest.Inventories.${version}.dll`;
             await github.repos.uploadReleaseAsset({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: release.data.id,
               name: `${dllName}.${version}.dll`,
-              data: fs.readFileSync(`./src/TheChest.Inventories/bin/Release/${dllName}.dll`)
+              data: fs.readFileSync(`./src/TheChest.Inventories/bin/Release/${dllName}`)
             });
 
