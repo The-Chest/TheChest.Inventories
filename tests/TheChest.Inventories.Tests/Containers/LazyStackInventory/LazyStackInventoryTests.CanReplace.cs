@@ -80,9 +80,9 @@
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
-            var oldItems = inventory.CanReplace(newItem, index, stackSize);
+            var canReplace = inventory.CanReplace(newItem, index, stackSize);
 
-            Assert.That(oldItems, Is.True);
+            Assert.That(canReplace, Is.True);
         }
     }
 }
