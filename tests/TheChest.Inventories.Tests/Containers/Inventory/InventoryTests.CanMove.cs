@@ -56,7 +56,7 @@
         }
 
         [Test]
-        public void CanMove_EmptyTarget_ReturnsTrue()
+        public void CanMove_OriginWithItem_EmptyTarget_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
@@ -69,20 +69,20 @@
         }
 
         [Test]
-        public void CanMove_EmptyOriginWithItemInTarget_ReturnsTrue()
+        public void CanMove_EmptyOrigin_TargetWithItem_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
             var item = this.itemFactory.CreateRandom();
             inventory.AddAt(item, 1);
 
-            var canMove = inventory.CanMove(1, 0);
+            var canMove = inventory.CanMove(0, 1);
 
             Assert.That(canMove, Is.True);
         }
 
         [Test]
-        public void CanMove_EmptyOriginAndTarget_ReturnsFalse()
+        public void CanMove_EmptyOrigin_EmptyTarget_ReturnsFalse()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
