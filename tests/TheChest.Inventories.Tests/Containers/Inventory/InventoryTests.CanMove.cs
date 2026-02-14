@@ -17,7 +17,7 @@
 
         [TestCase(-1)]
         [TestCase(100)]
-        public void CanMove_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
+        public void CanMove_InvalidTarget_ReturnsFalse(int target)
         {
             var size = this.random.Next(3, 10);
             var item = this.itemFactory.CreateDefault();
