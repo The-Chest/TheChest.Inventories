@@ -17,7 +17,7 @@
 
         [TestCase(-1)]
         [TestCase(100)]
-        public void CanMove_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
+        public void CanMove_InvalidTarget_ReturnsFalse(int target)
         {
             var size = this.random.Next(3, 10);
             var item = this.itemFactory.CreateDefault();
@@ -54,7 +54,7 @@
         }
 
         [Test]
-        public void CanMove_EmptyOrigin_ReturnsTrue()
+        public void CanMove_EmptyOriginWithItemInTarget_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
