@@ -54,7 +54,7 @@
         }
 
         [Test]
-        public void CanMove_EmptyOrigin_ReturnsTrue()
+        public void CanMove_EmptyOriginWithItemInTarget_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
