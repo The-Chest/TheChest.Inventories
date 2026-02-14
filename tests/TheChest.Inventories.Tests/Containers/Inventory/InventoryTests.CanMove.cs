@@ -61,7 +61,7 @@
             var item = this.itemFactory.CreateRandom();
             inventory.AddAt(item, 1);
 
-            var canMove = inventory.CanMove(0, 1);
+            var canMove = inventory.CanMove(1, 0);
 
             Assert.That(canMove, Is.True);
         }
