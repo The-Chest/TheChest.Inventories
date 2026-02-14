@@ -31,9 +31,12 @@
         [Test]
         public void CanMove_BothSlotsWithItems_ReturnsTrue()
         {
-            var size = this.random.Next(2, 20);
-            var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.containerFactory.EmptyContainer(2);
+
+            var firstItem = this.itemFactory.CreateRandom();
+            var secondItem = this.itemFactory.CreateRandom();
+            inventory.AddAt(firstItem, 0);
+            inventory.AddAt(secondItem, 1);
 
             var canMove = inventory.CanMove(0, 1);
 
