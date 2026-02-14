@@ -48,6 +48,7 @@ namespace TheChest.Inventories.Containers {
 
         + int GetCount(T item)
 
+        + bool CanMove(int origin, int target)
         + void Move(int origin, int target)
 
         + bool CanReplace(T item, int index, int amount)
@@ -95,7 +96,9 @@ namespace TheChest.Inventories.Containers.Interfaces {
         + int Add(T item, int amount)
         + int AddAt(T item, int index, int amount)
         
+        + bool CanMove(int origin, int target)
         + void Move(int origin, int target)
+        
         + T[] Clear()
         
         + bool CanReplace(T item, int index, int amount)
@@ -133,8 +136,10 @@ namespace TheChest.Inventories {
     class IInventoryLazyStackSlot~T~ {
         + bool CanAdd(T item, int amount = 1)
         + int Add(T item, int amount = 1)
+
         + bool CanReplace(T item, int amount = 1)
         + T[] Replace(T item, int amount = 1)
+
         + T[] Get(int amount = 1)
         + T[] GetAll()
         + bool Contains(T item)
