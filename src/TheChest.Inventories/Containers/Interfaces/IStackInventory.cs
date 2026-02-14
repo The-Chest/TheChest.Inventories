@@ -152,9 +152,9 @@ namespace TheChest.Inventories.Containers.Interfaces
 
         #region IInteractiveContainer
         /// <summary>
-        /// Checks if the specified item can be moved from the origin index to the target index.
+        /// Checks if the specified items can be moved from the origin index to the target index.
         /// </summary>
-        /// <param name="origin">The zero-based index representing the item's current position.</param>
+        /// <param name="origin">The zero-based index representing the items current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
         /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
         bool CanMove(int origin, int target);
