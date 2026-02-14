@@ -29,7 +29,7 @@
         }
 
         [Test]
-        public void CanReplace_InvalidAmount_ThrowsArgumentOutOfRangeException()
+        public void CanReplace_NullItem_ThrowsArgumentNullException()
         {
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(20, 1, item);
