@@ -1,6 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
-    public partial class StackInventoryTests<T>
+    public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1)]
         [TestCase(100)]
