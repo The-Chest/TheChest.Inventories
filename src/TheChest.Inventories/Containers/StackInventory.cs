@@ -437,6 +437,7 @@ namespace TheChest.Inventories.Containers
             
             if (origin == target)
                 return false;
+
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
 
