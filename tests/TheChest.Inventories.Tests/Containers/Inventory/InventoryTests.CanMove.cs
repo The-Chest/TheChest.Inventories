@@ -15,6 +15,18 @@
             Assert.That(canMove, Is.False);
         }
 
+        [Test]
+        public void CanMove_OriginEqualToSize_ReturnsFalse()
+        {
+            var size = this.random.Next(3, 10);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(size, item);
+
+            var canMove = inventory.CanMove(size, 0);
+
+            Assert.That(canMove, Is.False);
+        }
+
         [TestCase(-1)]
         [TestCase(100)]
         public void CanMove_InvalidTarget_ReturnsFalse(int target)
@@ -31,9 +43,12 @@
         [Test]
         public void CanMove_BothSlotsWithItems_ReturnsTrue()
         {
-            var size = this.random.Next(2, 20);
-            var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.containerFactory.EmptyContainer(2);
+
+            var firstItem = this.itemFactory.CreateRandom();
+            var secondItem = this.itemFactory.CreateRandom();
+            inventory.AddAt(firstItem, 0);
+            inventory.AddAt(secondItem, 1);
 
             var canMove = inventory.CanMove(0, 1);
 
@@ -41,7 +56,7 @@
         }
 
         [Test]
-        public void CanMove_EmptyTarget_ReturnsTrue()
+        public void CanMove_OriginWithItem_EmptyTarget_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
@@ -54,7 +69,7 @@
         }
 
         [Test]
-        public void CanMove_EmptyOriginWithItemInTarget_ReturnsTrue()
+        public void CanMove_EmptyOrigin_TargetWithItem_ReturnsTrue()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
@@ -67,7 +82,7 @@
         }
 
         [Test]
-        public void CanMove_EmptyOriginAndTarget_ReturnsFalse()
+        public void CanMove_EmptyOrigin_EmptyTarget_ReturnsFalse()
         {
             var inventory = this.containerFactory.EmptyContainer(2);
 
