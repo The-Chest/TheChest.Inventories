@@ -15,6 +15,18 @@
             Assert.That(canMove, Is.False);
         }
 
+        [Test]
+        public void CanMove_OriginEqualToSize_ReturnsFalse()
+        {
+            var size = this.random.Next(3, 10);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.containerFactory.FullContainer(size, item);
+
+            var canMove = inventory.CanMove(size, 0);
+
+            Assert.That(canMove, Is.False);
+        }
+
         [TestCase(-1)]
         [TestCase(100)]
         public void CanMove_InvalidTarget_ReturnsFalse(int target)
