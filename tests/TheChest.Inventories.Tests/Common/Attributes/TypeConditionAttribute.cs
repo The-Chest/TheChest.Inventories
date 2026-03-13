@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
 
 namespace TheChest.Tests.Common.Attributes
 {
@@ -7,18 +8,27 @@ namespace TheChest.Tests.Common.Attributes
     /// Derived attributes should implement logic to determine if a test should be ignored for a given type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public abstract class TypeConditionAttribute : Attribute
+    public abstract class TypeConditionAttribute : NUnitAttribute, IApplyToTest
     {
-        /// <summary>
-        /// The reason why the test was ignored.
-        /// </summary>
-        protected abstract string Reason { get; }
-
-        /// <summary>
-        /// Determines whether the test should be ignored for the specified type.
-        /// </summary>
-        /// <param name="type">The type to evaluate.</param>
-        /// <returns>True if the test should be ignored; otherwise, false.</returns>
         protected abstract bool ShouldIgnore(Type type);
+
+        protected virtual string Reason => "Condition not met.";
+
+        public void ApplyToTest(Test test)
+        {
+            var fixtureType = test.TypeInfo?.Type;
+            if (fixtureType == null)
+                return;
+
+            if (!fixtureType.IsGenericType)
+                return;
+
+            var firstArgument = fixtureType.GetGenericArguments()[0];
+
+            if (this.ShouldIgnore(firstArgument))
+            {
+                test.RunState = RunState.Ignored;
+            }
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using TheChest.Inventories.Containers;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
-using TheChest.Inventories.Tests.Extensions;
 using TheChest.Core.Slots.Interfaces;
+using TheChest.Tests.Common.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers.Factories
 {
@@ -145,7 +145,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
 
                 slots.SetValue(slot, i);
             }
-            slots.ShuffleItems();
+            slots.Shuffle();
 
             var container = Activator.CreateInstance(containerType, slots);
 
