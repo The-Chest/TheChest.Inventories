@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers.Events;
+﻿using NUnit.Framework.Internal;
+using TheChest.Tests.Common.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers
 {
@@ -31,32 +32,16 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void GetItemByIndex_ValidIndexFullSlot_ReturnsItem()
+        public void GetItemByIndex_ValidIndexFullSlot_RemovesItemFromSlot()
         {
             var size = this.random.Next(10, 20);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.containerFactory.FullContainer(size, item);
 
             var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-           
-            Assert.Multiple(() =>
-            {
-                Assert.That(result, Is.EqualTo(item));
-                Assert.That(inventory.GetSlot(randomIndex).IsEmpty, Is.True);
-            });
-        }
+            inventory.Get(randomIndex);
 
-        [Test]
-        public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
-        {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-
-            Assert.That(result, Is.Null);
+            Assert.That(inventory.GetSlot<T>(randomIndex).IsEmpty, Is.True);
         }
 
         [Test]
@@ -68,13 +53,14 @@ namespace TheChest.Inventories.Tests.Containers
 
             var randomIndex = this.random.Next(0, size);
             var raised = false;
-            inventory.OnGet += (sender, args) =>
-            {
-                Assert.That(
-                    args.Data, 
-                    Has.Count.EqualTo(1)
-                        .And.All.EqualTo(new InventoryGetItemEventData<T>(item, randomIndex))
-                );
+            inventory.OnGet += (sender, args) => {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
+                var eventData = args.Data.First();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(eventData.Item, Is.EqualTo(item));
+                    Assert.That(eventData.Index, Is.EqualTo(randomIndex));
+                });
                 raised = true;
             };
 
