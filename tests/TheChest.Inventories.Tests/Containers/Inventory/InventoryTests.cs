@@ -2,7 +2,7 @@
 
 namespace TheChest.Inventories.Tests.Containers
 {
-    public abstract partial class InventoryTests<T>
+    public partial class InventoryTests<T>
     {
         protected readonly IInventoryFactory<T> containerFactory;
         protected readonly ISlotItemFactory<T> itemFactory;
