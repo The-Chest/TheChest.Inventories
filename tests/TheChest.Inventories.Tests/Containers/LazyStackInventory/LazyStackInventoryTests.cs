@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
+
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public abstract partial class LazyStackInventoryTests<T>
     {

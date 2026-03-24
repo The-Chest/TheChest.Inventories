@@ -1,15 +1,41 @@
 ﻿using System;
 using System.Reflection;
-using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Tests.Common.Extensions
 {
     /// <summary>
-    /// Provides extension methods for the <see cref="ISlot{T}"/> interface.
+    /// Provides extension methods for the slots.
     /// </summary>
     public static class ISlotExtensions
     {
-        internal static FieldInfo GetContentField<T>(this ISlot<T> slot)
+        //TODO: add to TheChest.Tests.Common.Extensions
+        internal static Type GetSlotTypeByConstructor<TSlotInterface>(this Type containerType,string slotParameterName = "slots")
+        {
+            var constructor = containerType.GetConstructors()
+                    .FirstOrDefault(ctor =>
+                    {
+                        var parameters = ctor.GetParameters();
+                        var slotParamType = parameters.Length > 0 ? parameters[0].ParameterType : null;
+                        if (slotParamType is null)
+                            return false;
+                        return
+                            parameters.Length == 1 &&
+                            slotParamType.IsArray &&
+                            typeof(TSlotInterface).IsAssignableFrom(slotParamType.GetElementType());
+                    })
+                    ?? throw new ArgumentException($"Container type '{containerType.FullName}' does not have a suitable constructor.");
+
+            var slotParameter = constructor.GetParameters().FirstOrDefault(x => x.Name == slotParameterName)
+                ?? throw new ArgumentException($"Container type '{containerType.FullName}' does not have a constructor with {typeof(TSlotInterface).Name}[].");
+
+            var slotType = slotParameter.ParameterType.GetElementType();
+            if (!typeof(TSlotInterface).IsAssignableFrom(slotType))
+                throw new ArgumentException($"Type '{slotType?.FullName}' does not implement {typeof(TSlotInterface).FullName}.");
+
+            return slotType!;
+        }
+
+        internal static FieldInfo GetContentField(this object slot)
         {
             var type = slot.GetType();
             var field = type.GetField(
@@ -28,7 +54,7 @@ namespace TheChest.Tests.Common.Extensions
         /// <param name="slot">The slot from which to retrieve the value. </param>
         /// <returns>The value contained in the slot, cast to type <typeparamref name="T"/>.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the slot's underlying field type is not assignable to <typeparamref name="T"/>.</exception>
-        public static T GetContent<T>(this ISlot<T> slot)
+        public static T GetContent<T>(this object slot)
         {
             var field = slot.GetContentField();
 
@@ -46,7 +72,7 @@ namespace TheChest.Tests.Common.Extensions
         /// <param name="slot">The stack slot from which to retrieve the contents.</param>
         /// <returns>A new array containing the elements stored in the stack slot, or <see langword="null"/> if the slot is empty.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the underlying field type of the stack slot is not assignable to an array of type <typeparamref name="T"/>.</exception>
-        public static T[] GetContents<T>(this IStackSlot<T> slot)
+        public static T[] GetContents<T>(this object slot)
         {
             var field = slot.GetContentField();
 

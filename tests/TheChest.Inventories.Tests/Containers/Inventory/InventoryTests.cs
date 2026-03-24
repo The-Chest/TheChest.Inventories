@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
+
+namespace TheChest.Inventories.Tests.Containers
 {
     public abstract partial class InventoryTests<T>
     {

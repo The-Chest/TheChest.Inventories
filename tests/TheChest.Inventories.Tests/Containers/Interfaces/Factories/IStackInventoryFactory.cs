@@ -1,6 +1,6 @@
 ﻿using TheChest.Inventories.Containers.Interfaces;
 
-namespace TheChest.Inventories.Tests.Containers.Factories.Interfaces
+namespace TheChest.Inventories.Tests.Containers.Interfaces.Factories
 {
     public interface IStackInventoryFactory<T>
     {
