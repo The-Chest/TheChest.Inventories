@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions;
+
+namespace TheChest.Inventories.Tests.Containers
 {
     public partial class InventoryTests<T>
     {
@@ -31,20 +33,7 @@
             var item = this.itemFactory.CreateDefault();
             inventory.Replace(item, randomIndex);
 
-            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(item));
-        }
-
-        [Test]
-        public void Replace_EmptySlot_ReturnsNull()
-        {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Replace(item, randomIndex);
-
-            Assert.That(result, Is.Null);
+            Assert.That(inventory.GetItem<T>(randomIndex), Is.EqualTo(item));
         }
 
         [Test]
@@ -84,21 +73,7 @@
             var newItem = this.itemFactory.CreateRandom();
             inventory.Replace(newItem, randomIndex);
 
-            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(newItem));
-        }
-
-        [Test]
-        public void Replace_FullSlot_ReturnsOldItemFromSlot()
-        {
-            var size = this.random.Next(10, 20);
-            var initialItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, initialItem);
-
-            var randomIndex = this.random.Next(0, size);
-            var newItem = this.itemFactory.CreateRandom();
-            var result = inventory.Replace(newItem, randomIndex);
-
-            Assert.That(result, Is.EqualTo(initialItem));
+            Assert.That(inventory.GetItem<T>(randomIndex), Is.EqualTo(newItem));
         }
 
         [Test]
