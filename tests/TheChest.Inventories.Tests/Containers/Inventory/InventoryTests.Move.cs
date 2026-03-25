@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions;
+
+namespace TheChest.Inventories.Tests.Containers
 {
     public partial class InventoryTests<T>
     {
@@ -31,14 +33,14 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var ItemFromTarget = inventory.GetItem(target);
+            var itemFromOrigin = inventory.GetItem<T>(origin);
+            var ItemFromTarget = inventory.GetItem<T>(target);
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetItem(origin), Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory.GetItem(target), Is.EqualTo(itemFromOrigin));
+                Assert.That(inventory.GetItem<T>(origin), Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory.GetItem<T>(target), Is.EqualTo(itemFromOrigin));
             });
         }
 
@@ -51,8 +53,8 @@
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var ItemFromTarget = inventory.GetItem(target);
+            var itemFromOrigin = inventory.GetItem<T>(origin);
+            var ItemFromTarget = inventory.GetItem<T>(target);
 
             var raised = false;
             inventory.OnMove += (sender, args) =>
@@ -93,8 +95,8 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
-                Assert.That(inventory.GetItem(1), Is.EqualTo(item));
+                Assert.That(inventory.GetSlot<T>(0).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem<T>(1), Is.EqualTo(item));
             });
         }
 
@@ -137,8 +139,8 @@
             inventory.Move(0, 1);
 
             Assert.Multiple(() => {
-                Assert.That(inventory.GetItem(0), Is.EqualTo(item));
-                Assert.That(inventory.GetSlot(1).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem<T>(0), Is.EqualTo(item));
+                Assert.That(inventory.GetSlot<T>(1).IsEmpty, Is.True);
             });
         }
 
