@@ -5,7 +5,7 @@
         [Test]
         public void GetAllFrom_EmptySlot_ReturnsEmptyArray()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var items = inventory.GetAll(0);
             Assert.That(items, Is.Empty);
         }
@@ -13,7 +13,7 @@
         [Test]
         public void GetAllFrom_EmptySlot_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty slot");
             
@@ -24,17 +24,17 @@
         [TestCase(100)]
         public void GetAllFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.GetAll(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         public void GetAllFrom_SlotWithItems_ReturnItems()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var items = inventory.GetAll(index);
 
@@ -48,10 +48,10 @@
         [Test]
         public void GetAllFrom_SlotWithItems_RemovesAllItemsFromSlot()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             inventory.GetAll(index);
 
@@ -66,10 +66,10 @@
         [Test]
         public void GetAllFrom_SlotWithItems_CallsOnGetEvent()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>

@@ -5,7 +5,7 @@
         [Test]
         public void GetAllItems_InvalidItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.GetAll(default(T)!), Throws.ArgumentNullException);
         }
 
@@ -13,7 +13,7 @@
         public void GetAllItems_EmptyInventory_ReturnsEmptyArray()
         {
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var items = inventory.GetAll(item);
             Assert.That(items, Is.Empty);
         }
@@ -22,7 +22,7 @@
         public void GetAllItems_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             
@@ -32,14 +32,14 @@
         [Test]
         public void GetAllItems_InventoryWithItems_ReturnSearchedItems()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var item = this.itemFactory.CreateDefault();
             var inventoryItems = this.itemFactory.CreateManyRandom(inventorySize / 2)
                 .Append(item)
                 .Append(item)
                 .ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
             var items = inventory.GetAll(item);
 
@@ -53,12 +53,12 @@
         [Test]
         public void GetAllItems_InventoryWithItems_RemovesItemsFromInventory()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
             var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
             inventory.GetAll(slotItems[0]);
 
@@ -71,12 +71,12 @@
         [Test]
         public void GetAllItems_InventoryWithItems_CallsOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
             var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>

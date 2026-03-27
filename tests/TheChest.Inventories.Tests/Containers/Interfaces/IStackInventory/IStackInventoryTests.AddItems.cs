@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         [Test]
         public void AddItems_AddingEmptyArray_ThrowsArgumentException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var items = Array.Empty<T>();
             var result = inventory.Add(items);
@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItems_EmptyInventory_ReturnsEmptyArray()
         {
             var items = this.itemFactory.CreateMany(20);
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var result = inventory.Add(items);
 
@@ -30,7 +30,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItems_EmptyInventory_AddsToFirstSlot()
         {
             var items = this.itemFactory.CreateMany(10);
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.Add(items);
 
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItems_EmptyInventory_CallsOnAddEvent()
         {
             var items = this.itemFactory.CreateMany(10);
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var raised = false;
             inventory.OnAdd += (sender, args) =>
@@ -65,7 +65,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         {
             var item = this.itemFactory.CreateDefault();
             var maxSize = this.random.Next(2, 10);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, maxSize, item);
             inventory.Get(item, maxSize - 1);
 
             var amount = maxSize;
@@ -85,7 +85,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         {
             var item = this.itemFactory.CreateDefault();
             var maxSize = this.random.Next(2, 10);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, maxSize, item);
             inventory.Get(item, maxSize - 1);
 
             var amount = maxSize;
@@ -117,7 +117,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         {
             var item = this.itemFactory.CreateDefault();
             var maxSize = this.random.Next(2, 10);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, maxSize, item);
 
             var amount = this.random.Next(1, maxSize - 1);
             var items = this.itemFactory.CreateMany(maxSize + amount);
@@ -143,7 +143,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         {
             var item = this.itemFactory.CreateDefault();
             var maxSize = this.random.Next(2, 10);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, maxSize, item);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, maxSize, item);
             inventory.Get(item, maxSize - 1);
 
             var amount = maxSize;
@@ -162,7 +162,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_CallsOnAddEventOnTwoSlots()
         {
             var items = this.itemFactory.CreateMany(20);
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var raised = false;
             inventory.OnAdd += (sender, args) =>
@@ -194,7 +194,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItems_EmptyInventory_BiggerAmountThanSlotSize_AddsToTwoAvailableSlots()
         {
             var items = this.itemFactory.CreateMany(20);
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.Add(items);
 
@@ -211,7 +211,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var slotItem = this.itemFactory.CreateRandom();
             var items = this.itemFactory.CreateMany(20);
             var expectedItems = items.ToArray();
-            var inventory = this.containerFactory.FullContainer(20, 2, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 2, slotItem);
 
             inventory.Add(items);
 
@@ -223,7 +223,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         {
             var slotItem = this.itemFactory.CreateRandom();
             var items = this.itemFactory.CreateMany(20);
-            var inventory = this.containerFactory.FullContainer(20, 2, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 2, slotItem);
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
             
@@ -235,7 +235,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         {
             var slotItem = this.itemFactory.CreateRandom();
             var items = this.itemFactory.CreateMany(20);
-            var inventory = this.containerFactory.FullContainer(20, 2, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 2, slotItem);
 
             var result = inventory.Add(items);
 
