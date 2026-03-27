@@ -6,9 +6,9 @@
         [TestCase(-1)]
         public void GetItems_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             Assert.That(
                 () => inventory.Get(item, amount),
@@ -19,14 +19,14 @@
         [Test]
         public void GetItems_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.Get(item: default!, amount: 1), Throws.ArgumentNullException);
         }
 
         [Test]
         public void GetItems_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
             
@@ -36,10 +36,10 @@
         [Test]
         public void GetItems_ExistingItemOnSlot_CallsOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var expectedAmount = this.random.Next(1, inventorySize / 2);
             var items = this.itemFactory.CreateMany(expectedAmount);
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(inventorySize, items);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>

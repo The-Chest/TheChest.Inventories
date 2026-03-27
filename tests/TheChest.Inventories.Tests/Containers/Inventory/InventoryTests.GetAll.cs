@@ -7,14 +7,14 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetAll_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.GetAll(item: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void GetAll_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
 
@@ -24,9 +24,9 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetAll_WithItems_RemovesFromFoundSlots()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var index = this.random.Next(0, size);
             var randomItem = items[index];
@@ -38,9 +38,9 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetAll_NotFoundItem_DoesNotRemoveFromAnySlots()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
             var slots = inventory.GetSlots<T>()?.ToArray();
 
             var randomItem = this.itemFactory.CreateRandom();
@@ -52,10 +52,10 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetAll_WithItems_CallsOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size / 2);
             var sameItems = this.itemFactory.CreateManyRandom(size / 2);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
 
             var raised = false;
             inventory.OnGet += (sender, args) =>

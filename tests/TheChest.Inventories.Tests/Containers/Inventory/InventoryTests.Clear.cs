@@ -5,7 +5,7 @@
         [Test]
         public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
             
@@ -19,7 +19,7 @@
             var items = this.itemFactory.CreateManyRandom(size / 2)
                 .Concat(this.itemFactory.CreateMany(size / 2))
                 .ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>

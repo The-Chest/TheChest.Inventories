@@ -5,14 +5,14 @@
         [Test]
         public void CanAddItems_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.CanAdd(items: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var items = this.itemFactory.CreateMany(5).ToList();
             items.Add(default!);
 
@@ -22,8 +22,8 @@
         [Test]
         public void CanAddItems_ItemsAmountBiggerThanInventorySize_ReturnsFalse()
         {
-            var size = this.random.Next(5, 10);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             var items = this.itemFactory.CreateMany(size + 1);
 
             var canAdd = inventory.CanAdd(items);
@@ -34,9 +34,9 @@
         [Test]
         public void CanAddItems_PartiallyFullInventory_ReturnsTrue()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var randomAmount = this.random.Next(1, size);
             inventory.Get(item, randomAmount);
@@ -50,9 +50,9 @@
         [Test]
         public void CanAddItems_InsufficientSpace_ReturnsFalse()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
             var randomAmount = this.random.Next(5, size);
             inventory.Get(item, randomAmount - 1);
 

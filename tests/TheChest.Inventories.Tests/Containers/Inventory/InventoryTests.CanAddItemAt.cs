@@ -7,15 +7,19 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void CanAddAt_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.CanAddAt(item: default!, 0), Throws.ArgumentNullException);
+            var inventory = this.inventoryFactory.EmptyContainer();
+            Assert.That(
+                () => inventory.CanAddAt(item: default!, 0), 
+                Throws.ArgumentNullException
+            );
         }
 
         [TestCase(-1)]
-        [TestCase(22)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void CanAddAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
                 () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index),

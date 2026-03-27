@@ -6,12 +6,12 @@ namespace TheChest.Inventories.Tests.Containers
     public partial class InventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(30)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void GetItemByIndex_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             Assert.That(
                 () => inventory.Get(index), 
@@ -22,8 +22,8 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetItemByIndex_ValidIndexEmptySlot_DoesNotCallOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer();
             var index = this.random.Next(0, size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("Get(int index) should not be called if no item is found");
@@ -34,9 +34,9 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetItemByIndex_ValidIndexFullSlot_RemovesItemFromSlot()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var randomIndex = this.random.Next(0, size);
             inventory.Get(randomIndex);
@@ -47,9 +47,9 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetItemByIndex_ExistingItemOnSlot_CallsOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var randomIndex = this.random.Next(0, size);
             var raised = false;
