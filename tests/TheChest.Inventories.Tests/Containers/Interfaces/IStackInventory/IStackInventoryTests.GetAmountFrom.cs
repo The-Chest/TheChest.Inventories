@@ -6,7 +6,7 @@
         [TestCase(100)]
         public void GetAmountFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.Get(index, 10), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
@@ -14,14 +14,14 @@
         [TestCase(0)]
         public void GetAmountFrom_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.Get(0, amount), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         public void GetAmountFrom_EmptySlot_ReturnsEmptyArray()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             
             var item = inventory.Get(0, 10);
             
@@ -31,7 +31,7 @@
         [Test]
         public void GetAmountFrom_EmptySlot_CallsOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             
@@ -44,7 +44,7 @@
             var index = this.random.Next(0, 20);
             var stackSize = this.random.Next(10, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var items = inventory.Get(index, 10);
 
@@ -59,7 +59,7 @@
             var index = this.random.Next(0, 20);
             var stackSize = this.random.Next(10, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var removeAmount = this.random.Next(1, stackSize);
             inventory.Get(index, removeAmount);
@@ -72,7 +72,7 @@
         {
             var stackSize = this.random.Next(10, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var index = this.random.Next(0, 20);
             var amount = this.random.Next(1, stackSize);
@@ -99,7 +99,7 @@
         {
             var stackSize = this.random.Next(1, 10);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var amount = this.random.Next(stackSize + 1, stackSize * 2);
             var index = this.random.Next(0, 20);
@@ -113,7 +113,7 @@
         {
             var stackSize = this.random.Next(1, 10);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var index = this.random.Next(0, 20);
             var amount = this.random.Next(stackSize + 1, stackSize * 2);
@@ -127,7 +127,7 @@
         {
             var stackSize = this.random.Next(1, 10);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
             
             var index = this.random.Next(0, 20);
             var amount = this.random.Next(stackSize + 1, stackSize * 2);

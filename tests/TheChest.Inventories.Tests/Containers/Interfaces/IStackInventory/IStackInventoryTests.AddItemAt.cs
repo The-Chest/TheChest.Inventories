@@ -7,7 +7,7 @@
         public void AddItemAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
 
             Assert.That(() => inventory.AddAt(item, index), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
@@ -15,7 +15,7 @@
         [Test]
         public void AddItemAt_InvalidItem_ThrowsArgumentException()
         {
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
 
             Assert.That(() => inventory.AddAt(default(T)!, 0), Throws.ArgumentNullException);
         }
@@ -24,7 +24,7 @@
         public void AddItemAt_EmptySlot_AddsToStack()
         {
             var index = this.random.Next(0, 20);
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index);
@@ -36,7 +36,7 @@
         public void AddItemAt_EmptySlot_CallsOnAddEvent()
         {
             var index = this.random.Next(0, 20);
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
 
@@ -62,7 +62,7 @@
         public void AddItemAt_EmptySlot_ReturnsTrue()
         {
             var index = this.random.Next(0, 20);
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
             var result = inventory.AddAt(item, index);
@@ -76,7 +76,7 @@
         {
             var index = this.random.Next(0, 20);
             var items = this.itemFactory.CreateManyRandom(20);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, 5, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, 5, items);
 
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, index);
@@ -88,7 +88,7 @@
         public void AddItemAt_SlotWithDifferentItem_ReturnsFalse()
         {
             var index = this.random.Next(0, 20);
-            var inventory = this.containerFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
+            var inventory = this.inventoryFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
 
             var item = this.itemFactory.CreateDefault();
             var result = inventory.AddAt(item, index);
@@ -100,7 +100,7 @@
         public void AddItemAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
         {
             var index = this.random.Next(0, 20);
-            var inventory = this.containerFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
+            var inventory = this.inventoryFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
 
             var item = this.itemFactory.CreateDefault();
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
@@ -113,7 +113,7 @@
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             inventory.Get(index);
 
             var stackSize = inventory.GetSlot(index).Amount;
@@ -128,7 +128,7 @@
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             inventory.Get(index);
 
             var item = this.itemFactory.CreateDefault();
@@ -157,7 +157,7 @@
             var slotItem = this.itemFactory.CreateDefault();
 
             var amount = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(20, amount, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, amount, slotItem);
             inventory.Get(index);
 
             var item = this.itemFactory.CreateDefault();
@@ -171,7 +171,7 @@
         {
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             var item = this.itemFactory.CreateDefault();
 
             inventory.AddAt(item, index);
@@ -185,7 +185,7 @@
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
-            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             var item = this.itemFactory.CreateDefault();
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
@@ -199,7 +199,7 @@
             var index = this.random.Next(0, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
-            var inventory = this.containerFactory.FullContainer(20, 5, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
 
             var item = this.itemFactory.CreateDefault();
             var result = inventory.AddAt(item, index);

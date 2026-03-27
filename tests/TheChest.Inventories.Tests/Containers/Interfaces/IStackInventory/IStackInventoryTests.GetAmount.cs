@@ -7,7 +7,7 @@
         public void GetAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(
                 () => inventory.Get(item, amount), 
                 Throws.InstanceOf<ArgumentOutOfRangeException>()
@@ -17,7 +17,7 @@
         [Test]
         public void GetAmount_InvalidItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(
                 () => inventory.Get(default(T)!, 10), 
                 Throws.InstanceOf<ArgumentNullException>()
@@ -28,7 +28,7 @@
         public void GetAmount_EmptyInventory_ReturnsEmptyArray()
         {
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var amount = inventory.Get(item, 10);
             Assert.That(amount, Is.Empty);
         }
@@ -37,7 +37,7 @@
         public void GetAmount_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             
@@ -54,7 +54,7 @@
                 .Append(item)
                 .Append(item)
                 .ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, stackSize, inventoryItems);
 
             var items = inventory.Get(item, stackSize);
 
@@ -71,7 +71,7 @@
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
 
             inventory.Get(slotItem, stackSize);
 
@@ -84,7 +84,7 @@
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
 
             var raised = false;
             inventory.OnGet += (sender, args) => {
@@ -108,7 +108,7 @@
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(3, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
 
             inventory.Get(slotItem, stackSize + (stackSize - 2));
             
@@ -125,7 +125,7 @@
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(3, 20);
             var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
 
             var raised = false;
             inventory.OnGet += (sender, args) => {

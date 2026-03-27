@@ -5,7 +5,7 @@
         [Test]
         public void GetCount_InvalidItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.That(() => inventory.GetCount(default!), Throws.ArgumentNullException);
         }
@@ -13,7 +13,7 @@
         [Test]
         public void GetCount_EmptyInventory_ReturnsZero()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
             var count = inventory.GetCount(item);
@@ -31,7 +31,7 @@
                 .Append(item)
                 .ToList();
 
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
 
             var count = inventory.GetCount(item);
 

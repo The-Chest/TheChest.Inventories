@@ -5,7 +5,7 @@
         [Test]
         public void Clear_EmptyInventory_ReturnsEmptyArray()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var result = inventory.Clear();
 
@@ -15,7 +15,7 @@
         [Test]
         public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty inventory");
             inventory.Clear();
         }
@@ -26,7 +26,7 @@
             var inventorySize = 20;
             var stackSize = 10;
             var items = this.itemFactory.CreateManyRandom(inventorySize * stackSize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(inventorySize, stackSize, items);
 
             var result = inventory.Clear();
 
@@ -39,7 +39,7 @@
             var inventorySize = 20;
             var stackSize = 10;
             var items = this.itemFactory.CreateManyRandom(inventorySize * stackSize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(inventorySize, stackSize, items);
 
             inventory.Clear();
 
@@ -52,7 +52,7 @@
             var inventorySize = this.random.Next(10, 20);
             var stackSize = this.random.Next(10, 20);
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, item);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>
@@ -73,7 +73,7 @@
             var inventorySize = 20;
             var stackSize = 10;
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, item);
 
             var expectedArraySize = inventorySize * stackSize;
             var expectedArray = new T[expectedArraySize];
@@ -90,7 +90,7 @@
             var inventorySize = 20;
             var stackSize = 10;
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(inventorySize, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, item);
 
             inventory.Clear();
 

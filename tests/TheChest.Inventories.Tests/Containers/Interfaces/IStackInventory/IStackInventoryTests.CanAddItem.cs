@@ -5,14 +5,14 @@
         [Test]
         public void CanAddItem_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.CanAdd(item: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void CanAddItem_EmptyInventory_ReturnsTrue()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
             var canAdd = inventory.CanAdd(item);
@@ -26,7 +26,7 @@
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(2, 5);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
             inventory.Get(randomIndex);
@@ -41,7 +41,7 @@
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(2, 5);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
             inventory.Get(randomIndex);
@@ -58,7 +58,7 @@
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(2, 5);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var canAdd = inventory.CanAdd(item);
 

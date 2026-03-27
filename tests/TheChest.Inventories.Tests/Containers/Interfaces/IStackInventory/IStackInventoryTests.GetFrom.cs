@@ -6,14 +6,14 @@
         [TestCase(100)]
         public void GetFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.Get(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         public void GetFrom_EmptySlot_ReturnsNull()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var item = inventory.Get(0);
             Assert.That(item, Is.Null);
         }
@@ -21,7 +21,7 @@
         [Test]
         public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             
@@ -34,7 +34,7 @@
             var index = this.random.Next(0, 20);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var item = inventory.Get(index);
 
@@ -47,7 +47,7 @@
             var index = this.random.Next(0, 20);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             inventory.Get(index);
 
@@ -59,7 +59,7 @@
         {
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
             var index = this.random.Next(0, 20);
 

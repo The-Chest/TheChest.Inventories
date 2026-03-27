@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         [Test]
         public void CanAddItemAt_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.CanAddAt(item: default!, 0), Throws.ArgumentNullException);
         }
 
@@ -15,7 +15,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         [TestCase(22)]
         public void CanAddItemAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.That(
                 () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index),
@@ -26,7 +26,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         [Test]
         public void CanAddItemAt_EmptyInventory_ReturnsTrue()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var item = this.itemFactory.CreateDefault();
 
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var randomIndex = this.random.Next(0, size);
             inventory.Get(randomIndex, stackSize - 1);
 
@@ -56,7 +56,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var randomIndex = this.random.Next(0, size);
             inventory.Get(randomIndex, stackSize - 1);
 
@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
             inventory.AddAt(item, randomIndex);
