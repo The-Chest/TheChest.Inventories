@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework.Internal;
 
-namespace TheChest.Inventories.Tests.Containers
+namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
-    public partial class StackInventoryTests<T>
+    public partial class IStackInventoryTests<T>
     {
         [Test]
         public void CanAddItemAt_NullItem_ThrowsArgumentNullException()
