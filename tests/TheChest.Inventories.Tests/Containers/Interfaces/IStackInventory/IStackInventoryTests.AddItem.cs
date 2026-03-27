@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItem_InventoryWithItems_CallsOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(2, 10);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var expectedIndex = this.random.Next(0, size);
@@ -117,7 +117,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         public void AddItem_InventoryWithFullSlotWithSameItem_AddsToFirstAvailableSlot()
         {
             var item = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(2, 10);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var expectedIndex = this.random.Next(0, size);

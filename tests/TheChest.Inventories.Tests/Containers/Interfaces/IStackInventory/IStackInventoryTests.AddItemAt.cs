@@ -23,7 +23,7 @@
         [Test]
         public void AddItemAt_EmptySlot_AddsToStack()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
@@ -35,7 +35,7 @@
         [Test]
         public void AddItemAt_EmptySlot_CallsOnAddEvent()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
@@ -61,7 +61,7 @@
         [Test]
         public void AddItemAt_EmptySlot_ReturnsTrue()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var item = this.itemFactory.CreateDefault();
@@ -74,7 +74,7 @@
         [Ignore("This test is not working due Inventory creation")]
         public void AddItemAt_SlotWithDifferentItem_DoNotAddItem()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(20);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(20, 5, items);
 
@@ -87,7 +87,7 @@
         [Test]
         public void AddItemAt_SlotWithDifferentItem_ReturnsFalse()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
 
             var item = this.itemFactory.CreateDefault();
@@ -99,7 +99,7 @@
         [Test]
         public void AddItemAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(20, 5, this.itemFactory.CreateRandom());
 
             var item = this.itemFactory.CreateDefault();
@@ -111,7 +111,7 @@
         [Test]
         public void AddItemAt_SlotWithSameItem_AddsToStack()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             inventory.Get(index);
@@ -126,7 +126,7 @@
         [Test]
         public void AddItemAt_SlotWithSameItem_CallsOnAddEvent()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             inventory.Get(index);
@@ -153,7 +153,7 @@
         [Test]
         public void AddItemAt_SlotWithSameItem_ReturnsTrue()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
             var amount = this.random.Next(1, 10);
@@ -169,7 +169,7 @@
         [Test]
         public void AddItemAt_FullSlotWithSameItem_DoesNotAddsToStack()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
             var item = this.itemFactory.CreateDefault();
@@ -182,7 +182,7 @@
         [Test]
         public void AddItemAt_FullSlotWithSameItem_DoNotCallsOnAddEvent()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
             var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);
@@ -196,7 +196,7 @@
         [Test]
         public void AddItemAt_FullSlotWithSameItem_ReturnsFalse()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
             var inventory = this.inventoryFactory.FullContainer(20, 5, slotItem);

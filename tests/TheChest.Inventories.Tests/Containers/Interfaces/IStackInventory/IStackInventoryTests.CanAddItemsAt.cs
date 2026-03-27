@@ -46,7 +46,7 @@
         [Test]
         public void CanAddItemsAt_SlotWithSameItemsAndEnoughSpace_ReturnsTrue()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
@@ -63,7 +63,7 @@
         [Test]
         public void CanAddItemsAt_ItemsAmountBiggerThanSlotSize_ReturnsFalse()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
@@ -80,7 +80,7 @@
         [Test]
         public void CanAddItemsAt_SlotWithDifferentItemsAndEnoughSpace_ReturnsFalse()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(5, 10);
             var randomItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
@@ -97,7 +97,7 @@
         [Test]
         public void CanAddItemsAt_FullInventory_ReturnsFalse()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(5, 10);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);

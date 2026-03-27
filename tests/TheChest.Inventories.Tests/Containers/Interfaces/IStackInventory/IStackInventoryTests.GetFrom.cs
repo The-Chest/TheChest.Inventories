@@ -31,7 +31,7 @@
         [Test]
         public void GetFrom_SlotWithItems_ReturnsItem()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
@@ -44,7 +44,7 @@
         [Test]
         public void GetFrom_SlotWithItems_RemovesItemFromSlot()
         {
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
@@ -61,7 +61,7 @@
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
 
-            var index = this.random.Next(0, 20);
+            var index = this.random.Next(0, MAX_SIZE_TEST);
 
             var raised = false;
             inventory.OnGet += (sender, args) => {

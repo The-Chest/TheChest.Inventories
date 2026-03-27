@@ -49,7 +49,7 @@
         [Test]
         public void Clear_InventoryWithItems_CallsOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(10, 20);
             var item = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, item);

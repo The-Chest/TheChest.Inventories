@@ -7,7 +7,7 @@
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
@@ -20,7 +20,7 @@
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var index = this.random.Next(0, size);
@@ -46,7 +46,7 @@
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
@@ -60,7 +60,7 @@
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var items = this.itemFactory.CreateMany(stackSize + 1);
@@ -77,7 +77,7 @@
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
@@ -91,7 +91,7 @@
         public void CanReplace_EmptySlot_ReturnsTrue()
         {
             var stackSize = this.random.Next(10, 20);
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var randomIndex = this.random.Next(0, size);

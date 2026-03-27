@@ -47,7 +47,7 @@
         [Test]
         public void GetAmount_InventoryWithItems_ReturnsSearchedItems()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var item = this.itemFactory.CreateDefault();
             var inventoryItems = this.itemFactory.CreateManyRandom(inventorySize / 2)
@@ -68,7 +68,7 @@
         [Test]
         public void GetAmount_InventoryWithItems_RemovesItemsFromSlot()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
@@ -81,7 +81,7 @@
         [Test]
         public void GetAmount_InventoryWithItems_CallsOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
@@ -105,7 +105,7 @@
         [Test]
         public void GetAmount_InventoryWithItems_RemovesItemsFromMultipleSlotsInOrder()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(3, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
@@ -122,7 +122,7 @@
         [Test]
         public void GetAmount_InventoryWithItems_CallsOnGetEventFromMultipleSlotsInOrder()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(3, 20);
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);

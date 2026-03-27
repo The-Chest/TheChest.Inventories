@@ -32,7 +32,7 @@
         [Test]
         public void GetAllItems_InventoryWithItems_ReturnSearchedItems()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var item = this.itemFactory.CreateDefault();
             var inventoryItems = this.itemFactory.CreateManyRandom(inventorySize / 2)
@@ -53,7 +53,7 @@
         [Test]
         public void GetAllItems_InventoryWithItems_RemovesItemsFromInventory()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
             var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);
@@ -71,7 +71,7 @@
         [Test]
         public void GetAllItems_InventoryWithItems_CallsOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
             var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);

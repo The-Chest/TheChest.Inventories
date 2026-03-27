@@ -26,7 +26,7 @@
         [Test]
         public void CanMove_SameOriginAndTarget_ReturnsFalse()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var originIndex = this.random.Next(0, inventorySize - 1);
             var inventory = this.inventoryFactory.EmptyContainer(inventorySize, stackSize);
@@ -39,7 +39,7 @@
         [Test]
         public void CanMove_EmptyOrigin_TargetWithItems_ReturnsTrue()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
@@ -57,7 +57,7 @@
         [Test]
         public void CanMove_OriginWithItems_EmptyTarget_ReturnsTrue()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
@@ -75,7 +75,7 @@
         [Test]
         public void Move_OriginAndTargetWithSameItems_ReturnsTrue()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(5, 20);
             var slotItem = this.itemFactory.CreateDefault();
 
@@ -93,7 +93,7 @@
         [Test]
         public void Move_OriginAndTargetWithDifferentItems_ReturnsTrue()
         {
-            var inventorySize = this.random.Next(10, 20);
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(1, 20);
             var slotItems = this.itemFactory.CreateMany(inventorySize / 2);
             var randomItems = this.itemFactory.CreateManyRandom(inventorySize / 2);
