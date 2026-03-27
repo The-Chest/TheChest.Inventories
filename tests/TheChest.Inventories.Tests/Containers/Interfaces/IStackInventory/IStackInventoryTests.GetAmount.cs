@@ -1,6 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
-    public partial class StackInventoryTests<T>
+    public partial class IStackInventoryTests<T>
     {
         [TestCase(-1)]
         [TestCase(0)]

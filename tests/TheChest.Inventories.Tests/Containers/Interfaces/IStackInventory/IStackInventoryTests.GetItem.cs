@@ -1,6 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
-    public partial class StackInventoryTests<T>
+    public partial class IStackInventoryTests<T>
     {
         [Test]
         public void GetItem_InvalidItem_ThrowsArgumentNullException()
