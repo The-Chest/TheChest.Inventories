@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions;
+﻿using TheChest.Inventories.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers
 {
