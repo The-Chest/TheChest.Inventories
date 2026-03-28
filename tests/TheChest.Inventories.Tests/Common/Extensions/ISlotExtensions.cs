@@ -9,7 +9,7 @@ namespace TheChest.Tests.Common.Extensions
     public static class ISlotExtensions
     {
         //TODO: add to TheChest.Tests.Common.Extensions
-        internal static Type GetSlotTypeByConstructor<TSlotInterface>(this Type containerType,string slotParameterName = "slots")
+        internal static Type GetSlotTypeByConstructor<TSlotInterface>(this Type containerType, string slotParameterName = "slots")
         {
             var constructor = containerType.GetConstructors()
                     .FirstOrDefault(ctor =>
