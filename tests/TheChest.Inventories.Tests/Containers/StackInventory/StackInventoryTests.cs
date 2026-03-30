@@ -15,8 +15,6 @@ namespace TheChest.Inventories.Tests.Containers
     [TestFixture(typeof(TestEnumItem))]
     public partial class StackInventoryTests<T> : IStackInventoryTests<T>
     {
-        const int MIN_STACK_SIZE_TEST = 5;
-        const int MAX_STACK_SIZE_TEST = 10;
         public StackInventoryTests() : base(configure =>
         {
             configure
