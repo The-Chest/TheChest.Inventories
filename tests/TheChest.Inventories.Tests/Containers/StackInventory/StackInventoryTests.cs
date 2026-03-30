@@ -15,12 +15,13 @@ namespace TheChest.Inventories.Tests.Containers
     [TestFixture(typeof(TestEnumItem))]
     public partial class StackInventoryTests<T> : IStackInventoryTests<T>
     {
+        const int MIN_STACK_SIZE_TEST = 5;
+        const int MAX_STACK_SIZE_TEST = 10;
         public StackInventoryTests() : base(configure =>
         {
             configure
                 .Register<IInventoryStackSlotFactory<T>, InventoryStackSlotFactory<InventoryStackSlot<T>, T>>()
-                .Register<IStackInventoryFactory<T>, StackInventoryFactory<StackInventory<T>, T>>()
-                .Register<ISlotItemFactory<T>, SlotItemFactory<T>>();
+                .Register<IStackInventoryFactory<T>, StackInventoryFactory<StackInventory<T>, T>>();
         }) { }
     }
 }
