@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Tests.Common.Extensions
 {
@@ -54,7 +55,7 @@ namespace TheChest.Tests.Common.Extensions
         /// <param name="slot">The slot from which to retrieve the value. </param>
         /// <returns>The value contained in the slot, cast to type <typeparamref name="T"/>.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the slot's underlying field type is not assignable to <typeparamref name="T"/>.</exception>
-        public static T GetContent<T>(this object slot)
+        public static T GetContent<T>(this ISlot<T> slot)
         {
             var field = slot.GetContentField();
 
@@ -72,7 +73,7 @@ namespace TheChest.Tests.Common.Extensions
         /// <param name="slot">The stack slot from which to retrieve the contents.</param>
         /// <returns>A new array containing the elements stored in the stack slot, or <see langword="null"/> if the slot is empty.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the underlying field type of the stack slot is not assignable to an array of type <typeparamref name="T"/>.</exception>
-        public static T[] GetContents<T>(this object slot)
+        public static T[] GetContents<T>(this IStackSlot<T> slot)
         {
             var field = slot.GetContentField();
 
