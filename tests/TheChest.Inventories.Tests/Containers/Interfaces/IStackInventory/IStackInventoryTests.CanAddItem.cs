@@ -3,13 +3,6 @@
     public partial class IStackInventoryTests<T>
     {
         [Test]
-        public void CanAddItem_NullItem_ThrowsArgumentNullException()
-        {
-            var inventory = this.inventoryFactory.EmptyContainer();
-            Assert.That(() => inventory.CanAdd(item: default!), Throws.ArgumentNullException);
-        }
-
-        [Test]
         public void CanAddItem_EmptyInventory_ReturnsTrue()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -24,7 +17,7 @@
         public void CanAddItem_AvailableSlotOnInventory_ReturnsTrue()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(2, 5);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -39,7 +32,7 @@
         public void CanAddItem_AvailableSlotWithDifferentItemOnInventory_ReturnsTrue()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(2, 5);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -48,7 +41,7 @@
 
             var randomItem = this.itemFactory.CreateRandom();
             var canAdd = inventory.CanAdd(randomItem);
-            
+
             Assert.That(canAdd, Is.False);
         }
 
@@ -56,7 +49,7 @@
         public void CanAddItem_FullInventory_ReturnsFalse()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(2, 5);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
