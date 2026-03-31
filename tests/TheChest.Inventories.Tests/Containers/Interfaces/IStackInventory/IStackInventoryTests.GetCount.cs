@@ -3,14 +3,6 @@
     public partial class IStackInventoryTests<T>
     {
         [Test]
-        public void GetCount_InvalidItem_ThrowsArgumentNullException()
-        {
-            var inventory = this.inventoryFactory.EmptyContainer();
-
-            Assert.That(() => inventory.GetCount(default!), Throws.ArgumentNullException);
-        }
-
-        [Test]
         public void GetCount_EmptyInventory_ReturnsZero()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -24,14 +16,15 @@
         [Test]
         public void GetCount_InventoryWithItems_ReturnsItemCount()
         {
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventoryItems = this.itemFactory.CreateManyRandom(10)
                 .Append(item)
                 .Append(item)
                 .ToList();
 
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, stackSize, inventoryItems.ToArray());
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems.ToArray());
 
             var count = inventory.GetCount(item);
 

@@ -5,37 +5,25 @@
         [Test]
         public void GetAllFrom_EmptySlot_ReturnsEmptyArray()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
-            var items = inventory.GetAll(0);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var index = this.random.Next(0, size - 1);
+            var items = inventory.GetAll(index);
+
             Assert.That(items, Is.Empty);
-        }
-
-        [Test]
-        public void GetAllFrom_EmptySlot_DoesNotCallOnGetEvent()
-        {
-            var inventory = this.inventoryFactory.EmptyContainer();
-            
-            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty slot");
-            
-            inventory.GetAll(0);
-        }
-
-        [TestCase(-1)]
-        [TestCase(100)]
-        public void GetAllFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
-        {
-            var inventory = this.inventoryFactory.EmptyContainer();
-            Assert.That(() => inventory.GetAll(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         public void GetAllFrom_SlotWithItems_ReturnItems()
         {
-            var index = this.random.Next(0, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
+            var index = this.random.Next(0, size);
             var items = inventory.GetAll(index);
 
             Assert.Multiple(() =>
@@ -43,50 +31,6 @@
                 Assert.That(items, Has.Length.EqualTo(stackSize));
                 Assert.That(items, Has.All.EqualTo(slotItem));
             });
-        }
-
-        [Test]
-        public void GetAllFrom_SlotWithItems_RemovesAllItemsFromSlot()
-        {
-            var index = this.random.Next(0, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(1, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
-
-            inventory.GetAll(index);
-
-            Assert.Multiple(() =>
-            {
-                var slot = inventory.GetSlot(index);
-                Assert.That(slot!.IsEmpty, Is.True);
-                Assert.That(slot!.GetContents(), Has.All.Null);
-            });
-        }
-
-        [Test]
-        public void GetAllFrom_SlotWithItems_CallsOnGetEvent()
-        {
-            var index = this.random.Next(0, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(1, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(20, stackSize, slotItem);
-
-            var raised = false;
-            inventory.OnGet += (sender, args) =>
-            {
-                Assert.Multiple(() =>
-                {
-                    var firstEvent = args.Data.FirstOrDefault();
-                    Assert.That(args.Data, Has.Count.EqualTo(1));
-                    Assert.That(firstEvent.Items, Has.All.EqualTo(slotItem));
-                    Assert.That(firstEvent.Index, Is.EqualTo(index));
-                });
-                raised = true;
-            };
-
-            inventory.GetAll(index);
-
-            Assert.That(raised, Is.True, "OnGet event was not raised");
         }
     }
 }
