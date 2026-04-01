@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace TheChest.Inventories.Tests.Common.Extensions.Containers
+namespace TheChest.Tests.Common.Extensions.Containers
 {
     internal static class ContainerExtensions
     {
