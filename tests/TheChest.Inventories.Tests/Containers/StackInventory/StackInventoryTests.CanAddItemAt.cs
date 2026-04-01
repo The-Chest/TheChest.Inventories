@@ -10,15 +10,13 @@
         }
 
         [TestCase(-1)]
-        [TestCase(22)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void CanAddItemAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
-            Assert.That(
-                () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index),
-                Throws.Exception.TypeOf<ArgumentOutOfRangeException>()
-            );
+            Assert.That(() => inventory.CanAddAt(this.itemFactory.CreateDefault(), index), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
         }
     }
 }

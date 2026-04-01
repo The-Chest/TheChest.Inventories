@@ -9,10 +9,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(
-                () => inventory.CanAddAt(items: default!, 0), 
-                Throws.ArgumentNullException
-            );
+            Assert.That(() => inventory.CanAddAt(items: default!, 0), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -25,10 +22,7 @@
             var items = this.itemFactory.CreateMany(stackSize - 1).ToList();
             items.Add(default!);
 
-            Assert.That(
-                () => inventory.CanAddAt(items.ToArray(), 0), 
-                Throws.ArgumentNullException
-            );
+            Assert.That(() => inventory.CanAddAt(items.ToArray(), 0), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -39,10 +33,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(
-                () => inventory.CanAddAt(this.itemFactory.CreateMany(stackSize), index),
-                Throws.Exception.TypeOf<ArgumentOutOfRangeException>()
-            );
+            Assert.That(() => inventory.CanAddAt(this.itemFactory.CreateMany(stackSize), index), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
         }
     }
 }

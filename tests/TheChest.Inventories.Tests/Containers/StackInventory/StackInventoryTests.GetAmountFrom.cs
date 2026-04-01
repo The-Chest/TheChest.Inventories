@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using TheChest.Inventories.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers
 {
