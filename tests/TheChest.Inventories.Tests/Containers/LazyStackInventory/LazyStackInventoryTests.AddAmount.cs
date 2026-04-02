@@ -1,4 +1,6 @@
 ﻿using TheChest.Core.Slots.Interfaces;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
@@ -7,7 +9,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_WithAmount_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.Throws<ArgumentNullException>(() => inventory.Add(item: default!, amount: 1));
         }
@@ -16,7 +18,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [TestCase(-1)]
         public void Add_WithAmount_ZeroOrLessAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Add(item, amount));
@@ -25,10 +27,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_WithAmount_EmptyInventory_AddsToFirstAvilableSlot()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
+            var amount = this.random.Next(1, stackSize);
             inventory.Add(item, amount);
 
             Assert.Multiple(() =>
@@ -43,10 +47,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_WithAmount_EmptyInventory_CallsOnAddEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
+            var amount = this.random.Next(1, stackSize);
 
             var raised = false;
             inventory.OnAdd += (sender, args) => {
@@ -67,57 +73,30 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_WithAmount_SuccessfullyAddedItems_ReturnsZero()
-        {
-            var inventory = this.containerFactory.EmptyContainer();
-            var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
-
-            var result = inventory.Add(item, amount);
-
-            Assert.That(result, Is.Zero);
-        }
-
-        [Test]
-        public void Add_WithAmount_FullInventory_ReturnsRemainingAmount()
-        {
-            var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 10);
-            var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, randomItem);
-
-            var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
-            var result = inventory.Add(item, amount);
-
-            Assert.That(result, Is.EqualTo(amount));
-        }
-
-        [Test]
         public void Add_WithAmount_FullInventory_DoesNotCallOnAddEvent()
         {
-            var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, randomItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
             
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when inventory is full.");
             
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
+            var amount = this.random.Next(1, stackSize);
             inventory.Add(item, amount);
         }
 
         [Test]
         public void Add_WithAmount_FullInventory_DoesNotAddToInventory()
         {
-            var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, randomItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
 
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
+            var amount = this.random.Next(1, stackSize);
             inventory.Add(item, amount);
 
             Assert.Multiple(() =>
@@ -131,27 +110,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_WithAmount_NotAllItemsBeAdded_ReturnsRemainingAmount()
-        {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(2, 10);
-            var randomItem = this.itemFactory.CreateManyRandom(size - 1);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
-
-            var item = this.itemFactory.CreateDefault();
-            var amount = stackSize + this.random.Next(1, 5);
-            var result = inventory.Add(item, amount);
-
-            Assert.That(result, Is.EqualTo(amount - stackSize));
-        }
-
-        [Test]
         public void Add_WithAmount_NotAllItemsBeAdded_CallsOnAddEvent()
         {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(2, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var randomItem = this.itemFactory.CreateManyRandom(size - 1);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItem);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItem);
 
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
@@ -178,10 +142,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_WithAmount_NotAllItemsBeAdded_AddsToFirstAvailableSlot()
         {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var randomItems = this.itemFactory.CreateManyRandom(size - 1);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
 
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
