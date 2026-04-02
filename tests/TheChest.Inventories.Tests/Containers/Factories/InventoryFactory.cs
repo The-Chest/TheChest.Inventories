@@ -1,10 +1,11 @@
 ﻿using TheChest.Inventories.Containers;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
-using TheChest.Inventories.Tests.Common.Extensions.Containers;
 using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 using TheChest.Inventories.Tests.Slots.Factories.Interfaces;
 using TheChest.Tests.Common.Extensions;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Containers.Factories
 {
