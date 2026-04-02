@@ -1,4 +1,4 @@
-﻿using TheChest.Inventories.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers
 {
@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Containers
             var randomItem = items[index];
             inventory.GetAll(randomItem);
 
-            Assert.That(inventory.GetSlots<T>()![index].IsEmpty, Is.True);
+            Assert.That(inventory.GetSlots()![index].IsEmpty, Is.True);
         }
 
         [Test]

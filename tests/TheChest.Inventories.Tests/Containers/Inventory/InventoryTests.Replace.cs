@@ -1,4 +1,4 @@
-﻿using TheChest.Inventories.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers
 {
@@ -73,7 +73,7 @@ namespace TheChest.Inventories.Tests.Containers
             var newItem = this.itemFactory.CreateRandom();
             inventory.Replace(newItem, randomIndex);
 
-            Assert.That(inventory.GetItem<T>(randomIndex), Is.EqualTo(newItem));
+            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(newItem));
         }
 
         [Test]

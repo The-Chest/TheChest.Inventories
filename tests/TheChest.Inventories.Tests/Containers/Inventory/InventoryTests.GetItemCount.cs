@@ -1,4 +1,4 @@
-﻿using TheChest.Inventories.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers
 {
@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Containers
 
             inventory.GetCount(items[0]);
 
-            Assert.That(inventory.GetItem<T>(0), Is.EqualTo(items[0]));
+            Assert.That(inventory.GetItem(0), Is.EqualTo(items[0]));
         }
     }
 }

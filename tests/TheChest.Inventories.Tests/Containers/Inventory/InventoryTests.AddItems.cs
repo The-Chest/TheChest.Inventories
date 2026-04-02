@@ -1,5 +1,5 @@
-﻿using TheChest.Inventories.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Extensions;
+﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Containers
 {
@@ -151,7 +151,7 @@ namespace TheChest.Inventories.Tests.Containers
             inventory.Add(items);
 
             Assert.That(
-                inventory.GetSlots<T>()?.Take(randomSize).Select(x => x.GetContent<T>()), 
+                inventory.GetSlots()?.Take(randomSize).Select(x => x.GetContent()), 
                 Is.EqualTo(items)
             );
         }

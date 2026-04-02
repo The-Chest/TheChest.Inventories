@@ -1,14 +1,15 @@
-﻿using TheChest.Inventories.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers
 {
     public partial class InventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(22)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void AddAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
                 () => inventory.AddAt(this.itemFactory.CreateDefault(), index),
@@ -23,7 +24,6 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.That(() => inventory.AddAt(default!, 0), Throws.ArgumentNullException);
         }
 
-        //TODO: check if these tests should be moved
         [Test]
         public void AddAt_EmptySlot_AddsItem()
         {
@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Containers
             var item = this.itemFactory.CreateDefault();
             inventory.AddAt(item, randomIndex);
 
-            Assert.That(inventory.GetItem<T>(randomIndex), Is.EqualTo(item));
+            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(item));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace TheChest.Inventories.Tests.Containers
 
             Assert.Multiple(() =>
             {
-                var randomItem = inventory.GetItem<T>(randomIndex);
+                var randomItem = inventory.GetItem(randomIndex);
                 Assert.That(randomItem, Is.EqualTo(oldItem));
                 Assert.That(randomItem, Is.Not.EqualTo(item));
             });
@@ -87,10 +87,11 @@ namespace TheChest.Inventories.Tests.Containers
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var oldItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, oldItem);
+            
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
 
             var randomIndex = this.random.Next(0, size);
             var item = this.itemFactory.CreateRandom();
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
             inventory.AddAt(item, randomIndex);
         }
     }
