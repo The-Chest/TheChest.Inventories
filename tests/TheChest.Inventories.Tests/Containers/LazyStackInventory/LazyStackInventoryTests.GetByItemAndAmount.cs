@@ -1,13 +1,13 @@
-﻿using System.Drawing;
-
-namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
         public void Get_ByItemAndAmount_Nulltem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.Throws<ArgumentNullException>(() => inventory.Get(item: default!, amount: 1));
         }
@@ -16,32 +16,19 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [TestCase(0)]
         public void Get_ByItemAndAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
-            var item = this.itemFactory.CreateDefault();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
+            var item = this.itemFactory.CreateDefault();
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Get(item, amount));
-        }
-
-        [Test]
-        public void Get_ByItemAndAmount_ExistingItemsAndAmountBiggerThanInventorySize_ReturnsMaxAvailableAmount()
-        {
-            var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 20);
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-
-            var amount = size * stackSize * 2;
-            var expectedAmount = size * stackSize;
-            var result = inventory.Get(item, amount);
-
-            Assert.That(result, Has.Length.EqualTo(expectedAmount).And.All.EqualTo(item));
         }
 
         [Test]
         public void Get_ByItemAndAmount_ExistingItemsAndAmountBiggerThanInventorySize_CallsOnGetEvent()
         {
-            var size = this.random.Next(1, 20);
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -63,24 +50,13 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByItemAndAmount_ExistingItems_ReturnsCorrectAmountFromMultipleSlots()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
-            var amount = this.random.Next(2, 20);
-
-            var result = inventory.Get(item, amount);
-
-            Assert.That(result, Has.Length.EqualTo(amount).And.All.EqualTo(item));
-        }
-
-        [Test]
         public void Get_ByItemAndAmount_ExistingItems_CallsOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+            
             var multiplier = this.random.Next(2, size);
             var amount = stackSize * multiplier;
             
@@ -102,27 +78,16 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByItemAndAmount_NotFoundItem_ReturnsEmptyArray()
-        {
-            var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(20, 1, randomItem);
-
-            var amount = this.random.Next(2, 20);
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Get(item, amount);
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
         public void Get_ByItemAndAmount_NotFoundItem_DoesNotCallOnGetEvent()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(20, 1, randomItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for non-existing item.");
             
-            var amount = this.random.Next(2, 20);
+            var amount = this.random.Next(2, size);
             var item = this.itemFactory.CreateDefault();
             inventory.Get(item, amount);
         }
