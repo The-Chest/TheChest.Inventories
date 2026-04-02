@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Get_ByItemAndAmount_Nulltem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.Throws<ArgumentNullException>(() => inventory.Get(item: default!, amount: 1));
         }
@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [TestCase(0)]
         public void Get_ByItemAndAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Get(item, amount));
@@ -28,7 +28,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 20);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var amount = size * stackSize * 2;
             var expectedAmount = size * stackSize;
@@ -43,7 +43,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 20);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var amount = size * stackSize * 2;
             var raised = false;
@@ -66,7 +66,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         public void Get_ByItemAndAmount_ExistingItems_ReturnsCorrectAmountFromMultipleSlots()
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
             var amount = this.random.Next(2, 20);
 
             var result = inventory.Get(item, amount);
@@ -80,7 +80,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var size = this.random.Next(10, 20);
             var stackSize = this.random.Next(1, 10);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var multiplier = this.random.Next(2, size);
             var amount = stackSize * multiplier;
             
@@ -105,7 +105,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         public void Get_ByItemAndAmount_NotFoundItem_ReturnsEmptyArray()
         {
             var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, 1, randomItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, randomItem);
 
             var amount = this.random.Next(2, 20);
             var item = this.itemFactory.CreateDefault();
@@ -118,7 +118,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         public void Get_ByItemAndAmount_NotFoundItem_DoesNotCallOnGetEvent()
         {
             var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, 1, randomItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, randomItem);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for non-existing item.");
             

@@ -7,7 +7,7 @@
         public void Replace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
 
             Assert.That(
                 () => inventory.Replace(item, index, amount),
@@ -20,7 +20,7 @@
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
 
             Assert.That(
                 () => inventory.Replace(item, index, amount),
@@ -32,7 +32,7 @@
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException()
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
 
             Assert.That(
                 () => inventory.Replace(default! , 1, 1),
@@ -46,7 +46,7 @@
             var oldItem = this.itemFactory.CreateDefault();
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, oldItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
@@ -64,7 +64,7 @@
             var oldItem = this.itemFactory.CreateDefault();
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, oldItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
@@ -79,7 +79,7 @@
             var oldItem = this.itemFactory.CreateDefault();
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, oldItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
@@ -112,7 +112,7 @@
             var oldItem = this.itemFactory.CreateDefault();
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, oldItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
@@ -126,7 +126,7 @@
         {
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
@@ -140,7 +140,7 @@
         {
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);
@@ -154,7 +154,7 @@
         {
             var size = this.random.Next(2, 20);
             var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(size, stackSize);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
             var index = this.random.Next(0, size - 1);

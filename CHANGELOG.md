@@ -22,7 +22,7 @@
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 
-## What's next
+## What's Next
 * [#174](https://github.com/The-Chest/TheChest.Inventories/issues/174) - Update to use `TheChest.Core v0.15.2`
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0

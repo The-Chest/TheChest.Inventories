@@ -6,7 +6,7 @@
         public void Get_ByIndex_ValidIndex_ReturnsItem()
         {
             var expectedItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, expectedItem);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, expectedItem);
 
             var result = inventory.Get(0);
 
@@ -19,7 +19,7 @@
             var size = this.random.Next(1, 20);
             var stackSize = this.random.Next(1, 10);
             var expectedItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, stackSize, expectedItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, expectedItem);
 
             var index = this.random.Next(0, size);
             var raised = false;
@@ -43,7 +43,7 @@
         [Test]
         public void Get_ByIndex_EmptySlot_ReturnsNull()
         {
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
 
             var result = inventory.Get(0);
 
@@ -53,7 +53,7 @@
         [Test]
         public void Get_ByIndex_EmptySlot_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer(20);
+            var inventory = this.inventoryFactory.EmptyContainer(20);
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for an empty slot.");
             inventory.Get(0);
         }
@@ -63,7 +63,7 @@
         public void Get_ByIndex_ShouldThrowArgumentOutOfRangeException_WhenIndexIsInvalid(int index)
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Get(index));
         }
