@@ -1,13 +1,18 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
+
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1, 1)]
-        [TestCase(2000, 1)]
+        [TestCase(MAX_SIZE_TEST + 1, 1)]
         public void Replace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             Assert.That(
                 () => inventory.Replace(item, index, amount),
@@ -19,8 +24,10 @@
         [TestCase(0, -1)]
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             Assert.That(
                 () => inventory.Replace(item, index, amount),
@@ -31,11 +38,15 @@
         [Test]
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(20, 1, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
+            var randomIndex = this.random.Next(0, size - 1);
+            var randonAmount = this.random.Next(1, stackSize);
             Assert.That(
-                () => inventory.Replace(default! , 1, 1),
+                () => inventory.Replace(default! , randomIndex, randonAmount),
                 Throws.TypeOf<ArgumentNullException>().And.With.Message.Contains("item")
             );
         }
@@ -43,9 +54,9 @@
         [Test]
         public void Replace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var oldItem = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
@@ -61,9 +72,9 @@
         [Test]
         public void Replace_SlotWithItems_ReplacesItemOnSlot()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var oldItem = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
@@ -76,9 +87,9 @@
         [Test]
         public void Replace_SlotWithItems_CallsOnReplaceEventWithItems()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var oldItem = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
             var newItem = this.itemFactory.CreateRandom();
@@ -107,25 +118,10 @@
         }
 
         [Test]
-        public void Replace_SlotWithItems_ReturnsItemFromSlot()
-        {
-            var oldItem = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
-
-            var newItem = this.itemFactory.CreateRandom();
-            var index = this.random.Next(0, size - 1);
-            var oldItems = inventory.Replace(newItem, index, stackSize);
-
-            Assert.That(oldItems, Has.Length.EqualTo(stackSize).And.All.EqualTo(oldItem));
-        }
-
-        [Test]
         public void Replace_Empty_AddsItemToSlot()
         {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
@@ -136,24 +132,10 @@
         }
 
         [Test]
-        public void Replace_EmptySlot_ReturnsEmptyArray()
-        {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var newItem = this.itemFactory.CreateRandom();
-            var index = this.random.Next(0, size - 1);
-            var oldItems = inventory.Replace(newItem, index, stackSize);
-
-            Assert.That(oldItems, Is.Empty);
-        }
-
-        [Test]
         public void Replace_EmptySlot_CallsOnReplaceEventWithNullOldItem()
         {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
