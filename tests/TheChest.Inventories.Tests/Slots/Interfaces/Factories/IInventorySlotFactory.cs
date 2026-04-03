@@ -1,6 +1,6 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
 
-namespace TheChest.Inventories.Tests.Slots.Factories.Interfaces
+namespace TheChest.Inventories.Tests.Slots.Interfaces.Factories
 {
     /// <summary>
     /// Factory interface to instantiate any <see cref="IInventorySlot{T}"/>

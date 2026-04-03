@@ -1,11 +1,11 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
-using TheChest.Core.Slots;
-using TheChest.Inventories.Tests.Slots.Factories.Interfaces;
+using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
+using TheChest.Inventories.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.Factories
 {
     public class InventorySlotFactory<Slot, Item> : IInventorySlotFactory<Item> 
-        where Slot : Slot<Item>
+        where Slot : InventorySlot<Item>
     {
         public virtual IInventorySlot<Item> EmptySlot()
         {

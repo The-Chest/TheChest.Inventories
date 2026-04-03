@@ -1,6 +1,6 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
 
-namespace TheChest.Inventories.Tests.Slots.Factories.Interfaces
+namespace TheChest.Inventories.Tests.Slots.Interfaces.Factories
 {
     public interface IInventoryStackSlotFactory<T>
     {
