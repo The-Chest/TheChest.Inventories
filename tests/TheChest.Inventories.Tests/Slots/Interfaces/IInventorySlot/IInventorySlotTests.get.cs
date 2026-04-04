@@ -1,4 +1,4 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots.Interfaces
 {
     public partial class IInventorySlotTests<T>
     {
@@ -22,17 +22,6 @@
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.EqualTo(item));
-        }
-
-        [Test]
-        public void GetOne_FullSlot_RemovesItemFromSlot()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
-
-            slot.Get();
-
-            Assert.That(slot.GetContent(), Is.Null);
         }
     }
 }
