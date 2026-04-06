@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework.Internal;
 
-namespace TheChest.Inventories.Tests.Containers
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
