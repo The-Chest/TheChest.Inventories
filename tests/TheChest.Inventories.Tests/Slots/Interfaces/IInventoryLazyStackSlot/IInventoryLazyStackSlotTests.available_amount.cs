@@ -1,4 +1,4 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots.Interfaces
 {
     public partial class IInventoryLazyStackSlotTests<T>
     {
