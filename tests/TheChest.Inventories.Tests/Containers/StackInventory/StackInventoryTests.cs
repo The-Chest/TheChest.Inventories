@@ -8,7 +8,7 @@ using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 using TheChest.Inventories.Tests.Slots.Factories;
 using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
 
-namespace TheChest.Inventories.Tests.Containers
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     [TestFixture(typeof(TestItem))]
     [TestFixture(typeof(TestStructItem))]
