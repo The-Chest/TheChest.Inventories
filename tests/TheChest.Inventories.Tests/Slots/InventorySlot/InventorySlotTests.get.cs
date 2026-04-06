@@ -2,7 +2,7 @@
 
 namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
-    public partial class IInventorySlotTests<T>
+    public partial class InventorySlotTests<T>
     {
         [Test]
         public void GetOne_FullSlot_RemovesItemFromSlot()
