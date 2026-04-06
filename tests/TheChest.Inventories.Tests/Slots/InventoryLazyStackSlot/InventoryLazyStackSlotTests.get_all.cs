@@ -1,6 +1,6 @@
 ﻿using TheChest.Tests.Common.Extensions.Slots;
 
-namespace TheChest.Inventories.Tests.Slots
+namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
 {
     public partial class InventoryLazyStackSlotTests<T>
     {

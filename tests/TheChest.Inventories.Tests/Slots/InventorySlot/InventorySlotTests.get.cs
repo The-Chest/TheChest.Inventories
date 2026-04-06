@@ -1,6 +1,6 @@
 ﻿using TheChest.Tests.Common.Extensions.Slots;
 
-namespace TheChest.Inventories.Tests.Slots.Interfaces
+namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class IInventorySlotTests<T>
     {
