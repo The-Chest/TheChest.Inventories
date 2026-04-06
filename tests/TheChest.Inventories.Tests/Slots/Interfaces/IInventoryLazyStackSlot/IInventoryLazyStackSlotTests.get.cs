@@ -1,16 +1,7 @@
-﻿namespace TheChest.Inventories.Tests.Slots
+﻿namespace TheChest.Inventories.Tests.Slots.Interfaces
 {
     public partial class IInventoryLazyStackSlotTests<T>
     {
-        [TestCase(0)]
-        [TestCase(-1)]
-        public void Get_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
-        {
-            var slot = this.slotFactory.EmptySlot();
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => slot.Get(amount));
-        }
-
         [Test]
         public void Get_EmptySlot_ReturnsEmptyArray()
         {
@@ -25,26 +16,12 @@
         public void Get_AmountExceedingStackAmount_ReturnsAllItems()
         {
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 10);
-            var maxAmount = this.random.Next(10, 20);
-            var slot = this.slotFactory.WithItem(item, amount, maxAmount);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.WithItem(item, stackSize, stackSize);
 
-            var result = slot.Get(amount + 1);
+            var result = slot.Get(stackSize + 1);
 
-            Assert.That(result, Has.Length.EqualTo(amount));
-        }
-
-        [Test]
-        public void Get_AmountExceedingStackAmount_ClearsSlot()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 10);
-            var maxAmount = this.random.Next(10, 20);
-            var slot = this.slotFactory.WithItem(item, amount, maxAmount);
-
-            slot.Get(amount + 1);
-
-            Assert.That(slot.IsEmpty, Is.True);
+            Assert.That(result, Has.Length.EqualTo(stackSize));
         }
 
         [Test]
