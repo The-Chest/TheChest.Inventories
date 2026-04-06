@@ -7,7 +7,7 @@ namespace TheChest.Tests.Common.Attributes.Reflection
     /// Proxy class for handling exceptions thrown by methods invoked via reflection.
     /// When used, it can unwrap and rethrow inner exceptions based on the presence of the <see cref="ReflectionExceptionHandleAttribute"/>.
     /// </summary>
-    public sealed class ReflectionExceptionHandleProxy<T> : DispatchProxy
+    public class ReflectionExceptionHandleProxy<T> : DispatchProxy
     {
         private T target;
 
@@ -48,7 +48,7 @@ namespace TheChest.Tests.Common.Attributes.Reflection
         /// <returns>The result of the method invocation.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="targetMethod"/> is null.</exception>
         /// <exception cref="Exception">Rethrows exceptions according to the attribute and invocation context.</exception>
-        protected override object Invoke(MethodInfo targetMethod, object[] args)
+        protected override object Invoke(MethodInfo? targetMethod, object?[]? args)
         {
             if (targetMethod == null)
                 throw new ArgumentNullException(nameof(targetMethod));
