@@ -5,7 +5,7 @@ using TheChest.Tests.Common.Items.Interfaces;
 
 namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
-    public partial class IStackInventoryTests<T> : BaseTest<T>
+    public abstract partial class IStackInventoryTests<T> : BaseTest<T>
     {
         protected readonly IStackInventoryFactory<T> inventoryFactory;
         protected readonly IItemFactory<T> itemFactory;
