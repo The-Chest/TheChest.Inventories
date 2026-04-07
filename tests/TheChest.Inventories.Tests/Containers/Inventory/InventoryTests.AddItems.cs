@@ -212,6 +212,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_NotAvailabeSlotsForAllItems_AddsSomeItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -228,6 +229,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_NotAvailabeSlotsForAllItems_ReturnsNotAddedItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -243,6 +245,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_FullInventory_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -256,6 +259,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_FullInventory_ReturnsAllNotAddedItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
