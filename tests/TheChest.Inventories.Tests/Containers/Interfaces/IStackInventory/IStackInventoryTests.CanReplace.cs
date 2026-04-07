@@ -1,3 +1,4 @@
+using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
     public partial class IStackInventoryTests<T>
@@ -10,7 +11,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var items = this.itemFactory.CreateMany(20);
+            var items = this.itemFactory.CreateMany(stackSize);
             Assert.That(() => inventory.Replace(items, index), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
@@ -44,6 +45,7 @@
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void Replace_NullItems_DoesNotReplace()
         {
             var item = this.itemFactory.CreateDefault();

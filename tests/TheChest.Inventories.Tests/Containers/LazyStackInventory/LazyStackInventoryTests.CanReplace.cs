@@ -1,3 +1,4 @@
+using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
@@ -33,6 +34,7 @@
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void CanReplace_NullItem_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

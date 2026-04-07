@@ -1,3 +1,4 @@
+using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
     public partial class ILazyStackInventoryTests<T>
@@ -17,6 +18,7 @@
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void Get_ByItem_NotFoundItem_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -28,6 +30,21 @@
             var result = inventory.Get(item);
 
             Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        [IgnoreIfReferenceTypeAttribute]
+        public void Get_ByItem_NotFoundItemValueType_ReturnsDefault()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var items = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
+
+            var item = this.itemFactory.CreateRandom();
+            var result = inventory.Get(item);
+
+            Assert.That(result, Is.EqualTo(default(T)));
         }
     }
 }

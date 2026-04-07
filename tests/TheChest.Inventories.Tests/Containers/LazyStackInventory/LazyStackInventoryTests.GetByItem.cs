@@ -1,14 +1,25 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void Get_ByItem_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
             Assert.Throws<ArgumentNullException>(() => inventory.Get(item: default!));
+        }
+
+        [Test]
+        [IgnoreIfReferenceTypeAttribute]
+        public void Get_ByItem_DefaultValueTypeItem_DoesNotThrow()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer();
+
+            Assert.That(() => inventory.Get(item: default!), Throws.Nothing);
         }
 
         [Test]
