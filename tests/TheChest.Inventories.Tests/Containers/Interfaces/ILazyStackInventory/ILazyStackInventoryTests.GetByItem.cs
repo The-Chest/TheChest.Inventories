@@ -17,6 +17,7 @@
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void Get_ByItem_NotFoundItem_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

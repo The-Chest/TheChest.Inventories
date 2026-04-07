@@ -5,6 +5,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void GetItem_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

@@ -132,6 +132,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void Replace_EmptySlot_CallsOnReplaceEventWithNullOldItem()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

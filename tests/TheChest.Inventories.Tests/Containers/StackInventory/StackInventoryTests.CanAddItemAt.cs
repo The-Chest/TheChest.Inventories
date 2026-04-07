@@ -3,6 +3,7 @@
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void CanAddItemAt_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

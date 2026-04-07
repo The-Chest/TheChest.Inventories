@@ -3,6 +3,7 @@
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void Get_ByItemAndAmount_Nulltem_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

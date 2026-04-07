@@ -16,6 +16,7 @@
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
         {
             var size = this.random.Next(10, 20);

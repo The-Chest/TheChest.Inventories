@@ -44,6 +44,7 @@
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void Replace_NullItems_DoesNotReplace()
         {
             var item = this.itemFactory.CreateDefault();

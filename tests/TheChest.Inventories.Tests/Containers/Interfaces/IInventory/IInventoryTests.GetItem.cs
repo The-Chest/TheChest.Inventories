@@ -3,6 +3,7 @@
     public partial class IInventoryTests<T>
     {
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void GetItem_NotFoundItem_ReturnsNull()
         {
             var size = this.random.Next(10, 20);

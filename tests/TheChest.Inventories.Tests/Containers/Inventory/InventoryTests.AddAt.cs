@@ -18,6 +18,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void AddAt_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

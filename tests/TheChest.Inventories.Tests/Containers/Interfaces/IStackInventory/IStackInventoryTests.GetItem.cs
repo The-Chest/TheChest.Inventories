@@ -3,6 +3,7 @@
     public partial class IStackInventoryTests<T>
     {
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void GetItem_EmptyInventory_ReturnsNull()
         {
             var item = this.itemFactory.CreateDefault();
@@ -27,6 +28,7 @@
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void GetItem_InventoryWithDifferentItems_ReturnsNull()
         {
             var stackSize = this.random.Next(1, 20);

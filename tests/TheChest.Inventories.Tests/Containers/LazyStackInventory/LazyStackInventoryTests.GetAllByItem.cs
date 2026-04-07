@@ -5,6 +5,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueTypeAttribute]
         public void GetAllByItem_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
