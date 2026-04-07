@@ -40,12 +40,11 @@
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
-            var index = this.random.Next(0, size);
+            var index = this.random.Next(0, size - 1);
             var amount = this.random.Next(stackSize + 1, stackSize + 10);
             var result = inventory.Get(index, amount);
 
-            Assert.That(result, Has.Length.EqualTo(size));
-            Assert.That(result, Has.All.EqualTo(item));
+            Assert.That(result, Has.Length.EqualTo(stackSize).And.All.EqualTo(item));
         }
     }
 }

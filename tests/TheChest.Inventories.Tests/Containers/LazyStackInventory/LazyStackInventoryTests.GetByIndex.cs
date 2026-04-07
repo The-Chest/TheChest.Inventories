@@ -1,9 +1,11 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using TheChest.Tests.Common.Extensions.Containers;
+
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_STACK_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void Get_ByIndex_ShouldThrowArgumentOutOfRangeException_WhenIndexIsInvalid(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -14,7 +16,19 @@
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Get(index));
         }
 
-        //TODO: add tests to remove item from slot
+        [Test]
+        public void Get_ByIndex_ValidIndex_RemovesItemFromSlot()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var expectedItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, expectedItem);
+
+            var index = this.random.Next(0, size - 1);
+            inventory.Get(index);
+
+            Assert.That(inventory.GetItems(index), Has.Length.EqualTo(stackSize - 1));
+        }
 
         [Test]
         public void Get_ByIndex_ValidIndex_CallsOnGetEvent()

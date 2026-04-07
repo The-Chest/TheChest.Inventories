@@ -7,14 +7,13 @@
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var expectedAmount = size * stackSize;
-
             var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
             var amount = size * stackSize * 2;
             var result = inventory.Get(item, amount);
 
+            var expectedAmount = size * stackSize;
             Assert.That(result, Has.Length.EqualTo(expectedAmount).And.All.EqualTo(item));
         }
 

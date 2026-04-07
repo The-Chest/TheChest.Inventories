@@ -23,7 +23,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             var inventoryType = typeof(Inventory).GetContainerType(typeof(ILazyStackInventory<Item>));
             var slotType = inventoryType.GetSlotTypeByConstructor<IInventoryLazyStackSlot<Item>>();
 
-            var slots = slotType.CreateSlots(size, _ => slotFactory.EmptySlot());
+            var slots = slotType.CreateSlots(size, _ => slotFactory.EmptySlot(stackSize));
 
             var inventory = Activator.CreateInstance(
                 type: inventoryType,
@@ -66,7 +66,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                                 amount: Random.Shared.Next(1, stackSize),
                                 maxAmount: stackSize
                             )
-                            : slotFactory.EmptySlot(),
+                            : slotFactory.EmptySlot(stackSize),
                     shuffle: true
                 );
 

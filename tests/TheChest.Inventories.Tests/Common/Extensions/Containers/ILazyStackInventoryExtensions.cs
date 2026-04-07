@@ -28,6 +28,6 @@ namespace TheChest.Tests.Common.Extensions.Containers
         /// <param name="container">The container from which to retrieve the item.</param>
         /// <param name="index">Index of the slot to retrieve.</param>
         /// <returns>An item of type <typeparamref name="T"/> representing the content of the slot at the specified index in the container, or <see langword="null"/> if the container does not contain slot data in the expected format, if the index is out of bounds, or if the slot at the specified index is empty.</returns>
-        public static T GetItems<T>(this ILazyStackContainer<T> container, int index) => container.GetSlot(index).GetContent();
+        public static T[] GetItems<T>(this ILazyStackContainer<T> container, int index) => container.GetSlot(index).GetContents();
     }
 }

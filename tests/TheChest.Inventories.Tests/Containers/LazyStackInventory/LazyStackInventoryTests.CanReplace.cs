@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1, 1)]
-        [TestCase(MAX_STACK_SIZE_TEST + 1, 1)]
+        [TestCase(MAX_SIZE_TEST + 1, 1)]
         public void CanReplace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

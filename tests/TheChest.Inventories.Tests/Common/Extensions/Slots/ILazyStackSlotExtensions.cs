@@ -11,7 +11,16 @@ namespace TheChest.Tests.Common.Extensions.Slots
         /// <param name="slot">The slot from which to retrieve the value. </param>
         /// <returns>The value contained in the slot, cast to type <typeparamref name="T"/>.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the slot's underlying field type is not assignable to <typeparamref name="T"/>.</exception>
-        public static T GetContent<T>(this ILazyStackSlot<T> slot) => slot.GetContents()[0];
+        public static T GetContent<T>(this ILazyStackSlot<T> slot)
+        {
+            var field = slot.GetContentField();
+
+            var value = field.GetValue(slot);
+            if (value is null)
+                return default!;
+            
+            return (T)value;
+        }
 
         /// <summary>
         /// Retrieves a copy of the contents stored in the specified stack slot.
@@ -22,17 +31,11 @@ namespace TheChest.Tests.Common.Extensions.Slots
         /// <exception cref="InvalidOperationException">Thrown if the underlying field type of the stack slot is not assignable to an array of type <typeparamref name="T"/>.</exception>
         public static T[] GetContents<T>(this ILazyStackSlot<T> slot)
         {
-            var field = slot.GetContentField();
-
-            var fieldType = field.FieldType;
-            if (fieldType != typeof(T[]) && !typeof(T[]).IsAssignableFrom(fieldType))
-                throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T[])}'.");
-
-            var original = (T[])field.GetValue(slot);
+            var original = slot.GetContent();
             if (original is null)
-                return null;
+                return Array.Empty<T>();
 
-            return (T[])original.Clone();
+            return Enumerable.Repeat(original, slot.Amount).ToArray();
         }
     }
 }

@@ -23,8 +23,8 @@
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var item = this.itemFactory.CreateDefault();
 
+            var item = this.itemFactory.CreateDefault();
             var randomIndex = this.random.Next(0, size - 1);
             var amount = stackSize + this.random.Next(1, stackSize);
             var canAdd = inventory.CanAddAt(item, randomIndex, amount);

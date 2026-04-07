@@ -71,8 +71,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItems(origin);
-            var ItemFromTarget = inventory.GetItems(target);
+            var itemFromOrigin = inventory.GetItems(origin)[0];
+            var ItemFromTarget = inventory.GetItems(target)[0];
 
             var raised = false;
             inventory.OnMove += (o, args) =>

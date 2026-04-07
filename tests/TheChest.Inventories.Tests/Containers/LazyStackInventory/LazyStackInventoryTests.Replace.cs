@@ -129,7 +129,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var index = this.random.Next(0, size - 1);
             inventory.Replace(newItem, index, stackSize);
 
-            Assert.That(inventory.GetSlots()![index].GetContent(), Is.EqualTo(newItem));
+            Assert.That(inventory.GetItems(index), Has.All.EqualTo(newItem));
         }
 
         [Test]

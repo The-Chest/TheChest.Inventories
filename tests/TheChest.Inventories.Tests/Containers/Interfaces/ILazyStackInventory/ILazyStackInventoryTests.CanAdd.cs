@@ -67,11 +67,13 @@
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventoryItems = this.itemFactory.CreateManyRandom(size).ToList();
+            var inventoryItems = this.itemFactory.CreateManyRandom(size - 1).ToList();
             inventoryItems.Add(item);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems.ToArray());
 
             var amount = this.random.Next(1, stackSize);
+            inventory.Get(item, amount);
+
             var canAdd = inventory.CanAdd(item, amount);
 
             Assert.That(canAdd, Is.True);
