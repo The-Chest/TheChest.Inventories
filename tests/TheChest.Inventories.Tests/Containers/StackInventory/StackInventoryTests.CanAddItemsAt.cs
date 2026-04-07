@@ -1,8 +1,10 @@
+using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void CanAddItemsAt_NullItems_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -13,6 +15,7 @@
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void CanAddItemsAt_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

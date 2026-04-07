@@ -1,5 +1,6 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
@@ -20,6 +21,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItemAt_InvalidItem_ThrowsArgumentException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

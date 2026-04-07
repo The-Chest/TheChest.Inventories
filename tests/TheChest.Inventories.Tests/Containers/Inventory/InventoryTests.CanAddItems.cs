@@ -1,8 +1,10 @@
+using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void CanAddItems_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -10,6 +12,7 @@
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

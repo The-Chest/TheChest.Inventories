@@ -1,6 +1,7 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
+using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
@@ -18,6 +19,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayWithOnlyNullItems_ReturnsEmptyArray()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -30,6 +32,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayWithOnlyNullItems_DoesNotAddToAnySlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -42,6 +45,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayWithOnlyNullItems_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -52,6 +56,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayContainingNullItems_ReturnsEmptyArray()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -68,6 +73,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayContainingNullItems_DoesNotAddNullToAnySlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -89,6 +95,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayContainingNullItems_DoesNotCallOnAddEventWithNullItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -112,6 +119,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void AddItems_ArrayContainingNullItems_CallsOnAddEventWithAddedItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

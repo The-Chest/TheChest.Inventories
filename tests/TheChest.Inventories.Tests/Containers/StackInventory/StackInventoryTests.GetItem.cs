@@ -1,15 +1,26 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueTypeAttribute]
         public void GetItem_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.That(() => inventory.Get(default(T)!), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        [IgnoreIfReferenceTypeAttribute]
+        public void GetItem_DefaultValueTypeItem_DoesNotThrow()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer();
+
+            Assert.That(() => inventory.Get(default(T)!), Throws.Nothing);
         }
 
         [Test]
