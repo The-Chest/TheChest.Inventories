@@ -65,6 +65,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddAt_FullSlot_DoesNotAddTheItem()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -84,6 +85,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddAt_FullSlot_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

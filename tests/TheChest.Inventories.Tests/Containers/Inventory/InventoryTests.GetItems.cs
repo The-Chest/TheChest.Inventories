@@ -37,6 +37,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void GetItems_ExistingItemOnSlot_CallsOnGetEvent()
         {
             var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

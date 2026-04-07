@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers.Inventory
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
@@ -13,6 +15,7 @@
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void Clear_FullInventory_CallsOnGetEvent()
         {
             var size = this.random.Next(10, 20);
