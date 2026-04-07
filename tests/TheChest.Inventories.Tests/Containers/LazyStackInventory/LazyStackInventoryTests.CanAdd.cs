@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void CanAdd_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
