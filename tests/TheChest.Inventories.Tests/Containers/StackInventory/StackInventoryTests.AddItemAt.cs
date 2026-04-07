@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void AddItemAt_InvalidItem_ThrowsArgumentException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -127,10 +127,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var containerItem = this.itemFactory.CreateRandom();
+            var containerItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, containerItem);
             
-            var index = this.random.Next(0, size);
+            var index = this.random.Next(0, size - 1);
             inventory.Get(index);
 
             var item = this.itemFactory.CreateDefault();

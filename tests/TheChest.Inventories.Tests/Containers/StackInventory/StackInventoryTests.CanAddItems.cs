@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void CanAddItems_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -12,7 +12,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

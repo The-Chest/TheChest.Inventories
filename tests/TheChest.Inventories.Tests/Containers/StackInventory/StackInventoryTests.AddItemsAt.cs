@@ -123,7 +123,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when is not possible to Add.");
 
             var items = this.itemFactory.CreateMany(stackSize);
-            var index = this.random.Next(0, MAX_SIZE_TEST);
+            var index = this.random.Next(0, size - 1);
             inventory.AddAt(items, index);
         }
     }

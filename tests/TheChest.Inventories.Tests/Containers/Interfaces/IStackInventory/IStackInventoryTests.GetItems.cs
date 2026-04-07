@@ -18,8 +18,10 @@
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = this.itemFactory.CreateManyRandom(size - 1);
-            var inventoryItems = this.itemFactory.CreateManyRandom(10).ToList();
+            var items = this.itemFactory.CreateManyRandom(size / 2);
+            var inventoryItems = this.itemFactory
+                .CreateManyRandom(size / 2)
+                .ToList();
             inventoryItems.AddRange(items);
 
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems.ToArray());

@@ -60,7 +60,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                     factory:
                         index => index < items.Length
                             ? slotFactory.WithItem(items[index], stackSize, stackSize)
-                            : slotFactory.EmptySlot(),
+                            : slotFactory.EmptySlot(stackSize),
                     shuffle: true
                 );
 

@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetCount_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

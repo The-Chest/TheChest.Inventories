@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetAmount_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

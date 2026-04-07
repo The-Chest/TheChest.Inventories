@@ -29,7 +29,7 @@
             var items = inventory.Get(index, amount);
 
             Assert.That(items, Is.Not.Empty);
-            Assert.That(items.Count, Is.EqualTo(10));
+            Assert.That(items, Has.Length.EqualTo(amount));
             Assert.That(items, Has.All.EqualTo(slotItem));
         }
 

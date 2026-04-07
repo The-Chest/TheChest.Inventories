@@ -6,7 +6,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItem_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -15,7 +15,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfReferenceTypeAttribute]
+        [IgnoreIfReferenceType]
         public void GetItem_DefaultValueTypeItem_DoesNotThrow()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

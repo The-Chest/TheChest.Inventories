@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void CanAddItemsAt_NullItems_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -15,7 +15,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void CanAddItemsAt_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -29,7 +29,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [TestCase(-1)]
-        [TestCase(MAX_STACK_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void CanAddItemsAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

@@ -22,7 +22,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
-            var originIndex = this.random.Next(MIN_SIZE_TEST, inventorySize - 1);
+            var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
 
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
@@ -40,7 +40,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
-            var originIndex = this.random.Next(MIN_SIZE_TEST, inventorySize - 1);
+            var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
 
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
@@ -58,7 +58,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
-            var originIndex = this.random.Next(MIN_SIZE_TEST, inventorySize - 1);
+            var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
 
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
@@ -80,7 +80,7 @@
 
             var inventory = this.inventoryFactory.ShuffledItemsContainer(inventorySize, stackSize, inventoryItems);
 
-            var originIndex = this.random.Next(MIN_SIZE_TEST, inventorySize - 1);
+            var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
 
             var canMove = inventory.CanMove(originIndex, targetIndex);

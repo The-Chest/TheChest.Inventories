@@ -53,12 +53,12 @@
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var index = this.random.Next(0, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
 
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
             var item = this.itemFactory.CreateDefault();
+            var index = this.random.Next(0, size - 1);
             var result = inventory.AddAt(item, index);
 
             Assert.That(result, Is.False);

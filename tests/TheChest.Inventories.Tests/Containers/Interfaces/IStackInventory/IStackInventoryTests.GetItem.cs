@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class IStackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItem_EmptyInventory_ReturnsNull()
         {
             var item = this.itemFactory.CreateDefault();
@@ -16,7 +16,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfReferenceTypeAttribute]
+        [IgnoreIfReferenceType]
         public void GetItem_EmptyInventoryValueType_ReturnsDefault()
         {
             var item = this.itemFactory.CreateDefault();
@@ -41,7 +41,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItem_InventoryWithDifferentItems_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -56,7 +56,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfReferenceTypeAttribute]
+        [IgnoreIfReferenceType]
         public void GetItem_InventoryWithDifferentItemsValueType_ReturnsDefault()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
