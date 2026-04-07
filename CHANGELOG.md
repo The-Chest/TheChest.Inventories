@@ -14,7 +14,7 @@
 
 ## Known Issues
 * The Current Architecture is not stable for the final version yet
-* Unit tests are getting too complex and need a refactor 
+* No support for structs or value types 
 * `StackInventory<T>` class is too complex and needs some refactors 
 * Inventory classes have too many methods
   * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
