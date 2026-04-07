@@ -89,9 +89,9 @@
         public void CanAddItems_ItemEqualsToSlot_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = this.itemFactory.CreateMany(stackSize);
             var halfStackSize = stackSize / 2;
-            var slot = this.slotFactory.WithItems(items, halfStackSize);
+            var items = this.itemFactory.CreateMany(halfStackSize);
+            var slot = this.slotFactory.WithItems(items, stackSize);
 
             var addItems = this.itemFactory.CreateMany(halfStackSize);
 

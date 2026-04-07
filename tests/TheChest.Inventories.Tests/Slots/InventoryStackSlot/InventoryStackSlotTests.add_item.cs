@@ -44,7 +44,8 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public void Add_SlotWithSameItem_AddsToContent()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = this.itemFactory.CreateMany(stackSize / 2 );
+            var halfStackSize = stackSize / 2;
+            var items = this.itemFactory.CreateMany(halfStackSize);
             var slot = this.slotFactory.WithItems(items, stackSize);
 
             var item = this.itemFactory.CreateDefault();
@@ -52,8 +53,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
             slot.Add(item);
 
-            Assert.Fail("Improve this test validation");
-            Assert.That(slot.GetContents()[0..((stackSize / 2) - 1)], Is.EqualTo(expectedItems));
+            Assert.That(slot.GetContents()[0..halfStackSize], Is.EqualTo(expectedItems));
         }
 
         [Test]

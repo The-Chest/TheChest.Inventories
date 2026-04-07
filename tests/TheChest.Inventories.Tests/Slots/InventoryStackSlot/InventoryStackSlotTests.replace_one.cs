@@ -1,10 +1,12 @@
-﻿using TheChest.Tests.Common.Extensions.Slots;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 {
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void ReplaceOne_NullItemReplace_ThrowsArgumentNullException()
         {
             var slotItems = this.itemFactory.CreateMany(10);
