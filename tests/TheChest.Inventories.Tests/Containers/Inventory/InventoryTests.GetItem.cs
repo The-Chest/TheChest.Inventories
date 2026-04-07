@@ -1,12 +1,12 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
-
 using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItem_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -14,7 +14,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfReferenceTypeAttribute]
+        [IgnoreIfReferenceType]
         public void GetItem_DefaultValueTypeItem_DoesNotThrow()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

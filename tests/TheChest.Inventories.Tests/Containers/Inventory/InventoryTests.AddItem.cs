@@ -1,14 +1,14 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
-
 using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void AddItem_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
@@ -26,12 +26,11 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             Assert.Multiple(() =>
             {
-                var randomIndex = this.random.Next(0, size);
-                var firstSlot = inventory.GetSlot<T>(randomIndex);
+                var firstSlot = inventory.GetSlot(0);
 
                 Assert.That(firstSlot, Is.Not.Null);
-                Assert.That(firstSlot!.IsEmpty, Is.False);
-                Assert.That(firstSlot.GetContent<T>(), Is.EqualTo(item));
+                Assert.That(firstSlot.IsEmpty, Is.False);
+                Assert.That(firstSlot.GetContent(), Is.EqualTo(item));
             });
         }
 

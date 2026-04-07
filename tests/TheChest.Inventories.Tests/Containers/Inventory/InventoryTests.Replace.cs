@@ -9,7 +9,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [TestCase(MAX_SIZE_TEST + 1)]
         public void Replace_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
                 () => inventory.Replace(this.itemFactory.CreateDefault(), index),
@@ -18,7 +19,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void Replace_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

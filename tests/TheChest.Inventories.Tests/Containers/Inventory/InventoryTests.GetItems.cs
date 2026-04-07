@@ -1,5 +1,6 @@
 using TheChest.Tests.Common.Attributes;
-﻿namespace TheChest.Inventories.Tests.Containers.Inventory
+﻿
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
@@ -18,7 +19,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItems_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

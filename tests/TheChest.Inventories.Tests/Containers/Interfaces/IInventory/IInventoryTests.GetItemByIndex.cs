@@ -17,7 +17,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -30,7 +30,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfReferenceTypeAttribute]
+        [IgnoreIfReferenceType]
         public void GetItemByIndex_ValidIndexEmptySlotValueType_ReturnsDefault()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

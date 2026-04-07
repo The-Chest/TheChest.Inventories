@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class IInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void Replace_EmptySlot_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

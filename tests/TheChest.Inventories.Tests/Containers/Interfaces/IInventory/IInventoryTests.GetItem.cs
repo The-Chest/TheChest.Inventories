@@ -4,7 +4,7 @@ using TheChest.Tests.Common.Attributes;
     public partial class IInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueTypeAttribute]
+        [IgnoreIfValueType]
         public void GetItem_NotFoundItem_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -18,7 +18,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        [IgnoreIfReferenceTypeAttribute]
+        [IgnoreIfReferenceType]
         public void GetItem_NotFoundItemValueType_ReturnsDefault()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
