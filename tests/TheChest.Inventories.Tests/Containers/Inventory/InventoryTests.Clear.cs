@@ -15,7 +15,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void Clear_FullInventory_CallsOnGetEvent()
         {
             var size = this.random.Next(10, 20);

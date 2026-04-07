@@ -31,7 +31,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void AddItems_FullInventory_DoesNotAddItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -42,20 +41,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             inventory.Add(items);
 
             Assert.That(inventory.GetCount(items[0]), Is.EqualTo(0));
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void AddItems_FullInventoryValueType_AddsItems()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, item);
-
-            var items = this.itemFactory.CreateManyRandom(size);
-            inventory.Add(items);
-
-            Assert.That(inventory.GetCount(items[0]), Is.GreaterThan(0));
         }
     }
 }

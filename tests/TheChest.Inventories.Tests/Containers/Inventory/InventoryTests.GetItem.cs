@@ -14,15 +14,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void GetItem_DefaultValueTypeItem_DoesNotThrow()
-        {
-            var inventory = this.inventoryFactory.EmptyContainer();
-
-            Assert.That(() => inventory.Get(item: default!), Throws.Nothing);
-        }
-
-        [Test]
         public void GetItem_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

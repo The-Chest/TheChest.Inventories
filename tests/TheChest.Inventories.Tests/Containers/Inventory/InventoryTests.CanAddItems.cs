@@ -52,7 +52,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void CanAddItems_InsufficientSpace_ReturnsFalse()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

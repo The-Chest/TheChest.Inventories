@@ -1,11 +1,8 @@
-﻿using TheChest.Tests.Common.Attributes;
-
-namespace TheChest.Inventories.Tests.Containers.Interfaces
+﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
     public partial class IInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void GetCount_ReturnsItemCount()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -15,19 +12,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var count = inventory.GetCount(items[0]);
 
             Assert.That(count, Is.EqualTo(size));
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void GetCount_ValueTypeDefaultInFullContainer_ReturnsZero()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var items = this.itemFactory.CreateMany(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
-
-            var count = inventory.GetCount(items[0]);
-
-            Assert.That(count, Is.Zero);
         }
 
         [Test]

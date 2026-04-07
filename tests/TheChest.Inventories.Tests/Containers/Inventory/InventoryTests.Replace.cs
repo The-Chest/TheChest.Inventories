@@ -40,7 +40,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void Replace_EmptySlot_CallsOnAddEventWithEmptyOldItem()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -58,28 +57,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                     Assert.That(args.Data.Select(x => x.OldItem), Has.All.Null);
                     Assert.That(args.Data.Select(x => x.NewItem), Has.All.EqualTo(item));
                 });
-                raised = true;
-            };
-
-            inventory.Replace(item, randomIndex);
-
-            Assert.That(raised, Is.True, "OnReplace event was not raised");
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Replace_EmptySlotValueType_CallsOnAddEventWithDefaultOldItem()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var item = this.itemFactory.CreateRandom();
-
-            var raised = false;
-            inventory.OnReplace += (sender, args) =>
-            {
-                Assert.That(args.Data.Select(x => x.OldItem), Has.All.EqualTo(default(T)));
                 raised = true;
             };
 

@@ -15,7 +15,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void Clear_FullInventory_ReturnsEveryItemFromInventory()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -27,20 +26,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var result = inventory.Clear();
 
             Assert.That(result, Is.EquivalentTo(items));
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Clear_FullInventoryValueType_ReturnsOnlyNonDefaultItems()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var randomItems = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-            inventory.Add(randomItems);
-
-            var result = inventory.Clear();
-
-            Assert.That(result.Length, Is.GreaterThan(0));
         }
     }
 }

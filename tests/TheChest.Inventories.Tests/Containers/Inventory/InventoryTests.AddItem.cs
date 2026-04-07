@@ -16,7 +16,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void AddItem_EmptyInventory_AddsToFirstSlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -60,7 +59,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void AddItem_InventoryWithItems_AddsToFirstAvailableSlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -80,7 +78,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void AddItem_FullInventory_DoesNotAddItem()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -99,7 +96,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void AddItem_FullInventory_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
