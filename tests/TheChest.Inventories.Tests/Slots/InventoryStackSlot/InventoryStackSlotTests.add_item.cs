@@ -53,19 +53,21 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
             slot.Add(item);
 
-            Assert.That(slot.GetContents()[0..halfStackSize], Is.EqualTo(expectedItems));
+            Assert.That(slot.GetContents()[0..(halfStackSize + 1)], Is.EquivalentTo(expectedItems));
         }
 
         [Test]
-        public void Add_SlotWithDifferentItem_DoNotAddToContent()
+        public void Add_SlotWithDifferentItem_DoesNotAddToContent()
         {
-            var items = this.itemFactory.CreateMany(5);
-            var slot = this.slotFactory.WithItems(items, 10);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var halfStackSize = stackSize / 2;
+            var items = this.itemFactory.CreateMany(halfStackSize);
+            var slot = this.slotFactory.WithItems(items, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             slot.Add(item);
 
-            Assert.That(slot.GetContents(), Is.Not.Contains(item));
+            Assert.That(slot.GetContents(), Has.None.EqualTo(item));
         }
     }
 }

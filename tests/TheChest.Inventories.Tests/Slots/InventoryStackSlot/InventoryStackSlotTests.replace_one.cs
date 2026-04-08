@@ -22,7 +22,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             var slot = this.slotFactory.EmptySlot(stackSize);
 
             var item = this.itemFactory.CreateDefault();
-            var expectedResult = new T[stackSize];
+            var expectedResult = new T[1];
             expectedResult[0] = item;
 
             slot.Replace(item);
@@ -38,7 +38,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             var slot = this.slotFactory.WithItems(items, stackSize);
 
             var replacingItem = this.itemFactory.CreateRandom();
-            var expectedResult = new T[stackSize];
+            var expectedResult = new T[1];
             expectedResult[0] = replacingItem;
 
             slot.Replace(replacingItem);

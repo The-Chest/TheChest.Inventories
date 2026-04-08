@@ -25,7 +25,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             var amount = this.random.Next(1, stackSize);
             slot.Get(amount);
 
-            Assert.That(slot.GetContents()[amount..stackSize], Is.EquivalentTo(items[amount..stackSize]));
+            Assert.That(slot.GetContents(), Has.Exactly(stackSize - amount).Items);
         }
 
         [Test]

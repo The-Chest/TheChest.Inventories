@@ -21,9 +21,9 @@ namespace TheChest.Tests.Common.Extensions.Slots
 
             var original = (T[])field.GetValue(slot);
             if (original is null)
-                return null;
+                return Array.Empty<T>();
 
-            return (T[])original.Clone();
+            return (T[])original.Where(i => i is not null).ToArray().Clone();
         }
     }
 }
