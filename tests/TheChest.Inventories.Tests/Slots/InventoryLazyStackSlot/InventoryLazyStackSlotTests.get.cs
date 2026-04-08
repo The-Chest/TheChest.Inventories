@@ -21,9 +21,10 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.WithItem(item, stackSize, stackSize);
             
-            slot.Get(stackSize);
+            var amount = this.random.Next(1, stackSize);
+            slot.Get(amount);
 
-            Assert.That(slot.GetContents(), Has.Length.EqualTo(stackSize - 1));
+            Assert.That(slot.GetContents(), Has.Length.EqualTo(stackSize - amount));
         }
 
 

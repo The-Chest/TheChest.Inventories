@@ -26,9 +26,10 @@
 
             var newItem = this.itemFactory.CreateRandom();
             
-            var result = slot.Add(newItem, 1);
+            var addAmount = this.random.Next(1, stackSize);
+            var result = slot.Add(newItem, addAmount);
 
-            Assert.That(result, Is.EqualTo(1).And.All.EqualTo(newItem));
+            Assert.That(result, Is.EqualTo(addAmount));
         }
 
         [Test]
