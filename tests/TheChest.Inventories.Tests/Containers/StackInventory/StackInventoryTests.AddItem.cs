@@ -1,6 +1,8 @@
 ﻿using TheChest.Core.Slots.Interfaces;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
-namespace TheChest.Inventories.Tests.Containers
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
@@ -8,14 +10,14 @@ namespace TheChest.Inventories.Tests.Containers
         public void AddItem_EmptyInventory_AddsToFirstEmptySlot()
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.Add(item);
-            
+
             Assert.Multiple(() =>
             {
                 var firstSlot = inventory.GetSlot(0);
-                Assert.That(firstSlot!.GetContents(), Has.One.EqualTo(item));
+                Assert.That(firstSlot!.GetContents<T>(), Has.One.EqualTo(item));
                 Assert.That(firstSlot!.Amount, Is.EqualTo(1));
             });
         }
@@ -24,7 +26,7 @@ namespace TheChest.Inventories.Tests.Containers
         public void AddItem_EmptyInventory_CallsOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var raised = false;
             inventory.OnAdd += (sender, args) =>
@@ -44,26 +46,18 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void AddItem_EmptyInventory_ReturnsTrue()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.EmptyContainer();
-
-            var result = inventory.Add(item);
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
         public void AddItem_InventoryWithItems_AddsToAvailableSlot()
         {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, 10, this.itemFactory.CreateManyRandom(10));
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var items = this.itemFactory.CreateManyRandom(stackSize);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
+            var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
-            
+
             Assert.That(
-                inventory.GetSlots()?.Any(x => x.GetContents()?.Contains(item) ?? false), 
+                inventory.GetSlots()?.Any(x => x.GetContents<T>()?.Contains(item) ?? false),
                 Is.True
             );
         }
@@ -72,9 +66,10 @@ namespace TheChest.Inventories.Tests.Containers
         public void AddItem_InventoryWithItems_CallsOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(2, 10);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
             var expectedIndex = this.random.Next(0, size);
             inventory.GetAll(expectedIndex);
 
@@ -100,15 +95,16 @@ namespace TheChest.Inventories.Tests.Containers
         {
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(2, 10);
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, amount, item);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, amount, item);
             inventory.Get(item, amount - 1);
 
             inventory.Add(item);
 
             Assert.That(
-                inventory.GetSlots(), 
+                inventory.GetSlots(),
                 Has.One.Matches<IStackSlot<T>>(
-                    x => x.Amount == 2 && x.GetContents()!.Contains(item)
+                    x => x.Amount == 2 && x.GetContents<T>()!.Contains(item)
                 )
              );
         }
@@ -117,9 +113,9 @@ namespace TheChest.Inventories.Tests.Containers
         public void AddItem_InventoryWithFullSlotWithSameItem_AddsToFirstAvailableSlot()
         {
             var item = this.itemFactory.CreateDefault();
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(2, 10);
-            var inventory = this.containerFactory.FullContainer(size, stackSize, item);
+            var amount = this.random.Next(2, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.FullContainer(size, amount, item);
             var expectedIndex = this.random.Next(0, size);
             inventory.GetAll(expectedIndex);
 
@@ -128,7 +124,7 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.Multiple(() =>
             {
                 var slot = inventory.GetSlot(expectedIndex);
-                Assert.That(slot.GetContents(), Has.One.EqualTo(item));
+                Assert.That(slot.GetContents<T>(), Has.One.EqualTo(item));
                 Assert.That(slot.Amount, Is.EqualTo(1));
             });
         }
@@ -140,9 +136,9 @@ namespace TheChest.Inventories.Tests.Containers
             var items = this.itemFactory.CreateManyRandom(19)
                 .Append(this.itemFactory.CreateDefault())
                 .ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(20, 10, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(20, 10, items);
             var slots = inventory.GetSlots()!;
-            var slotIndex = Array.IndexOf(slots, slots.First(x => x.GetContents()?.Contains(item) ?? false));
+            var slotIndex = Array.IndexOf(slots, slots.First(x => x.GetContents<T>()?.Contains(item) ?? false));
             inventory.Get(slotIndex, 9);
 
             inventory.Add(item);
@@ -150,40 +146,21 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.Multiple(() =>
             {
                 var slot = inventory.GetSlot(slotIndex);
-                Assert.That(slot.GetContents(), Has.Exactly(2).EqualTo(item));
+                Assert.That(slot.GetContents<T>(), Has.Exactly(2).EqualTo(item));
                 Assert.That(slot.Amount, Is.EqualTo(2));
             });
-        }
-
-        [Test]
-        public void AddItem_FullInventory_DoesNotAddToSlot()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(10,10, this.itemFactory.CreateRandom());
-
-            inventory.Add(item);
-
-            Assert.That(inventory.GetCount(item), Is.Zero);
         }
 
         [Test]
         public void AddItem_FullInventory_DoesNotCallOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(10, 10, this.itemFactory.CreateRandom());
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.FullContainer(size, size, this.itemFactory.CreateRandom());
+
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
+
             inventory.Add(item);
-        }
-
-        [Test]
-        public void AddItem_FullInventory_ReturnsFalse()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(10, 10, this.itemFactory.CreateRandom());
-
-            var result = inventory.Add(item);
-
-            Assert.That(result, Is.False);
         }
     }
 }

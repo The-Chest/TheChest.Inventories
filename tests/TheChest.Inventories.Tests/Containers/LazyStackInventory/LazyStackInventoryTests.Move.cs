@@ -1,33 +1,41 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
+
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(100)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void Move_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(2, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(origin, 2));
         }
 
         [TestCase(-1)]
-        [TestCase(100)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(2, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(0, target));
         }
 
         [Test]
         public void Move_OriginEqualsToTarget_ThrowsArgumentException()
         {
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(2, stackSize, item);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             Assert.Throws<ArgumentException>(() => inventory.Move(1, 1));
         }
@@ -35,36 +43,36 @@
         [Test]
         public void Move_BothSlotsWithItems_SwapsItems()
         {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var ItemFromTarget = inventory.GetItem(target);
+            var itemFromOrigin = inventory.GetItems(origin);
+            var ItemFromTarget = inventory.GetItems(target);
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetItem(origin), Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory.GetItem(target), Is.EqualTo(itemFromOrigin));
+                Assert.That(inventory.GetItems(origin), Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory.GetItems(target), Is.EqualTo(itemFromOrigin));
             });
         }
 
         [Test]
         public void Move_BothSlotsWithItems_CallsOnMove()
         {
-            var size = this.random.Next(2, 20);
-            var stackSize = this.random.Next(1, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, stackSize, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var ItemFromTarget = inventory.GetItem(target);
+            var itemFromOrigin = inventory.GetItems(origin)[0];
+            var ItemFromTarget = inventory.GetItems(target)[0];
 
             var raised = false;
             inventory.OnMove += (o, args) =>
@@ -95,8 +103,9 @@
         [Test]
         public void Move_EmptyTarget_MovesItem()
         {
-            var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
@@ -119,8 +128,9 @@
         [Test]
         public void Move_EmptyTarget_CallsOnMoveEventOnlyWithOrigin()
         {
-            var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;
@@ -148,8 +158,9 @@
         [Test]
         public void Move_EmptyOrigin_MovesItem()
         {
-            var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;
@@ -176,8 +187,9 @@
         [Test]
         public void Move_EmptyOrigin_CallsOnMoveEventOnlyWithTarget()
         {
-            var stackSize = this.random.Next(1, 10);
-            var inventory = this.containerFactory.EmptyContainer(2, stackSize);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
             var originIndex = 0;

@@ -1,17 +1,23 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots;
+using TheChest.Inventories.Tests.Containers.Factories;
+using TheChest.Inventories.Tests.Containers.Interfaces;
+using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
+using TheChest.Inventories.Tests.Slots.Factories;
+using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
+using TheChest.Tests.Common.Items.ReferenceType;
+
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
-    public abstract partial class LazyStackInventoryTests<T>
+    [TestFixture(typeof(TestItem))]
+    public partial class LazyStackInventoryTests<T> : ILazyStackInventoryTests<T>
     {
-        protected readonly ILazyStackInventoryFactory<T> containerFactory;
-        protected readonly ISlotItemFactory<T> itemFactory;
-
-        protected readonly Random random;
-        protected LazyStackInventoryTests(ILazyStackInventoryFactory<T> containerFactory, ISlotItemFactory<T> itemFactory)
+        public LazyStackInventoryTests() : base(configure =>
         {
-            this.containerFactory = containerFactory;
-            this.itemFactory = itemFactory;
-
-            this.random = new Random();
-        }
+            configure
+                .Register<IInventoryLazyStackSlotFactory<T>, InventoryLazyStackSlotFactory<InventoryLazyStackSlot<T>, T>>()
+                .Register<ILazyStackInventoryFactory<T>, LazyStackInventoryFactory<LazyStackInventory<T>, T>>();
+        })
+        { }
     }
 }

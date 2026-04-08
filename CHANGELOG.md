@@ -1,3 +1,32 @@
+# v0.15.0
+
+## What's Added
+* 
+
+## What's Changed
+* 
+
+## What's Fixed
+* 
+
+## What's Removed
+* Example project from the repository.
+
+## Known Issues
+* The Current Architecture is not stable for the final version yet
+* No support for structs or value types 
+* `StackInventory<T>` class is too complex and needs some refactors 
+* Inventory classes have too many methods
+  * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+  * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+* Event system will need an improvement on creation/dispatch
+  * The new Event API is being planned
+
+## What's Next
+* [#174](https://github.com/The-Chest/TheChest.Inventories/issues/174) - Update to use `TheChest.Core v0.15.2`
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
+
 # v0.14.0
 
 ## What's added

@@ -1,16 +1,17 @@
-﻿using TheChest.Inventories.Containers.Events;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
-namespace TheChest.Inventories.Tests.Containers
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(30)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void GetItemByIndex_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             Assert.That(
                 () => inventory.Get(index), 
@@ -21,8 +22,8 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void GetItemByIndex_ValidIndexEmptySlot_DoesNotCallOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer();
             var index = this.random.Next(0, size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("Get(int index) should not be called if no item is found");
@@ -31,50 +32,35 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void GetItemByIndex_ValidIndexFullSlot_ReturnsItem()
+        public void GetItemByIndex_ValidIndexFullSlot_RemovesItemFromSlot()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-           
-            Assert.Multiple(() =>
-            {
-                Assert.That(result, Is.EqualTo(item));
-                Assert.That(inventory.GetSlot(randomIndex).IsEmpty, Is.True);
-            });
-        }
+            inventory.Get(randomIndex);
 
-        [Test]
-        public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
-        {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-
-            Assert.That(result, Is.Null);
+            Assert.That(inventory.GetSlot<T>(randomIndex).IsEmpty, Is.True);
         }
 
         [Test]
         public void GetItemByIndex_ExistingItemOnSlot_CallsOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var randomIndex = this.random.Next(0, size);
             var raised = false;
-            inventory.OnGet += (sender, args) =>
-            {
-                Assert.That(
-                    args.Data, 
-                    Has.Count.EqualTo(1)
-                        .And.All.EqualTo(new InventoryGetItemEventData<T>(item, randomIndex))
-                );
+            inventory.OnGet += (sender, args) => {
+                Assert.That(args.Data, Has.Count.EqualTo(1));
+                var eventData = args.Data.First();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(eventData.Item, Is.EqualTo(item));
+                    Assert.That(eventData.Index, Is.EqualTo(randomIndex));
+                });
                 raised = true;
             };
 

@@ -1,58 +1,43 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
+
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
-        [Test]
-        public void GetAllFrom_EmptySlot_ReturnsEmptyArray()
+        [TestCase(-1)]
+        [TestCase(MAX_SIZE_TEST + 1)]
+        public void GetAllFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
-            var items = inventory.GetAll(0);
-            Assert.That(items, Is.Empty);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.GetAll(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         public void GetAllFrom_EmptySlot_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
-            
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for empty slot");
-            
-            inventory.GetAll(0);
-        }
 
-        [TestCase(-1)]
-        [TestCase(100)]
-        public void GetAllFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
-        {
-            var inventory = this.containerFactory.EmptyContainer();
-            Assert.That(() => inventory.GetAll(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
-        }
-
-        [Test]
-        public void GetAllFrom_SlotWithItems_ReturnItems()
-        {
-            var index = this.random.Next(0, 20);
-            var stackSize = this.random.Next(1, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
-
-            var items = inventory.GetAll(index);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(items, Has.Length.EqualTo(stackSize));
-                Assert.That(items, Has.All.EqualTo(slotItem));
-            });
+            var index = this.random.Next(0, size - 1);
+            inventory.GetAll(index);
         }
 
         [Test]
         public void GetAllFrom_SlotWithItems_RemovesAllItemsFromSlot()
         {
-            var index = this.random.Next(0, 20);
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
+            var index = this.random.Next(0, size);
             inventory.GetAll(index);
 
             Assert.Multiple(() =>
@@ -66,11 +51,12 @@
         [Test]
         public void GetAllFrom_SlotWithItems_CallsOnGetEvent()
         {
-            var index = this.random.Next(0, 20);
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
+            var index = this.random.Next(0, size);
             var raised = false;
             inventory.OnGet += (sender, args) =>
             {

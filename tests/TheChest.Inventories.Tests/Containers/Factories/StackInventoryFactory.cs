@@ -1,127 +1,72 @@
 ﻿using TheChest.Inventories.Containers;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
-using TheChest.Inventories.Tests.Extensions;
+using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
+using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
+using TheChest.Tests.Common.Extensions;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Containers.Factories
 {
-    public class StackInventoryFactory<T, Y> : IStackInventoryFactory<Y>
-        where T : StackInventory<Y>
+    public class StackInventoryFactory<Inventory, Item> : IStackInventoryFactory<Item> 
+        where Inventory : StackInventory<Item>
     {
-        protected readonly IInventoryStackSlotFactory<Y> slotFactory;
+        protected readonly IInventoryStackSlotFactory<Item> slotFactory;
 
-        public StackInventoryFactory(IInventoryStackSlotFactory<Y> slotFactory) 
+        public StackInventoryFactory(IInventoryStackSlotFactory<Item> slotFactory) 
         {
             this.slotFactory = slotFactory;
         }
 
-        private static Type GetInventoryType()
+        public virtual IStackInventory<Item> EmptyContainer(int size = 20, int stackSize = 10)
         {
-            var inventoryType = typeof(T);
-            if (!typeof(IStackInventory<Y>).IsAssignableFrom(inventoryType))
-            {
-                throw new ArgumentException($"Type '{inventoryType.FullName}' does not implement IInventory<{typeof(Y).Name}>.");
-            }
+            var inventoryType = typeof(Inventory).GetContainerType(typeof(IStackInventory<Item>));
+            var slotType = inventoryType.GetSlotTypeByConstructor<IInventoryStackSlot<Item>>();
 
-            return inventoryType;
-        }
+            var slots = slotType.CreateSlots(size, _ => slotFactory.EmptySlot(stackSize));
 
-        private static Type GetSlotTypeFromConstructor()
-        {
-            var inventoryType = GetInventoryType();
-
-            var constructor = inventoryType.GetConstructors()
-                    .FirstOrDefault(ctor =>
-                    {
-                        var parameters = ctor.GetParameters();
-                        return
-                            parameters.Length == 1 &&
-                            parameters[0].ParameterType.IsArray &&
-                            typeof(IInventoryStackSlot<Y>).IsAssignableFrom(parameters[0].ParameterType.GetElementType());
-                    })
-                    ?? throw new ArgumentException($"Inventory type '{inventoryType.FullName}' does not have a suitable constructor.");
-
-            var slotParameter = constructor.GetParameters().FirstOrDefault(x => x.Name == "slots")
-                ?? throw new ArgumentException($"Inventory type '{inventoryType.FullName}' does not have a constructor with IInventorySlot<{typeof(Y).Name}>[].");
-
-            var slotType = slotParameter.ParameterType.GetElementType();
-            if (!typeof(IInventoryStackSlot<Y>).IsAssignableFrom(slotType))
-            {
-                throw new ArgumentException($"Type '{slotType!.FullName}' does not implement IInventoryStackSlot<{typeof(Y).Name}>.");
-            }
-
-            return slotType;
-        }
-
-        public virtual IStackInventory<Y> EmptyContainer(int size = 20, int stackSize = 10)
-        {
-            var containerType = GetInventoryType();
-            var slotType = GetSlotTypeFromConstructor();
-
-            Array slots = Array.CreateInstance(slotType, size);
-            for (int index = 0; index < size; index++)
-            {
-                slots.SetValue(slotFactory.EmptySlot(stackSize), index);
-            }
-
-            var container = Activator.CreateInstance(
-                type: containerType,
+            var inventory = Activator.CreateInstance(
+                type: inventoryType,
                 args: new object[1] { slots }
             );
-            return (IStackInventory<Y>)container!;
+            
+            return (IStackInventory<Item>)inventory!;
         }
 
-        public virtual IStackInventory<Y> FullContainer(int size, int stackSize, Y item)
+        public virtual IStackInventory<Item> FullContainer(int size, int stackSize, Item item = default!)
         {
-            var containerType = GetInventoryType();
-            var slotType = GetSlotTypeFromConstructor();
+            var inventoryType = typeof(Inventory).GetContainerType(typeof(IStackInventory<Item>));
+            var slotType = inventoryType.GetSlotTypeByConstructor<IInventoryStackSlot<Item>>();
 
-            Array slots = Array.CreateInstance(slotType, size);
-            for (int i = 0; i < size; i++)
-            {
-                var slot = slotFactory.WithItem(item, stackSize, stackSize);
-                slots.SetValue(slot, i);
-            }
+            var slots = slotType.CreateSlots(size, _ => slotFactory.WithItem(item, stackSize, stackSize));
 
-            var container = Activator.CreateInstance(containerType, slots);
+            var inventory = Activator.CreateInstance(inventoryType, slots);
 
-            return (IStackInventory<Y>)container!;
+            return (IStackInventory<Item>)inventory!;
         }
 
-        public virtual IStackInventory<Y> ShuffledItemsContainer(int size, int stackSize, params Y[] items)
+        public virtual IStackInventory<Item> ShuffledItemsContainer(int size, int stackSize, params Item[] items)
         {
             if (items.Length > size * stackSize)
-            {
                 throw new ArgumentException($"Item amount ({items.Length}) cannot be bigger than the container size ({size})");
-            }
 
-            var containerType = GetInventoryType();
+            var inventoryType = typeof(Inventory).GetContainerType(typeof(IStackInventory<Item>));
+            var slotType = inventoryType.GetSlotTypeByConstructor<IInventoryStackSlot<Item>>();
 
-            var slotType = GetSlotTypeFromConstructor();
+            var slots = slotType
+                .CreateSlots(
+                    size: size,
+                    factory:
+                        index => index < items.Length
+                            ? slotFactory.WithItem(items[index], stackSize, stackSize)
+                            : slotFactory.EmptySlot(stackSize),
+                    shuffle: true
+                );
 
-            Array slots = Array.CreateInstance(slotType, size);
-            for (int index = 0; index < size; index++)
-            {
-                if (index < items.Length)
-                {
-                    slots.SetValue(
-                        slotFactory.FullSlot(items[index], stackSize),
-                        index
-                    );
-                }
-                else
-                {
-                    slots.SetValue(
-                        slotFactory.EmptySlot(stackSize),
-                        index
-                    );
-                }
-            }
-            slots.ShuffleItems();
+            var inventory = Activator.CreateInstance(inventoryType, slots);
 
-            var container = Activator.CreateInstance(containerType, slots);
-
-            return (IStackInventory<Y>)container!;
+            return (IStackInventory<Item>)inventory!;
         }
     }
 }

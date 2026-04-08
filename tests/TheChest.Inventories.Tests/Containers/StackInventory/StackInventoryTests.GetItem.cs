@@ -1,53 +1,46 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions.Containers;
+
+using TheChest.Tests.Common.Attributes;
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void GetItem_InvalidItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.That(() => inventory.Get(default(T)!), Throws.ArgumentNullException);
         }
 
         [Test]
-        public void GetItem_EmptyInventory_ReturnsNull()
+        [IgnoreIfReferenceType]
+        public void GetItem_DefaultValueTypeItem_DoesNotThrow()
         {
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
-            var foundItem = inventory.Get(item);
-            
-            Assert.That(foundItem, Is.Null);
+            Assert.That(() => inventory.Get(default(T)!), Throws.Nothing);
         }
 
         [Test]
         public void GetItem_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
+            
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            
             var item = this.itemFactory.CreateDefault();
             inventory.Get(item);
         }
 
         [Test]
-        public void GetItem_InventoryWithItems_ReturnsItem()
-        {
-            var stackSize = this.random.Next(1, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
-
-            var item = inventory.Get(slotItem);
-
-            Assert.That(item, Is.EqualTo(slotItem));
-        }
-
-        [Test]
         public void GetItem_InventoryWithItems_RemovesItemFromFirstFoundSlot()
         {
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
             inventory.Get(slotItem);
 
@@ -57,9 +50,10 @@
         [Test]
         public void GetItem_InventoryWithItems_CallsOnGetEvent()
         {
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>
@@ -80,26 +74,15 @@
         }
 
         [Test]
-        public void GetItem_InventoryWithDifferentItems_ReturnsNull()
-        {
-            var stackSize = this.random.Next(1, 20);
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Get(item);
-
-            Assert.That(result, Is.Null);
-        }
-
-        [Test]
         public void GetItem_InventoryWithDifferentItems_DoesNotCallOnGetEvent()
         {
-            var stackSize = this.random.Next(1, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(20, stackSize, slotItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            
             var item = this.itemFactory.CreateDefault();
             inventory.Get(item);
         }

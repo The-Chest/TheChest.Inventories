@@ -1,24 +1,28 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using TheChest.Tests.Common.Extensions.Containers;
+
+using TheChest.Tests.Common.Attributes;
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        public void GetAll_ByItem_NullItem_ThrowsArgumentNullException()
+        [IgnoreIfValueType]
+        public void GetAllByItem_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.Throws<ArgumentNullException>(() => inventory.GetAll(item: default!));
         }
 
         [Test]
-        public void GetAll_ByItem_ExistingItem_CallsOnGetEvent()
+        public void GetAllByItem_ExistingItem_CallsOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
-            var stackSize = this.random.Next(1, 10);
-            var invalidRandomItems = this.itemFactory.CreateManyRandom(inventorySize - 5);
-            var validItems = this.itemFactory.CreateMany(inventorySize - invalidRandomItems.Length);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var invalidRandomItems = this.itemFactory.CreateManyRandom(size - 5);
+            var validItems = this.itemFactory.CreateMany(size - invalidRandomItems.Length);
             var items = invalidRandomItems.Concat(validItems).ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
             var item = this.itemFactory.CreateDefault();
             var raised = false;
@@ -39,25 +43,13 @@
         }
 
         [Test]
-        public void GetAll_ByItem_ExistingItem_ReturnsAllMatchingItems()
+        public void GetAllByItem_ExistingItem_RemovesAllMatchingItemsFromInventory()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventoryItem = this.itemFactory.CreateDefault();
             var inventoryRandomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.ShuffledItemsContainer(10, 5, inventoryItem, inventoryRandomItem);
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.GetAll(item);
-
-            Assert.That(result, Is.Not.Empty);
-            Assert.That(result, Has.All.EqualTo(item));
-        }
-
-        [Test]
-        public void GetAll_ByItem_ExistingItem_RemovesAllMatchingItemsFromInventory()
-        {
-            var inventoryItem = this.itemFactory.CreateDefault();
-            var inventoryRandomItem = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.ShuffledItemsContainer(10, 5, inventoryItem, inventoryRandomItem);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItem, inventoryRandomItem);
 
             var item = this.itemFactory.CreateDefault();
             inventory.GetAll(item);
@@ -66,31 +58,17 @@
         }
 
         [Test]
-        public void GetAll_ByItem_DifferentItems_DoesNotCallOnGetEvent()
+        public void GetAllByItem_DifferentItems_DoesNotCallOnGetEvent()
         {
-            var inventorySize = this.random.Next(10, 20);
-            var stackSize = this.random.Next(1, 10);
-            var invalidRandomItems = this.itemFactory.CreateManyRandom(inventorySize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, invalidRandomItems);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var invalidRandomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, invalidRandomItems);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for an empty slot.");
             
             var item = this.itemFactory.CreateDefault();
             inventory.GetAll(item);
-        }
-
-        [Test]
-        public void GetAll_ByItem_DifferentItems_ReturnsEmptyArray()
-        {
-            var inventorySize = this.random.Next(10, 20);
-            var stackSize = this.random.Next(1, 10);
-            var invalidRandomItems = this.itemFactory.CreateManyRandom(inventorySize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackSize, invalidRandomItems);
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.GetAll(item);
-
-            Assert.That(result, Is.Empty);
         }
     }
 }

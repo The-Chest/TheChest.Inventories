@@ -1,33 +1,35 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions.Containers;
+
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(100)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void Move_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
-            var size = this.random.Next(3, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(origin, 2));
         }
 
         [TestCase(-1)]
-        [TestCase(100)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
-            var size = this.random.Next(3, 10);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
             Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(0, target));
         }
 
         [Test]
         public void Move_BothSlotsWithItems_SwapsItems()
         {
-            var size = this.random.Next(2, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var origin = 0;
             var target = 1;
@@ -45,9 +47,9 @@
         [Test]
         public void Move_BothSlotsWithItems_CallsOnMoveWithTwoMovedItems()
         {
-            var size = this.random.Next(2, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var origin = 0;
             var target = 1;
@@ -84,7 +86,8 @@
         [Test]
         public void Move_EmptyTarget_MovesItem()
         {
-            var inventory = this.containerFactory.EmptyContainer(2);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
@@ -101,7 +104,8 @@
         [Test]
         public void Move_EmptyTarget_CallsOnMoveWithOnlyOriginData()
         {
-            var inventory = this.containerFactory.EmptyContainer(2);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
@@ -129,7 +133,8 @@
         [Test]
         public void Move_EmptyOrigin_MovesItem()
         {
-            var inventory = this.containerFactory.EmptyContainer(2);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
             inventory.AddAt(item, 1);
@@ -145,7 +150,8 @@
         [Test]
         public void Move_EmptyOrigin_CallsOnMoveWithOnlyTargetData()
         {
-            var inventory = this.containerFactory.EmptyContainer(2);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
             inventory.AddAt(item, 1);

@@ -21,13 +21,13 @@ jobs:
         --password "${{ secrets.NUGET_APIKEY }}" 
         --store-password-in-clear-text 
     - name: Restore dependencies
-      run: dotnet restore src/TheChest.Inventories
+      run: dotnet restore 
     - name: Build project
       run: dotnet build src/TheChest.Inventories 
         --no-restore 
         --configuration Release
     - name: Run Tests
-      run: dotnet test src/TheChest.Inventories
+      run: dotnet test 
         --configuration Release
         --verbosity minimal
         --settings tests/TheChest.Inventories.Tests/TheChest.Inventories.runsettings

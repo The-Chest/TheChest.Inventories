@@ -1,25 +1,16 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
+using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        public void AddItems_NoItems_ReturnsEmptyArray()
-        {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
-
-            var items = this.itemFactory.CreateMany(0);
-
-            var result = inventory.Add(items);
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
         public void AddItems_NoItems_DoesNotCallOnAddEvent()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = this.itemFactory.CreateMany(0);
 
@@ -30,8 +21,8 @@
         [Test]
         public void AddItems_ArrayWithOnlyNullItems_ReturnsEmptyArray()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = new T[10];
             var result = inventory.Add(items);
@@ -42,30 +33,32 @@
         [Test]
         public void AddItems_ArrayWithOnlyNullItems_DoesNotAddToAnySlot()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = new T[10];
             inventory.Add(items);
 
-            Assert.That(inventory.GetSlots()?.All(slot => slot.IsEmpty), Is.True);
+            Assert.That(inventory.GetSlots<T>()?.All(slot => slot.IsEmpty), Is.True);
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_ArrayWithOnlyNullItems_DoesNotCallOnAddEvent()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if no items are added");
             inventory.Add(new T[10]);
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_ArrayContainingNullItems_ReturnsEmptyArray()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = this.itemFactory
                 .CreateManyRandom(10)
@@ -78,10 +71,11 @@
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_ArrayContainingNullItems_DoesNotAddNullToAnySlot()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomItemSize = this.random.Next(3, size);
             var items = this.itemFactory
@@ -93,16 +87,17 @@
  
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetItem(0), Is.EqualTo(items[1]));
-                Assert.That(inventory.GetItem(randomItemSize - 1), Is.EqualTo(items[randomItemSize - 2]));
+                Assert.That(inventory.GetItem<T>(0), Is.EqualTo(items[1]));
+                Assert.That(inventory.GetItem<T>(randomItemSize - 1), Is.EqualTo(items[randomItemSize - 2]));
             });
         }
 
         [Test]
-        public void AddItems_ArrayContainingNullItems_DoesNotCallOnAddEventWithTheNullItem()
+        [IgnoreIfValueType]
+        public void AddItems_ArrayContainingNullItems_DoesNotCallOnAddEventWithNullItems()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             inventory.OnAdd += (sender, args) =>
             {
                 Assert.Multiple(() =>
@@ -122,10 +117,11 @@
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_ArrayContainingNullItems_CallsOnAddEventWithAddedItems()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomItemSize = this.random.Next(2, size);
             var items = this.itemFactory
@@ -153,8 +149,8 @@
         [Test]
         public void AddItems_EmptySlots_AddsAllItems()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomSize = this.random.Next(1, size);
             var items = this.itemFactory.CreateMany(randomSize);
@@ -169,8 +165,8 @@
         [Test]
         public void AddItems_EmptySlots_CallsOnAddForAllItems()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomSize = this.random.Next(1, size);
             var items = this.itemFactory.CreateMany(randomSize);
@@ -187,26 +183,13 @@
         }
 
         [Test]
-        public void AddItems_SuccessAdding_ReturnsEmptyArray()
-        {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
-
-            var randomSize = this.random.Next(1, size);
-            var items = this.itemFactory.CreateMany(randomSize);
-            var result = inventory.Add(items);
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
         public void AddItems_NotAvailabeSlotsForAllItems_CallsOnAddEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var emptySlotsSize = this.random.Next(1, size);
             var itemSize = size - emptySlotsSize;
             var items = this.itemFactory.CreateMany(itemSize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var addSize = emptySlotsSize + 1;
             var manyAdded = this.itemFactory.CreateManyRandom(addSize);
@@ -229,11 +212,11 @@
         [Test]
         public void AddItems_NotAvailabeSlotsForAllItems_AddsSomeItems()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var emptySlotsSize = this.random.Next(1, size);
             var itemSize = size - emptySlotsSize;
             var items = this.itemFactory.CreateMany(itemSize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var addSize = emptySlotsSize + 1;
             var manyAdded = this.itemFactory.CreateManyRandom(addSize);
@@ -245,11 +228,11 @@
         [Test]
         public void AddItems_NotAvailabeSlotsForAllItems_ReturnsNotAddedItems()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var emptySlotsSize = this.random.Next(1, size);
             var itemSize = size - emptySlotsSize;
             var items = this.itemFactory.CreateMany(itemSize);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var manyAdded = this.itemFactory.CreateManyRandom(emptySlotsSize + 1);
             var result = inventory.Add(manyAdded);
@@ -258,24 +241,11 @@
         }
 
         [Test]
-        public void AddItems_FullInventory_DoNotAddItems()
-        {
-            var size = this.random.Next(10, 20);
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
-
-            var items = this.itemFactory.CreateManyRandom(size);
-            inventory.Add(items);
-
-            Assert.That(inventory.GetCount(items[0]), Is.EqualTo(0));
-        }
-
-        [Test]
         public void AddItems_FullInventory_DoesNotCallOnAddEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var items = this.itemFactory.CreateManyRandom(size);
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if no items are added");
@@ -286,9 +256,9 @@
         [Test]
         public void AddItems_FullInventory_ReturnsAllNotAddedItems()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, item);
+            var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var items = this.itemFactory.CreateMany(size);
             var result = inventory.Add(items);

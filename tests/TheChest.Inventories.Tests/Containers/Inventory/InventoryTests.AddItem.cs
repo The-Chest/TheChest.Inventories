@@ -1,20 +1,25 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
+using TheChest.Tests.Common.Attributes;
 
-namespace TheChest.Inventories.Tests.Containers
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void AddItem_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.Add(item: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void AddItem_EmptyInventory_AddsToFirstSlot()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
@@ -24,7 +29,7 @@ namespace TheChest.Inventories.Tests.Containers
                 var firstSlot = inventory.GetSlot(0);
 
                 Assert.That(firstSlot, Is.Not.Null);
-                Assert.That(firstSlot!.IsEmpty, Is.False);
+                Assert.That(firstSlot.IsEmpty, Is.False);
                 Assert.That(firstSlot.GetContent(), Is.EqualTo(item));
             });
         }
@@ -32,7 +37,8 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void AddItem_EmptyInventory_CallsOnAddEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateDefault();
 
@@ -53,23 +59,12 @@ namespace TheChest.Inventories.Tests.Containers
         }
 
         [Test]
-        public void AddItem_EmptyInventory_ReturnsTrue()
-        {
-            var inventory = this.containerFactory.EmptyContainer();
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Add(item);
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
         public void AddItem_InventoryWithItems_AddsToFirstAvailableSlot()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size / 2);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
-            var firstAvailableSlot = inventory.GetSlots()?.First(slot => slot.IsEmpty);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
+            var firstAvailableSlot = inventory.GetSlots<T>()?.First(slot => slot.IsEmpty);
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
@@ -78,24 +73,24 @@ namespace TheChest.Inventories.Tests.Containers
             Assert.Multiple(() =>
             {
                 Assert.That(firstAvailableSlot.IsEmpty, Is.False);
-                Assert.That(firstAvailableSlot.GetContent(), Is.EqualTo(item));
+                Assert.That(firstAvailableSlot.GetContent<T>(), Is.EqualTo(item));
             });
         }
 
         [Test]
-        public void AddItem_FullInventory_DoNotAddItem()
+        public void AddItem_FullInventory_DoesNotAddItem()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, items);
+            var inventory = this.inventoryFactory.FullContainer(size, items);
 
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
 
             Assert.That(
-                inventory.GetSlots(), 
+                inventory.GetSlots<T>(), 
                 Is.All.Matches<IInventorySlot<T>>(
-                    x => x.IsFull && !x.GetContent()!.Equals(item)
+                    x => x.IsFull && !x.GetContent<T>()!.Equals(item)
                 )
             );
         }
@@ -103,28 +98,14 @@ namespace TheChest.Inventories.Tests.Containers
         [Test]
         public void AddItem_FullInventory_DoesNotCallOnAddEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, items);
+            var inventory = this.inventoryFactory.FullContainer(size, items);
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
             
             var item = this.itemFactory.CreateRandom();
             inventory.Add(item);
-        }
-
-        [Test]
-        public void AddItem_FullInventory_ReturnsFalse()
-        {
-            var size = this.random.Next(10, 20);
-            var items = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, items);
-
-            var item = this.itemFactory.CreateDefault();
-
-            var result = inventory.Add(item);
-        
-            Assert.That(result, Is.False);
         }
     }
 }

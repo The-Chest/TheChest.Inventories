@@ -1,12 +1,16 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions.Containers;
+
+using TheChest.Tests.Common.Attributes;
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(22)]
+        [TestCase(MAX_SIZE_TEST + 1)]
         public void Replace_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
                 () => inventory.Replace(this.itemFactory.CreateDefault(), index),
@@ -15,43 +19,31 @@
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void Replace_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.Replace(default!, 0), Throws.ArgumentNullException);
         }
 
         [Test]
         public void Replace_EmptySlot_AddsItemToSlot()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomIndex = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
             inventory.Replace(item, randomIndex);
 
-            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(item));
-        }
-
-        [Test]
-        public void Replace_EmptySlot_ReturnsNull()
-        {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Replace(item, randomIndex);
-
-            Assert.That(result, Is.Null);
+            Assert.That(inventory.GetItem<T>(randomIndex), Is.EqualTo(item));
         }
 
         [Test]
         public void Replace_EmptySlot_CallsOnAddEventWithEmptyOldItem()
         {
-            var size = this.random.Next(10, 20);
-            var inventory = this.containerFactory.EmptyContainer(size);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomIndex = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
@@ -76,9 +68,9 @@
         [Test]
         public void Replace_FullSlot_ReplacesItemInSlot()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var initialItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, initialItem);
+            var inventory = this.inventoryFactory.FullContainer(size, initialItem);
 
             var randomIndex = this.random.Next(0, size);
             var newItem = this.itemFactory.CreateRandom();
@@ -88,25 +80,11 @@
         }
 
         [Test]
-        public void Replace_FullSlot_ReturnsOldItemFromSlot()
-        {
-            var size = this.random.Next(10, 20);
-            var initialItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, initialItem);
-
-            var randomIndex = this.random.Next(0, size);
-            var newItem = this.itemFactory.CreateRandom();
-            var result = inventory.Replace(newItem, randomIndex);
-
-            Assert.That(result, Is.EqualTo(initialItem));
-        }
-
-        [Test]
         public void Replace_FullSlot_CallsOnReplaceEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var initialItem = this.itemFactory.CreateDefault();
-            var inventory = this.containerFactory.FullContainer(size, initialItem);
+            var inventory = this.inventoryFactory.FullContainer(size, initialItem);
 
             var randomIndex = this.random.Next(0, size);
             var newItem = this.itemFactory.CreateRandom();

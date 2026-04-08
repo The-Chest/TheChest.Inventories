@@ -1,18 +1,22 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void GetAll_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(() => inventory.GetAll(item: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void GetAll_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
 
@@ -20,25 +24,11 @@
         }
 
         [Test]
-        public void GetAll_WithItems_ReturnsSearchingItem()
-        {
-            var size = this.random.Next(10, 20);
-            var items = this.itemFactory.CreateMany(size / 2);
-            var sameItems = this.itemFactory.CreateManyRandom(size / 2);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
-
-            var randomItem = sameItems[0];
-            var result = inventory.GetAll(randomItem);
-        
-            Assert.That(result, Is.EqualTo(sameItems));
-        }
-
-        [Test]
         public void GetAll_WithItems_RemovesFromFoundSlots()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var index = this.random.Next(0, size);
             var randomItem = items[index];
@@ -48,39 +38,26 @@
         }
 
         [Test]
-        public void GetAll_NonExistingItem_ReturnsEmptyArray()
+        public void GetAll_NotFoundItem_DoesNotRemoveFromAnySlots()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
-
-            var randomItem = this.itemFactory.CreateRandom();
-            var result = inventory.GetAll(randomItem);
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void GetAll_NonExistingItem_DoesNotRemoveFromAnySlots()
-        {
-            var size = this.random.Next(10, 20);
-            var items = this.itemFactory.CreateMany(size);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
-            var slots = inventory.GetSlots()?.ToArray();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
+            var slots = inventory.GetSlots<T>()?.ToArray();
 
             var randomItem = this.itemFactory.CreateRandom();
             inventory.GetAll(randomItem);
 
-            Assert.That(inventory.GetSlots(), Is.EqualTo(slots));
+            Assert.That(inventory.GetSlots<T>(), Is.EqualTo(slots));
         }
 
         [Test]
         public void GetAll_WithItems_CallsOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size / 2);
             var sameItems = this.itemFactory.CreateManyRandom(size / 2);
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
 
             var raised = false;
             inventory.OnGet += (sender, args) =>

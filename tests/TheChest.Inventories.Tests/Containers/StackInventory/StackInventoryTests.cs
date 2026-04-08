@@ -1,18 +1,22 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Inventories.Containers;
+using TheChest.Inventories.Slots;
+using TheChest.Tests.Common.Items.ReferenceType;
+using TheChest.Inventories.Tests.Containers.Factories;
+using TheChest.Inventories.Tests.Containers.Interfaces;
+using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
+using TheChest.Inventories.Tests.Slots.Factories;
+using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
+
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
-    public abstract partial class StackInventoryTests<T> 
+    [TestFixture(typeof(TestItem))]
+    public partial class StackInventoryTests<T> : IStackInventoryTests<T>
     {
-        protected readonly IStackInventoryFactory<T> containerFactory;
-        protected readonly ISlotItemFactory<T> itemFactory;
-
-        protected readonly Random random;
-
-        public StackInventoryTests(IStackInventoryFactory<T> containerFactory, ISlotItemFactory<T> itemFactory)
-        { 
-            this.containerFactory = containerFactory;
-            this.itemFactory = itemFactory;
-        
-            this.random = new Random();
-        }
+        public StackInventoryTests() : base(configure =>
+        {
+            configure
+                .Register<IInventoryStackSlotFactory<T>, InventoryStackSlotFactory<InventoryStackSlot<T>, T>>()
+                .Register<IStackInventoryFactory<T>, StackInventoryFactory<StackInventory<T>, T>>();
+        }) { }
     }
 }

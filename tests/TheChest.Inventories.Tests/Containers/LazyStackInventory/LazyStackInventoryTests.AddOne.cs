@@ -1,32 +1,25 @@
 ﻿using TheChest.Core.Slots.Interfaces;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
+using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void Add_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             Assert.Throws<ArgumentNullException>(() => inventory.Add(default!));
         }
 
         [Test]
-        public void Add_SuccessfullyAdded_ReturnsTrue()
-        {
-            var inventory = this.containerFactory.EmptyContainer();
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Add(item);
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
         public void Add_EmptyInventory_AddsToFirstAvilableSlot()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
@@ -44,7 +37,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_EmptyInventory_CallsOnAddEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
             var raised = false;
@@ -69,10 +62,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_InventoryWithAvailableSlots_AddsToFirstAvilableSlot()
         {
-            var stackAmount = this.random.Next(1, 5);
-            var inventorySize = this.random.Next(2, 20);
-            var items = this.itemFactory.CreateManyRandom(inventorySize - 1);
-            var inventory = this.containerFactory.ShuffledItemsContainer(inventorySize, stackAmount, items);
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var items = this.itemFactory.CreateManyRandom(size - 1);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
@@ -91,22 +84,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_FailedToAdd_ReturnsFalse()
-        {
-            var items = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(10,5, items);
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Add(item);
-
-            Assert.That(result, Is.False);
-        }
-
-        [Test]
         public void Add_FullInventory_DoesNotAddsToInventory()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(10, 5, items);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, items);
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
@@ -124,8 +107,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Add_FullInventory_DoesNotCallOnAddEvent()
         {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateRandom();
-            var inventory = this.containerFactory.FullContainer(10, 5, items);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, items);
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when inventory is full.");
             

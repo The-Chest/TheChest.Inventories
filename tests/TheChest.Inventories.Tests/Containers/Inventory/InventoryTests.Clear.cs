@@ -1,38 +1,17 @@
-﻿namespace TheChest.Inventories.Tests.Containers
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        public void Clear_EmptyInventory_ReturnsEmptyArray()
-        {
-            var inventory = this.containerFactory.EmptyContainer();
-
-            var result = inventory.Clear();
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
         public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.containerFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer();
+            
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
             
             inventory.Clear();
-        }
-
-        [Test]
-        public void Clear_FullInventory_ReturnsEveryItemFromInventory()
-        {
-            var size = this.random.Next(10, 20);
-            var items = this.itemFactory.CreateManyRandom(size / 2)
-                .Concat(this.itemFactory.CreateMany(size / 2))
-                .ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
-
-            var result = inventory.Clear();
-
-            Assert.That(result, Is.EquivalentTo(items));
         }
 
         [Test]
@@ -42,7 +21,7 @@
             var items = this.itemFactory.CreateManyRandom(size / 2)
                 .Concat(this.itemFactory.CreateMany(size / 2))
                 .ToArray();
-            var inventory = this.containerFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var raised = false;
             inventory.OnGet += (sender, args) =>
