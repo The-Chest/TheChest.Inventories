@@ -3,50 +3,54 @@
 [![NuGet Version](https://img.shields.io/nuget/v/TheChest.Inventories)](https://www.nuget.org/packages/TheChest.Inventories)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=The-Chest_TheChest.Inventories&metric=coverage)](https://sonarcloud.io/summary/new_code?id=The-Chest_TheChest.Inventories)
 
-TheChest.Inventories is a library designed to manage inventories and slots for generic item collections. It provides a flexible and extensible framework for handling inventory systems, including support for stacked items, slot-based management.
+TheChest.Inventories is a library for managing inventories and slots in generic item collections. It provides a flexible and extensible framework for inventory systems, with support for stackable items, customizable slots, and operations such as adding, removing, moving, and querying items.
 
-## How does it work
+## Key features
 
-The library provides a robust framework for managing inventories and slots in a generic and extensible way. It is designed to handle various inventory operations, such as adding, removing, moving, and retrieving items, while supporting both single-item slots and stackable items.
+- **Generic inventory support**: works with generic item types for maximum flexibility.
+- **Slot-based system**: stores items in single-item or stackable slots.
+- **Extensible interfaces**: enables custom inventory implementations.
+- **Core operations**: add, remove, move, and retrieve items.
+- **Stacking support**: handles both simple inventories and stack-based inventories.
 
-### Features
+## Project structure
 
-- **Generic Inventory Management**: Supports generic item types for flexibility.
-- **Slot-Based System**: Items are stored and managed in slots, with interfaces and implementations for inventory slots.
-- **Extensible Interfaces**: Allows for custom implementations and extensions of the inventory system.
-- **Core Operations**: Add, retrieve and move  items from inventories and slots.
+### Main components
 
-## Project Structure
+- `Inventory<T>`
+  - Generic inventory implementation using single-item slots.
+  - Uses `InventorySlot<T>` to represent each slot.
 
-### Inventory
-- **`Inventory<T>`** : A generic inventory implementation that manages items in slots. 
-    - **`InventorySlot<T>`**: Represents a single slot in the inventory.
-- **`StackInventory<T>`** : A generic inventory that manages stackable items.
-    - **`InventoryStackSlot<T>`**: Represents a slot that can hold multiple items of the same type.
-- **`LazyStackInventory<T>`** : A generic stack inventory that allows lazy loading of items.
-    - **`LazyInventoryStackSlot<T>`**: Represents a slot that can hold one item with amount deciding how much it can return.
+- `StackInventory<T>`
+  - Generic inventory for stackable items.
+  - Uses `InventoryStackSlot<T>` to represent slots holding multiple units of the same item.
 
-## How to use it
+- `LazyStackInventory<T>`
+  - Stackable inventory with lazy item loading.
+  - Uses `InventoryLazyStackSlot<T>` to represent slots that can return items on demand.
 
-### Installation
+## Installation
 
-#### NuGet
-To install the library via NuGet, you need to add a NuGet package origin reference to the following URL:
+### Via NuGet
+Add the NuGet package source:
+
+```bash
+nuget source add -n TheChest https://nuget.pkg.github.com/The-Chest/index.json
 ```
-https://nuget.pkg.github.com/The-Chest/index.json
-```
-After adding the reference, use the following command to install the package:
+
+Install the package:
+
 ```bash
 nuget install TheChest.Inventories
 ```
 
-#### DLL
-Alternatively, you can download the DLL file and reference it directly in your project.
+### Via DLL
+You can also download the DLL directly and reference it in your project.
 
-## Usage
-The library provides ready-to-use implementations such as `Inventory<T>` and `InventorySlot<T>`. These can be used directly. For example:
+## Usage examples
 
-### Inventory
+### Simple inventory
+
 ```csharp
 var slots = new IInventorySlot<string>[10];
 for (int i = 0; i < slots.Length; i++)
@@ -59,29 +63,35 @@ inventory.Add("Item1");
 ```
 
 ### StackInventory
+
 ```csharp
 var stackSlots = new IInventoryStackSlot<string>[10];
 for (int i = 0; i < stackSlots.Length; i++)
 {
-    stackSlots[i] = new InventoryStackSlot<string>(new string[0], 5);
+    stackSlots[i] = new InventoryStackSlot<string>(Array.Empty<string>(), 5);
 }
 
 var stackInventory = new StackInventory<string>(stackSlots);
 stackInventory.Add("StackableItem", "StackableItem");
-``` 
+```
 
 ### LazyStackInventory
+
 ```csharp
 var lazyStackSlots = new IInventoryLazyStackSlot<string>[10];
 for (int i = 0; i < lazyStackSlots.Length; i++)
 {
-    lazyStackSlots[i] = new InventoryLazyStackSlot<string>($"item_{i}_",5 , 2);
+    lazyStackSlots[i] = new InventoryLazyStackSlot<string>($"item_{i}_", 5, 2);
 }
 
 var lazyStackInventory = new LazyStackInventory<string>(lazyStackSlots);
-stackInventory.Add("StackableItem", "StackableItem");
+lazyStackInventory.Add("StackableItem", "StackableItem");
 ```
 
-## Future Plans
+## Additional documentation
 
-The plans for future versions of the project are in this [GitHub Project Board](https://github.com/orgs/The-Chest/projects/19/views/2).
+More usage and extension details are available in the `docs/` folder.
+
+## Future plans
+
+Future version plans are available on the [GitHub Project Board](https://github.com/orgs/The-Chest/projects/19/views/2).
