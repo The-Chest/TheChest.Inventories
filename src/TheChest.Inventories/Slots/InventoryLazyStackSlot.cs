@@ -14,9 +14,6 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">Item the Slot Accept</typeparam>
     public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
-        /// <inheritdoc />
-        public virtual int AvailableAmount => this.maxAmount - this.amount;
-
         /// <inheritdoc/>
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior

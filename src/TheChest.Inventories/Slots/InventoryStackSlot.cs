@@ -13,9 +13,6 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">The item collection inside the slot accepts</typeparam>
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
     {
-        /// <inheritdoc />
-        public virtual int AvailableAmount => this.maxAmount - this.amount;
-
         /// <summary>
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
