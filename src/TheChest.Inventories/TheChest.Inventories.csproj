@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup Label="Information">
 		<Title>The Chest Inventories</Title>
 		<Description>Provides generic collections to inventory management systems.</Description>
@@ -84,6 +84,6 @@
 	</ItemGroup>
 	
 	<ItemGroup Label="Dependencies">
-		<PackageReference Include="TheChest.Core" Version="0.14.0" />
+		<PackageReference Include="TheChest.Core" Version="0.17.2" />
 	</ItemGroup>
 </Project>
