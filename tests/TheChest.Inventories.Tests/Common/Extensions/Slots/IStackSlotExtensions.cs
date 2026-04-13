@@ -18,12 +18,12 @@ namespace TheChest.Tests.Common.Extensions.Slots
             var fieldType = field.FieldType;
             if (fieldType != typeof(T[]) && !typeof(T[]).IsAssignableFrom(fieldType))
                 throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T[])}'.");
-
+            
             var original = (T[])field.GetValue(slot);
             if (original is null)
                 return Array.Empty<T>();
 
-            return (T[])original.Where(i => i is not null).ToArray().Clone();
+            return (T[])original.Clone();
         }
     }
 }

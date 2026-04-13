@@ -39,13 +39,21 @@ namespace TheChest.Tests.Common.Extensions.Slots
         internal static FieldInfo GetContentField(this object slot)
         {
             var type = slot.GetType();
-            var field = type.GetField(
-                "content",
-                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy
-            ) ??
-            throw new InvalidOperationException("Field 'content' not found.");
 
-            return field;
+            while (type != null)
+            {
+                var field = type.GetField(
+                    "content",
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+                );
+
+                if (field != null)
+                    return field;
+
+                type = type.BaseType;
+            }
+
+            throw new InvalidOperationException("Field 'content' not found.");
         }
     }
 }

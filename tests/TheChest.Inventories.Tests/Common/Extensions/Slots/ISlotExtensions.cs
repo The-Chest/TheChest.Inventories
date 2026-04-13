@@ -24,7 +24,11 @@ namespace TheChest.Tests.Common.Extensions.Slots
             if (fieldType != typeof(T) && !typeof(T).IsAssignableFrom(fieldType))
                 throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T)}'.");
 
-            return (T)field.GetValue(slot);
+            var value = field.GetValue(slot);
+            if (value is null)
+                return default!;
+
+            return (T)value;
         }
     }
 }
