@@ -71,11 +71,15 @@ namespace TheChest.Tests.Common.Extensions.Slots
         {
             var field = slot.GetContentField();
 
-            var original = (T[])field.GetValue(slot);
+            var original = field.GetValue(slot);
             if (original is null)
                 return Array.Empty<T>();
 
-            return (T[])original.Clone();
+            var array = original as Array;
+            if (array is null)
+                return Array.Empty<T>();
+
+            return array.Cast<T>().ToArray();
         }
     }
 }
