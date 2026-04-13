@@ -182,15 +182,9 @@ namespace TheChest.Inventories.Slots
         {
             // TODO: improve it by getting it from the last items (maybe using IEnumerable)
             // Turn it in a internal extension method
-            var result = this.Content
-                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
-                .Take(amount)
-                .ToArray();
-            
-            Array.Clear(this.Content, 0, amount);
+            var result = this.Content.Take(amount).ToArray();
 
-            this.amount -= result.Length;
-
+            this.Content = this.Content.Skip(result.Length).ToArray();
             return result;
         }
         /// <summary>
@@ -208,6 +202,9 @@ namespace TheChest.Inventories.Slots
         /// <returns>All items from slot</returns>
         public virtual T[] GetAll()
         {
+            if (this.IsEmpty)
+                return Array.Empty<T>();
+
             return this.GetItems(this.Amount);
         }
         /// <summary>
