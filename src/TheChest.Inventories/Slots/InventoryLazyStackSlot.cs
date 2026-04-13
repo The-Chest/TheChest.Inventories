@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="amount">The value to be set to <see cref="StackSlot{T}.Amount"/></param>
         protected void SetContent(T item, int amount)
         {
-            this.content = item;
+            this.Content = item;
             this.amount = amount;
         }
         /// <summary>
@@ -75,7 +75,7 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             if (!this.IsEmpty)
-                return this.content!.Equals(item);
+                return this.Content.Equals(item);
 
             return true;
         }
@@ -90,7 +90,7 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentOutOfRangeException(nameof(amount));
             if (this.IsFull)
                 return amount;
-            if (!this.IsEmpty && !this.content!.Equals(item))
+            if (!this.IsEmpty && !this.Content.Equals(item))
                 return amount;
 
             return this.AddItems(item, amount);
@@ -137,7 +137,7 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         protected void Clear()
         {
-            this.content = default!;
+            this.Content = default;
             this.Amount = 0;
         }
         /// <summary>
@@ -152,14 +152,14 @@ namespace TheChest.Inventories.Slots
             
             if (this.Amount <= requestedAmount)
             {
-                var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
+                var items = Enumerable.Repeat(this.Content, this.Amount).ToArray();
                 this.Clear();
                 return items;
             }
             
-            this.SetContent(this.content, this.Amount - requestedAmount);
+            this.SetContent(this.Content, this.Amount - requestedAmount);
 
-            return Enumerable.Repeat(this.content!, requestedAmount).ToArray();
+            return Enumerable.Repeat(this.Content, requestedAmount).ToArray();
         }
 
         /// <summary>

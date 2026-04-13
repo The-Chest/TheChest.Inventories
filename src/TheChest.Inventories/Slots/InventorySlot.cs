@@ -15,7 +15,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="currentItem">item that belongs to this slot</param>
         public InventorySlot(T currentItem = default!) : base(currentItem) 
         { 
-            this.content = currentItem;
+            this.Content = currentItem;
         }
 
         /// <inheritdoc />
@@ -29,15 +29,15 @@ namespace TheChest.Inventories.Slots
             if (!this.CanAdd(item))
                 return false;
 
-            this.content = item;
+            this.Content = item;
             return true;
         }
 
         /// <inheritdoc />
         public virtual T Get()
         {
-            var content = this.content;
-            this.content = default;
+            var content = this.Content;
+            this.Content = default!;
             return content;    
         }
 
@@ -49,8 +49,8 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual T Replace(T item)
         {
-            var content = this.content;
-            this.content = item;
+            var content = this.Content;
+            this.Content = item;
             return content;
         }
     }

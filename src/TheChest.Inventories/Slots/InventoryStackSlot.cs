@@ -39,9 +39,9 @@ namespace TheChest.Inventories.Slots
             var itemIndex = 0;
             for (int i = 0; i < this.MaxAmount; i++)
             {
-                if (this.content[i] is null)
+                if (this.Content[i] is null)
                 {
-                    this.content[i] = items[itemIndex++];
+                    this.Content[i] = items[itemIndex++];
                     this.amount++;
                 }
 
@@ -59,9 +59,9 @@ namespace TheChest.Inventories.Slots
         {
             for (int i = 0; i < this.MaxAmount; i++)
             {
-                if (this.content[i] is null)
+                if (this.Content[i] is null)
                 {
-                    this.content[i] = item;
+                    this.Content[i] = item;
                     this.amount++;
                     break;
                 }
@@ -185,12 +185,12 @@ namespace TheChest.Inventories.Slots
         {
             // TODO: improve it by getting it from the last items (maybe using IEnumerable)
             // Turn it in a internal extension method
-            var result = this.content
+            var result = this.Content
                 .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
                 .Take(amount)
                 .ToArray();
             
-            Array.Clear(this.content, 0, amount);
+            Array.Clear(this.Content, 0, amount);
 
             this.amount -= result.Length;
 
@@ -202,13 +202,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>One item or <see langword="null"/> if not found</returns>
         protected virtual T GetItem()
         {
-            var item = this.content.FirstOrDefault();
-            Array.Clear(this.content, 0, 1);
-            if (item is null)
-                return default!;
-
-            this.amount--;
-            return item!;
+            return this.GetItems(1).FirstOrDefault();
         }
 
         /// <summary>
