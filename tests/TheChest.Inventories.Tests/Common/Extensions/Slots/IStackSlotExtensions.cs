@@ -13,17 +13,7 @@ namespace TheChest.Tests.Common.Extensions.Slots
         /// <exception cref="InvalidOperationException">Thrown if the underlying field type of the stack slot is not assignable to an array of type <typeparamref name="T"/>.</exception>
         public static T[] GetContents<T>(this IStackSlot<T> slot)
         {
-            var field = slot.GetContentField();
-
-            var fieldType = field.FieldType;
-            if (fieldType != typeof(T[]) && !typeof(T[]).IsAssignableFrom(fieldType))
-                throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T[])}'.");
-            
-            var original = (T[])field.GetValue(slot);
-            if (original is null)
-                return Array.Empty<T>();
-
-            return (T[])original.Clone();
+            return slot.GetContentFieldValues<T>();
         }
     }
 }

@@ -13,17 +13,7 @@ namespace TheChest.Tests.Common.Extensions.Slots
         /// <exception cref="InvalidOperationException">Thrown if the slot's underlying field type is not assignable to <typeparamref name="T"/>.</exception>
         public static T GetContent<T>(this ILazyStackSlot<T> slot)
         {
-            var field = slot.GetContentField();
-
-            var fieldType = field.FieldType;
-            if (fieldType != typeof(T) && !typeof(T).IsAssignableFrom(fieldType))
-                throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T)}'.");
-            
-            var value = field.GetValue(slot);
-            if (value is null)
-                return default!;
-            
-            return (T)value;
+            return slot.GetContentFieldValue<T>();
         }
 
         /// <summary>
@@ -35,7 +25,7 @@ namespace TheChest.Tests.Common.Extensions.Slots
         /// <exception cref="InvalidOperationException">Thrown if the underlying field type of the stack slot is not assignable to an array of type <typeparamref name="T"/>.</exception>
         public static T[] GetContents<T>(this ILazyStackSlot<T> slot)
         {
-            var original = slot.GetContent();
+            var original = slot.GetContentFieldValue<T>();
             if (original is null)
                 return Array.Empty<T>();
 

@@ -55,5 +55,27 @@ namespace TheChest.Tests.Common.Extensions.Slots
 
             throw new InvalidOperationException("Field 'content' not found.");
         }
+
+        internal static T GetContentFieldValue<T>(this object slot)
+        {
+            var field = slot.GetContentField();
+
+            var value = field.GetValue(slot);
+            if (value is null)
+                return default!;
+
+            return (T)value;
+        }
+
+        internal static T[] GetContentFieldValues<T>(this object slot)
+        {
+            var field = slot.GetContentField();
+
+            var original = (T[])field.GetValue(slot);
+            if (original is null)
+                return Array.Empty<T>();
+
+            return (T[])original.Clone();
+        }
     }
 }
