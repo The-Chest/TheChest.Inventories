@@ -75,11 +75,11 @@ namespace TheChest.Tests.Common.Extensions.Slots
             if (original is null)
                 return Array.Empty<T>();
 
-            var array = original as Array;
+            var array = original as object[];
             if (array is null)
                 return Array.Empty<T>();
 
-            return array.Cast<T>().ToArray();
+            return array.Where(x => x is not null).Cast<T>().ToArray();
         }
     }
 }
