@@ -1,6 +1,13 @@
 # v0.15.0
 
 ## What's Added
+* New Constructors to Slot Classes
+  * `InventoryStackSlot<T>`
+    * `InventoryStackSlot()` - Creates a new instance of `InventoryStackSlot<T>` with default values
+    * `InventoryStackSlot(int maxStackAmount)` - Creates a new instance of `InventoryStackSlot<T>` with the specified `maxStackAmount` and default value of `T` as content
+    * `InventoryStackSlot(T[] items)` - Creates a new instance of `InventoryStackSlot<T>` with the specified items
+    * `InventoryStackSlot(T[] items, int maxStackAmount)` - Creates a new instance of `InventoryStackSlot<T>` with the specified items and `maxStackAmount`
+  * 
 * 
 
 ## What's Changed
@@ -23,7 +30,7 @@
   * The new Event API is being planned
 
 ## What's Next
-* [#174](https://github.com/The-Chest/TheChest.Inventories/issues/174) - Update to use `TheChest.Core v0.15.2`
+* 
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
 
