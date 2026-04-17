@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
@@ -32,19 +31,18 @@ namespace TheChest.Inventories.Slots
         protected virtual void AddItems(ref T[] items)
         {
             var addAmount = items.Length > this.AvailableAmount ? this.AvailableAmount : items.Length;
+            var content = this.Content;
 
-            var itemIndex = 0;
-            for (int i = 0; i < this.MaxAmount; i++)
+            Array.Resize(ref content, content.Length + addAmount);
+
+            var startIndex = content.Length - addAmount;
+            var endIndex = content.Length;
+            for (int index = startIndex; index < endIndex; index++)
             {
-                if (this.Content[i] is null)
-                {
-                    this.Content[i] = items[itemIndex++];
-                    this.amount++;
-                }
-
-                if (itemIndex == addAmount)
-                    break;
+                content[index] = items[index - startIndex];
             }
+
+            this.Content = content;
 
             items = items.Skip(addAmount).ToArray();
         }
@@ -54,15 +52,13 @@ namespace TheChest.Inventories.Slots
         /// <param name="item">item to be added to content</param>
         protected virtual void AddItem(ref T item)
         {
-            for (int i = 0; i < this.MaxAmount; i++)
-            {
-                if (this.Content[i] is null)
-                {
-                    this.Content[i] = item;
-                    this.amount++;
-                    break;
-                }
-            }
+            var content = this.Content;
+
+            Array.Resize(ref content, content.Length + 1);
+            content[^1] = item;
+
+            this.Content = content;
+
             item = default!;
         }
 
