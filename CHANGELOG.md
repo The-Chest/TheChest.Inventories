@@ -7,7 +7,9 @@
     * `InventoryStackSlot(int maxStackAmount)` - Creates a new instance of `InventoryStackSlot<T>` with the specified `maxStackAmount` and default value of `T` as content
     * `InventoryStackSlot(T[] items)` - Creates a new instance of `InventoryStackSlot<T>` with the specified items
     * `InventoryStackSlot(T[] items, int maxStackAmount)` - Creates a new instance of `InventoryStackSlot<T>` with the specified items and `maxStackAmount`
-  * 
+  * `InventoryLazyStackSlot<T>`
+    * `InventoryLazyStackSlot()` - Creates a new instance of `InventoryLazyStackSlot<T>` with default values
+    * `InventoryLazyStackSlot(T content, int amount = 1, int maxStackAmount = 1)` - Creates a new instance of `InventoryLazyStackSlot<T>` with the specified content, amount, and maxStackAmount
 * 
 
 ## What's Changed
