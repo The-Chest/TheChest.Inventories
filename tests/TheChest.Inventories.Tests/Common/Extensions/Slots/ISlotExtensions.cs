@@ -20,11 +20,11 @@ namespace TheChest.Tests.Common.Extensions.Slots
         {
             var field = slot.GetContentField();
 
-            var fieldType = field.FieldType;
-            if (fieldType != typeof(T) && !typeof(T).IsAssignableFrom(fieldType))
-                throw new InvalidOperationException($"Field type '{fieldType}' is not assignable to '{typeof(T)}'.");
+            var value = field.GetValue(slot);
+            if (value is null)
+                return default!;
 
-            return (T)field.GetValue(slot);
+            return (T)value;
         }
     }
 }

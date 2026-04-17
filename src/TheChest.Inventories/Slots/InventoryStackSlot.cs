@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
@@ -13,9 +12,6 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">The item collection inside the slot accepts</typeparam>
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
     {
-        /// <inheritdoc />
-        public virtual int AvailableAmount => this.maxAmount - this.amount;
-
         /// <summary>
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
@@ -35,19 +31,18 @@ namespace TheChest.Inventories.Slots
         protected virtual void AddItems(ref T[] items)
         {
             var addAmount = items.Length > this.AvailableAmount ? this.AvailableAmount : items.Length;
+            var content = this.Content;
 
-            var itemIndex = 0;
-            for (int i = 0; i < this.MaxAmount; i++)
+            Array.Resize(ref content, content.Length + addAmount);
+
+            var startIndex = content.Length - addAmount;
+            var endIndex = content.Length;
+            for (int index = startIndex; index < endIndex; index++)
             {
-                if (this.content[i] is null)
-                {
-                    this.content[i] = items[itemIndex++];
-                    this.amount++;
-                }
-
-                if (itemIndex == addAmount)
-                    break;
+                content[index] = items[index - startIndex];
             }
+
+            this.Content = content;
 
             items = items.Skip(addAmount).ToArray();
         }
@@ -57,15 +52,13 @@ namespace TheChest.Inventories.Slots
         /// <param name="item">item to be added to content</param>
         protected virtual void AddItem(ref T item)
         {
-            for (int i = 0; i < this.MaxAmount; i++)
-            {
-                if (this.content[i] is null)
-                {
-                    this.content[i] = item;
-                    this.amount++;
-                    break;
-                }
-            }
+            var content = this.Content;
+
+            Array.Resize(ref content, content.Length + 1);
+            content[^1] = item;
+
+            this.Content = content;
+
             item = default!;
         }
 
@@ -185,15 +178,9 @@ namespace TheChest.Inventories.Slots
         {
             // TODO: improve it by getting it from the last items (maybe using IEnumerable)
             // Turn it in a internal extension method
-            var result = this.content
-                .Where(x => !EqualityComparer<T>.Default.Equals(x, default!))
-                .Take(amount)
-                .ToArray();
-            
-            Array.Clear(this.content, 0, amount);
+            var result = this.Content.Take(amount).ToArray();
 
-            this.amount -= result.Length;
-
+            this.Content = this.Content.Skip(result.Length).ToArray();
             return result;
         }
         /// <summary>
@@ -202,13 +189,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>One item or <see langword="null"/> if not found</returns>
         protected virtual T GetItem()
         {
-            var item = this.content.FirstOrDefault();
-            Array.Clear(this.content, 0, 1);
-            if (item is null)
-                return default!;
-
-            this.amount--;
-            return item!;
+            return this.GetItems(1).FirstOrDefault();
         }
 
         /// <summary>
@@ -217,6 +198,9 @@ namespace TheChest.Inventories.Slots
         /// <returns>All items from slot</returns>
         public virtual T[] GetAll()
         {
+            if (this.IsEmpty)
+                return Array.Empty<T>();
+
             return this.GetItems(this.Amount);
         }
         /// <summary>
