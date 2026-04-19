@@ -17,12 +17,12 @@
         public void Get_FullSlot_ReturnsItem()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item, stackSize);
+            var items = this.itemFactory.CreateMany(stackSize);
+            var slot = this.slotFactory.FullSlot(items);
 
             var result = slot.Get();
 
-            Assert.That(result, Is.EqualTo(item));
+            Assert.That(result, Is.EqualTo(items[0]));
         }
 
         [Test]

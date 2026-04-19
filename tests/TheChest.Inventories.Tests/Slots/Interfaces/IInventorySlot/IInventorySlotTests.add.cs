@@ -6,7 +6,7 @@
         public void Add_EmptySlot_ReturnsTrue()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.EmptySlot();
+            var slot = this.slotFactory.Empty();
 
             var result = slot.Add(item);
 
@@ -16,7 +16,7 @@
         public void Add_FullSlot_ReturnsFalse()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
+            var slot = this.slotFactory.Full(item);
 
             var result = slot.Add(item);
 

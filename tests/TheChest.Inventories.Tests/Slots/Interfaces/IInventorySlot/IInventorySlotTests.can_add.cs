@@ -5,7 +5,7 @@
         [Test]
         public void CanAdd_NullItem_ReturnsFalse()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var slot = this.slotFactory.Empty();
 
             var result = slot.CanAdd(default!);
 
@@ -16,7 +16,7 @@
         public void CanAdd_EmptySlot_ReturnsTrue()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.EmptySlot();
+            var slot = this.slotFactory.Empty();
 
             var result = slot.CanAdd(item);
 
@@ -27,7 +27,7 @@
         public void CanAdd_FullSlot_ReturnsFalse()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
+            var slot = this.slotFactory.Full(item);
 
             var result = slot.CanAdd(item);
 
