@@ -10,7 +10,16 @@
   * `InventoryLazyStackSlot<T>`
     * `InventoryLazyStackSlot()` - Creates a new instance of `InventoryLazyStackSlot<T>` with default values
     * `InventoryLazyStackSlot(T content, int amount = 1, int maxStackAmount = 1)` - Creates a new instance of `InventoryLazyStackSlot<T>` with the specified content, amount, and maxStackAmount
-* 
+* New Constructors to Inventory Classes
+  * `Inventory<T>`
+    * `Inventory()` - Creates a new instance of `Inventory<T>` with default values
+    * `Inventory(int size)` - Creates a new instance of `Inventory<T>` with the specified size
+    * `Inventory(T[] items)` - Creates a new instance of `Inventory<T>` with the specified items
+    * `Inventory(T[] items, int size)` - Creates a new instance of `Inventory<T>` with the specified items and size
+  * `StackInventory<T>`
+    * 
+  * `LazyStackInventory<T>`
+    * 
 
 ## What's Changed
 * 
