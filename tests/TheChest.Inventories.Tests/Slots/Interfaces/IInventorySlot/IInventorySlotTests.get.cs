@@ -5,7 +5,7 @@
         [Test]
         public void GetOne_NoItem_ReturnsNull()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var slot = this.slotFactory.Empty();
 
             var result = slot.Get();
 
@@ -16,7 +16,7 @@
         public void GetOne_FullSlot_ReturnsItem()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
+            var slot = this.slotFactory.Full(item);
 
             var result = slot.Get();
 

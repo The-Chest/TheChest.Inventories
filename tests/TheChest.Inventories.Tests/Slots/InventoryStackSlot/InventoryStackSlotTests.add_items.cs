@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public void AddItems_AddingDifferentItems_ThrowsArgumentException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var randomSize = this.random.Next(1, stackSize);
             var addingItems = this.itemFactory
@@ -22,9 +22,10 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void AddItems_DifferentItemsFromSlot_ThrowsArgumentException()
         {
-            var slot = this.slotFactory.WithItem(this.itemFactory.CreateDefault());
-
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var items = new T[1] {  this.itemFactory.CreateRandom() };
+            var slot = this.slotFactory.WithItems(items, stackSize);
+
             var addingItems = this.itemFactory.CreateManyRandom(stackSize);
 
             Assert.That(() => slot.Add(addingItems), Throws.ArgumentException);
@@ -33,9 +34,10 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void AddItems_OneItemDifferentFromSlot_ThrowsArgumentException()
         {
-            var slot = this.slotFactory.WithItem(this.itemFactory.CreateDefault());
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var items = new T[1] { this.itemFactory.CreateRandom() };
+            var slot = this.slotFactory.WithItems(items, stackSize);
 
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST); 
             var addingItems = this.itemFactory.CreateMany(stackSize)
                 .Append(this.itemFactory.CreateRandom())
                 .ToArray();
@@ -46,7 +48,8 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void AddItems_AddingNoItems_ThrowsArgumentException()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var addingItems = Array.Empty<T>();
 
@@ -57,7 +60,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public void AddItems_EmptySlot_WithMoreItemsThanMaxAmount_AddsAllItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var randomSize = this.random.Next(stackSize + 1, stackSize + 20);
             var addingItems = this.itemFactory.CreateManyRandom(randomSize);
@@ -73,7 +76,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var addingItems = this.itemFactory.CreateMany(stackSize);
             slot.Add(addingItems);

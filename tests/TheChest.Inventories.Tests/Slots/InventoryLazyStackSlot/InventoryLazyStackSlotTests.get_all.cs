@@ -8,8 +8,8 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         public void GetAll_SlotWithContent_ClearsSlot()
         {
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(2, 10);
-            var maxAmount = this.random.Next(10, 20);
+            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var amount = this.random.Next(2, maxAmount);
             var slot = this.slotFactory.WithItem(item, amount, maxAmount);
 
             slot.GetAll();

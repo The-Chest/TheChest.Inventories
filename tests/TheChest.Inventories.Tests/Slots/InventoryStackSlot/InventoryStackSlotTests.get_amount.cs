@@ -10,7 +10,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             Assert.That(() => slot.Get(amount), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var amount = this.random.Next(1, stackSize);
             slot.Get(amount);
@@ -47,7 +47,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             slot.Get(stackSize * 2);
 

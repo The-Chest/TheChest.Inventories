@@ -5,7 +5,8 @@
         [Test]
         public void AvailableAmount_EmptySlot_ReturnsMaxStackAmount()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
 
             Assert.That(slot.AvailableAmount, Is.EqualTo(slot.MaxAmount));
         }
@@ -14,8 +15,8 @@
         public void AvailableAmount_PartiallyFilledSlot_ReturnsMaxStackAmountMinusAmount()
         {
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 10);
-            var maxAmount = this.random.Next(10, 20);
+            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var amount = this.random.Next(1, maxAmount - 1);
             var slot = this.slotFactory.WithItem(item, amount, maxAmount);
 
             Assert.That(slot.AvailableAmount, Is.EqualTo(slot.MaxAmount - slot.Amount));
@@ -25,7 +26,7 @@
         public void AvailableAmount_FullSlot_ReturnsZero()
         {
             var item = this.itemFactory.CreateDefault();
-            var maxAmount = this.random.Next(10, 20);
+            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.WithItem(item, maxAmount, maxAmount);
 
             Assert.That(slot.AvailableAmount, Is.EqualTo(0));

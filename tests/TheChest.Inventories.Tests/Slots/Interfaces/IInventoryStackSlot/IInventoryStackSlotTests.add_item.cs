@@ -6,7 +6,7 @@
         public void Add_EmptySlot_IncreasesAmountToOne()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
             var item = this.itemFactory.CreateDefault();
             
             slot.Add(item);

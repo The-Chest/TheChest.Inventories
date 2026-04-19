@@ -6,7 +6,7 @@
         public void ReplaceOne_EmptySlot_ReturnsEmptyArray()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = this.itemFactory.CreateDefault();
             var result = slot.Replace(item);
@@ -19,7 +19,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.WithItems(items);
+            var slot = this.slotFactory.WithItems(items, stackSize);
 
             var replacingItem = this.itemFactory.CreateRandom();
             var result = slot.Replace(replacingItem);
@@ -32,7 +32,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.WithItems(items);
+            var slot = this.slotFactory.WithItems(items, stackSize);
 
             var replacingItem = this.itemFactory.CreateDefault();
             var result = slot.Replace(replacingItem);

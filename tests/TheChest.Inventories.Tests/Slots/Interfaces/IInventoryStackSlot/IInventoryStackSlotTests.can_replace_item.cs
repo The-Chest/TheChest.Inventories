@@ -6,7 +6,7 @@
         public void CanReplaceItem_NullItem_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = (T)default!;
 
@@ -17,7 +17,7 @@
         public void CanReplaceItem_NotNullItem_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = this.itemFactory.CreateDefault();
             

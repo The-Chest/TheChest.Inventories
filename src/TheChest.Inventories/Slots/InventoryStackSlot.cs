@@ -13,6 +13,16 @@ namespace TheChest.Inventories.Slots
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
     {
         /// <summary>
+        /// Creates an empty <see cref="InventoryStackSlot{T}"/>
+        /// </summary>
+        public InventoryStackSlot() : base() { }
+        /// <summary>
+        /// Creates an Inventory Slot with a specified maximum stack amount
+        /// </summary>
+        /// <param name="maxStackAmount">The Max Size Allowed</param>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="maxStackAmount"/> is smaller than zero</exception>
+        public InventoryStackSlot(int maxStackAmount) : base(maxStackAmount) { }
+        /// <summary>
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
         public InventoryStackSlot(T[] items) : base(items) { }

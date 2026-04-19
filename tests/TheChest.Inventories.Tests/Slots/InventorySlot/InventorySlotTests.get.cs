@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         public void GetOne_FullSlot_RemovesItemFromSlot()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
+            var slot = this.slotFactory.Full(item);
 
             slot.Get();
 

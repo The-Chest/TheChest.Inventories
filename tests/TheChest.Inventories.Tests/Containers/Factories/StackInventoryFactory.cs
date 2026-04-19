@@ -24,7 +24,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             var inventoryType = typeof(Inventory).GetContainerType(typeof(IStackInventory<Item>));
             var slotType = inventoryType.GetSlotTypeByConstructor<IInventoryStackSlot<Item>>();
 
-            var slots = slotType.CreateSlots(size, _ => slotFactory.EmptySlot(stackSize));
+            var slots = slotType.CreateSlots(size, _ => slotFactory.Empty(stackSize));
 
             var inventory = Activator.CreateInstance(
                 type: inventoryType,
@@ -60,7 +60,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                     factory:
                         index => index < items.Length
                             ? slotFactory.WithItem(items[index], stackSize, stackSize)
-                            : slotFactory.EmptySlot(stackSize),
+                            : slotFactory.Empty(stackSize),
                     shuffle: true
                 );
 

@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         [Test]
         public void Replace_ReplacingItemOnEmptySlot_AddsItem()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var slot = this.slotFactory.Empty();
             var newItem = this.itemFactory.CreateDefault();
 
             slot.Replace(newItem);
@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         public void Replace_ReplacingItemOnFullSlot_AddsItem()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
+            var slot = this.slotFactory.Full(item);
 
             var newItem = this.itemFactory.CreateDefault();
             slot.Replace(newItem);

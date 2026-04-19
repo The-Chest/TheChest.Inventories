@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         public void Add_ItemIsNull_ThrowsArgumentNullException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             Assert.Throws<ArgumentNullException>(() => slot.Add(default!, 1));
         }
@@ -18,7 +18,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         public void Add_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
             var item = this.itemFactory.CreateDefault();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => slot.Add(item, amount));

@@ -14,14 +14,22 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">Item the Slot Accept</typeparam>
     public class InventoryLazyStackSlot<T> : LazyStackSlot<T>, IInventoryLazyStackSlot<T>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InventoryLazyStackSlot{T}"/> class with default values.
+        /// </summary>
+        /// <remarks>
+        /// The slot is initialized with no content, an amount of zero, and a maximum amount of one.
+        /// </remarks>
+        public InventoryLazyStackSlot() : base() { }
         /// <inheritdoc/>
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
         /// </summary>
         /// <param name="content">default item inside the slot</param>
-        /// <param name="amount">amount of the <paramref name="amount"/></param>
+        /// <param name="amount">amount of the <paramref name="content"/></param>
         /// <param name="maxStackAmount">the max accepted amount of this slot</param>
-        public InventoryLazyStackSlot(T content = default!, int amount = 1, int maxStackAmount = 1) : base(content, amount, maxStackAmount) { }
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> or <paramref name="maxStackAmount"/> is smaller than zero</exception>
+        public InventoryLazyStackSlot(T content, int amount = 1, int maxStackAmount = 1) : base(content, amount, maxStackAmount) { }
 
         /// <summary>
         /// Sets the values of content and <see cref="StackSlot{T}.Amount"/>

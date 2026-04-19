@@ -5,7 +5,7 @@
         [Test]
         public void Replace_ReplacingItemOnEmptySlot_ReturnsNull()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var slot = this.slotFactory.Empty();
             var newItem = this.itemFactory.CreateDefault();
 
             var result = slot.Replace(newItem);
@@ -17,7 +17,7 @@
         public void Replace_ReplacingItemOnFullSlot_ReturnsItem()
         {
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.FullSlot(item);
+            var slot = this.slotFactory.Full(item);
 
             var newItem = this.itemFactory.CreateDefault();
             var result = slot.Replace(newItem);

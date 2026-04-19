@@ -12,12 +12,12 @@ namespace TheChest.Inventories.Tests.Slots.Interfaces.Factories
         /// Creates an <see cref="IInventorySlot{T}"/> with no item inside it
         /// </summary>
         /// <returns>An empty <see cref="IInventorySlot{T}"/></returns>
-        IInventorySlot<T> EmptySlot();
+        IInventorySlot<T> Empty();
         /// <summary>
         /// Creates an <see cref="IInventorySlot{T}"/> with an item inside it
         /// </summary>
         /// <param name="item">The item that will be inside the created <see cref="IInventorySlot{T}"/></param>
         /// <returns>A full <see cref="IInventorySlot{T}"/></returns>
-        IInventorySlot<T> FullSlot(T item);
+        IInventorySlot<T> Full(T item);
     }
 }

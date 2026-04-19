@@ -23,7 +23,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             var inventoryType = typeof(Inventory).GetContainerType(typeof(IInventory<Item>));
             var slotType = inventoryType.GetSlotTypeByConstructor<IInventorySlot<Item>>();
 
-            var slots = slotType.CreateSlots(size, _ => slotFactory.EmptySlot());
+            var slots = slotType.CreateSlots(size, _ => slotFactory.Empty());
 
             var inventory = Activator.CreateInstance(
                 type: inventoryType,
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             var inventoryType = typeof(Inventory).GetContainerType(typeof(IInventory<Item>));
             var slotType = inventoryType.GetSlotTypeByConstructor<IInventorySlot<Item>>();
 
-            var slots = slotType.CreateSlots(size, _ => slotFactory.FullSlot(item));
+            var slots = slotType.CreateSlots(size, _ => slotFactory.Full(item));
 
             var inventory = Activator.CreateInstance(
                 type: inventoryType,
@@ -64,8 +64,8 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                     size: size,
                     factory:
                         index => index == new Random().Next(0, size - 1)
-                            ? slotFactory.FullSlot(item)
-                            : slotFactory.EmptySlot(),
+                            ? slotFactory.Full(item)
+                            : slotFactory.Empty(),
                     shuffle: true
                 );
 
@@ -87,8 +87,8 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                     size: size,
                     factory:
                         index => index < items.Length
-                            ? slotFactory.FullSlot(items[index])
-                            : slotFactory.EmptySlot(),
+                            ? slotFactory.Full(items[index])
+                            : slotFactory.Empty(),
                     shuffle: true
                 );
 

@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         public void Get_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => slot.Get(amount));
         }
