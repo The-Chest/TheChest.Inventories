@@ -6,7 +6,7 @@
         public void AddItems_EmptySlot_WithLessItemsThanMaxAmount_IncreasesAmount()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var addingAmount = this.random.Next(1, stackSize - 1);
             var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
@@ -19,7 +19,7 @@
         public void AddItems_EmptySlot_WithMoreItemsThanMaxAmount_IncreasesAmountToMaxAvailable()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var addingItems = this.itemFactory.CreateManyRandom(stackSize);
             slot.Add(addingItems);
@@ -46,7 +46,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
             var item = this.itemFactory.CreateDefault();
             slot.Add(item);
 

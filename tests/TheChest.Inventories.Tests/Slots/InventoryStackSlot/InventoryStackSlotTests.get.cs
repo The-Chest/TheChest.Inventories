@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             slot.Get();
 

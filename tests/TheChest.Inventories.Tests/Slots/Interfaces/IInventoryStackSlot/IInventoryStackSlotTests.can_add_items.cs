@@ -6,7 +6,7 @@
         public void CanAddItems_NullArray_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             Assert.That(slot.CanAdd(items: default), Is.False);
         }
@@ -15,7 +15,7 @@
         public void CanAddItems_EmptyArray_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var items = Array.Empty<T>();
 
@@ -27,7 +27,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var item = this.itemFactory.CreateMany(10);
 
@@ -39,7 +39,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var addItems = this.itemFactory.CreateMany(stackSize / 2)
                 .Append(this.itemFactory.CreateRandom())
@@ -53,7 +53,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var item = this.itemFactory.CreateMany(stackSize / 2);
 
@@ -78,7 +78,7 @@
         public void CanAddItems_EmptySlot_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize);
 

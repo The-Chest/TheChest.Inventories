@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(slotItems);
+            var slot = this.slotFactory.Full(slotItems);
 
             var items = Array.Empty<T>();
             Assert.That(() => slot.Replace(items), Throws.ArgumentException);
@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public void Replace_ItemsBiggerThanMaxAmount_ThrowsArgumentOutOfRangeException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize + 1);
             Assert.That(() => slot.Replace(items), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
@@ -29,7 +29,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public void Replace_EmptySlot_AddsItem()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize / 2);
             var expectedResult = (T[])items.Clone();

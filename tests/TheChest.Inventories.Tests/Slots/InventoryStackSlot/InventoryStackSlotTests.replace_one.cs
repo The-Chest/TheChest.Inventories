@@ -11,7 +11,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(slotItems);
+            var slot = this.slotFactory.Full(slotItems);
 
             Assert.That(() => slot.Replace(default(T)!), Throws.ArgumentNullException);
         }
@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public void ReplaceOne_EmptySlot_AddsItem()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = this.itemFactory.CreateDefault();
             var expectedResult = new T[1];

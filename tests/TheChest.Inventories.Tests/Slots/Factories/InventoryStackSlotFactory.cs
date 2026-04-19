@@ -7,14 +7,14 @@ namespace TheChest.Inventories.Tests.Slots.Factories
     public class InventoryStackSlotFactory<Slot, Item> : IInventoryStackSlotFactory<Item>
         where Slot : InventoryStackSlot<Item>
     {
-        public virtual IInventoryStackSlot<Item> EmptySlot(int maxAmount)
+        public virtual IInventoryStackSlot<Item> Empty(int maxAmount)
         {
             var type = typeof(Slot);
             var slot = Activator.CreateInstance(type, Array.Empty<Item>(), maxAmount);
             return (IInventoryStackSlot<Item>)slot!;
         }
 
-        public virtual IInventoryStackSlot<Item> FullSlot(Item[] items)
+        public virtual IInventoryStackSlot<Item> Full(Item[] items)
         {
             var type = typeof(Slot);
             var slot = Activator.CreateInstance(type, (Item[])items.Clone(), items.Length);

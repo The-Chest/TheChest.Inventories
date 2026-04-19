@@ -6,7 +6,7 @@
         public void AvailableAmount_EmptySlot_ReturnsMaxStackAmount()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             Assert.That(slot.AvailableAmount, Is.EqualTo(slot.MaxAmount));
         }

@@ -7,7 +7,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = Array.Empty<T>();
             Assert.That(slot.CanReplace(items), Is.False);
@@ -18,7 +18,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = this.itemFactory.CreateMany(stackSize / 2)
                 .Append(default)
@@ -31,7 +31,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = this.itemFactory.CreateMany(stackSize / 2)
                 .Append(this.itemFactory.CreateRandom())
@@ -44,7 +44,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = this.itemFactory.CreateMany(stackSize + 1);
             Assert.That(slot.CanReplace(items), Is.False);
@@ -55,7 +55,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = this.itemFactory.CreateMany(stackSize);
             Assert.That(slot.CanReplace(items), Is.True);
@@ -66,7 +66,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = this.itemFactory.CreateMany(stackSize - 1);
             Assert.That(slot.CanReplace(items), Is.True);
@@ -77,7 +77,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             Assert.That(slot.CanReplace(startItems), Is.True);
         }
@@ -87,7 +87,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var startItems = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(startItems);
+            var slot = this.slotFactory.Full(startItems);
 
             var items = this.itemFactory.CreateManyRandom(stackSize);
             Assert.That(slot.CanReplace(items), Is.True);

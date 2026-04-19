@@ -7,7 +7,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var amount = this.random.Next(1, stackSize);
             var result = slot.Get(amount);
@@ -59,7 +59,7 @@
         public void GetAmount_EmptySlot_ReturnsEmptyArray()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var amount = this.random.Next(1, stackSize / 2);
             var result = slot.Get(amount);
@@ -72,7 +72,7 @@
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.FullSlot(items);
+            var slot = this.slotFactory.Full(items);
 
             var amount = this.random.Next(1, stackSize);
             slot.Get(amount);
