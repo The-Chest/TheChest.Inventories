@@ -9,7 +9,8 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [IgnoreIfValueType]
         public void ReplaceOne_NullItemReplace_ThrowsArgumentNullException()
         {
-            var slotItems = this.itemFactory.CreateMany(10);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slotItems = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.FullSlot(slotItems);
 
             Assert.That(() => slot.Replace(default(T)!), Throws.ArgumentNullException);
