@@ -6,7 +6,7 @@
         public void CanAdd_NullItem_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var result = slot.CanAdd(default!, 1);
 
@@ -30,7 +30,7 @@
         public void CanAdd_InvalidAmount_ReturnsFalse(int amount)
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = this.itemFactory.CreateDefault();
             var result = slot.CanAdd(item, amount);
@@ -42,7 +42,7 @@
         public void CanAdd_EmptySlotAndValidItem_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = this.itemFactory.CreateDefault();
             var result = slot.CanAdd(item, 1);

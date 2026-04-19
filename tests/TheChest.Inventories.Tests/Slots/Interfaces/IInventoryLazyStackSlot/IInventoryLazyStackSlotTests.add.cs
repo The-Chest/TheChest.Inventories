@@ -36,7 +36,7 @@
         public void Add_EmptySlot_AddsItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.EmptySlot(stackSize);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, stackSize);

@@ -5,7 +5,8 @@
         [Test]
         public void Get_EmptySlot_ReturnsEmptyArray()
         {
-            var slot = this.slotFactory.EmptySlot();
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
 
             var result = slot.Get(1);
 
@@ -28,8 +29,8 @@
         public void Get_ValidAmount_ReturnsSpecifiedAmountOfItems()
         {
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(2, 10);
-            var maxAmount = this.random.Next(10, 20);
+            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var amount = this.random.Next(2, maxAmount);
             var slot = this.slotFactory.WithItem(item, amount, maxAmount);
 
             var result = slot.Get(amount - 1);
@@ -42,8 +43,8 @@
         public void Get_ValidAmount_ReducesStackAmount()
         {
             var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(2, 10);
-            var maxAmount = this.random.Next(10, 20);
+            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var amount = this.random.Next(2, maxAmount);
             var slot = this.slotFactory.WithItem(item, amount, maxAmount);
 
             var getAmount = this.random.Next(1, amount);
