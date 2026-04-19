@@ -1,7 +1,7 @@
 # v0.15.0
 
 ## What's Added
-* New Constructors to Slot Classes
+* New Constructors to Stack Slot Classes
   * `InventoryStackSlot<T>`
     * `InventoryStackSlot()` - Creates a new instance of `InventoryStackSlot<T>` with default values
     * `InventoryStackSlot(int maxStackAmount)` - Creates a new instance of `InventoryStackSlot<T>` with the specified `maxStackAmount` and default value of `T` as content

@@ -10,14 +10,14 @@ namespace TheChest.Inventories.Tests.Slots.Factories
         public virtual IInventoryStackSlot<Item> Empty(int maxAmount)
         {
             var type = typeof(Slot);
-            var slot = Activator.CreateInstance(type, Array.Empty<Item>(), maxAmount);
+            var slot = Activator.CreateInstance(type, maxAmount);
             return (IInventoryStackSlot<Item>)slot!;
         }
 
         public virtual IInventoryStackSlot<Item> Full(Item[] items)
         {
             var type = typeof(Slot);
-            var slot = Activator.CreateInstance(type, (Item[])items.Clone(), items.Length);
+            var slot = Activator.CreateInstance(type, (Item[])items.Clone());
             return (IInventoryStackSlot<Item>)slot!;
         }
 
