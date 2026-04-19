@@ -157,6 +157,8 @@ namespace TheChest.Inventories {
     }
 
     class InventoryStackSlot~T~ {
+        + InventoryStackSlot()
+        + InventoryStackSlot(int maxStackAmount)
         + InventoryStackSlot(T[] items)
         + InventoryStackSlot(T[] items, int maxStackAmount)
         

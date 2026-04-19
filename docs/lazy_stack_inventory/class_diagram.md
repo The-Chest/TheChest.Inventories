@@ -145,8 +145,8 @@ namespace TheChest.Inventories {
         + bool Contains(T item)
     }
     class InventoryLazyStackSlot~T~ {
-        + InventoryLazyStackSlot(T? currentItem = default)
-        + InventoryLazyStackSlot(T? currentItem = default, int maxStackAmount = 1)
+        + InventoryLazyStackSlot()
+        + InventoryLazyStackSlot(T content, int amount = 1, int maxStackAmount = 1)
         
         + bool Contains(T item)
         
