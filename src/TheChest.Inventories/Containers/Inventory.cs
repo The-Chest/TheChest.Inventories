@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
-using TheChest.Core.Slots;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Extensions;
@@ -45,13 +44,13 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="size"/> is zero or smaller</exception>
         public Inventory(int size) : this(new T[size], size) { }
         /// <summary>
-        /// Creates an Inventory with <see cref="Slot{T}"/> implementation and the size of the provided items array
+        /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation and the size of the provided items array
         /// </summary>
         /// <param name="items">Items to be added to the slots on the inventory</param>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is null</exception>
         public Inventory(T[] items) : this(items, items.Length) { }
         /// <summary>
-        /// Creates an Inventory with <see cref="Slot{T}"/> implementation, provided <paramref name="items"/> and the size of the inventory is defined by the <paramref name="size"/>
+        /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation, provided <paramref name="items"/> and the size of the inventory is defined by the <paramref name="size"/>
         /// </summary>
         /// <param name="items">Items to be added to the slots on the inventory</param>
         /// <param name="size">Number with the size of the inventory</param>
