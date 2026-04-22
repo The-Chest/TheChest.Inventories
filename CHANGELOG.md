@@ -17,7 +17,9 @@
     * `Inventory(T[] items)` - Creates a new instance of `Inventory<T>` with the specified items
     * `Inventory(T[] items, int size)` - Creates a new instance of `Inventory<T>` with the specified items and size
   * `StackInventory<T>`
-    * 
+    * `StackInventory()` - Creates a new instance of `StackInventory<T>` with default values
+    * `StackInventory(int size, int maxStackAmount)` - Creates a new instance of `StackInventory<T>` with the specified size and maxStackAmount
+    * `StackInventory(T[] items, int maxStackAmount)` - Creates a new instance of `StackInventory<T>` with the specified items and maxStackAmount
   * `LazyStackInventory<T>`
     * 
 
