@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Extensions
+﻿using System.Collections.Generic;
+
+namespace TheChest.Inventories.Extensions
 {
     internal static class ArrayExtensions
     {
@@ -19,6 +21,24 @@
             }
 
             return false;
+        }
+
+        internal static int GetAdjacentEqualCount<T>(this T[] array, int startIndex, int maxCount)
+        {
+            var index = startIndex;
+            var amount = 1;
+            var comparer = EqualityComparer<T>.Default;
+
+            while (
+                index + 1 < array.Length && amount < maxCount &&
+                comparer.Equals(array[index + 1], array[startIndex])
+            )
+            {
+                index++;
+                amount++;
+            }
+
+            return index;
         }
     }
 }
