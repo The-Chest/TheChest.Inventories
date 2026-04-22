@@ -30,6 +30,21 @@ namespace TheChest.Inventories.Containers
         public event LazyStackInventoryReplaceEventHandler<T> OnReplace;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="LazyStackInventory{T}"/> class with default size of 20 and max stack size of 1.
+        /// </summary>
+        public LazyStackInventory() : base() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LazyStackInventory{T}"/> class with the specified size and maximum stack size.
+        /// </summary>
+        /// <inheritdoc/>
+        public LazyStackInventory(int size, int maxStackSize) : base(size, maxStackSize) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LazyStackInventory{T}"/> class with the specified items and maximum amount.
+        /// </summary>
+        /// <inheritdoc/>
+        public LazyStackInventory((T item, int amount)[] items, int maxAmount) : base(items, maxAmount) { }
+
+        /// <summary>
         /// Creates an Stackable Inventory with lazy behavior
         /// </summary>
         /// <param name="slots">An array of <see cref="IInventoryLazyStackSlot{T}"/></param>

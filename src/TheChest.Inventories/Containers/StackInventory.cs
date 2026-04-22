@@ -31,13 +31,41 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryReplaceEventHandler<T> OnReplace;
 
         /// <summary>
+        /// Creates an empty StackInventory with a default size of 0
+        /// </summary>
+        public StackInventory()
+        {
+            this.slots = Array.Empty<IInventoryStackSlot<T>>();
+        }
+        /// <summary>
+        /// Creates an StackInventory and initializes it with the provided size and max stack size.
+        /// </summary>
+        /// <inheritdoc />
+        public StackInventory(int size, int maxStackSize) : this(new T[size], maxStackSize) { }
+        /// <summary>
+        /// Creates an StackInventory and initializes it with the provided items and max stack size.
+        /// </summary>
+        /// <inheritdoc />
+        public StackInventory(T[] items, int maxStackSize) : base(items, maxStackSize) 
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            if (maxStackSize <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maxStackSize), "Max stack size must be greater than zero.");
+
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+
+            this.slots = items.ToStackSlots(maxStackSize);
+        }
+        /// <summary>
         /// Creates an Inventory with <see cref="IInventoryStackSlot{T}"/> slots
         /// </summary>
-        /// <param name="slots">An array of <see cref="IInventoryStackSlot{T}"/></param>
-        /// <exception cref="ArgumentNullException"><inheritdoc/></exception>
-        public StackInventory(IInventoryStackSlot<T>[] slots) : base(slots) 
+        /// <inheritdoc />
+        public StackInventory(IInventoryStackSlot<T>[] slots) : base(slots)
         {
-            this.slots = slots;
+            this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
 
         /// <inheritdoc/>
@@ -66,7 +94,7 @@ namespace TheChest.Inventories.Containers
                 return false;
             //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null"); 
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
 
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
@@ -169,7 +197,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 return items;
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), "One of the items is null");
 
@@ -232,7 +259,6 @@ namespace TheChest.Inventories.Containers
                 return items;
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), "One of the items is null");
 
@@ -512,7 +538,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
- 
             if (items.Length == 0)
                 return false;
             //TODO: check if its better to return false instead of throw an exception when one of the items is null
@@ -532,7 +557,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 throw new ArgumentException("Cannot replace using an empty item array", nameof(items));
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), "One of the items is null");
             if (index < 0 || index > this.Size)

@@ -63,6 +63,10 @@ direction TB
 	        + ~~event~~ OnMove: InventoryMoveEventHandler~T~ 
 	        + ~~event~~ OnReplace: InventoryReplaceEventHandler~T~ 
 	        
+			+ Inventory()
+			+ Inventory(int size)
+			+ Inventory(T[] items)
+			+ Inventory(T[] items, int size)
 			+ Inventory(IInventorySlot~T~[] slots)
 
 	        + bool CanAdd(T item)

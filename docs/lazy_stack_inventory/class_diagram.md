@@ -23,6 +23,9 @@ namespace TheChest.Inventories.Containers {
         - IInventoryLazyStackSlot~T~[] slots
         + IInventoryLazyStackSlot~T~ this[int index]
 
+        + LazyStackInventory()
+        + LazyStackInventory(int size, int maxStackSize)
+        + LazyStackInventory((T item, int amount)[] items, int maxAmount)
         + LazyStackInventory(IInventoryLazyStackSlot~T~[] slots)
 
 	    + ~~event~~ OnGet: LazyStackInventoryGetEventHandler~T~ 

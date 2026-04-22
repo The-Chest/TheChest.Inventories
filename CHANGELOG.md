@@ -10,13 +10,23 @@
   * `InventoryLazyStackSlot<T>`
     * `InventoryLazyStackSlot()` - Creates a new instance of `InventoryLazyStackSlot<T>` with default values
     * `InventoryLazyStackSlot(T content, int amount = 1, int maxStackAmount = 1)` - Creates a new instance of `InventoryLazyStackSlot<T>` with the specified content, amount, and maxStackAmount
-* 
+* New Constructors to Inventory Classes
+  * `Inventory<T>`
+    * `Inventory()` - Creates a new instance of `Inventory<T>` with default values
+    * `Inventory(int size)` - Creates a new instance of `Inventory<T>` with the specified size
+    * `Inventory(T[] items)` - Creates a new instance of `Inventory<T>` with the specified items
+    * `Inventory(T[] items, int size)` - Creates a new instance of `Inventory<T>` with the specified items and size
+  * `StackInventory<T>`
+    * `StackInventory()` - Creates a new instance of `StackInventory<T>` with default values
+    * `StackInventory(int size, int maxStackAmount)` - Creates a new instance of `StackInventory<T>` with the specified size and maxStackAmount
+    * `StackInventory(T[] items, int maxStackAmount)` - Creates a new instance of `StackInventory<T>` with items inside, specified items and maxStackAmount
+  * `LazyStackInventory<T>`
+    * `LazyStackInventory()` - Creates a new instance of `LazyStackInventory<T>` with default values
+    * `LazyStackInventory(int size, int maxStackAmount)` - Creates a new instance of `LazyStackInventory<T>` with the specified size and maxStackAmount
+    * `LazyStackInventory(T item, int amount)[] items, int maxAmount)` - Creates a new instance of `LazyStackInventory<T>` with items inside, specified items and maxStackAmount
 
 ## What's Changed
-* 
-
-## What's Fixed
-* 
+* Project is now using `TheChest.Core v0.17.4`
 
 ## What's Removed
 * Example project from the repository.
@@ -30,9 +40,11 @@
   * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
+* `ArgumentNullException`s when an Array is null are being repeted in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 
 ## What's Next
-* 
+* [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
+* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | []() | []() - Try methods to avoid throwing exceptions in some cases
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
 
