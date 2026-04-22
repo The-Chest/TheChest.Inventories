@@ -6,6 +6,16 @@ namespace TheChest.Inventories.Extensions
 {
     internal static class IInventoryStackSlotExtensions
     {
+        /// <summary>
+        /// Converts an array of items into inventory stack slots by grouping adjacent equal items,
+        /// with each stack containing at most <paramref name="maxStackSize"/> items.
+        /// </summary>
+        /// <typeparam name="T">The item type stored in the stack slots.</typeparam>
+        /// <param name="items">The source array of items to convert.</param>
+        /// <param name="maxStackSize">The maximum number of items allowed in a single stack slot.</param>
+        /// <returns>
+        /// An array of <see cref="IInventoryStackSlot{T}"/> instances representing the grouped items.
+        /// </returns>
         internal static IInventoryStackSlot<T>[] ToStackSlots<T>(this T[] items, int maxStackSize)
         {
             var index = 0;
