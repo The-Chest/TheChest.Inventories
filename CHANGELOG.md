@@ -23,7 +23,7 @@
   * `LazyStackInventory<T>`
     * `LazyStackInventory()` - Creates a new instance of `LazyStackInventory<T>` with default values
     * `LazyStackInventory(int size, int maxStackAmount)` - Creates a new instance of `LazyStackInventory<T>` with the specified size and maxStackAmount
-    * `LazyStackInventory(T item, int amount)[] items, int maxAmount)` - Creates a new instance of `LazyStackInventory<T>` with items inside, specified items and maxStackAmount
+    * `LazyStackInventory((T item, int amount)[] items, int maxStackAmount)` - Creates a new instance of `LazyStackInventory<T>` with items inside, specified items and maxStackAmount
 
 ## What's Changed
 * Project is now using `TheChest.Core v0.17.4`
