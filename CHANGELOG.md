@@ -40,7 +40,7 @@
   * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
-* `ArgumentNullException`s when an Array is null are being repeted in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 
 ## What's Next
 * [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
