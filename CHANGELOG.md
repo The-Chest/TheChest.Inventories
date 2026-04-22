@@ -301,7 +301,7 @@
 ## What's Changed
 * The project is now using `TheChest.Core v0.10.0` so it uses its new resources like
   * `StackAmount` is now `Amount`
-  * `MaxStackAmount` is not `MaxAmount`
+  * `MaxStackAmount` is now `MaxAmount`
   * `protected` fields added for the properties `Amount` and `MaxAmount`
   * More info on : https://github.com/The-Chest/TheChest.Core/releases/tag/v0.10.0
 
