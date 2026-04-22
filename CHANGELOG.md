@@ -43,7 +43,7 @@
 * `ArgumentNullException`s when an Array is null are being repeted in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 
 ## What's Next
-* [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
+* [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
