@@ -23,7 +23,7 @@
   * `LazyStackInventory<T>`
     * `LazyStackInventory()` - Creates a new instance of `LazyStackInventory<T>` with default values
     * `LazyStackInventory(int size, int maxStackAmount)` - Creates a new instance of `LazyStackInventory<T>` with the specified size and maxStackAmount
-    * `LazyStackInventory(T item, int amount)[] items, int maxAmount)` - Creates a new instance of `LazyStackInventory<T>` with items inside, specified items and maxStackAmount
+    * `LazyStackInventory((T item, int amount)[] items, int maxStackAmount)` - Creates a new instance of `LazyStackInventory<T>` with items inside, specified items and maxStackAmount
 
 ## What's Changed
 * Project is now using `TheChest.Core v0.17.4`
@@ -40,10 +40,10 @@
   * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
-* `ArgumentNullException`s when an Array is null are being repeted in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 
 ## What's Next
-* [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
+* [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
@@ -301,7 +301,7 @@
 ## What's Changed
 * The project is now using `TheChest.Core v0.10.0` so it uses its new resources like
   * `StackAmount` is now `Amount`
-  * `MaxStackAmount` is not `MaxAmount`
+  * `MaxStackAmount` is now `MaxAmount`
   * `protected` fields added for the properties `Amount` and `MaxAmount`
   * More info on : https://github.com/The-Chest/TheChest.Core/releases/tag/v0.10.0
 
