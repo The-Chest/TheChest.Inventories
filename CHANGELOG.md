@@ -26,10 +26,7 @@
     * `LazyStackInventory(T item, int amount)[] items, int maxAmount)` - Creates a new instance of `LazyStackInventory<T>` with items inside, specified items and maxStackAmount
 
 ## What's Changed
-* 
-
-## What's Fixed
-* 
+* Project is now using `TheChest.Core v0.17.4`
 
 ## What's Removed
 * Example project from the repository.
