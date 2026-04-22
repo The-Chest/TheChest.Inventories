@@ -20,7 +20,12 @@ direction TB
         class StackInventory~T~ {
             - IInventoryStackSlot~T~[] slots
             + IInventoryStackSlot~T~ this[int index]
+
+            + StackInventory()
+            + StackInventory(int size, int maxStackAmount)
+            + StackInventory(T[] items, int maxStackAmount)
             + StackInventory(IInventoryStackSlot~T~[] slots)
+
 	        + ~~event~~ OnGet: StackInventoryGetEventHandler~T~ 
 	        + ~~event~~ OnAdd: StackInventoryAddEventHandler~T~ 
 	        + ~~event~~ OnMove: StackInventoryMoveEventHandler~T~ 
