@@ -22,26 +22,29 @@ on:
 permissions:
   pull-requests: read
 
+env:
+  PROJECT_NAME: "TheChest.Inventories"
+
 jobs:
   Analysis:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 6.0.x
 
-      - name: Add NuGet source
-        run: dotnet nuget add source https://nuget.pkg.github.com/The-Chest/index.json 
-          --name github 
-          --username The-Chest 
-          --password "${{ secrets.NUGET_APIKEY }}" 
-          --store-password-in-clear-text
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Dotnet Build
+        id: dotnet-build
+        uses: The-Chest/Actions/dotnet-build@v1
+        with:
+          project-path: "src"
+          create-build-artifact: false
       
       - name: Restore dependencies
         run: dotnet restore 
@@ -54,7 +57,7 @@ jobs:
           distribution: 'zulu' 
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
@@ -62,7 +65,7 @@ jobs:
         
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -79,7 +82,7 @@ jobs:
       - name: Begin Coverage Report
         run: 
           dotnet tool run dotnet-sonarscanner begin 
-          /k:"The-Chest_TheChest.Inventories" 
+          /k:"The-Chest_${{ env.PROJECT_NAME }}" 
           /o:"the-chest" 
           /d:sonar.token="${{ secrets.SONAR_TOKEN }}" 
           /d:sonar.host.url="https://sonarcloud.io" 
