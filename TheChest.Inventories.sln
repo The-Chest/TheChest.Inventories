@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.2.11415.280
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}"
 EndProject
@@ -41,7 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{BB4B9E4B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3C358749-7C82-4444-8F8C-FE68D058170F}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\codeql.workflow.yml = .github\workflows\codeql.workflow.yml
 		.github\workflows\publish_library.workflow.yml = .github\workflows\publish_library.workflow.yml
 		.github\workflows\sonarcloud.yml = .github\workflows\sonarcloud.yml
 		.github\workflows\tests.workflow.yml = .github\workflows\tests.workflow.yml
