@@ -9,25 +9,31 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: '6.0.x'
+
     - name: Add NuGet source
       run: dotnet nuget add source https://nuget.pkg.github.com/The-Chest/index.json 
         --name github 
         --username The-Chest 
-        --password "${{ secrets.NUGET_APIKEY }}" 
+        --password "${{ secrets.NUGET_API_KEY }}" 
         --store-password-in-clear-text 
+
     - name: Restore dependencies
       run: dotnet restore 
-    - name: Build project
-      run: dotnet build src/TheChest.Inventories 
-        --no-restore 
-        --configuration Release
+
+    - name: Dotnet Build
+      id: dotnet-build
+      uses: The-Chest/Actions/dotnet-build@v1
+      with:
+        project-path: "src"
+        create-build-artifact: false
+    
     - name: Run Tests
       run: dotnet test 
         --configuration Release
         --verbosity minimal
-        --settings tests/TheChest.Inventories.Tests/TheChest.Inventories.runsettings
+        --settings tests/TheChest.Inventories.runsettings

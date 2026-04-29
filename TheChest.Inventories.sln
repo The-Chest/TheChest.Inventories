@@ -1,15 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.2.11415.280
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7C06F316-5168-46BC-9A49-54ADAE23B173}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories", "src\TheChest.Inventories\TheChest.Inventories.csproj", "{0A74FE04-E435-C7D6-7323-B8A06E238903}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories.Tests", "tests\TheChest.Inventories.Tests\TheChest.Inventories.Tests.csproj", "{135428C7-DEB2-22D4-0DC7-F80603D9EC23}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
 EndProject
@@ -41,11 +37,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{BB4B9E4B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3C358749-7C82-4444-8F8C-FE68D058170F}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\codeql.workflow.yml = .github\workflows\codeql.workflow.yml
 		.github\workflows\publish_library.workflow.yml = .github\workflows\publish_library.workflow.yml
 		.github\workflows\sonarcloud.yml = .github\workflows\sonarcloud.yml
 		.github\workflows\tests.workflow.yml = .github\workflows\tests.workflow.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories", "src\TheChest.Inventories.csproj", "{304F1F23-00A3-6AAD-9BD4-326221B7F39D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories.Tests", "tests\TheChest.Inventories.Tests.csproj", "{5737827E-E8E2-CBC2-5282-862F0276D8EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,25 +52,25 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0A74FE04-E435-C7D6-7323-B8A06E238903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A74FE04-E435-C7D6-7323-B8A06E238903}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A74FE04-E435-C7D6-7323-B8A06E238903}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A74FE04-E435-C7D6-7323-B8A06E238903}.Release|Any CPU.Build.0 = Release|Any CPU
-		{135428C7-DEB2-22D4-0DC7-F80603D9EC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{135428C7-DEB2-22D4-0DC7-F80603D9EC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{135428C7-DEB2-22D4-0DC7-F80603D9EC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{135428C7-DEB2-22D4-0DC7-F80603D9EC23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{304F1F23-00A3-6AAD-9BD4-326221B7F39D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{304F1F23-00A3-6AAD-9BD4-326221B7F39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{304F1F23-00A3-6AAD-9BD4-326221B7F39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{304F1F23-00A3-6AAD-9BD4-326221B7F39D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5737827E-E8E2-CBC2-5282-862F0276D8EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5737827E-E8E2-CBC2-5282-862F0276D8EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5737827E-E8E2-CBC2-5282-862F0276D8EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5737827E-E8E2-CBC2-5282-862F0276D8EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0A74FE04-E435-C7D6-7323-B8A06E238903} = {F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}
-		{135428C7-DEB2-22D4-0DC7-F80603D9EC23} = {7C06F316-5168-46BC-9A49-54ADAE23B173}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{6E4E9365-6329-4D99-A987-3975D1D27AF4} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{F23C1317-F2B9-4C47-B2A0-1C9C0B57C495} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{3C358749-7C82-4444-8F8C-FE68D058170F} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
+		{304F1F23-00A3-6AAD-9BD4-326221B7F39D} = {F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}
+		{5737827E-E8E2-CBC2-5282-862F0276D8EB} = {7C06F316-5168-46BC-9A49-54ADAE23B173}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF9A167E-B926-4A99-B692-8A3566AB0996}
