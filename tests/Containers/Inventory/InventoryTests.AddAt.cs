@@ -65,6 +65,18 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        public void AddAt_FullSlot_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var oldItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, oldItem);
+
+            var randomIndex = this.random.Next(0, size);
+            var item = this.itemFactory.CreateRandom();
+            Assert.That(() => inventory.AddAt(item, randomIndex), Throws.InvalidOperationException);
+        }
+
+        [Test]
         public void AddAt_FullSlot_DoesNotAddTheItem()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -73,7 +85,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             var randomIndex = this.random.Next(0, size);
             var item = this.itemFactory.CreateRandom();
-            inventory.AddAt(item, randomIndex);
+            Assert.That(() => inventory.AddAt(item, randomIndex), Throws.InvalidOperationException);
 
             Assert.Multiple(() =>
             {
@@ -94,7 +106,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             var randomIndex = this.random.Next(0, size);
             var item = this.itemFactory.CreateRandom();
-            inventory.AddAt(item, randomIndex);
+
+            Assert.That(() => inventory.AddAt(item, randomIndex), Throws.InvalidOperationException);
         }
     }
 }

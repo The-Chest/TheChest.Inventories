@@ -233,7 +233,8 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>"
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>
+        /// <exception cref="InvalidOperationException">When there are not enough free slots to add all the items</exception>
         /// <returns>An array of <paramref name="items"/> that were not added to the inventory.</returns>
         public virtual T[] Add(params T[] items)
         {
@@ -264,7 +265,11 @@ namespace TheChest.Inventories.Containers
             if (!this.slots[index].CanAdd(item))
                 throw new InvalidOperationException($"The item cannot be added to the slot at index {index}.");
 
-            return this.AddItems(item).Length == 0;
+            var added = this.slots[index].Add(item);
+            if (added)
+                this.OnAdd?.Invoke(this, (new[] { item }, new[] { index }));
+
+            return added;
         }
 
         /// <inheritdoc/>

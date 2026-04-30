@@ -88,9 +88,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             inventory.Add(item);
 
             Assert.That(
-                inventory.GetSlots<T>(), 
+                inventory.GetSlots(), 
                 Is.All.Matches<IInventorySlot<T>>(
-                    x => x.IsFull && !x.GetContent<T>()!.Equals(item)
+                    x => x.IsFull && !x.GetContent()!.Equals(item)
                 )
             );
         }
