@@ -54,14 +54,15 @@ This section is going to be separated into subsections for each Inventory Type t
 ## Known Issues
 * The Current Architecture is not stable for the final version yet
 * No support for structs or value types 
-* `StackInventory<T>` class is too complex and needs some refactors 
-* Inventory classes have too many methods
-  * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
-  * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 * `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
-* Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+* Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
@@ -69,6 +70,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.15.0...v0.16.0
 
+---
 # v0.15.0
 
 ## What's Added
@@ -119,6 +121,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
 
+---
 # v0.14.0
 
 ## What's added
@@ -188,6 +191,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
 
+---
 # v0.13.0
 
 ## What's Changed
@@ -210,6 +214,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.4...v0.13.0
 
+---
 # v0.12.4
 
 ## What's Fixed
@@ -253,6 +258,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.2...v0.12.3
 
+---
 # v0.12.2
 
 ## What's Fixed
@@ -277,6 +283,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.1...v0.12.2
 
+---
 # v0.12.1
 
 ## What's Fixed
@@ -294,6 +301,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.0...v0.12.1
 
+---
 # v0.12.0
 
 ## What's Changed
@@ -310,6 +318,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.11.1...v0.12.0
 
+---
 # v0.11.1
 
 ## What's Changed
@@ -327,6 +336,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.11.0...v0.11.1
 
+---
 # v0.11.0
 
 ## What's Added
@@ -361,6 +371,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.10.1...v0.11.0
 
+---
 # v0.10.0
 
 ## What's Added
@@ -386,6 +397,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.9.0...v0.10.0
 
+---
 # v0.9.0
 
 ## What's Added
@@ -420,6 +432,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.8.1...v0.9.0
 
+---
 # v0.8.1
 
 ## What's Fixed
@@ -437,6 +450,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.8.0...v0.8.1
 
+---
 # v0.8.0
 
 ## What's Changed
@@ -451,6 +465,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.7.1...v0.8.0
 
+---
 # v0.7.1
 
 ## What's Added
@@ -471,9 +486,9 @@ This section is going to be separated into subsections for each Inventory Type t
 * [#38](https://github.com/The-Chest/TheChest.Inventories/issues/38) - Inventories doesn't have `Replace` methods
 * [#37](https://github.com/The-Chest/TheChest.Inventories/issues/37) - `InventoryLazyStackSlot.Replace` needs to receive an array of item instead of an item and the amount number
 
-
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.7.0...v0.7.1
 
+---
 # v0.7.0
 
 ## What's Added
@@ -511,6 +526,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.6.0...v0.7.0
 
+---
 # v0.6.0
 
 ## What's Changed
@@ -520,6 +536,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.5.0...v0.6.0
 
+---
 # v0.5.0
 
 ## What's Changed
@@ -543,6 +560,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.5...v0.5.0
 
+---
 # v0.4.5
 
 ## What's Changed
@@ -563,6 +581,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.4...v0.4.5
 
+---
 # v0.4.4
 
 ## What's Changed
@@ -577,6 +596,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.3...v0.4.4
 
+---
 # v0.4.3
 
 ## What's Changed
@@ -590,6 +610,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.2...v0.4.3
 
+---
 # v0.4.2
 
 ## What's Changed
@@ -604,6 +625,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.1...v0.4.2
 
+---
 # v0.4.1
 
 ## What's Changed
@@ -621,6 +643,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.0...v0.4.1
 
+---
 # v0.4.0
 
 ## What's Added
@@ -640,6 +663,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.3.0...v0.4.0
 
+---
 # v0.3.0
 
 ## What's Added
@@ -661,6 +685,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.2.0...v0.3.0
 
+---
 # v0.2.0
 
 ## What's Added
@@ -677,6 +702,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.1.0...v0.2.0
 
+---
 # v0.1.0
 
 ## What's Added
