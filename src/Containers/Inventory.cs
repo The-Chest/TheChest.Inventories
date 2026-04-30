@@ -93,7 +93,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>The method does not modify the slots or items.</remarks>
         /// <param name="items">An array of items to check for availability.</param>
         /// <returns><see langword="true"/> if all items in <paramref name="items"/> can be added to the slots; otherwise, <see langword="false"/>.</returns>
-        protected bool CanAddAmount(T[] items)
+        protected bool CanAddItems(T[] items)
         {
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
@@ -140,7 +140,7 @@ namespace TheChest.Inventories.Containers
             if (items.Length > this.Size)
                 return false;
 
-            return this.CanAddAmount(items);
+            return this.CanAddItems(items);
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
@@ -232,7 +232,7 @@ namespace TheChest.Inventories.Containers
                 throw new InvalidOperationException("The amount of items to be added cannot be bigger than the inventory size.");
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), "One of the items is null");
-            if (!this.CanAddAmount(items))
+            if (!this.CanAddItems(items))
                 throw new InvalidOperationException("There are not enough free slots to add all the items.");
 
             return this.AddItems(items);
