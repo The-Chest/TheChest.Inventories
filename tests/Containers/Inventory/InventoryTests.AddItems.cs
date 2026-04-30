@@ -136,7 +136,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        public void AddItems_NotAvailabeSlotsForAllItems_CallsOnAddEvent()
+        public void AddItems_NotAvailabeSlotsForAllItems_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var emptySlotsSize = this.random.Next(1, size);
@@ -146,24 +146,15 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             var addSize = emptySlotsSize + 1;
             var manyAdded = this.itemFactory.CreateManyRandom(addSize);
-            var countIndex = 1;
-            var raised = false;
-            inventory.OnAdd += (sender, args) =>
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(sender, Is.EqualTo(inventory));
-                    Assert.That(args.Data.Select(x => x.Item), Has.All.EqualTo(manyAdded[countIndex++]));
-                });
-                raised = true;
-            };
-            inventory.Add(manyAdded);
-
-            Assert.That(raised, Is.True, "OnAdd event was not raised");
+            Assert.That(
+                () => inventory.Add(manyAdded),
+                Throws.InvalidOperationException
+                    .With.Message.EqualTo("There are not enough free slots to add all the items.")
+            );
         }
 
         [Test]
-        public void AddItems_NotAvailabeSlotsForAllItems_AddsSomeItems()
+        public void AddItems_NotAvailabeSlotsForAllItems_DoesNotAddAnyItem()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var emptySlotsSize = this.random.Next(1, size);
@@ -173,13 +164,13 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             var addSize = emptySlotsSize + 1;
             var manyAdded = this.itemFactory.CreateManyRandom(addSize);
-            inventory.Add(manyAdded);
+            Assert.That(() => inventory.Add(manyAdded), Throws.InvalidOperationException);
 
-            Assert.That(inventory.GetCount(manyAdded[0]), Is.EqualTo(emptySlotsSize));
+            Assert.That(inventory.GetSlots()?.Count(slot => slot.IsEmpty), Is.EqualTo(emptySlotsSize));
         }
 
         [Test]
-        public void AddItems_NotAvailabeSlotsForAllItems_ReturnsNotAddedItems()
+        public void AddItems_NotAvailabeSlotsForAllItems_DoesNotCallOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var emptySlotsSize = this.random.Next(1, size);
@@ -188,9 +179,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
             var manyAdded = this.itemFactory.CreateManyRandom(emptySlotsSize + 1);
-            var result = inventory.Add(manyAdded);
+            inventory.OnAdd += (_, _) => Assert.Fail("OnAdd should not be called when add operation fails");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            Assert.That(() => inventory.Add(manyAdded), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -203,7 +194,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var items = this.itemFactory.CreateManyRandom(size);
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if no items are added");
             
-            inventory.Add(items);
+            Assert.That(() => inventory.Add(items), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -214,9 +205,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var items = this.itemFactory.CreateMany(size);
-            var result = inventory.Add(items);
-
-            Assert.That(result, Is.EqualTo(items));
+            Assert.That(() => inventory.Add(items), Throws.InvalidOperationException);
         }
     }
 }
