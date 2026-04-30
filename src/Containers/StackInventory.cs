@@ -67,12 +67,36 @@ namespace TheChest.Inventories.Containers
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
 
+        protected bool CanAddItems(T[] items)
+        {
+            var canAddAmount = 0;
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                var toAddItems = items
+                    .Skip(canAddAmount)
+                    .Take(slot.AvailableAmount)
+                    .ToArray();
+
+                if (slot.CanAdd(toAddItems))
+                {
+                    canAddAmount += toAddItems.Length;
+                    if (items.Length == canAddAmount)
+                        return true;
+                }
+            }
+
+            return false;
+        }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool CanAdd(T item)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            if (this.IsFull)
+                return false;
 
             for (int i = 0; i < this.Size; i++)
             {
@@ -88,31 +112,15 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
-
-            if (items.Length == 0)
-                return false;
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
-            var canAddAmount = 0;
-            for (int i = 0; i < this.Size; i++)
-            {
-                var slot = this.slots[i];
-                //TODO: improve this by remove Linq usage
-                var toAddItems = items
-                    .Skip(canAddAmount)
-                    .Take(slot.AvailableAmount)
-                    .ToArray();
+            if (items.Length == 0)
+                return false;
+            if (items.Length > this.slots.Sum(x => x.AvailableAmount))
+                return false;
 
-                if (slot.CanAdd(toAddItems)){
-                    canAddAmount += toAddItems.Length;
-                    if (canAddAmount >= items.Length)
-                        break;
-                }
-            }
-            
-            return canAddAmount == items.Length;
+            return this.CanAddItems(items);
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
