@@ -66,7 +66,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(size));
             if (size < items.Length)
                 throw new ArgumentException(
-                    InventoryErrors.ItemsBiggerThanInventorySize(items.Length, size),
+                    InventoryErrors.ItemsBiggerThanInventorySize,
                     nameof(size)
                 );
 
@@ -264,7 +264,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (!this.slots[index].CanAdd(item))
-                throw new InvalidOperationException(InventoryErrors.CannotAddItemAtIndex(index));
+                throw new InvalidOperationException(InventoryErrors.CannotAddItemAtIndex);
 
             this.slots[index].Add(item);
             this.OnAdd?.Invoke(this, (item, index));

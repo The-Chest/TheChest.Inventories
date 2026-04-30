@@ -3,7 +3,7 @@
     internal static class InventoryErrors
     {
         #region Constructor
-        internal static string ItemsBiggerThanInventorySize(int items, int inventorySize) => $"The number of items ({items}) exceeds the inventory size ({inventorySize}).";
+        internal const string ItemsBiggerThanInventorySize = "The number of items exceeds the inventory size.";
         #endregion
 
         #region Parameters Validation
@@ -11,7 +11,7 @@
         #endregion
 
         #region Adding Items
-        internal static string CannotAddItemAtIndex(int index) => $"The item cannot be added to the slot at index {index}.";
+        internal const string CannotAddItemAtIndex = "The item cannot be added to the slot at index.";
         #endregion
     }
 }
