@@ -12,7 +12,6 @@
 
         #region Adding Items
         internal static string CannotAddItemAtIndex(int index) => $"The item cannot be added to the slot at index {index}.";
-
-        internal const string InventoryIsFull = "The inventory is full.";
+        #endregion
     }
 }

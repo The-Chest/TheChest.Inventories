@@ -1,30 +1,37 @@
 # v0.16.0
 
 ## What's Added
-*
-
-## What's Changed
-* Project's c# version is now 7.3 to increase compatibility.
-* `Inventory<T>.Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
-* Action methods now throws `InvalidOperationException` when the params are valid but the Container couldn't add because of state validation, for example, trying to add an item to a full slot or trying to move items from a slot to another when the target slot has a different item. 
-  * `Inventory<T>` 
-    * `Add(T item)`- When the container is full
-    * `Add(T[] items)` - When the container is full or there is no available slots to add the items
-    * `AddAt(T item, int index)` - When the slot is full
-  * `StackInventory<T>` 
-    * `Add(T item)`
-    * `Add(T[] items)`
-    * `AddAt(T item, int index)`
-    * `AddAt(T[] items, int index)`
-  * `LazyStackInventory<T>` 
-    * `Add(T item, int amount = 1)`
-    * `AddAt(T item, int index, int amount = 1)`
-* `Inventory<T>` has new protected methods
+* New protected methods to `Inventory<T>`
     * `CanAddAmount(T[] items)` - Checks if an amount of items can be added to the inventory, it is used in the `Add` method to check if the items can be added before trying to add them
     * `AddItems` - Adds an amount of items to the inventory, it is used in the `Add` method to add the items after checking if they can be added with `CanAddAmount`
+
+## What's Changed
+This section is going to be separated into subsections for each Inventory Type to make it more organized
+
+### Global (These changes applies to the whole project)
+* Project's c# version is now 7.3 to increase compatibility.
+* Exception messages are normalized now.
+
+### Inventory\<T\>
+* `Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
+* The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item)`- When the container is full
+  * `Add(T[] items)` - When the container is full or there is no available slots to add the items
+  * `AddAt(T item, int index)` - When the slot is full
 * Some methods are now Obsolete and are going to be removed in the future
-    * `IInventory<T>`
-      * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+  * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+
+### StackInventory\<T\>
+* The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item)`
+  * `Add(T[] items)`
+  * `AddAt(T item, int index)`
+  * `AddAt(T[] items, int index)`
+
+### LazyStackInventory\<T\>
+* The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item, int amount = 1)`
+  * `AddAt(T item, int index, int amount = 1)`
 
 ## Known Issues
 * The Current Architecture is not stable for the final version yet
