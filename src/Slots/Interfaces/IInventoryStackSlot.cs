@@ -12,19 +12,19 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Checks if is possible to add one item to the slot
         /// </summary>
         /// <param name="item">item to be checked to add</param>
-        /// <returns>true if is possible to add the item</returns>
+        /// <returns><see langword="true"/> if is possible to add the item</returns>
         bool CanAdd(T item);
         /// <summary>
         /// Checks if is possible to add an array of items to the slot
         /// </summary>
         /// <param name="items">items to be checked to add</param>
-        /// <returns>true if is possible to add <paramref name="items"/></returns>
+        /// <returns><see langword="true"/> if is possible to add <paramref name="items"/></returns>
         bool CanAdd(T[] items);
         /// <summary>
         /// Adds an item to the slot
         /// </summary>
         /// <param name="item">The item to be added</param>
-        /// <returns>True if the value is successful added</returns>
+        /// <returns><see langword="true"/> if the value is successful added</returns>
         bool Add(T item);
         /// <summary>
         /// Adds an array of items to the slot.
@@ -37,13 +37,13 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Checks if is possible to replace an item
         /// </summary>
         /// <param name="item">item to be checked if is possible to replace</param>
-        /// <returns>returns true if is possible to replace</returns>
+        /// <returns>returns <see langword="true"/> if is possible to replace</returns>
         bool CanReplace(T item);
         /// <summary>
         /// Checks if is possible to replace an array of items
         /// </summary>
         /// <param name="items">array of items to be checked if is possible to replace</param>
-        /// <returns>returns true if is possible to replace</returns>
+        /// <returns><see langword="true"/> if is possible to replace</returns>
         bool CanReplace(T[] items);
         /// <summary>
         /// Replaces the items from the slot to <paramref name="items"/>
