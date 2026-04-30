@@ -1,3 +1,29 @@
+# v0.16.0
+
+## What's Added
+*
+
+## What's Changed
+* Project's c# version is now 7.3 to increase compatibility.
+
+## Known Issues
+* The Current Architecture is not stable for the final version yet
+* No support for structs or value types 
+* `StackInventory<T>` class is too complex and needs some refactors 
+* Inventory classes have too many methods
+  * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+  * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+* Event system will need an improvement on creation/dispatch
+  * The new Event API is being planned
+* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+
+## What's Next
+* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
+* [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.15.0...v0.16.0
+
 # v0.15.0
 
 ## What's Added
