@@ -38,9 +38,11 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
             var items = this.itemFactory.CreateManyRandom(size);
-            inventory.Add(items);
-
-            Assert.That(inventory.GetCount(items[0]), Is.EqualTo(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => inventory.Add(items), Throws.Exception);
+                Assert.That(inventory.GetCount(items[0]), Is.EqualTo(0));
+            });
         }
     }
 }
