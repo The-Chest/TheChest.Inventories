@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Exceptions;
 using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
@@ -50,12 +51,10 @@ namespace TheChest.Inventories.Containers
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
-
             if (maxStackSize <= 0)
-                throw new ArgumentOutOfRangeException(nameof(maxStackSize), "Max stack size must be greater than zero.");
-
+                throw new ArgumentOutOfRangeException(nameof(maxStackSize), StackInventoryErrors.MaxStackSizeMustBeGreaterThanZero);
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
             this.slots = items.ToStackSlots(maxStackSize);
         }
@@ -94,7 +93,7 @@ namespace TheChest.Inventories.Containers
                 return false;
             //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
@@ -137,7 +136,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
             return this.slots[index].CanAdd(items);
         }
@@ -198,7 +197,7 @@ namespace TheChest.Inventories.Containers
             if (items.Length == 0)
                 return items;
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
             var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
             var indexes = this.slots.GetAddOrderIndexes(items);
@@ -260,7 +259,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
             var slot = this.slots[index];
             if (!slot.CanAdd(items))
@@ -312,6 +311,7 @@ namespace TheChest.Inventories.Containers
             var item = this.slots[index].Get();
             if(!EqualityComparer<T>.Default.Equals(item, default))
                 this.OnGet?.Invoke(this, (new[]{ item }, index));
+            
             return item;
         }
         /// <inheritdoc/>
@@ -542,7 +542,7 @@ namespace TheChest.Inventories.Containers
                 return false;
             //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
             return this.slots[index].CanReplace(items);
         }
@@ -555,16 +555,16 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
-            if (items.Length == 0)
-                throw new ArgumentException("Cannot replace using an empty item array", nameof(items));
+            if (items.Length == 0) 
+                throw new ArgumentException(StackInventoryErrors.CannotReplaceEmptyArray, nameof(items)); // why not?
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             
             var slot = this.slots[index];
             if (items.Length > slot.MaxAmount)
-                throw new InvalidOperationException("The amount of items to replace exceeds the stack size of the slot.");
+                throw new InvalidOperationException(StackInventoryErrors.MaxStackSizeSmallerThanItemsToReplace);
 
             var oldItems = slot.Replace(items);
             this.OnReplace?.Invoke(this, (index, oldItems, items));

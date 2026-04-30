@@ -60,7 +60,7 @@ using TheChest.Tests.Common.Attributes;
             Assert.That(() =>
                 inventory.Replace(items, index),
                 Throws.InvalidOperationException
-                    .With.Message.EqualTo("The amount of items to replace exceeds the stack size of the slot.")
+                    .With.Message.EqualTo("The max stack size is smaller than the number of items to replace.")
             );
         }
     }
