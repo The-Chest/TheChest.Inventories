@@ -86,6 +86,29 @@ namespace TheChest.Inventories.Containers
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
 
+        /// <summary>
+        /// Determines whether all specified items can be added to the available slots.
+        /// </summary>
+        /// <remarks>The method does not modify the slots or items.</remarks>
+        /// <param name="items">An array of items to check for availability.</param>
+        /// <returns><see langword="true"/> if all items in <paramref name="items"/> can be added to the slots; otherwise, <see langword="false"/>.</returns>
+        protected bool CanAddAmount(T[] items)
+        {
+            var canAddAmount = 0;
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                var item = items[canAddAmount];
+                if (slot.CanAdd(item))
+                {
+                    canAddAmount++;
+                    if (items.Length == canAddAmount)
+                        return true;
+                }
+            }
+            return false;
+        }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool CanAdd(T item)
