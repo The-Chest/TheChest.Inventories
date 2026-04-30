@@ -27,6 +27,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual bool Add(T item)
         {
+            //TODO: remove this extra validation
             if (!this.CanAdd(item))
                 return false;
 

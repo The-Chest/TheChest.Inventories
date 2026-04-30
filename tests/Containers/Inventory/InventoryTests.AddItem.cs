@@ -64,7 +64,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size / 2);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
-            var firstAvailableSlot = inventory.GetSlots<T>()?.First(slot => slot.IsEmpty);
+            var firstAvailableSlot = inventory.GetSlots()?.First(slot => slot.IsEmpty);
 
             var item = this.itemFactory.CreateDefault();
             inventory.Add(item);
@@ -73,8 +73,20 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             Assert.Multiple(() =>
             {
                 Assert.That(firstAvailableSlot.IsEmpty, Is.False);
-                Assert.That(firstAvailableSlot.GetContent<T>(), Is.EqualTo(item));
+                Assert.That(firstAvailableSlot.GetContent(), Is.EqualTo(item));
             });
+        }
+
+        [Test]
+        public void AddItem_FullInventory_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var items = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, items);
+
+            var item = this.itemFactory.CreateRandom();
+
+            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -85,7 +97,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var inventory = this.inventoryFactory.FullContainer(size, items);
 
             var item = this.itemFactory.CreateRandom();
-            inventory.Add(item);
+            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
 
             Assert.That(
                 inventory.GetSlots(), 
@@ -105,7 +117,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
             
             var item = this.itemFactory.CreateRandom();
-            inventory.Add(item);
+            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
         }
     }
 }

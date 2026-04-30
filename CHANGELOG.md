@@ -11,6 +11,14 @@
     * `Add(T item)`- When the container is full
     * `Add(T[] items)` - When the container is full or there is no available slots to add the items
     * `AddAt(T item, int index)` - When the slot is full
+  * `StackInventory<T>` 
+    * `Add(T item)`
+    * `Add(T[] items)`
+    * `AddAt(T item, int index)`
+    * `AddAt(T[] items, int index)`
+  * `LazyStackInventory<T>` 
+    * `Add(T item, int amount = 1)`
+    * `AddAt(T item, int index, int amount = 1)`
 * `Inventory<T>` has new protected methods
     * `CanAddAmount(T[] items)` - Checks if an amount of items can be added to the inventory, it is used in the `Add` method to check if the items can be added before trying to add them
     * `AddItems` - Adds an amount of items to the inventory, it is used in the `Add` method to add the items after checking if they can be added with `CanAddAmount`

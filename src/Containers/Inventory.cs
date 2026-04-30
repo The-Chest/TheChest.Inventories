@@ -265,11 +265,10 @@ namespace TheChest.Inventories.Containers
             if (!this.slots[index].CanAdd(item))
                 throw new InvalidOperationException($"The item cannot be added to the slot at index {index}.");
 
-            var added = this.slots[index].Add(item);
-            if (added)
-                this.OnAdd?.Invoke(this, (new[] { item }, new[] { index }));
+            this.slots[index].Add(item);
+            this.OnAdd?.Invoke(this, (item, index));
 
-            return added;
+            return true;
         }
 
         /// <inheritdoc/>
