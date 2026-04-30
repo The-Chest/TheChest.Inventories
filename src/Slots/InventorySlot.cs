@@ -11,10 +11,14 @@ namespace TheChest.Inventories.Slots
     public class InventorySlot<T> : Slot<T>, IInventorySlot<T>
     {
         /// <summary>
+        /// Creates an empty inventory slot
+        /// </summary>
+        public InventorySlot() : base() {  }
+        /// <summary>
         /// Creates a basic inventory slot with an item
         /// </summary>
         /// <param name="currentItem">item that belongs to this slot</param>
-        public InventorySlot(T currentItem = default) : base(currentItem) 
+        public InventorySlot(T currentItem) : base(currentItem) 
         { 
             this.Content = currentItem;
         }
