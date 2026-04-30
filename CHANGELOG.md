@@ -2,7 +2,7 @@
 
 ## What's Added
 * New protected methods to `Inventory<T>`
-    * `CanAddAmount(T[] items)` - Checks if an amount of items can be added to the inventory, it is used in the `Add` method to check if the items can be added before trying to add them
+    * `CanAddItems(T[] items)` - Checks if an amount of items can be added to the inventory, it is used in the `Add` method to check if the items can be added before trying to add them
     * `AddItems` - Adds an amount of items to the inventory, it is used in the `Add` method to add the items after checking if they can be added with `CanAddAmount`
 
 ## What's Changed
