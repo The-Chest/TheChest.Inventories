@@ -215,6 +215,41 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the inventory is full</exception>
+        public virtual bool Add(T item)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if(this.IsFull)
+                throw new InvalidOperationException("The inventory is full.");
+
+            return this.AddItems(item).Length == 0;
+        }
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
+        /// </remarks>
+        /// <param name="items">Array of items to be added to any avaliable slot found</param>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>"
+        /// <returns>An array of <paramref name="items"/> that were not added to the inventory.</returns>
+        public virtual T[] Add(params T[] items)
+        {
+            if (items.Length == 0)
+                return items;
+            if (items.Length > this.Size)
+                throw new InvalidOperationException("The amount of items to be added cannot be bigger than the inventory size.");
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+            if (!this.CanAddAmount(items))
+                throw new InvalidOperationException("There are not enough free slots to add all the items.");
+
+            return this.AddItems(items);
+        }
+        /// <inheritdoc/>
+        /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
@@ -229,11 +264,7 @@ namespace TheChest.Inventories.Containers
             if (!this.slots[index].CanAdd(item))
                 throw new InvalidOperationException($"The item cannot be added to the slot at index {index}.");
 
-            var added = this.slots[index].Add(item);
-            if (added)
-                this.OnAdd?.Invoke(this, (item, index));
-
-            return added;
+            return this.AddItems(item).Length == 0;
         }
 
         /// <inheritdoc/>
