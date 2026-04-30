@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using TheChest.Core.Slots;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
@@ -70,7 +71,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>true if <paramref name="item"/> is not <see langword="null"/>, <paramref name="amount"/> is bigger than zero and the slot is not full and either empty or contains the same item as <paramref name="item"/></returns>
         public virtual bool CanAdd(T item, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 return false;
 
             if (this.IsFull)
@@ -89,7 +90,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero</exception>
         public virtual int Add(T item, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -105,7 +106,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
         public virtual bool CanReplace(T item, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 return false;
 
             if (amount <= 0 || amount > this.MaxAmount)
@@ -121,7 +122,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
         public virtual T[] Replace(T item, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0 || amount > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));

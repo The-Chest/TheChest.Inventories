@@ -1,5 +1,6 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Core.Slots;
+using TheChest.Inventories.Extensions;
 
 namespace TheChest.Inventories.Slots
 {
@@ -13,7 +14,7 @@ namespace TheChest.Inventories.Slots
         /// Creates a basic inventory slot with an item
         /// </summary>
         /// <param name="currentItem">item that belongs to this slot</param>
-        public InventorySlot(T currentItem = default!) : base(currentItem) 
+        public InventorySlot(T currentItem = default) : base(currentItem) 
         { 
             this.Content = currentItem;
         }
@@ -21,7 +22,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual bool CanAdd(T item)
         {
-            return !this.IsFull && !(item is null);
+            return !this.IsFull && !item.IsNull();
         }
         /// <inheritdoc />
         public virtual bool Add(T item)
@@ -37,14 +38,14 @@ namespace TheChest.Inventories.Slots
         public virtual T Get()
         {
             var content = this.Content;
-            this.Content = default!;
+            this.Content = default;
             return content;    
         }
 
         /// <inheritdoc />
         public virtual bool CanReplace(T item)
         {
-            return !(item is null);
+            return !item.IsNull();
         }
         /// <inheritdoc />
         public virtual T Replace(T item)

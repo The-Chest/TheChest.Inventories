@@ -70,5 +70,5 @@ namespace TheChest.Inventories.Containers.Events.Stack
     /// <typeparam name="T"></typeparam>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    public delegate void StackInventoryGetEventHandler<T>(object? sender, StackInventoryGetEventArgs<T> e);
+    public delegate void StackInventoryGetEventHandler<T>(object sender, StackInventoryGetEventArgs<T> e);
 }

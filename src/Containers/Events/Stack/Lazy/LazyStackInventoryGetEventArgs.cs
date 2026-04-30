@@ -78,5 +78,5 @@ namespace TheChest.Inventories.Containers.Events.Stack.Lazy
     /// <typeparam name="T"></typeparam>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    public delegate void LazyStackInventoryGetEventHandler<T>(object? sender, LazyStackInventoryGetEventArgs<T> e);
+    public delegate void LazyStackInventoryGetEventHandler<T>(object sender, LazyStackInventoryGetEventArgs<T> e);
 }
