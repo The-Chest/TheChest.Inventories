@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Containers.Interfaces;
+﻿using System;
+using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events.Stack;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -67,6 +68,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to evaluate to add to the inventory.</param>
         /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        [Obsolete("Use CanAddAt(params T[]) instead to check if the item can be added.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot on inventory.

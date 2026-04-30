@@ -14,7 +14,7 @@ This section is going to be separated into subsections for each Inventory Type t
 
 ### Inventory\<T\>
 * `Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
-* The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+* The Action methods in now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item)`- When the container is full
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
   * `AddAt(T item, int index)` - When the slot is full
@@ -27,6 +27,8 @@ This section is going to be separated into subsections for each Inventory Type t
   * `Add(T[] items)`
   * `AddAt(T item, int index)`
   * `AddAt(T[] items, int index)`
+* Some methods are now Obsolete and are going to be removed in the future
+  * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
 
 ### LazyStackInventory\<T\>
 * The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
