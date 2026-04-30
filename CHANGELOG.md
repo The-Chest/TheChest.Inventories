@@ -5,6 +5,18 @@
 
 ## What's Changed
 * Project's c# version is now 7.3 to increase compatibility.
+* `Inventory<T>.Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
+* Action methods now throws `InvalidOperationException` when the params are valid but the Container couldn't add because of state validation, for example, trying to add an item to a full slot or trying to move items from a slot to another when the target slot has a different item. 
+  * `Inventory<T>` 
+    * `Add(T item)`- When the container is full
+    * `Add(T[] items)` - When the container is full or there is no available slots to add the items
+    * `AddAt(T item, int index)` - When the slot is full
+* `Inventory<T>` has new protected methods
+    * `CanAddAmount(T[] items)` - Checks if an amount of items can be added to the inventory, it is used in the `Add` method to check if the items can be added before trying to add them
+    * `AddItems` - Adds an amount of items to the inventory, it is used in the `Add` method to add the items after checking if they can be added with `CanAddAmount`
+* Some methods are now Obsolete and are going to be removed in the future
+    * `IInventory<T>`
+      * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
 
 ## Known Issues
 * The Current Architecture is not stable for the final version yet
