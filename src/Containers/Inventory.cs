@@ -107,7 +107,6 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
-
             if (items.Length == 0)
                 return false;
             if (items.Length > this.Size)
@@ -150,10 +149,13 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the inventory is full</exception>
         public virtual bool Add(T item)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            if(this.IsFull)
+                throw new InvalidOperationException("The inventory is full.");
 
             for (int i = 0; i < this.Size ; i ++)
             {
@@ -172,14 +174,12 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <returns>
-        /// An array of <paramref name="items"/> that were not added to the inventory.
-        /// </returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>"
+        /// <returns>An array of <paramref name="items"/> that were not added to the inventory.</returns>
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0) 
                 return items;
-
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), "One of the items is null");
             
@@ -222,7 +222,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        /// <exception cref="InvalidOperationException">When the item cannot be added to the slot at index <paramref name="index"/></exception>"
+        /// <exception cref="InvalidOperationException">When the item cannot be added to the slot at index <paramref name="index"/></exception>
         public virtual bool AddAt(T item, int index)
         {
             if (item.IsNull())
