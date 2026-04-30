@@ -167,51 +167,25 @@ namespace TheChest.Inventories.Containers
             return this.slots[index].CanAdd(item);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Attempts to add the specified items to the available slots and returns any items that could not be added.
+        /// </summary>
         /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
+        /// The method adds items to slots in order until either all items are added or no more slots are available.  
+        /// The <c>OnAdd</c> event is invoked if any items are successfully added.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="InvalidOperationException">When the inventory is full</exception>
-        public virtual bool Add(T item)
+        /// <param name="items">An array of items to add. 
+        /// Items that are <see langword="null"/> or considered null by <c>IsNull()</c> are skipped.</param>
+        /// <returns>An array containing the items that could not be added due to lack of available space. Returns an empty array if all items were successfully added.</returns>
+        protected T[] AddItems(params T[] items)
         {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if(this.IsFull)
-                throw new InvalidOperationException("The inventory is full.");
-
-            for (int i = 0; i < this.Size ; i ++)
-            {
-                var added = this.slots[i].Add(item);
-                if (added)
-                {
-                    this.OnAdd?.Invoke(this, (item, i)); 
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
-        /// </remarks>
-        /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>"
-        /// <returns>An array of <paramref name="items"/> that were not added to the inventory.</returns>
-        public virtual T[] Add(params T[] items)
-        {
-            if (items.Length == 0) 
-                return items;
-            if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
-            
             var addedAmount = 0;
             var addedItems = new Dictionary<int, T>();
+
             var index = 0;
             while (index < this.Size)
             {
-                if(addedAmount >= items.Length)
+                if (addedAmount >= items.Length)
                     break;
 
                 var item = items[addedAmount];
@@ -231,8 +205,8 @@ namespace TheChest.Inventories.Containers
                 index++;
             }
 
-            if(addedItems.Count > 0)
-                this.OnAdd?.Invoke(this, (addedItems.Values.ToArray() , addedItems.Keys.ToArray()));
+            if (addedItems.Count > 0)
+                this.OnAdd?.Invoke(this, (addedItems.Values.ToArray(), addedItems.Keys.ToArray()));
 
             if (addedAmount < items.Length)
                 return items.Skip(addedAmount).ToArray();
