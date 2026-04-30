@@ -22,9 +22,24 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
             var slot = this.slotFactory.Full(item);
 
             var newItem = this.itemFactory.CreateRandom();
-            slot.Add(newItem);
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => slot.Add(newItem), Throws.InvalidOperationException);
+                Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
+            });
+        }
 
-            Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
+        [Test]
+        public void Add_FullSlot_ThrowsInvalidOperationException()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Full(item);
+
+            var newItem = this.itemFactory.CreateRandom();
+            Assert.That(
+                () => slot.Add(newItem), 
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is already full.")
+            );
         }
     }
 }

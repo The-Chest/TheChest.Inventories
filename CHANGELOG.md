@@ -4,6 +4,7 @@
 * New protected methods to `Inventory<T>`
   * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
   * `AddItems` - Adds an array of items to the inventory.
+* New empty constructor to `InventorySlot<T>`
 * New protected methods to `StackInventory<T>`
   * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
 
@@ -22,6 +23,9 @@ This section is going to be separated into subsections for each Inventory Type t
   * `AddAt(T item, int index)` - When the slot is full
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+#### InventorySlot\<T\>
+* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full.
+* `Replace(T item)` now throws `ArgumentNullException` when the param `item` is null.
 
 ### StackInventory\<T\>
 * Validation methods now have extra validations
