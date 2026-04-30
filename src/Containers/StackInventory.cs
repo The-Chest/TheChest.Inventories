@@ -67,6 +67,11 @@ namespace TheChest.Inventories.Containers
             this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
 
+        /// <summary>
+        /// Determines whether all specified items can be added to the collection without exceeding available capacity.
+        /// </summary>
+        /// <param name="items">An array of items to check for addability. The array must not be <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if all items in the <paramref name="items"/> array can be added to the collection; otherwise, <see langword="false"/>.</returns>
         protected bool CanAddItems(T[] items)
         {
             var canAddAmount = 0;
