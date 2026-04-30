@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Exceptions;
 using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots;
 using TheChest.Inventories.Slots.Interfaces;
@@ -65,7 +66,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(size));
             if (size < items.Length)
                 throw new ArgumentException(
-                    $"The provided size ({size}) cannot be smaller than the number of items ({items.Length}).",
+                    InventoryErrors.ItemsBiggerThanInventorySize(items.Length, size),
                     nameof(size)
                 );
 
@@ -137,7 +138,7 @@ namespace TheChest.Inventories.Containers
 
             //TODO: check if its better to return false instead of throw an exception when one of the items is null
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), InventoryErrors.ItemArrayContainsNull);
 
             var canAddAmount = 0;
             for (int i = 0; i < this.Size; i++)
@@ -263,7 +264,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (!this.slots[index].CanAdd(item))
-                throw new InvalidOperationException($"The item cannot be added to the slot at index {index}.");
+                throw new InvalidOperationException(InventoryErrors.CannotAddItemAtIndex(index));
 
             this.slots[index].Add(item);
             this.OnAdd?.Invoke(this, (item, index));
