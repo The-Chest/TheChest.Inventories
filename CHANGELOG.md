@@ -2,8 +2,10 @@
 
 ## What's Added
 * New protected methods to `Inventory<T>`
-    * `CanAddItems(T[] items)` - Checks if an amount of items can be added to the inventory, it is used in the `Add` method to check if the items can be added before trying to add them
-    * `AddItems` - Adds an amount of items to the inventory, it is used in the `Add` method to add the items after checking if they can be added with `CanAddAmount`
+  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
+  * `AddItems` - Adds an array of items to the inventory.
+* New protected methods to `StackInventory<T>`
+  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
 
 ## What's Changed
 This section is going to be separated into subsections for each Inventory Type to make it more organized
@@ -22,7 +24,11 @@ This section is going to be separated into subsections for each Inventory Type t
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
 
 ### StackInventory\<T\>
-* The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+* Validation methods now have extra validations
+  * `CanAdd(T item)` - Checks if the Inventory is full or if there is no available slot to add the item
+  * `CanAdd(T[] items)` - Check if it is possible to add all the items in the array to the inventory
+  * `CanAddAt(T[] items, int index)` - Checks if the param `items` is empty
+* The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item)`
   * `Add(T[] items)`
   * `AddAt(T item, int index)`
@@ -31,9 +37,15 @@ This section is going to be separated into subsections for each Inventory Type t
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
 
 ### LazyStackInventory\<T\>
-* The Action methods in Containers now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+* The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item, int amount = 1)`
   * `AddAt(T item, int index, int amount = 1)`
+
+## What's Fixed
+* 
+
+## What's Removed
+* `AvailableAmount` property from `IInventoryStackSlot<T>` and `IInventoryLazyStackSlot<T>` (it belongs now to `IStackSlot<T>` and `ILazyStackSlot<T>`)
 
 ## Known Issues
 * The Current Architecture is not stable for the final version yet

@@ -114,10 +114,10 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
-
+            
             if (items.Length == 0)
                 return false;
-            if (items.Length > this.slots.Sum(x => x.AvailableAmount))
+            if (items.Length > this.slots.Sum(x => x.AvailableAmount)) // TODO: check if the this.CanAddItems(items) already does the job
                 return false;
 
             return this.CanAddItems(items);
@@ -145,6 +145,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (items.Length == 0)
+                return false;
 
             return this.slots[index].CanAdd(items);
         }
@@ -153,7 +155,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory. 
         /// </remarks>
-        /// <returns>true if is possible to add the items</returns>
+        /// <returns><see langword="true"/> if is possible to add the items</returns>
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
