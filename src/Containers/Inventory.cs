@@ -131,29 +131,16 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), InventoryErrors.ItemArrayContainsNull);
+
             if (items.Length == 0)
                 return false;
             if (items.Length > this.Size)
                 return false;
 
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
-            if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), InventoryErrors.ItemArrayContainsNull);
-
-            var canAddAmount = 0;
-            for (int i = 0; i < this.Size; i++)
-            {
-                var slot = this.slots[i];
-                var item = items[canAddAmount];
-                if (slot.CanAdd(item))
-                {
-                    canAddAmount++;
-                    if (items.Length == canAddAmount)
-                        return true;
-                }
-            }
-
-            return false;
+            return this.CanAddAmount(items);
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
