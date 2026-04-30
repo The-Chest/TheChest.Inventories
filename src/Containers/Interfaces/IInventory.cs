@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers.Events;
+﻿using System;
+using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -56,30 +57,30 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Checks if <paramref name="item"/> can be added to any slot.
         /// </summary>
         /// <param name="item">The item to evaluate for addition to the inventory.</param>
-        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        [Obsolete("Use CanAddAt(params T[]) instead to check if the item can be added.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot.
         /// </summary>
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
-        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if ALL <paramref name="items"/> can be added; otherwise, <see langword="false"/>.</returns>
         bool CanAdd(params T[] items);
         /// <summary>
         /// Determines whether the specified item can be added at the given index.
         /// </summary>
         /// <param name="item">The item to evaluate for insertion at the specified index.</param>
-        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the
-        /// collection.</param>
-        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the collection.</param>
+        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
         bool CanAddAt(T item, int index);
 
         /// <summary>
         /// <para> Adds an item in a avaliable slot </para>
         /// <para> This method return will change to void in future versions. </para>
-        /// <para> Use <see cref="CanAdd(T)"/> to check if the item can be added before calling this method.</para>
+        /// <para> Use <see cref="CanAdd(T[])"/> to check if the item can be added before calling this method.</para>
         /// </summary>
         /// <param name="item">item to be added</param>
-        /// <returns>true if the <paramref name="item"/> could be added</returns>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> could be added</returns>
         bool Add(T item);
         /// <summary>
         /// Adds and array of items in a avaliable slot
@@ -94,7 +95,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>
-        /// <returns>true if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">Item to be checked to ocupy the slot on <paramref name="index"/></param>
         /// <param name="index">The index of the slot to be checked for replacement</param>
-        /// <returns>true if the <paramref name="item"/> can be replaced in the <paramref name="index"/> slot; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> can be replaced in the <paramref name="index"/> slot; otherwise, <see langword="false"/>.</returns>
         bool CanReplace(T item, int index);
         /// <summary>
         /// Replaces an item in a specific slot
