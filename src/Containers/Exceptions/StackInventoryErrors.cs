@@ -1,4 +1,4 @@
-﻿namespace TheChest.Inventories.Exceptions
+﻿namespace TheChest.Inventories.Containers.Exceptions
 {
     internal static class StackInventoryErrors
     {

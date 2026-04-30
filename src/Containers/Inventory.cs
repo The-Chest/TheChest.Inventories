@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
+using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Containers.Interfaces;
-using TheChest.Inventories.Exceptions;
 using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots;
 using TheChest.Inventories.Slots.Interfaces;
@@ -160,10 +160,9 @@ namespace TheChest.Inventories.Containers
         /// </summary>
         /// <remarks>
         /// The method adds items to slots in order until either all items are added or no more slots are available.  
-        /// The <c>OnAdd</c> event is invoked if any items are successfully added.
+        /// The <see cref="OnAdd"/> event is invoked if any items are successfully added.
         /// </remarks>
-        /// <param name="items">An array of items to add. 
-        /// Items that are <see langword="null"/> or considered null by <c>IsNull()</c> are skipped.</param>
+        /// <param name="items">An array of items to add. Items that are or considered <see langword="null"/> are skipped.</param>
         /// <returns>An array containing the items that could not be added due to lack of available space. Returns an empty array if all items were successfully added.</returns>
         protected T[] AddItems(params T[] items)
         {
