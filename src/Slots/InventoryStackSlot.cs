@@ -2,6 +2,7 @@
 using System.Linq;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
@@ -65,11 +66,11 @@ namespace TheChest.Inventories.Slots
             var content = this.Content;
 
             Array.Resize(ref content, content.Length + 1);
-            content[^1] = item;
+            content[content.Length - 1] = item;
 
             this.Content = content;
 
-            item = default!;
+            item = default;
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>true if the item can be added to the slot; otherwise, false.</returns>
         public virtual bool CanAdd(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 return false;
 
             if (this.IsFull)
@@ -112,7 +113,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>true if all items can be added to the slot; otherwise, false.</returns>
         public virtual bool CanAdd(T[] items)
         {
-            if (items == null || items.Length == 0)
+            if (items is null || items.Length == 0)
                 return false;
 
             if (this.IsFull)
@@ -122,7 +123,7 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             var firstItem = items[0];
-            if (firstItem is null)
+            if (firstItem.IsNull())
                 return false;
 
             if (!this.IsEmpty && !this.Contains(firstItem))
@@ -130,7 +131,7 @@ namespace TheChest.Inventories.Slots
 
             for (int i = 1; i < items.Length; i++)
             {
-                if (items[i] is null)
+                if (items[i].IsNull())
                     return false;
 
                 if(!firstItem.Equals(items[i]))
@@ -152,7 +153,7 @@ namespace TheChest.Inventories.Slots
 
             for (int i = 1; i < items.Length; i++)
             {
-                if (!items[0]!.Equals(items[i]))
+                if (!items[0].Equals(items[i]))
                     throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
 
                 if (!this.IsEmpty && !this.Contains(items[i]))
@@ -167,7 +168,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
-            if(item is null)
+            if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             if (this.CanAdd(item))
@@ -237,7 +238,7 @@ namespace TheChest.Inventories.Slots
         public virtual T Get()
         {
             if (this.IsEmpty)
-                return default!;
+                return default;
 
             return this.GetItem();
         }
@@ -254,7 +255,7 @@ namespace TheChest.Inventories.Slots
             if (items.Length > this.MaxAmount)
                 return false;
 
-            var firstItem = items[0]!;
+            var firstItem = items[0];
             for (int i = 0; i < items.Length; i++)
             {
                 if (!this.CanReplace(items[i]))
@@ -273,7 +274,7 @@ namespace TheChest.Inventories.Slots
         /// <returns>false if the param <paramref name="item"/> is <see langword="null"/></returns>
         public virtual bool CanReplace(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 return false;
 
             return true;
@@ -293,7 +294,7 @@ namespace TheChest.Inventories.Slots
             if (items.Length > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(items));
 
-            var firstItem = items[0]!;
+            var firstItem = items[0];
             for (int i = 1; i < items.Length; i++)
             {
                 if (!firstItem.Equals(items[i]))
@@ -326,7 +327,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] Replace(T item)
         {
-            if(item is null)
+            if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             if (this.IsEmpty)

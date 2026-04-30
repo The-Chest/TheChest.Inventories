@@ -90,5 +90,5 @@ namespace TheChest.Inventories.Containers.Events
     /// <typeparam name="T"></typeparam>
     /// <param name="sender">Inventory that sent the event</param>
     /// <param name="e">Data that were requested</param>
-    public delegate void InventoryGetEventHandler<T>(object? sender, InventoryGetEventArgs<T> e);
+    public delegate void InventoryGetEventHandler<T>(object sender, InventoryGetEventArgs<T> e);
 }

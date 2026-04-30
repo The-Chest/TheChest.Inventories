@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool CanAdd(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             for (int i = 0; i < this.Size; i++)
@@ -120,7 +120,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
         public virtual bool CanAddAt(T item, int index)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -150,7 +150,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When param <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool Add(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             var fallbackIndex = -1;
@@ -236,7 +236,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual bool AddAt(T item, int index)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -310,7 +310,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
             
             var item = this.slots[index].Get();
-            if(!EqualityComparer<T>.Default.Equals(item, default!))
+            if(!EqualityComparer<T>.Default.Equals(item, default))
                 this.OnGet?.Invoke(this, (new[]{ item }, index));
             return item;
         }
@@ -321,7 +321,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             for (int index = 0; index < this.Size; index++)
@@ -330,12 +330,12 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var result = slot.Get();
-                    if(!EqualityComparer<T>.Default.Equals(item, default!))
+                    if(!EqualityComparer<T>.Default.Equals(item, default))
                         this.OnGet?.Invoke(this, (new[]{ result }, index));
                     return result;
                 }
             }
-            return default!;
+            return default;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -347,7 +347,7 @@ namespace TheChest.Inventories.Containers
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
@@ -415,7 +415,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] GetAll(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
@@ -440,7 +440,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             var amount = 0;

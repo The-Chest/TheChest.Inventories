@@ -70,5 +70,5 @@ namespace TheChest.Inventories.Containers.Events.Stack
     /// <typeparam name="T">Item type</typeparam>
     /// <param name="sender">Inventory that sent the event</param>
     /// <param name="e">Data that were sent throught the event</param>
-    public delegate void StackInventoryAddEventHandler<T>(object? sender, StackInventoryAddEventArgs<T> e);
+    public delegate void StackInventoryAddEventHandler<T>(object sender, StackInventoryAddEventArgs<T> e);
 }

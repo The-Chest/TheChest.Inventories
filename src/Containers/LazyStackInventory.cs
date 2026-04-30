@@ -4,6 +4,7 @@ using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
@@ -59,7 +60,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to 0.</exception>
         public virtual bool CanAdd(T item, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -77,7 +78,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to 0, or if <paramref name="index"/> is less than 0 or greater than the current size of the inventory.</exception>
         public virtual bool CanAddAt(T item, int index, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -113,7 +114,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual int Add(T item, int amount)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -153,7 +154,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual int AddAt(T item, int index, int amount)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -208,7 +209,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var item = this.slots[index].Get().FirstOrDefault();
-            if (!EqualityComparer<T>.Default.Equals(item, default!))
+            if (!EqualityComparer<T>.Default.Equals(item, default))
                 this.OnGet?.Invoke(this, (item, index, 1));
 
             return item;
@@ -220,7 +221,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             
             for (int index = 0; index < this.Size; index++)
@@ -229,14 +230,14 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var foundItem = slot.Get().FirstOrDefault();
-                    if(!EqualityComparer<T>.Default.Equals(foundItem, default!))
+                    if(!EqualityComparer<T>.Default.Equals(foundItem, default))
                         this.OnGet?.Invoke(this, (foundItem, index, 1));
 
                     return foundItem;
                 }
             }
 
-            return default!;
+            return default;
         }
         /// <summary>
         /// Gets an amount of items from the inventory
@@ -251,7 +252,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(T item, int amount)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -313,7 +314,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] GetAll(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             var items = new List<T>();
@@ -359,7 +360,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
             var count = 0;
@@ -379,7 +380,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         public virtual bool CanReplace(T item, int index, int amount = 1)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -394,7 +395,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="InvalidOperationException">When <paramref name="amount"/> exceeds the stack size of the slot on <paramref name="index"/>.</exception>
         public virtual T[] Replace(T item, int index, int amount)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -410,7 +411,7 @@ namespace TheChest.Inventories.Containers
             if (replacedItems.Length > 0)
                 this.OnReplace?.Invoke(this, (replacedItems[0], replacedItems.Length, item, amount, index));
             else
-                this.OnReplace?.Invoke(this, (default!, 0, item, amount, index));
+                this.OnReplace?.Invoke(this, (default, 0, item, amount, index));
 
             return replacedItems;
         }
@@ -463,26 +464,26 @@ namespace TheChest.Inventories.Containers
             var originItems = originSlot.GetAll();
             var originItem = originItems.FirstOrDefault();
 
-            if (!EqualityComparer<T>.Default.Equals(originItem, default!))
+            if (!EqualityComparer<T>.Default.Equals(originItem, default))
             {
-                var targetItems = targetSlot.Replace(originItem!, originItems.Length);
-                events.Add(new LazyStackInventoryMoveItemEventData<T>(originItem!, originItems.Length, origin, target));
+                var targetItems = targetSlot.Replace(originItem, originItems.Length);
+                events.Add(new LazyStackInventoryMoveItemEventData<T>(originItem, originItems.Length, origin, target));
                 var targetItem = targetItems.FirstOrDefault();
 
-                if (!EqualityComparer<T>.Default.Equals(targetItem, default!))
+                if (!EqualityComparer<T>.Default.Equals(targetItem, default))
                 {
-                    originSlot.Replace(targetItem!, targetItems.Length);
-                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem!, targetItems.Length, target, origin));
+                    originSlot.Replace(targetItem, targetItems.Length);
+                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem, targetItems.Length, target, origin));
                 }
             }
             else
             {
                 var targetItems = targetSlot.GetAll();
                 var targetItem = targetItems.FirstOrDefault();
-                if (!EqualityComparer<T>.Default.Equals(targetItem, default!))
+                if (!EqualityComparer<T>.Default.Equals(targetItem, default))
                 {
-                    originSlot.Add(targetItem!, targetItems.Length);
-                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem!, targetItems.Length, target, origin));
+                    originSlot.Add(targetItem, targetItems.Length);
+                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem, targetItems.Length, target, origin));
                 }
             }
 
