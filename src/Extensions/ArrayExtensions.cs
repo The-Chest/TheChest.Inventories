@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Extensions
 
             for (int i = 0; i < array.Length; i++)
             {
-                if (array[i] is null)
+                if (array[i].IsNull())
                     return true;
             }
 

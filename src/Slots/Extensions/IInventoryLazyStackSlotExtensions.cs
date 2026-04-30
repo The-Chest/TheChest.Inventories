@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots.Extensions
@@ -28,7 +29,7 @@ namespace TheChest.Inventories.Slots.Extensions
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the amount parameter is less than 0.</exception>
         internal static IEnumerable<int> GetAddOrderIndexes<T>(this IInventoryLazyStackSlot<T>[] slots, T item, int amount)
         {
-            if (item is null)
+            if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (amount < 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than or equal to 0.");
