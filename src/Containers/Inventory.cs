@@ -179,11 +179,9 @@ namespace TheChest.Inventories.Containers
         {
             if (items.Length == 0) 
                 return items;
-            /* 
-            TODO: check if its better to return false instead of throw an exception when one of the items is null
+
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), "One of the items is null");
-            */
             
             var addedAmount = 0;
             var addedItems = new Dictionary<int, T>();
@@ -224,12 +222,15 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        /// <exception cref="InvalidOperationException">When the item cannot be added to the slot at index <paramref name="index"/></exception>"
         public virtual bool AddAt(T item, int index)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
+            if (!this.slots[index].CanAdd(item))
+                throw new InvalidOperationException($"The item cannot be added to the slot at index {index}.");
 
             var added = this.slots[index].Add(item);
             if (added)
