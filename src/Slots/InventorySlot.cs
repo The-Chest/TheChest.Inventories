@@ -1,6 +1,8 @@
-﻿using TheChest.Inventories.Slots.Interfaces;
+﻿using System;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Extensions;
+using TheChest.Inventories.Slots.Exceptions;
+using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
 {
@@ -29,11 +31,14 @@ namespace TheChest.Inventories.Slots
             return !this.IsFull && !item.IsNull();
         }
         /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the slot is full</exception>
         public virtual bool Add(T item)
         {
-            //TODO: remove this extra validation
-            if (!this.CanAdd(item))
-                return false;
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (this.IsFull)
+                throw new InvalidOperationException(InventorySlotErrors.FullSlot);
 
             this.Content = item;
             return true;
@@ -42,8 +47,11 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual T Get()
         {
+            if (this.IsEmpty)
+                return (T)(object)null;
+
             var content = this.Content;
-            this.Content = default;
+            this.Content = (T)(object)null;
             return content;    
         }
 
@@ -55,6 +63,14 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual T Replace(T item)
         {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (this.IsEmpty)
+            {
+                this.Content = item;
+                return (T)(object)null;
+            }
+
             var content = this.Content;
             this.Content = item;
             return content;
