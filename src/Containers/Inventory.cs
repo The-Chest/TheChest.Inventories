@@ -182,9 +182,10 @@ namespace TheChest.Inventories.Containers
                     continue;
                 }
 
-                var added = this.slots[index].Add(item);
-                if (added)
+                var slot = this.slots[index];
+                if (slot.CanAdd(item))
                 {
+                    this.slots[index].Add(item);
                     addedItems.Add(index, item);
                     addedAmount++;
                 }
