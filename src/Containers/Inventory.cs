@@ -426,17 +426,20 @@ namespace TheChest.Inventories.Containers
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
 
-            var item = this.slots[origin].Get();
-            var oldItem = this.slots[target].Replace(item);
+            var originItem = this.slots[origin].Get();
+            var targetItem = this.slots[target].Get();
 
             var events = new List<InventoryMoveItemEventData<T>>();
-            if (!EqualityComparer<T>.Default.Equals(item, default))
-                events.Add(new InventoryMoveItemEventData<T>(item, origin, target));
-
-            if (!EqualityComparer<T>.Default.Equals(oldItem, default))
+            if (!EqualityComparer<T>.Default.Equals(originItem, default))
             {
-                this.slots[origin].Replace(oldItem);
-                events.Add(new InventoryMoveItemEventData<T>(oldItem, target, origin));
+                this.slots[target].Add(originItem);
+                events.Add(new InventoryMoveItemEventData<T>(originItem, origin, target));
+            }
+
+            if (!EqualityComparer<T>.Default.Equals(targetItem, default))
+            {
+                this.slots[origin].Add(targetItem);
+                events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
             }
             this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }
