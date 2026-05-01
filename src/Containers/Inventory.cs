@@ -205,8 +205,8 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="InvalidOperationException">When the inventory is full</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the inventory has no available slot for <paramref name="item"/>.</exception>
         public virtual bool Add(T item)
         {
             if (item.IsNull())
@@ -221,8 +221,9 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>
-        /// <exception cref="InvalidOperationException">When there are not enough free slots to add all the items</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="items"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="items"/> contains one or more <see langword="null"/> entries.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when <paramref name="items"/> has more items than <see cref="Container{T}.Size"/> or when the inventory does not have enough available slots to add all items.</exception>
         /// <returns>An array of <paramref name="items"/> that were not added to the inventory.</returns>
         public virtual T[] Add(params T[] items)
         {
