@@ -52,5 +52,22 @@ namespace TheChest.Inventories.Extensions
             }
             return true;
         }
+
+        internal static bool HasAllEqualAndNoNull<T>(this T[] array)
+        {
+            var first = array[0];
+            if (first.IsNull())
+                return false;
+
+            var comparer = EqualityComparer<T>.Default;
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (array[i].IsNull())
+                    return false;
+                if (!comparer.Equals(array[i], first))
+                    return false;
+            }
+            return true;
+        }
     }
 }
