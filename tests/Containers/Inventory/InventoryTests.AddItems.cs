@@ -16,7 +16,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var items = this.itemFactory.CreateMany(0);
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if no items are added");
-            inventory.Add(items);
+            Assert.That(() => inventory.Add(items), Throws.ArgumentException
+                .With.Message.EqualTo("Cannot add an empty array of items. (Parameter 'items')"));
         }
 
         [Test]
@@ -61,7 +62,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             Assert.That(
                 () => inventory.Add(new T[10]), 
                 Throws.ArgumentNullException
-                    .With.Message.EqualTo("One of the items is null (Parameter 'items')")
+                    .With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
             );
         }
 
@@ -128,7 +129,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             Assert.That(
                 () => inventory.Add(items), 
                 Throws.ArgumentNullException
-                    .With.Message.EqualTo("One of the items is null (Parameter 'items')")
+                    .With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
             );
         }
 

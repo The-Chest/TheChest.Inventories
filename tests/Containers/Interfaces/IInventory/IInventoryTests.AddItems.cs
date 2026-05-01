@@ -12,9 +12,11 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
 
             var items = this.itemFactory.CreateMany(0);
 
-            var result = inventory.Add(items);
-
-            Assert.That(result, Is.Empty);
+            Assert.That(
+                () => inventory.Add(items),
+                Throws.ArgumentException
+                    .With.Message.EqualTo("Cannot add an empty array of items. (Parameter 'items')")
+            );
         }
 
         [Test]
