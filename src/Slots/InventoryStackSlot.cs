@@ -129,14 +129,8 @@ namespace TheChest.Inventories.Slots
             if (!this.IsEmpty && !this.Contains(firstItem))
                 return false;
 
-            for (int i = 1; i < items.Length; i++)
-            {
-                if (items[i].IsNull())
-                    return false;
-
-                if(!firstItem.Equals(items[i]))
-                    return false;
-            }
+            if (!items.HasAllEqualAndNoNull())
+                return false;
 
             return true;
         }
