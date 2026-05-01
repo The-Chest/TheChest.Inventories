@@ -40,6 +40,10 @@ This section is going to be separated into subsections for each Inventory Type t
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
 
+#### InventoryStackSlot\<T\>
+* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
+* `Add(T[] items)` now throws `InvalidOperationException` when the param `items` is valid but the slot is full or the items are different from the slot's content.`
+
 ### LazyStackInventory\<T\>
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item, int amount = 1)`

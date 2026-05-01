@@ -38,7 +38,7 @@ namespace TheChest.Inventories.Slots
         /// It's recommended to use <see cref="IInventoryStackSlot{T}.Add(T[])"/> or <see cref="IInventoryStackSlot{T}.CanAdd(T[])"/> to ensure no invalid items are added
         /// </para>
         /// </summary>
-        /// <param name="items">items to be added to the slot (and the reference will be removed after)</param>
+        /// <param name="items">items to be added to the slot</param>
         protected virtual void AddItems(ref T[] items)
         {
             var addAmount = items.Length > this.AvailableAmount ? this.AvailableAmount : items.Length;
@@ -83,7 +83,7 @@ namespace TheChest.Inventories.Slots
         /// </para>
         /// </remarks>
         /// <param name="item"><inheritdoc/></param>
-        /// <returns>true if the item can be added to the slot; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be added to the slot; otherwise, <see langword="false"/>.</returns>
         public virtual bool CanAdd(T item)
         {
             if (item.IsNull())
@@ -97,20 +97,14 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         /// <remarks>
         /// This method checks that the slot is not full, that the number of items does not
         /// exceed the available capacity, and that all items are non-null and equal to each other.  
         /// If the slot is not empty, the items must also match the type of items already contained.   
         /// The method does not modify <paramref name="items"/>.
-        /// <para>
-        /// Override this method to customize the criteria for adding items.
-        /// </para>
         /// </remarks>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns>true if all items can be added to the slot; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if all items can be added to the slot; otherwise, <see langword="false"/>.</returns>
         public virtual bool CanAdd(T[] items)
         {
             if (items is null || items.Length == 0)
@@ -138,21 +132,24 @@ namespace TheChest.Inventories.Slots
         /// <remarks>
         /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
         /// </remarks>
-        /// <exception cref="ArgumentException">When the item array is empty or has different items inside it or has any that is not equal to the items inside the slot</exception>
+        /// <exception cref="ArgumentException">When any of the items in <paramref name="items"/> is invalid or when the items are different from the items already in the slot</exception>
+        /// <exception cref="InvalidOperationException">When the slot is full or when trying to add items that are different from the items already in the slot</exception>
+        /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
         public virtual T[] Add(T[] items)
         {
-            //TODO: improve this method validations
             if (items.Length == 0)
                 throw new ArgumentException("Cannot add empty list of items", nameof(items));
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "Cannot add an array of items with null values");
+            if (!items.HasAllEqual())
+                throw new ArgumentException("Cannot add an array of items with different types", nameof(items));
+            if (items.Length > this.AvailableAmount)
+                throw new ArgumentException("Cannot add more items than the available amount", nameof(items));
 
-            for (int i = 1; i < items.Length; i++)
-            {
-                if (!items[0].Equals(items[i]))
-                    throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
-
-                if (!this.IsEmpty && !this.Contains(items[i]))
-                    throw new ArgumentException($"Param \"items\" must have every item equal to the Current item on the Slot ({i})", nameof(items));
-            } 
+            if (this.IsFull)
+                throw new InvalidOperationException("The slot is full");
+            if (!this.IsEmpty && !this.Contains(items))
+                throw new InvalidOperationException("Cannot add items that are different from the items already in the slot");
 
             this.AddItems(ref items);
 
@@ -164,6 +161,10 @@ namespace TheChest.Inventories.Slots
         {
             if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            if (this.IsFull)
+                throw new InvalidOperationException("The slot is full");
+            if (!this.IsEmpty && !this.Contains(item))
+                throw new InvalidOperationException("Cannot add items that are different from the items already in the slot");
 
             if (this.CanAdd(item))
             {
@@ -184,7 +185,6 @@ namespace TheChest.Inventories.Slots
             // TODO: improve it by getting it from the last items (maybe using IEnumerable)
             // Turn it in a internal extension method
             var result = this.Content.Take(amount).ToArray();
-
             this.Content = this.Content.Skip(result.Length).ToArray();
             return result;
         }
@@ -228,7 +228,7 @@ namespace TheChest.Inventories.Slots
         /// <summary>
         /// Gets a single item from inside the slot
         /// </summary>
-        /// <returns>an item from slot or <see langword="null"/> if <see cref="ISlot{T}.IsEmpty"/> is true</returns>
+        /// <returns>an item from slot or <see langword="null"/> if <see cref="ISlot{T}.IsEmpty"/> is <see langword="true"/></returns>
         public virtual T Get()
         {
             if (this.IsEmpty)
@@ -237,11 +237,8 @@ namespace TheChest.Inventories.Slots
             return this.GetItem();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
-        /// <returns>false if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
+        /// <returns><see langword="true"/> if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
         {
             if (items.Length == 0)
@@ -261,11 +258,8 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns>false if the param <paramref name="item"/> is <see langword="null"/></returns>
+        /// <returns><see langword="false"/> if the param <paramref name="item"/> is <see langword="null"/></returns>
         public virtual bool CanReplace(T item)
         {
             if (item.IsNull())
@@ -273,10 +267,7 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="items"><inheritdoc/></param>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
         /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
         /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
@@ -313,9 +304,7 @@ namespace TheChest.Inventories.Slots
             this.AddItems(ref result);
             return items;
         }
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         /// <param name="item">the item that will be attempt to replace</param>
         /// <returns><see langword="null"/> if the slot is empty. The items from inside the slot if is not empty and possible to replace. An array with <paramref name="item"/> if is not possible to replace</returns>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
