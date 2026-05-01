@@ -40,5 +40,17 @@ namespace TheChest.Inventories.Extensions
 
             return index;
         }
+
+        internal static bool HasAllEqual<T>(this T[] array)
+        {
+            var first = array[0];
+            var comparer = EqualityComparer<T>.Default;
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (!comparer.Equals(array[i], first))
+                    return false;
+            }
+            return true;
+        }
     }
 }
