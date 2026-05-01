@@ -15,16 +15,14 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Add_FullSlot_DoNotAddToContent()
+        public void Add_FullSlot_ThrowsInvalidOperationException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.Full(items);
 
             var item = this.itemFactory.CreateDefault();
-            slot.Add(item);
-
-            Assert.That(slot.GetContents(), Has.No.AnyOf(item));
+            Assert.That(() => slot.Add(item), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -38,6 +36,18 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             slot.Add(item);
 
             Assert.That(slot.GetContents(), Has.One.EqualTo(expecteditem[0]));
+        }
+
+        [Test]
+        public void Add_EmptySlot_ReturnsTrue()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var item = this.itemFactory.CreateDefault();
+            var result = slot.Add(item);
+
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -57,7 +67,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Add_SlotWithDifferentItem_DoesNotAddToContent()
+        public void Add_SlotWithDifferentItem_ThrowsInvalidOperationException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var halfStackSize = stackSize / 2;
@@ -65,9 +75,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             var slot = this.slotFactory.WithItems(items, stackSize);
 
             var item = this.itemFactory.CreateRandom();
-            slot.Add(item);
-
-            Assert.That(slot.GetContents(), Has.None.EqualTo(item));
+            Assert.That(() => slot.Add(item), Throws.InvalidOperationException);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using TheChest.Core.Slots;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Inventories.Extensions;
+using TheChest.Inventories.Slots.Exceptions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
@@ -138,18 +139,17 @@ namespace TheChest.Inventories.Slots
         public virtual T[] Add(T[] items)
         {
             if (items.Length == 0)
-                throw new ArgumentException("Cannot add empty list of items", nameof(items));
+                throw new ArgumentException(InventoryStackSlotErrors.CannotAddEmptyItems, nameof(items));
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "Cannot add an array of items with null values");
+                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.CannotAddArrayWithNullValues);
             if (!items.HasAllEqual())
-                throw new ArgumentException("Cannot add an array of items with different types", nameof(items));
-            if (items.Length > this.AvailableAmount)
-                throw new ArgumentException("Cannot add more items than the available amount", nameof(items));
-
+                throw new ArgumentException(InventoryStackSlotErrors.CannotAddArrayWithDifferentTypes, nameof(items));
             if (this.IsFull)
-                throw new InvalidOperationException("The slot is full");
+                throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
+            if (items.Length > this.AvailableAmount)
+                throw new InvalidOperationException(InventoryStackSlotErrors.CannotAddMoreThanAvailableAmount);
             if (!this.IsEmpty && !this.Contains(items))
-                throw new InvalidOperationException("Cannot add items that are different from the items already in the slot");
+                throw new InvalidOperationException(InventoryStackSlotErrors.CannotAddDifferentItemsFromSlot);
 
             this.AddItems(ref items);
 
@@ -162,9 +162,9 @@ namespace TheChest.Inventories.Slots
             if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (this.IsFull)
-                throw new InvalidOperationException("The slot is full");
+                throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
             if (!this.IsEmpty && !this.Contains(item))
-                throw new InvalidOperationException("Cannot add items that are different from the items already in the slot");
+                throw new InvalidOperationException(InventoryStackSlotErrors.CannotAddDifferentItemsFromSlot);
 
             if (this.CanAdd(item))
             {
