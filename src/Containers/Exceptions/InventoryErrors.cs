@@ -12,6 +12,9 @@
 
         #region Adding Items
         internal const string CannotAddItemAtIndex = "The item cannot be added to the slot at index.";
+        internal const string InventoryIsFull = "The inventory is full";
+        internal const string NotEnoughFreeSlots = "There are not enough free slots to add all the items.";
+        internal const string CannotAddEmptyArray = "Cannot add an empty array of items.";
         #endregion
     }
 }

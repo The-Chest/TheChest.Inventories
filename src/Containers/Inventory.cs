@@ -212,7 +212,7 @@ namespace TheChest.Inventories.Containers
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if(this.IsFull)
-                throw new InvalidOperationException("The inventory is full.");
+                throw new InvalidOperationException(InventoryErrors.InventoryIsFull);
 
             return this.AddItems(item).Length == 0;
         }
@@ -227,13 +227,13 @@ namespace TheChest.Inventories.Containers
         public virtual T[] Add(params T[] items)
         {
             if (items.Length == 0)
-                return items;
+                throw new ArgumentException(InventoryErrors.CannotAddEmptyArray, nameof(items));
             if (items.Length > this.Size)
-                throw new InvalidOperationException("The amount of items to be added cannot be bigger than the inventory size.");
+                throw new InvalidOperationException(InventoryErrors.ItemsBiggerThanInventorySize);
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), "One of the items is null");
+                throw new ArgumentNullException(nameof(items), InventoryErrors.ItemArrayContainsNull);
             if (!this.CanAddItems(items))
-                throw new InvalidOperationException("There are not enough free slots to add all the items.");
+                throw new InvalidOperationException(InventoryErrors.NotEnoughFreeSlots);
 
             return this.AddItems(items);
         }
