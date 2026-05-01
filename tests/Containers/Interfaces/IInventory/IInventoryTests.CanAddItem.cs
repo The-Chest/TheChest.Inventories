@@ -5,6 +5,19 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
     public partial class IInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
+        public void CanAddItem_NullItem_ThrowsArgumentNullException()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer();
+
+            Assert.That(
+                () => inventory.CanAdd(item: default!),
+                Throws.ArgumentNullException
+                    .With.Message.EqualTo("Value cannot be null. (Parameter 'item')")
+            );
+        }
+
+        [Test]
         public void CanAddItem_EmptyInventory_ReturnsTrue()
         {
             var inventory = this.inventoryFactory.EmptyContainer();

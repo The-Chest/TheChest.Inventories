@@ -20,6 +20,39 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        public void AddItems_EmptyItemsArray_ThrowsArgumentException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            Assert.That(
+                () => inventory.Add(Array.Empty<T>()),
+                Throws.ArgumentException
+                    .With.Message.EqualTo("Cannot add an empty array of items. (Parameter 'items')")
+            );
+        }
+
+        [Test]
+        [IgnoreIfValueType]
+        public void AddItems_ArrayContainingNullItems_ThrowsArgumentNullException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var items = this.itemFactory
+                .CreateManyRandom(this.random.Next(2, size))
+                .Append(default!)
+                .ToArray();
+            items.Shuffle();
+
+            Assert.That(
+                () => inventory.Add(items),
+                Throws.ArgumentNullException
+                    .With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
+            );
+        }
+
+        [Test]
         public void AddItems_ArrayWithOnlyNullItems_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
