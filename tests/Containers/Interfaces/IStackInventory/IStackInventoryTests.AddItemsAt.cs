@@ -17,7 +17,7 @@
         }
 
         [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ReturnsItemsFromParams()
+        public void AddItemsAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -27,13 +27,11 @@
             var amount = stackSize;
             var items = this.itemFactory.CreateMany(amount);
             var index = this.random.Next(0, size); 
-            var result = inventory.AddAt(items, index);
-
-            Assert.That(result, Is.EqualTo(items));
+            Assert.That(() => inventory.AddAt(items, index), Throws.InvalidOperationException);
         }
 
         [Test]
-        public void AddItemsAt_FullSlotSlotWithSameItem_ReturnsNotAddedItemsFromParam()
+        public void AddItemsAt_FullSlotSlotWithSameItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var slotItem = this.itemFactory.CreateDefault();
@@ -42,13 +40,11 @@
 
             var index = this.random.Next(0, size);
             var items = this.itemFactory.CreateMany(stackSize);
-            var result = inventory.AddAt(items, index);
-
-            Assert.That(result, Is.EqualTo(items));
+            Assert.That(() => inventory.AddAt(items, index), Throws.InvalidOperationException);
         }
 
         [Test]
-        public void AddItemsAt_FullSlotWithSameItem_ReturnsNotAddedItems()
+        public void AddItemsAt_FullSlotWithSameItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -57,9 +53,7 @@
 
             var items = this.itemFactory.CreateMany(10);
             var index = this.random.Next(0, size);
-            var result = inventory.AddAt(items, index);
-
-            Assert.That(result, Is.Not.Empty.And.EqualTo(items));
+            Assert.That(() => inventory.AddAt(items, index), Throws.InvalidOperationException);
         }
     }
 }

@@ -23,6 +23,14 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueType]
+        public void AddItem_NullItem_ThrowsArgumentNullException()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer();
+            Assert.That(() => inventory.Add(default(T)!), Throws.ArgumentNullException);
+        }
+
+        [Test]
         public void AddItem_EmptyInventory_CallsOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
@@ -152,7 +160,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItem_FullInventory_DoesNotCallOnAddEvent()
+        public void AddItem_FullInventory_ThrowsAndDoesNotCallOnAddEvent()
         {
             var item = this.itemFactory.CreateDefault();
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -160,7 +168,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
 
-            inventory.Add(item);
+            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
         }
     }
 }

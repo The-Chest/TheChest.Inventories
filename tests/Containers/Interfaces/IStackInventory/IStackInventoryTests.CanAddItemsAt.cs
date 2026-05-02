@@ -77,7 +77,6 @@
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
-            inventory.AddAt(item, randomIndex);
 
             var items = this.itemFactory.CreateMany(stackSize);
             var canAdd = inventory.CanAddAt(items, randomIndex);

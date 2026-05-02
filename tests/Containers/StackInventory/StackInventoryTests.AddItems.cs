@@ -14,9 +14,26 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = Array.Empty<T>();
-            var result = inventory.Add(items);
+            Assert.That(() => inventory.Add(items), Throws.ArgumentException);
+        }
 
-            Assert.That(result, Is.Empty);
+        [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueType]
+        public void AddItems_NullItems_ThrowsArgumentNullException()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer();
+            Assert.That(() => inventory.Add(null!), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        [TheChest.Tests.Common.Attributes.IgnoreIfValueType]
+        public void AddItems_ItemsContainsNull_ThrowsArgumentNullException()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer(5, 5);
+            var validItem = this.itemFactory.CreateDefault();
+            var items = new T[] { validItem, default!, validItem };
+
+            Assert.That(() => inventory.Add(items), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -212,21 +229,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItems_FullInventory_DoNotAddsItems()
+        public void AddItems_FullInventory_ThrowsInvalidOperationException()
         {
             var slotItem = this.itemFactory.CreateRandom();
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var items = this.itemFactory.CreateMany(size);
-            var expectedItems = items.ToArray();
             var inventory = this.inventoryFactory.FullContainer(size, 2, slotItem);
-
-            inventory.Add(items);
-
-            Assert.That(items, Is.EqualTo(expectedItems));
+            Assert.That(() => inventory.Add(items), Throws.InvalidOperationException);
         }
 
         [Test]
-        public void AddItems_FullInventory_DoNotCallOnAddEvent()
+        public void AddItems_FullInventory_ThrowsAndDoNotCallOnAddEvent()
         {
             var slotItem = this.itemFactory.CreateRandom();
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -235,7 +248,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
 
-            inventory.Add(items);
+            Assert.That(() => inventory.Add(items), Throws.InvalidOperationException);
         }
     }
 }
