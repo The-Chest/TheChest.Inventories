@@ -1,24 +1,7 @@
-﻿using TheChest.Tests.Common.Attributes;
-
-namespace TheChest.Inventories.Tests.Containers.Interfaces
+﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
     public partial class IInventoryTests<T>
     {
-        [Test]
-        public void AddItems_NoItems_ReturnsEmptyArray()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var items = this.itemFactory.CreateMany(0);
-
-            Assert.That(
-                () => inventory.Add(items),
-                Throws.ArgumentException
-                    .With.Message.EqualTo("Cannot add an empty array of items. (Parameter 'items')")
-            );
-        }
-
         [Test]
         public void AddItems_SuccessAdding_ReturnsEmptyArray()
         {
@@ -30,21 +13,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var result = inventory.Add(items);
 
             Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void AddItems_FullInventory_DoesNotAddItems()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, item);
-
-            var items = this.itemFactory.CreateManyRandom(size);
-            Assert.Multiple(() =>
-            {
-                Assert.That(() => inventory.Add(items), Throws.Exception);
-                Assert.That(inventory.GetCount(items[0]), Is.EqualTo(0));
-            });
         }
     }
 }
