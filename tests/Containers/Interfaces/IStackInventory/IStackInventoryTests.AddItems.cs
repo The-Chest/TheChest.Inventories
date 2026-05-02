@@ -14,15 +14,13 @@
         }
 
         [Test]
-        public void AddItems_FullInventory_ReturnsNotAddedItems()
+        public void AddItems_FullInventory_ThrowsInvalidOperationException()
         {
             var slotItem = this.itemFactory.CreateRandom();
             var items = this.itemFactory.CreateMany(20);
             var inventory = this.inventoryFactory.FullContainer(20, 2, slotItem);
 
-            var result = inventory.Add(items);
-
-            Assert.That(result, Is.EqualTo(items));
+            Assert.That(() => inventory.Add(items), Throws.InvalidOperationException);
         }
     }
 }

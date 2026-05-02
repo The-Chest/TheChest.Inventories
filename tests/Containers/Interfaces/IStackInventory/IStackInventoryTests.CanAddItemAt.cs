@@ -56,7 +56,6 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
-            inventory.AddAt(item, randomIndex);
 
             var canAdd = inventory.CanAddAt(item, randomIndex);
 

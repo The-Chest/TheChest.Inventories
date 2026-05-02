@@ -90,7 +90,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
+        public void AddItemAt_SlotWithDifferentItem_ThrowsAndDoesNotCallOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -101,7 +101,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var item = this.itemFactory.CreateDefault();
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
 
-            inventory.AddAt(item, index);
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemAt_FullSlotWithSameItem_DoesNotAddsToStack()
+        public void AddItemAt_FullSlotWithSameItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -162,13 +162,11 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var index = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
-            inventory.AddAt(item, index);
-
-            Assert.That(inventory.GetItems(index), Has.No.AnyOf(item));
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
 
         [Test]
-        public void AddItemAt_FullSlotWithSameItem_DoNotCallsOnAddEvent()
+        public void AddItemAt_FullSlotWithSameItem_ThrowsAndDoNotCallsOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -180,7 +178,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when item is not possible to add");
 
-            inventory.AddAt(item, index);
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
     }
 }

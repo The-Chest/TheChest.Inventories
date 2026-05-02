@@ -270,6 +270,8 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="InvalidOperationException">When the items cannot be added to the slot on <paramref name="index"/></exception>
         public virtual T[] AddAt(T[] items, int index)
         {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 throw new ArgumentException(StackInventoryErrors.CannotAddEmptyArray, nameof(items));
             if (index < 0 || index > this.Size)

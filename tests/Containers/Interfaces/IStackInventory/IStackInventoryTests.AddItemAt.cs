@@ -17,7 +17,7 @@
         }
 
         [Test]
-        public void AddItemAt_SlotWithDifferentItem_ReturnsFalse()
+        public void AddItemAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -26,9 +26,7 @@
 
             var index = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
-            var result = inventory.AddAt(item, index);
-
-            Assert.That(result, Is.False);
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -49,7 +47,7 @@
         }
 
         [Test]
-        public void AddItemAt_FullSlotWithSameItem_ReturnsFalse()
+        public void AddItemAt_FullSlotWithSameItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -59,9 +57,7 @@
 
             var item = this.itemFactory.CreateDefault();
             var index = this.random.Next(0, size - 1);
-            var result = inventory.AddAt(item, index);
-
-            Assert.That(result, Is.False);
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
     }
 }
