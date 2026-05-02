@@ -33,10 +33,10 @@ This section is going to be separated into subsections for each Inventory Type t
   * `CanAdd(T[] items)` - Check if it is possible to add all the items in the array to the inventory
   * `CanAddAt(T[] items, int index)` - Checks if the param `items` is empty
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
-  * `Add(T item)`
-  * `Add(T[] items)`
-  * `AddAt(T item, int index)`
-  * `AddAt(T[] items, int index)`
+  * `Add(T item)` - When the container is full or there is no available slots to add the item
+  * `Add(T[] items)` - When the container is full or there is no available slots to add the items
+  * `AddAt(T item, int index)` - When the slot is full or the item is different from the slot's content
+  * `AddAt(T[] items, int index)` - When the slot is full or the items are different from the slot's content
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
 
