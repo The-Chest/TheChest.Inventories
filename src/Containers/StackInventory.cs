@@ -75,7 +75,7 @@ namespace TheChest.Inventories.Containers
         protected bool CanAddItems(T[] items)
         {
             if (items.Length == 0)
-                return false;
+                return true;
 
             var canAddAmount = 0;
 
@@ -120,6 +120,8 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
+            if (items.Length == 0)
+                return true;
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (!items.HasAllEqual())
@@ -146,13 +148,12 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
+            if (items.Length == 0)
+                return true;
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
-            
-            if (items.Length == 0)
-                return false;
 
             return this.slots[index].CanAdd(items);
         }
@@ -236,7 +237,7 @@ namespace TheChest.Inventories.Containers
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
-                throw new ArgumentException(StackInventoryErrors.CannotAddEmptyArray, nameof(items));
+                return Array.Empty<T>();
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
@@ -275,7 +276,8 @@ namespace TheChest.Inventories.Containers
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
-                throw new ArgumentException(StackInventoryErrors.CannotAddEmptyArray, nameof(items));
+                return Array.Empty<T>();
+
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())

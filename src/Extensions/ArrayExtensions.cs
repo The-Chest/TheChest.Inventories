@@ -43,6 +43,9 @@ namespace TheChest.Inventories.Extensions
 
         internal static bool HasAllEqual<T>(this T[] array)
         {
+            if(array.Length == 0)
+                return true;
+
             var first = array[0];
             var comparer = EqualityComparer<T>.Default;
             for (int i = 1; i < array.Length; i++)

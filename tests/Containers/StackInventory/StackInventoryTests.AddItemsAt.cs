@@ -33,16 +33,41 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_EmptyArray_ThrowsArgumentException()
+        public void AddItemsAt_EmptyArray_ReturnsEmptyArray()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            
+            var randomIndex = this.random.Next(0, size);
+            var result = inventory.AddAt(Array.Empty<T>(), randomIndex);
+            
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void AddItemsAt_EmptyArray_DoesNotAddToSlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(
-                () => inventory.AddAt(Array.Empty<T>(), 0), 
-                Throws.ArgumentException.With.Property("ParamName").EqualTo("items").And.Message.Contains("Cannot add using an empty item array")
-            );
+            var randomIndex = this.random.Next(0, size);
+            inventory.AddAt(Array.Empty<T>(), randomIndex);
+
+            Assert.That(inventory.GetItems(randomIndex), Is.Empty);
+        }
+
+        [Test]
+        public void AddItemsAt_EmptyArray_DoesNotCallOnAddEvent()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when adding an empty array of items");  
+            var randomIndex = this.random.Next(0, size);
+            inventory.AddAt(Array.Empty<T>(), randomIndex);
         }
 
         [Test]

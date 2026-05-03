@@ -5,20 +5,23 @@
         [Test]
         public void CanAddItems_EmptyItemsArray_ReturnsTrue()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
-            var items = Array.Empty<T>();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             
-            var canAdd = inventory.CanAdd(items);
+            var canAdd = inventory.CanAdd(Array.Empty<T>());
             
-            Assert.That(canAdd, Is.False);
+            Assert.That(canAdd, Is.True);
         }
 
         [Test]
         public void CanAddItems_EmptyInventory_ReturnsTrue()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var items = this.itemFactory.CreateMany(10);
+            var items = this.itemFactory.CreateMany(stackSize);
             var canAdd = inventory.CanAdd(items);
 
             Assert.That(canAdd, Is.True);
@@ -86,7 +89,7 @@
             for (int i = 0; i < stackSize; i++)
             {
                 var randomIndex = this.random.Next(0, size);
-                inventory.Get(randomIndex, 1);
+                inventory.Get(randomIndex);
             }
 
             var items = this.itemFactory.CreateMany(stackSize);

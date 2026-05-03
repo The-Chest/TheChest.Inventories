@@ -19,16 +19,25 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItems_AddingEmptyArray_ThrowsArgumentException()
+        public void AddItems_AddingEmptyArray_ReturnsEmptyArray()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            
+            var result = inventory.Add(Array.Empty<T>());
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        public void AddItems_AddingEmptyArray_DoesNotAddItems()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(
-                () => inventory.Add(Array.Empty<T>()), 
-                Throws.ArgumentException.With.Property("ParamName").EqualTo("items").And.Message.Contains("Cannot add using an empty item array")
-            );
+            inventory.Add(Array.Empty<T>());
+            Assert.That(inventory.GetSlots(), Has.All.Matches<IStackSlot<T>>(x => x.IsEmpty));
         }
 
         [Test]
