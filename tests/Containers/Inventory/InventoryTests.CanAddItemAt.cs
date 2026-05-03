@@ -1,18 +1,16 @@
 ﻿using NUnit.Framework.Internal;
-using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void CanAddAt_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(
                 () => inventory.CanAddAt(item: default!, 0), 
-                Throws.ArgumentNullException
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
 
@@ -25,7 +23,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             Assert.That(
                 () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index),
-                Throws.Exception.TypeOf<ArgumentOutOfRangeException>()
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
     }
