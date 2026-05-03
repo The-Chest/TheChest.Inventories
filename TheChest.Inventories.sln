@@ -46,6 +46,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories.Tests", "tests\TheChest.Inventories.Tests.csproj", "{5737827E-E8E2-CBC2-5282-862F0276D8EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ai", "ai", "{4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA}"
+	ProjectSection(SolutionItems) = preProject
+		AGENTS.md = AGENTS.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skills", "skills", "{D4C4483F-797C-4877-9281-92C70D529986}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test-creation-skill", "test-creation-skill", "{FF04AD41-6658-429F-B530-FE09B7EF7E44}"
+	ProjectSection(SolutionItems) = preProject
+		skills\test-generator\SKILL.md = skills\test-generator\SKILL.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +83,9 @@ Global
 		{3C358749-7C82-4444-8F8C-FE68D058170F} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
 		{304F1F23-00A3-6AAD-9BD4-326221B7F39D} = {F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}
 		{5737827E-E8E2-CBC2-5282-862F0276D8EB} = {7C06F316-5168-46BC-9A49-54ADAE23B173}
+		{4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
+		{D4C4483F-797C-4877-9281-92C70D529986} = {4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA}
+		{FF04AD41-6658-429F-B530-FE09B7EF7E44} = {D4C4483F-797C-4877-9281-92C70D529986}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF9A167E-B926-4A99-B692-8A3566AB0996}

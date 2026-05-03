@@ -1,15 +1,23 @@
 # v0.16.0
 
+> This Changelog is going to be separated into subsections for each Inventory Type to make it more organized
+
 ## What's Added
+
+### Inventory\<T\>
 * New protected methods to `Inventory<T>`
   * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
   * `AddItems` - Adds an array of items to the inventory.
 * New empty constructor to `InventorySlot<T>`
+
+### StackInventory\<T\>
 * New protected methods to `StackInventory<T>`
   * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
 
+### LazyStackInventory\<T\>
+* 
+
 ## What's Changed
-This section is going to be separated into subsections for each Inventory Type to make it more organized
 
 ### Global (These changes applies to the whole project)
 * Project's c# version is now 7.3 to increase compatibility.
