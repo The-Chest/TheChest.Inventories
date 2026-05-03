@@ -95,11 +95,3 @@ More usage and extension details are available in the `docs/` folder.
 ## Future plans
 
 Future version plans are available on the [GitHub Project Board](https://github.com/orgs/The-Chest/projects/19/views/2).
-
-## Agent skill for test creation
-
-This repository includes an agent skill for standardized test generation:
-
-- `skills/test-generator/SKILL.md`
-
-Use this skill to keep test naming, structure, fixture coverage, and common namespaces consistent.
