@@ -74,6 +74,9 @@ namespace TheChest.Inventories.Containers
         /// <returns><see langword="true"/> if all items in the <paramref name="items"/> array can be added to the collection; otherwise, <see langword="false"/>.</returns>
         protected bool CanAddItems(T[] items)
         {
+            if (items.Length == 0)
+                return false;
+
             var canAddAmount = 0;
 
             for (int i = 0; i < this.Size; i++)
@@ -119,11 +122,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
-            
-            if (items.Length == 0)
-                return false;
-            if (items.Length > this.slots.Sum(x => x.AvailableAmount)) // TODO: check if the this.CanAddItems(items) already does the job
-                return false;
+            if (!items.HasAllEqual())
+                throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
             return this.CanAddItems(items);
         }
@@ -150,6 +150,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            
             if (items.Length == 0)
                 return false;
 

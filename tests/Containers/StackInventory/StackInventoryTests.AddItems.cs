@@ -9,7 +9,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItems_NullItems_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             Assert.That(
                 () => inventory.Add(null), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")

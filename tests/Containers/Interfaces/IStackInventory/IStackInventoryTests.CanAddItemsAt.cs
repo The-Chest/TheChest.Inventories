@@ -9,7 +9,7 @@
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var items = this.itemFactory.CreateMany(5);
+            var items = this.itemFactory.CreateMany(stackSize);
 
             var randomIndex = this.random.Next(0, size);
             var canAdd = inventory.CanAddAt(items, randomIndex);
