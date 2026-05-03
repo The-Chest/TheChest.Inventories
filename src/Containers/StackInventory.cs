@@ -238,6 +238,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentException(StackInventoryErrors.CannotAddEmptyArray, nameof(items));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+
             if (this.IsFull)
                 throw new InvalidOperationException(StackInventoryErrors.InventoryIsFull);
             if (!this.CanAddItems(items))
@@ -280,6 +281,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
+            
             if (!this.slots[index].CanAdd(items))
                 throw new InvalidOperationException(StackInventoryErrors.NotPossibleToAddAllItems);
 

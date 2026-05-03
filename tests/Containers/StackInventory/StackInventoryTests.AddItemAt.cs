@@ -1,10 +1,22 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
-using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
+        [Test]
+        public void AddItemAt_InvalidItem_ThrowsArgumentException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(
+                () => inventory.AddAt(default(T)!, 0), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST + 1)]
         public void AddItemAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
@@ -21,14 +33,30 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfValueType]
-        public void AddItemAt_InvalidItem_ThrowsArgumentException()
+        public void AddItemAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var inventoryItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, inventoryItem);
 
-            Assert.That(() => inventory.AddAt(default(T)!, 0), Throws.ArgumentNullException);
+            var index = this.random.Next(0, size);
+            var item = this.itemFactory.CreateDefault();
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
+        }
+
+        [Test]
+        public void AddItemAt_FullSlotWithSameItem_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slotItem = this.itemFactory.CreateDefault();
+
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var item = this.itemFactory.CreateDefault();
+            var index = this.random.Next(0, size - 1);
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -150,19 +178,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.AddAt(item, index);
 
             Assert.That(raised, Is.True, "OnAdd event was not raised");
-        }
-
-        [Test]
-        public void AddItemAt_FullSlotWithSameItem_ThrowsInvalidOperationException()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var containerItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, containerItem);
-
-            var index = this.random.Next(0, size);
-            var item = this.itemFactory.CreateDefault();
-            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
         }
 
         [Test]
