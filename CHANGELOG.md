@@ -74,6 +74,7 @@
   * Inventory classes have too many methods
     * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
     * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
 
