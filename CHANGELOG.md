@@ -31,6 +31,7 @@
   * `AddAt(T item, int index)` - When the slot is full
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+
 #### InventorySlot\<T\>
 * `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full.
 * `Replace(T item)` now throws `ArgumentNullException` when the param `item` is null.

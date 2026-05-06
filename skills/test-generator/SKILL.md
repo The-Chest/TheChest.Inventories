@@ -12,7 +12,7 @@ Use this skill whenever creating or updating tests in this repository.
 ### Tests
 - Tests should ALWAYS:
   - Use factory classes.
-  - Inherit `BaseTests<T>` and inject its factories.
+  - Inherit `BaseTest<T>` and inject its factories.
   - Follow the order of execution of the code.
     - Example method:
     ```csharp
