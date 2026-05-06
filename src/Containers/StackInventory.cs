@@ -214,6 +214,7 @@ namespace TheChest.Inventories.Containers
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            
             if (this.IsFull)
                 throw new InvalidOperationException(StackInventoryErrors.InventoryIsFull);
 
@@ -243,8 +244,6 @@ namespace TheChest.Inventories.Containers
 
             if (this.IsFull)
                 throw new InvalidOperationException(StackInventoryErrors.InventoryIsFull);
-            if (!this.CanAddItems(items))
-                throw new InvalidOperationException(StackInventoryErrors.NotEnoughFreeSlots);
 
             return this.AddItems(items);
         }
@@ -258,8 +257,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            if (!this.slots[index].CanAdd(item))
-                throw new InvalidOperationException(StackInventoryErrors.NotPossibleToAddItem);
 
             var added = this.slots[index].Add(item);
             if (added)
@@ -284,9 +281,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
-            
-            if (!this.slots[index].CanAdd(items))
-                throw new InvalidOperationException(StackInventoryErrors.NotPossibleToAddAllItems);
 
             var notAddedItems = this.slots[index].Add(items);
             if (notAddedItems.Length != items.Length)
