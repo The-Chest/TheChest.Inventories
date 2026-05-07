@@ -22,8 +22,6 @@ Use this skill whenever creating or updating tests in this repository.
        throw new ArgumentNullException(nameof(item));
       if (index > this.Size || index < 0)
         throw new ArgumentOutOfRangeException(nameof(index));
-      if (!this.slots[index].CanAdd(item))
-        throw new InvalidOperationException(StackInventoryErrors.NotPossibleToAddItem);
 
       this.slots[index].Add(item);
       this.OnAdd?.Invoke(this, (new[] { item }, index));
