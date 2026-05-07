@@ -139,17 +139,17 @@ namespace TheChest.Inventories.Slots
         public virtual T[] Add(T[] items)
         {
             if (items.Length == 0)
-                throw new ArgumentException(InventoryStackSlotErrors.CannotAddEmptyItems, nameof(items));
+                throw new ArgumentException(InventoryStackSlotErrors.AddEmptyItems, nameof(items));
             if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.CannotAddArrayWithNullValues);
+                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.AddArrayWithNullValues);
             if (!items.HasAllEqual())
-                throw new ArgumentException(InventoryStackSlotErrors.CannotAddArrayWithDifferentTypes, nameof(items));
+                throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
             if (this.IsFull)
                 throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
             if (items.Length > this.AvailableAmount)
-                throw new InvalidOperationException(InventoryStackSlotErrors.CannotAddMoreThanAvailableAmount);
+                throw new InvalidOperationException(InventoryStackSlotErrors.AddMoreThanAvailableAmount);
             if (!this.IsEmpty && !this.Contains(items))
-                throw new InvalidOperationException(InventoryStackSlotErrors.CannotAddDifferentItemsFromSlot);
+                throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
             this.AddItems(ref items);
 
@@ -164,7 +164,7 @@ namespace TheChest.Inventories.Slots
             if (this.IsFull)
                 throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
             if (!this.IsEmpty && !this.Contains(item))
-                throw new InvalidOperationException(InventoryStackSlotErrors.CannotAddDifferentItemsFromSlot);
+                throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
             if (this.CanAdd(item))
             {
