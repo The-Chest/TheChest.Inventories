@@ -3,7 +3,7 @@
     public partial class ILazyStackInventoryTests<T>
     {
         [Test]
-        public void CanAdd_EmptyInventory_ReturnsTrue()
+        public void CanAdd_EmptyInventory_ReturnsFalse()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -13,7 +13,7 @@
             var amount = this.random.Next(1, stackSize);
             var canAdd = inventory.CanAdd(item, amount);
 
-            Assert.That(canAdd, Is.True);
+            Assert.That(canAdd, Is.False);
         }
 
         [Test]
@@ -32,7 +32,7 @@
         }
 
         [Test]
-        public void CanAdd_PartiallyFilledInventoryWithSpace_ReturnsTrue()
+        public void CanAdd_PartiallyFilledInventoryWithoutSameItem_ReturnsFalse()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -43,7 +43,7 @@
             var amount = this.random.Next(1, stackSize);
             var canAdd = inventory.CanAdd(item, amount);
            
-            Assert.That(canAdd, Is.True);
+            Assert.That(canAdd, Is.False);
         }
 
         [Test]

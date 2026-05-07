@@ -3,20 +3,19 @@
     public partial class IInventoryLazyStackSlotTests<T>
     {
         [Test]
-        public void Add_FullSlot_ReturnsNotAddedAmount()
+        public void Add_FullSlot_ThrowsInvalidOperationException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.FullSlot(item, stackSize);
 
             var amount = this.random.Next(1, stackSize);
-            var result = slot.Add(item, amount);
 
-            Assert.That(result, Is.EqualTo(amount));
+            Assert.Throws<InvalidOperationException>(() => slot.Add(item, amount));
         }
 
         [Test]
-        public void Add_NotEmptySlotAndDifferentItem_ReturnsNotAddedAmount()
+        public void Add_NotEmptySlotAndDifferentItem_ThrowsInvalidOperationException()
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -25,11 +24,9 @@
             var slot = this.slotFactory.WithItem(item, amount, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
-            
-            var addAmount = this.random.Next(1, stackSize);
-            var result = slot.Add(newItem, addAmount);
+            var addAmount = this.random.Next(1, stackSize - amount + 1);
 
-            Assert.That(result, Is.EqualTo(addAmount));
+            Assert.Throws<InvalidOperationException>(() => slot.Add(newItem, addAmount));
         }
 
         [Test]
@@ -50,7 +47,7 @@
         }
 
         [Test]
-        public void Add_SlotContainingSameItem_ReturnsNotAddedAmount()
+        public void Add_SlotContainingSameItem_ReturnsZero()
         {
             var item = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -61,8 +58,7 @@
             var newAmount = this.random.Next(1, stackSize - amount + 1);
             var result = slot.Add(item, newAmount);
 
-            var expectedAmount = Math.Max(0, amount + newAmount - stackSize);
-            Assert.That(result, Is.EqualTo(expectedAmount));
+            Assert.That(result, Is.Zero);
         }
 
         [Test]
