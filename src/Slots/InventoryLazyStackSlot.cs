@@ -2,6 +2,7 @@
 using System.Linq;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Extensions;
+using TheChest.Inventories.Slots.Exceptions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots
@@ -36,7 +37,7 @@ namespace TheChest.Inventories.Slots
         /// Sets the values of content and <see cref="StackSlot{T}.Amount"/>
         /// </summary>
         /// <param name="item">The value to be set to content</param>
-        /// <param name="amount">The value to be set to <see cref="StackSlot{T}.Amount"/></param>
+        /// <param name="amount">The value to be set to <see cref="LazyStackSlot{T}.Amount"/></param>
         protected void SetContent(T item, int amount)
         {
             this.Content = item;
@@ -50,7 +51,7 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         /// <param name="item">The item to be added </param>
         /// <param name="amount">The amount of items added</param>
-        /// <returns>Return 0 if all items are fully added to slot, else will return the amount left</returns>
+        /// <returns>Return zero if all items are fully added to slot, else will return the amount left</returns>
         protected int AddItems(T item, int amount = 1)
         {
             var leftAmount = 0;
@@ -92,18 +93,21 @@ namespace TheChest.Inventories.Slots
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
-            if (amount <= 0)
+            if (amount <= 0 || amount > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));
+
             if (this.IsFull)
-                return amount;
+                throw new InvalidOperationException(InventoryLazyStackSlotErrors.SlotIsFull);
+            if (amount > this.AvailableAmount)
+                throw new InvalidOperationException(InventoryLazyStackSlotErrors.AddMoreThanAvailableAmount);
             if (!this.IsEmpty && !this.Content.Equals(item))
-                return amount;
+                throw new InvalidOperationException(InventoryLazyStackSlotErrors.AddDifferentItemsFromSlot);
 
             return this.AddItems(item, amount);
         }
 
         /// <inheritdoc/>
-        /// <returns>true if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
+        /// <returns><see langword="true"/> if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
         public virtual bool CanReplace(T item, int amount = 1)
         {
             if (item.IsNull())

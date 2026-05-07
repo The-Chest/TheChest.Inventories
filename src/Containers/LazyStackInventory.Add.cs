@@ -46,6 +46,7 @@ namespace TheChest.Inventories.Containers
 
             return false;
         }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero.</exception>
@@ -108,8 +109,6 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
             if (this.IsFull)
                 throw new InvalidOperationException(LazyStackInventoryErrors.InventoryIsFull);
-            if (!this.CanAddItems(item, amount))
-                throw new InvalidOperationException(LazyStackInventoryErrors.NotEnoughSpace);
 
             var events = new List<LazyStackInventoryAddItemEventData<T>>(amount);
             var indexes = this.slots.GetAddOrderIndexes(item, amount);
@@ -153,11 +152,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var slot = this.slots[index];
-            if (!slot.CanAdd(item, amount))
-                throw new InvalidOperationException(LazyStackInventoryErrors.NotPossibleToAddItem);
-
-            var notAdded = slot.Add(item, amount);
+            var notAdded = this.slots[index].Add(item, amount);
             if (notAdded < amount)
                 this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
 
