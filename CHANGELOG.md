@@ -15,13 +15,19 @@
   * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
 
 ### LazyStackInventory\<T\>
-* 
+* New protected methods to `LazyStackInventory<T>`
+  * `CanAddItems(T item, int amount)` - Checks if an amount of an item can be added to the inventory.
 
 ## What's Changed
 
 ### Global (These changes applies to the whole project)
 * Project's c# version is now 7.3 to increase compatibility.
 * Exception messages are normalized now.
+* Inventories' classes are now divided in four files with the following organization:
+  * `Add` 
+  * `Replace`
+  * `Move`
+  * The default file has no extra extension and contains the main class declaration
 
 ### Inventory\<T\>
 * `Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
@@ -55,9 +61,11 @@
 
 ### LazyStackInventory\<T\>
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
-  * `Add(T item, int amount = 1)`
-  * `AddAt(T item, int index, int amount = 1)`
-
+  * `Add(T item, int amount = 1)` - When the container is full or there is no available slots to add the item
+  * `AddAt(T item, int index, int amount = 1)` - When the slot is full or the item is different from the slot's content
+#### LazyInventoryStackSlot\<T\>
+* 
+ 
 ## What's Fixed
 * 
 
