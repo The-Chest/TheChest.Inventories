@@ -30,9 +30,6 @@ namespace TheChest.Inventories.Containers
             for (int index = 0; index < this.Size; index++)
             {
                 var slot = this.slots[index];
-                if (!slot.Contains(item) || slot.IsFull)
-                    continue;
-
                 var addAmount = Math.Min(totalAmount, slot.AvailableAmount);
 
                 if (!slot.CanAdd(item, addAmount))
