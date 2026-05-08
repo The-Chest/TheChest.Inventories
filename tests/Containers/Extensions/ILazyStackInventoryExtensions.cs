@@ -2,7 +2,7 @@
 
 namespace TheChest.Inventories.Tests.Containers.Extensions
 {
-    internal static class ILazyStackContainerExtensions
+    internal static class ILazyStackInventoryExtensions
     {
         internal static void Remove<T>(this ILazyStackInventory<T> inventory, int amount, Random? random = null)
         {

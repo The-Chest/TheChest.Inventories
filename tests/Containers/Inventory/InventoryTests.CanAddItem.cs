@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(
                 () => inventory.CanAdd(item: default!),
-                Throws.ArgumentNullException.With.Message.EqualTo("Value cannot be null. (Parameter 'item')")
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
     }

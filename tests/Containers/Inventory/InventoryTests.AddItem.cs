@@ -14,9 +14,53 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var inventory = this.inventoryFactory.EmptyContainer();
             Assert.That(
                 () => inventory.Add(item: default!),
-                Throws.ArgumentNullException
-                    .With.Message.EqualTo("Value cannot be null. (Parameter 'item')")
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
+        }
+
+        [Test]
+        public void AddItem_FullInventory_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var items = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, items);
+
+            var item = this.itemFactory.CreateRandom();
+            Assert.That(
+                () => inventory.Add(item), 
+                Throws.InvalidOperationException.With.Message.EqualTo("The inventory is full")
+            );
+        }
+
+        [Test]
+        public void AddItem_FullInventory_DoesNotAddItem()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var items = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, items);
+
+            var item = this.itemFactory.CreateRandom();
+            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
+
+            Assert.That(
+                inventory.GetSlots(),
+                Is.All.Matches<IInventorySlot<T>>(
+                    x => x.IsFull && !x.GetContent()!.Equals(item)
+                )
+            );
+        }
+
+        [Test]
+        public void AddItem_FullInventory_DoesNotCallOnAddEvent()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var items = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, items);
+
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
+
+            var item = this.itemFactory.CreateRandom();
+            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -79,49 +123,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 Assert.That(firstAvailableSlot.IsEmpty, Is.False);
                 Assert.That(firstAvailableSlot.GetContent(), Is.EqualTo(item));
             });
-        }
-
-        [Test]
-        public void AddItem_FullInventory_ThrowsInvalidOperationException()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var items = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, items);
-
-            var item = this.itemFactory.CreateRandom();
-
-            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
-        }
-
-        [Test]
-        public void AddItem_FullInventory_DoesNotAddItem()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var items = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, items);
-
-            var item = this.itemFactory.CreateRandom();
-            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
-
-            Assert.That(
-                inventory.GetSlots(), 
-                Is.All.Matches<IInventorySlot<T>>(
-                    x => x.IsFull && !x.GetContent()!.Equals(item)
-                )
-            );
-        }
-
-        [Test]
-        public void AddItem_FullInventory_DoesNotCallOnAddEvent()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var items = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, items);
-
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called if inventory is full");
-            
-            var item = this.itemFactory.CreateRandom();
-            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
         }
     }
 }

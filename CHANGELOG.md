@@ -85,6 +85,7 @@
     * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
+* Interface unti tests will be removed when 
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases

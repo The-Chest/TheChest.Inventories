@@ -46,7 +46,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             Assert.That(
                 () => inventory.Add(items),
-                Throws.ArgumentNullException.With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
+                Throws.ArgumentNullException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
             );
         }
 
@@ -58,7 +60,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             Assert.That(
                 () => inventory.Add(new T[10]), 
-                Throws.ArgumentNullException.With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
+                Throws.ArgumentNullException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
             );
         }
 
@@ -75,8 +79,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var manyAdded = this.itemFactory.CreateManyRandom(addSize);
             Assert.That(
                 () => inventory.Add(manyAdded),
-                Throws.InvalidOperationException.
-                    With.Message.EqualTo("There are not enough free slots to add all the items.")
+                Throws.InvalidOperationException.With.Message.EqualTo("There are not enough free slots to add all the items.")
             );
         }
 
