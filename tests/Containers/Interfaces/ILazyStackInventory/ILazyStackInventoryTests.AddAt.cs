@@ -16,7 +16,7 @@
         }
 
         [Test]
-        public void AddAt_SlotWithDifferentItem_ReturnsNotAddedAmount()
+        public void AddAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -25,13 +25,12 @@
 
             var item = this.itemFactory.CreateDefault();
             var randomIndex = this.random.Next(0, size);
-            var result = inventory.AddAt(item, randomIndex, stackSize);
 
-            Assert.That(result, Is.EqualTo(stackSize));
+            Assert.Throws<InvalidOperationException>(() => inventory.AddAt(item, randomIndex, 1));
         }
 
         [Test]
-        public void AddAt_AmountBiggerThanSlotSize_ReturnsAmount()
+        public void AddAt_AmountBiggerThanSlotSize_ThrowsArgumentOutOfRangeException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -40,9 +39,8 @@
             var item = this.itemFactory.CreateDefault();
             var randomIndex = this.random.Next(0, size);
             var amount = this.random.Next(1, 10) + stackSize;
-            var notAddedCount = inventory.AddAt(item, randomIndex, amount);
 
-            Assert.That(notAddedCount, Is.EqualTo(amount));
+            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.AddAt(item, randomIndex, amount));
         }
     }
 }

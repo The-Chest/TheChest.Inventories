@@ -84,7 +84,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_FullInventory_DoesNotAddsToInventory()
+        public void Add_FullInventory_ThrowsInvalidOperationExceptionAndDoesNotAdd()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -92,16 +92,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, items);
 
             var item = this.itemFactory.CreateDefault();
-            inventory.Add(item);
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetSlots(), 
-                    Has.All.Matches<ILazyStackSlot<T>>(
-                        slot => slot.IsFull && !item!.Equals(slot.GetContent())
-                    )
-                );
-            });
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item));
         }
 
         [Test]
@@ -115,7 +107,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when inventory is full.");
             
             var item = this.itemFactory.CreateDefault();
-            inventory.Add(item);
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item));
         }
     }
 }

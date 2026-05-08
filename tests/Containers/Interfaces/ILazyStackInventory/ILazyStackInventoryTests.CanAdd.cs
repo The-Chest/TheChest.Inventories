@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers.Interfaces
+﻿using TheChest.Inventories.Tests.Containers.Extensions;
+
+namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
     public partial class ILazyStackInventoryTests<T>
     {
@@ -32,7 +34,7 @@
         }
 
         [Test]
-        public void CanAdd_PartiallyFilledInventoryWithSpace_ReturnsTrue()
+        public void CanAdd_InventoryPartiallyFilledWithDifferentItem_ReturnsTrue()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -47,7 +49,7 @@
         }
 
         [Test]
-        public void CanAdd_PartiallyFilledInventoryWithoutSpace_ReturnsFalse()
+        public void CanAdd_InventoryFilledWithDifferentItems_ReturnsFalse()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -62,7 +64,7 @@
         }
 
         [Test]
-        public void CanAdd_InventoryWithSameItemWithSpace_ReturnsTrue()
+        public void CanAdd_InventoryContainingSameItemAndEnoughSpace_ReturnsTrue()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -77,6 +79,21 @@
             var canAdd = inventory.CanAdd(item, amount);
 
             Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        public void CanAdd_InventoryWithSameItemAndNoEnoughSpace_ReturnsFalse()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, this.itemFactory.CreateDefault());
+            inventory.Remove(stackSize, this.random);
+
+            var item = this.itemFactory.CreateDefault();
+            var addAmount = stackSize + this.random.Next(1, stackSize);
+            var canAdd = inventory.CanAdd(item, addAmount);
+
+            Assert.That(canAdd, Is.False);
         }
     }
 }

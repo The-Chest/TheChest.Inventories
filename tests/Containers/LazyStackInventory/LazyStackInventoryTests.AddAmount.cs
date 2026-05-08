@@ -27,6 +27,20 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void Add_WithAmount_FullInventory_ThrowsInvalidOperationExceptionAndDoesNotAdd()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
+
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(1, stackSize);
+
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item, amount));
+        }
+
+        [Test]
         public void Add_WithAmount_EmptyInventory_AddsToFirstAvilableSlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -86,7 +100,8 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, stackSize);
-            inventory.Add(item, amount);
+
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item, amount));
         }
 
         [Test]
@@ -99,7 +114,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, stackSize);
-            inventory.Add(item, amount);
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item, amount));
 
             Assert.Multiple(() =>
             {
@@ -146,23 +161,21 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var randomItems = this.itemFactory.CreateManyRandom(size - 1);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+            var randomItem = this.itemFactory.CreateManyRandom(size - 1);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItem);
 
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
             inventory.Add(item, amount);
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetSlots(),
-                    Has.One.Matches<ILazyStackSlot<T>>(
-                        slot =>
-                            item!.Equals(slot.GetContent()) &&
-                            slot.Amount == amount - (amount - stackSize)
-                    )
-                );
-            });
+            Assert.That(
+                inventory.GetSlots(),
+                Has.One.Matches<ILazyStackSlot<T>>(
+                    slot =>
+                        item!.Equals(slot.GetContent()) &&
+                        slot.IsFull
+                )
+            );
         }
     }
 }

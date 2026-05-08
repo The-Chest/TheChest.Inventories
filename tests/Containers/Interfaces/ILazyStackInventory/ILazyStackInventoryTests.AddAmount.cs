@@ -15,7 +15,7 @@
         }
 
         [Test]
-        public void Add_WithAmount_FullInventory_ReturnsRemainingAmount()
+        public void Add_WithAmount_FullInventory_ThrowsInvalidOperationException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -24,9 +24,8 @@
 
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, 5);
-            var result = inventory.Add(item, amount);
 
-            Assert.That(result, Is.EqualTo(amount));
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item, amount));
         }
 
         [Test]
