@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to evaluate for addition to the inventory.</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> can be added; otherwise, false.</returns>
-        [Obsolete("Use CanAddAt(params T[]) instead to check if the item can be added.")]
+        [Obsolete("Use CanAdd(params T[]) instead. This method will be removed in future versions.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot.
@@ -81,6 +81,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added</returns>
+        [Obsolete("Use Add(params T[]) instead. This method will be removed in future versions.")]
         bool Add(T item);
         /// <summary>
         /// Adds and array of items in a avaliable slot

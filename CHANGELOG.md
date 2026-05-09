@@ -65,6 +65,8 @@
   * `AddAt(T item, int index, int amount = 1)` - When the slot is full or the item is different from the slot's content
 #### LazyInventoryStackSlot\<T\>
 * 
+* Some methods are now Obsolete and are going to be removed in the future
+  * `CanAdd(T item)` -> Use `CanAdd(T item, int amount)` instead
  
 ## What's Fixed
 * 

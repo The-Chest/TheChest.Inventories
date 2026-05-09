@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Containers.Interfaces;
+﻿using System;
+using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -63,6 +64,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>returns true if the item could be added</returns>
+        [Obsolete("Use Add(T item, int amount) instead. This method will be removed in future versions.")]
         bool Add(T item);
         #endregion
 
