@@ -63,13 +63,10 @@
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item, int amount = 1)` - When the container is full or there is no available slots to add the item
   * `AddAt(T item, int index, int amount = 1)` - When the slot is full or the item is different from the slot's content
-#### LazyInventoryStackSlot\<T\>
-* 
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(T item, int amount)` instead
- 
-## What's Fixed
-* 
+#### LazyInventoryStackSlot\<T\>
+* `Add(T item, int amount = 1)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
 
 ## What's Removed
 * `AvailableAmount` property from `IInventoryStackSlot<T>` and `IInventoryLazyStackSlot<T>` (it belongs now to `IStackSlot<T>` and `ILazyStackSlot<T>`)
