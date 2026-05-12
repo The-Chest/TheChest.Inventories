@@ -51,7 +51,7 @@ namespace TheChest.Inventories.Slots
                 return (T)(object)null;
 
             var content = this.Content;
-            this.Content = (T)(object)null;
+            this.Content = default;
             return content;    
         }
 
