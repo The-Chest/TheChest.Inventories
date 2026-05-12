@@ -75,10 +75,11 @@
 
 ## What's Removed
 * `AvailableAmount` property from `IInventoryStackSlot<T>` and `IInventoryLazyStackSlot<T>` (it belongs now to `IStackSlot<T>` and `ILazyStackSlot<T>`)
+* Extra validations from `Inventory<T>.Replace` and `InventorySlot<T>.Add` usage when `Content` is null
 
 ## Known Issues
+* **No support for structs or value types** 
 * The Current Architecture is not stable for the final version yet
-* No support for structs or value types 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 * `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters

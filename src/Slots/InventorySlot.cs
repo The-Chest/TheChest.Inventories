@@ -65,6 +65,7 @@ namespace TheChest.Inventories.Slots
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            
             if (this.IsEmpty)
             {
                 this.Content = item;

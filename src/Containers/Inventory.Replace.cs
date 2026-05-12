@@ -32,20 +32,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var slot = this.slots[index];
-            if (slot.IsEmpty)
-            {
-                var added = slot.Add(item);
-                if (added)
-                {
-                    this.OnReplace?.Invoke(this, (index, default, item));
-                    return default;
-                }
-
-                return item;
-            }
-
-            var oldItem = slot.Replace(item);
+            var oldItem = this.slots[index].Replace(item);
             this.OnReplace?.Invoke(this, (index, oldItem, item));
 
             return oldItem;
