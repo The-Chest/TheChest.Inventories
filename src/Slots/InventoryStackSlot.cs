@@ -209,7 +209,7 @@ namespace TheChest.Inventories.Slots
             return this.GetItems(this.Amount);
         }
         /// <summary>
-        /// Gets an removes amount of items from slot.
+        /// Gets and removes amount of items from slot.
         /// If is bigger than <see cref="IStackSlot{T}.Amount"/> it returns the maximum amount possible.
         /// </summary>
         /// <param name="amount">Amount of items to get from slot</param>
@@ -259,8 +259,8 @@ namespace TheChest.Inventories.Slots
             return true;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> size is zero or bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
-        /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
+        /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> is bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
         /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
         public virtual T[] Replace(T[] items)
         {

@@ -1,6 +1,4 @@
-﻿using TheChest.Tests.Common.Attributes;
-
-namespace TheChest.Inventories.Tests.Containers.Inventory
+﻿namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
