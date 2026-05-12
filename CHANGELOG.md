@@ -6,22 +6,22 @@
 
 ### Inventory\<T\>
 * New protected methods to `Inventory<T>`
-  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
-  * `AddItems` - Adds an array of items to the inventory.
+  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory
+  * `AddItems` - Adds an array of items to the inventory
 * New empty constructor to `InventorySlot<T>`
 
 ### StackInventory\<T\>
 * New protected methods to `StackInventory<T>`
-  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory.
+  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory
 
 ### LazyStackInventory\<T\>
 * New protected methods to `LazyStackInventory<T>`
-  * `CanAddItems(T item, int amount)` - Checks if an amount of an item can be added to the inventory.
+  * `CanAddItems(T item, int amount)` - Checks if an amount of an item can be added to the inventory
 
 ## What's Changed
 
 ### Global (These changes applies to the whole project)
-* Project's c# version is now 7.3 to increase compatibility.
+* Project's c# version is now 7.3 to increase compatibility
 * Exception messages are normalized now.
 * Inventories' classes are now divided in four files with the following organization:
   * `Add` 
@@ -34,13 +34,15 @@
 * The Action methods in now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item)`- When the container is full
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
-  * `AddAt(T item, int index)` - When the slot is full
+  * `AddAt(T item, int index)` - When the selected slot rejects the item
+  * `Replace(T item, int index)` now uses `Add()` when replacing an empty slot.
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+  * `Add(T item)` -> Use `Add(params T[] items)` instead
 
 #### InventorySlot\<T\>
-* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full.
-* `Replace(T item)` now throws `ArgumentNullException` when the param `item` is null.
+* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full
+* `Replace(T item)` now throws `ArgumentNullException` when the param `item` is null
 
 ### StackInventory\<T\>
 * Validation methods now have extra validations
@@ -54,6 +56,7 @@
   * `AddAt(T[] items, int index)` - When the slot is full or the items are different from the slot's content
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+  * `Add(T item)` -> Use `Add(params T[] items)` instead
 
 #### InventoryStackSlot\<T\>
 * `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
@@ -65,6 +68,8 @@
   * `AddAt(T item, int index, int amount = 1)` - When the slot is full or the item is different from the slot's content
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(T item, int amount)` instead
+  * `Add(T item)` -> Use `Add(T item, int amount)` instead.
+
 #### LazyInventoryStackSlot\<T\>
 * `Add(T item, int amount = 1)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
 
@@ -84,7 +89,7 @@
     * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
-* Interface unti tests will be removed when 
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
