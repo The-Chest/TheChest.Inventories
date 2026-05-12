@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Slots.Interfaces;
+﻿using System;
+using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots.Interfaces
 {
@@ -13,10 +14,14 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="item">item to be checked to add</param>
         /// <returns><see langword="true"/> if is possible to add the item</returns>
+        [Obsolete("Use CanAdd(T[]) instead. This method will be removed in future versions.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if is possible to add an array of items to the slot
         /// </summary>
+        /// <remarks>
+        /// This method contract will change to have params instead of array in the future, but for now it will be an array for compatibility reasons.
+        /// </remarks>
         /// <param name="items">items to be checked to add</param>
         /// <returns><see langword="true"/> if is possible to add <paramref name="items"/></returns>
         bool CanAdd(T[] items);
@@ -25,10 +30,14 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="item">The item to be added</param>
         /// <returns><see langword="true"/> if the value is successful added</returns>
+        [Obsolete("Use Add(T[]) instead. This method will be removed in future versions.")]
         bool Add(T item);
         /// <summary>
         /// Adds an array of items to the slot.
         /// </summary>
+        /// <remarks>
+        /// This method contract will change to have params instead of array in the future, but for now it will be an array for compatibility reasons.
+        /// </remarks>
         /// <param name="items">items to be added to the slot</param>
         /// <returns>The items that were not added to the slot</returns>
         T[] Add(T[] items);
@@ -38,6 +47,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="item">item to be checked if is possible to replace</param>
         /// <returns>returns <see langword="true"/> if is possible to replace</returns>
+        [Obsolete("Use CanReplace(T[]) instead. This method will be removed in future versions.")]
         bool CanReplace(T item);
         /// <summary>
         /// Checks if is possible to replace an array of items
@@ -46,17 +56,21 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <returns><see langword="true"/> if is possible to replace</returns>
         bool CanReplace(T[] items);
         /// <summary>
-        /// Replaces the items from the slot to <paramref name="items"/>
-        /// </summary>
-        /// <param name="items">items that will replace items from slots</param>
-        /// <returns>old items from the slot if the replacement is possible</returns>
-        T[] Replace(T[] items);
-        /// <summary>
         /// Replaces the items from the slot to one <paramref name="item"/>
         /// </summary>
         /// <param name="item">The item that will replace items from slots</param>
         /// <returns>the old items from the slot</returns>
+        [Obsolete("Use Replace(T[]) instead. This method will be removed in future versions.")]
         T[] Replace(T item);
+        /// <summary>
+        /// Replaces the items from the slot to <paramref name="items"/>
+        /// </summary>
+        /// <remarks>
+        /// This method contract will change to have params instead of array in the future, but for now it will be an array for compatibility reasons.
+        /// </remarks>
+        /// <param name="items">items that will replace items from slots</param>
+        /// <returns>old items from the slot if the replacement is possible</returns>
+        T[] Replace(T[] items);
 
         /// <summary>
         /// Gets a single item from the slot

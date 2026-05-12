@@ -35,7 +35,6 @@
   * `Add(T item)`- When the container is full
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
   * `AddAt(T item, int index)` - When the selected slot rejects the item
-  * `Replace(T item, int index)` now uses `Add()` when replacing an empty slot.
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
   * `Add(T item)` -> Use `Add(params T[] items)` instead
@@ -59,8 +58,14 @@
   * `Add(T item)` -> Use `Add(params T[] items)` instead
 
 #### InventoryStackSlot\<T\>
-* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
-* `Add(T[] items)` now throws `InvalidOperationException` when the param `items` is valid but the slot is full or the items are different from the slot's content.`
+* Changes in some methods
+  * `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
+  * `Add(T[] items)` now throws `InvalidOperationException` when the param `items` is valid but the slot is full or the items are different from the slot's content.
+* Obsolete methods
+  * `CanAdd(T item)` -> Use `CanAdd(T[] items)` instead
+  * `Add(T item)` -> Use `Add(T[] items)` instead
+  * `CanReplace(T item)` -> Use `CanReplace(T[] items)` instead
+  * `Replace(T item)` -> Use `Replace(T[] items)` instead
 
 ### LazyStackInventory\<T\>
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.

@@ -243,18 +243,10 @@ namespace TheChest.Inventories.Slots
         {
             if (items.Length == 0)
                 return false;
+            if (items.HasAllEqualAndNoNull())
+                return false;
             if (items.Length > this.MaxAmount)
                 return false;
-
-            var firstItem = items[0];
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (!this.CanReplace(items[i]))
-                    return false;
-
-                if (!firstItem.Equals(items[i]))
-                    return false;
-            }
 
             return true;
         }

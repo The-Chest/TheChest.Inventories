@@ -21,11 +21,11 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
+
             if (items.Length == 0)
                 return false;
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
-            if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (items.HasAllEqualAndNoNull())
+                return false;
 
             return this.slots[index].CanReplace(items);
         }
