@@ -84,6 +84,10 @@
 		</None>
 	</ItemGroup>
 	
+	<ItemGroup Label="Testing">
+		<InternalsVisibleTo Include="TheChest.Inventories.Tests" />
+	</ItemGroup>
+
 	<ItemGroup Label="Dependencies">
 		<PackageReference Include="TheChest.Core" Version="0.17.4" />
 	</ItemGroup>

@@ -1,4 +1,5 @@
-﻿using TheChest.Core.Containers.Interfaces;
+﻿using System;
+using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events.Stack;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -67,25 +68,27 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to evaluate to add to the inventory.</param>
         /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        [Obsolete("Use CanAddAt(params T[]) instead. This method will be removed in future versions.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot on inventory.
         /// </summary>
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
-        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if ALL <paramref name="items"/> can be added; otherwise, <see langword="false"/>.</returns>
         bool CanAdd(params T[] items);
 
         /// <summary>
         /// Adds and array of item in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <returns></returns>
+        /// <returns>An array of items that couldn't be added to the inventory; otherwise, an empty array.</returns>
         T[] Add(params T[] items);
         /// <summary>
         /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
-        /// <returns>true if is possible to add <paramref name="item"/></returns>
+        /// <returns><see langword="true"/> if is possible to add <paramref name="item"/></returns>
+        [Obsolete("Use Add(params T[]) instead. This method will be removed in future versions.")]
         bool Add(T item);
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="items">The items that will check to be replaced the slot on <paramref name="index"/></param>
         /// <param name="index">The index of the slot to be checked if can be replaced by <paramref name="items"/></param>
-        /// <returns>True if the <paramref name="items"/> can replace the slot on <paramref name="index"/>; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the <paramref name="items"/> can replace the slot on <paramref name="index"/>; otherwise, <see langword="false"/>.</returns>
         bool CanReplace(T[] items, int index);
         /// <summary>
         /// Replaces items in a specific slot
@@ -124,14 +127,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to evaluate for insertion at the specified index.</param>
         /// <param name="index">The zero-based index at which to check if the item can be added.</param>
-        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
         bool CanAddAt(T item, int index);
         /// <summary>
         /// Determines whether the specified items can be added at the given index.
         /// </summary>
         /// <param name="items">The array of items to evaluate for insertion</param>
         /// <param name="index">The zero-based index at which to check if the items can be added.</param>
-        /// <returns>true if all of the items can be added at the specified index; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if all of the items can be added at the specified index; otherwise, <see langword="false"/>.</returns>
         bool CanAddAt(T[] items, int index);
 
         /// <summary>
@@ -139,7 +142,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
-        /// <returns>True if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
         /// <summary>
         /// Adds an array of items inside the inventory
@@ -156,7 +159,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="origin">The zero-based index representing the items current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
-        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be moved to the target index; otherwise, <see langword="false"/>.</returns>
         bool CanMove(int origin, int target);
         /// <summary>
         /// Moves an item from one index to another in the inventory

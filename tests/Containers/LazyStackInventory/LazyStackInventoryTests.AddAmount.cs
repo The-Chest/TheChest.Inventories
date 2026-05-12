@@ -2,32 +2,92 @@
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
-using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
-        public void Add_WithAmount_NullItem_ThrowsArgumentNullException()
+        public void AddAmount_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
 
-            Assert.Throws<ArgumentNullException>(() => inventory.Add(item: default!, amount: 1));
+            Assert.That(
+                () => inventory.Add(item: default!, amount: 1),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [TestCase(0)]
         [TestCase(-1)]
-        public void Add_WithAmount_ZeroOrLessAmount_ThrowsArgumentOutOfRangeException(int amount)
+        public void AddAmount_ZeroOrLessAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Add(item, amount));
+            Assert.That(
+                () => inventory.Add(item, amount),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
         }
 
         [Test]
-        public void Add_WithAmount_EmptyInventory_AddsToFirstAvilableSlot()
+        public void AddAmount_FullInventory_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
+
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(1, stackSize);
+
+
+            Assert.That(
+                () => inventory.Add(item, amount),
+                Throws.InvalidOperationException.With.Message.EqualTo("The inventory is full")
+            );
+        }
+
+        [Test]
+        public void AddAmount_FullInventory_DoesNotCallOnAddEvent()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
+
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when inventory is full.");
+
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(1, stackSize);
+
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item, amount));
+        }
+
+        [Test]
+        public void AddAmount_FullInventory_DoesNotAddToInventory()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
+
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(1, stackSize);
+            Assert.Throws<InvalidOperationException>(() => inventory.Add(item, amount));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetSlots(),
+                    Has.All.Matches<ILazyStackSlot<T>>(
+                        slot => slot.IsFull && randomItem!.Equals(slot.GetContent())
+                    )
+                );
+            });
+        }
+
+        [Test]
+        public void AddAmount_EmptyInventory_AddsToFirstAvilableSlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -47,7 +107,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_WithAmount_EmptyInventory_CallsOnAddEvent()
+        public void AddAmount_EmptyInventory_CallsOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -75,44 +135,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_WithAmount_FullInventory_DoesNotCallOnAddEvent()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
-            
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when inventory is full.");
-            
-            var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, stackSize);
-            inventory.Add(item, amount);
-        }
-
-        [Test]
-        public void Add_WithAmount_FullInventory_DoesNotAddToInventory()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var randomItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
-
-            var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, stackSize);
-            inventory.Add(item, amount);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetSlots(),
-                    Has.All.Matches<ILazyStackSlot<T>>(
-                        slot => slot.IsFull && randomItem!.Equals(slot.GetContent())
-                    )
-                );
-            });
-        }
-
-        [Test]
-        public void Add_WithAmount_NotAllItemsBeAdded_CallsOnAddEvent()
+        public void AddAmount_NotAllItemsBeAdded_CallsOnAddEvent()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -142,27 +165,25 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Add_WithAmount_NotAllItemsBeAdded_AddsToFirstAvailableSlot()
+        public void AddAmount_NotAllItemsBeAdded_AddsToFirstAvailableSlot()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var randomItems = this.itemFactory.CreateManyRandom(size - 1);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+            var randomItem = this.itemFactory.CreateManyRandom(size - 1);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItem);
 
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
             inventory.Add(item, amount);
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetSlots(),
-                    Has.One.Matches<ILazyStackSlot<T>>(
-                        slot =>
-                            item!.Equals(slot.GetContent()) &&
-                            slot.Amount == amount - (amount - stackSize)
-                    )
-                );
-            });
+            Assert.That(
+                inventory.GetSlots(),
+                Has.One.Matches<ILazyStackSlot<T>>(
+                    slot =>
+                        item!.Equals(slot.GetContent()) &&
+                        slot.IsFull
+                )
+            );
         }
     }
 }

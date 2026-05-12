@@ -14,5 +14,26 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             Assert.That(slot.GetContent(), Is.Null);
         }
+
+        [Test]
+        public void GetOne_FullSlot_ReturnsExistingItem()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Full(item);
+
+            var result = slot.Get();
+
+            Assert.That(result, Is.EqualTo(item));
+        }
+
+        [Test]
+        public void GetOne_EmptySlot_ReturnsNull()
+        {
+            var slot = this.slotFactory.Empty();
+
+            var result = slot.Get();
+
+            Assert.That(result, Is.Null);
+        }
     }
 }

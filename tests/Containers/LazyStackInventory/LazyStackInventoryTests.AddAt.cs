@@ -1,46 +1,190 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
-using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void AddAt_NullItem_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var index = this.random.Next(0, size);
-            Assert.Throws<ArgumentNullException>(() => inventory.AddAt(default!, index, 1));
+            var inventory = this.inventoryFactory.EmptyContainer();
+            Assert.That(
+                () => inventory.AddAt(default!, 0, 1),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [TestCase(0)]
         [TestCase(-1)]
-        public void AddAt_ZeroOrNegativeAmount_ThrowsArgumentOutOfRangeException(int amount)
+        public void AddAt_ZeroOrLessAmount_ThrowsArgumentOutOfRangeException(int amount)
+        {
+            var inventory = this.inventoryFactory.EmptyContainer();
+            var item = this.itemFactory.CreateDefault();
+
+            Assert.That(
+                () => inventory.AddAt(item, 0, amount),
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
+        }
+
+        [Test]
+        public void AddAt_AmountBiggerThanSlotSize_ThrowsArgumentOutOfRangeException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var index = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.AddAt(item, index, amount));
+            var randomIndex = this.random.Next(0, size);
+            var amount = this.random.Next(1, 10) + stackSize;
+
+            Assert.That(
+                () => inventory.AddAt(item, randomIndex, amount),
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
         }
 
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST + 1)]
-        public void AddAt_ThrowsArgumentOutOfRangeException_WhenIndexIsInvalid(int index)
+        public void AddAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateDefault();
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.AddAt(item, index, 1));
+            Assert.That(
+                () => inventory.AddAt(item, index, 1),
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
+            );
+        }
+
+        [Test]
+        public void AddAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+
+            var item = this.itemFactory.CreateDefault();
+            var randomIndex = this.random.Next(0, size);
+
+            Assert.That(
+                () => inventory.AddAt(item, randomIndex, 1),
+                Throws.Exception.TypeOf<InvalidOperationException>().With.Message.EqualTo("Cannot add items that are different from the items already in the slot")
+            );
+        }
+
+        [Test]
+        public void AddAt_SlotWithDifferentItem_DoesNotAddItem()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+
+            var item = this.itemFactory.CreateDefault();
+            var randomIndex = this.random.Next(0, size);
+            var originalSlot = inventory.GetSlot(randomIndex);
+            var originalContent = originalSlot.GetContent();
+            var originalAmount = originalSlot.Amount;
+
+            Assert.That(
+                () => inventory.AddAt(item, randomIndex, 1),
+                Throws.Exception.TypeOf<InvalidOperationException>()
+            );
+
+            Assert.Multiple(() =>
+            {
+                var slot = inventory.GetSlot(randomIndex);
+                Assert.That(slot.GetContent(), Is.EqualTo(originalContent));
+                Assert.That(slot.Amount, Is.EqualTo(originalAmount));
+            });
+        }
+
+        [Test]
+        public void AddAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var randomItems = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when adding an item to a slot with a different item.");
+
+            var item = this.itemFactory.CreateDefault();
+            var randomIndex = this.random.Next(0, size);
+            Assert.That(
+                () => inventory.AddAt(item, randomIndex, 1),
+                Throws.Exception.TypeOf<InvalidOperationException>()
+            );
+        }
+
+        [Test]
+        public void AddAt_AmountBiggerThanAvailableAmount_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, item);
+
+            var index = Array.FindIndex(inventory.GetSlots(), slot => item!.Equals(slot.GetContent()));
+            var amount = stackSize;
+
+            Assert.That(
+                () => inventory.AddAt(item, index, amount),
+                Throws.Exception.TypeOf<InvalidOperationException>().With.Message.EqualTo("Cannot add more items than the available amount")
+            );
+        }
+
+        [Test]
+        public void AddAt_AmountBiggerThanAvailableAmount_DoesNotAddItem()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, item);
+            
+            var randomIndex = Array.FindIndex(
+                inventory.GetSlots(), 
+                slot => item!.Equals(slot.GetContent())
+            );
+            var originalSlot = inventory.GetSlot(randomIndex);
+            var originalAmount = originalSlot.Amount;
+            var amount = stackSize;
+            
+            Assert.That(
+                () => inventory.AddAt(item, randomIndex, amount),
+                Throws.Exception.TypeOf<InvalidOperationException>()
+            );
+
+            Assert.Multiple(() =>
+            {
+                var slot = inventory.GetSlot(randomIndex);
+                Assert.That(slot.Amount, Is.EqualTo(originalAmount));
+            });
+        }
+
+        [Test]
+        public void AddAt_AmountBiggerThanAvailableAmount_DoesNotCallOnAddEvent()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, item);
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when adding more items than the available amount.");
+            
+            var randomIndex = Array.FindIndex(
+                inventory.GetSlots(), 
+                slot => item!.Equals(slot.GetContent())
+            );
+            var amount = stackSize;
+            Assert.That(
+                () => inventory.AddAt(item, randomIndex, amount),
+                Throws.Exception.TypeOf<InvalidOperationException>()
+            );
         }
 
         [Test]
@@ -88,71 +232,6 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             inventory.AddAt(item, index, stackSize);
 
             Assert.That(raised, Is.True, "OnAdd event was not raised");
-        }
-
-        [Test]
-        public void AddAt_AmountBiggerThanSlotSize_DoesntAddItems()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var item = this.itemFactory.CreateDefault();
-
-            var randomIndex = this.random.Next(0, size);
-            var amount = this.random.Next(1, 10) + stackSize;
-            inventory.AddAt(item, randomIndex, amount);
-
-            Assert.Multiple(() =>
-            {
-                var slot = inventory.GetSlot(randomIndex);
-                Assert.That(slot.GetContent(), Is.Not.EqualTo(item));
-                Assert.That(slot.IsEmpty, Is.True);
-            });
-        }
-
-        [Test]
-        public void AddAt_AmountBiggerThanSlotSize_DoesntCallsOnAddEvent()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var item = this.itemFactory.CreateDefault();
-
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called.");
-
-            var randomIndex = this.random.Next(0, size);
-            var amount = this.random.Next(1, 10) + stackSize;
-            inventory.AddAt(item, randomIndex, amount);
-        }
-
-        [Test]
-        public void AddAt_SlotWithDifferentItem_DoesNotAddItems()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var randomItems = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
-
-            var item = this.itemFactory.CreateDefault();
-            var randomIndex = this.random.Next(0, size);
-            inventory.AddAt(item, randomIndex, stackSize);
-
-            Assert.That(inventory.GetItems(randomIndex), Has.None.EqualTo(item));
-        }
-
-        [Test]
-        public void AddAt_SlotWithDifferentItem_DoesNotCallOnAddEvent()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var randomItems = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
-
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd event should not be called when adding to a slot with a different item.");
-            
-            var item = this.itemFactory.CreateDefault();
-            var randomIndex = this.random.Next(0, size);
-            inventory.AddAt(item, randomIndex, stackSize);
         }
     }
 }

@@ -1,22 +1,95 @@
 # v0.16.0
 
+> This Changelog is going to be separated into subsections for each Inventory Type to make it more organized
+
 ## What's Added
-*
+
+### Inventory\<T\>
+* New protected methods to `Inventory<T>`
+  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory
+  * `AddItems` - Adds an array of items to the inventory
+* New empty constructor to `InventorySlot<T>`
+
+### StackInventory\<T\>
+* New protected methods to `StackInventory<T>`
+  * `CanAddItems(T[] items)` - Checks if an array of items can be added to the inventory
+
+### LazyStackInventory\<T\>
+* New protected methods to `LazyStackInventory<T>`
+  * `CanAddItems(T item, int amount)` - Checks if an amount of an item can be added to the inventory
 
 ## What's Changed
-* Project's c# version is now 7.3 to increase compatibility.
+
+### Global (These changes applies to the whole project)
+* Project's c# version is now 7.3 to increase compatibility
+* Exception messages are normalized now.
+* Inventories' classes are now divided in four files with the following organization:
+  * `Add` 
+  * `Replace`
+  * `Move`
+  * The default file has no extra extension and contains the main class declaration
+
+### Inventory\<T\>
+* `Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
+* The Action methods in now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item)`- When the container is full
+  * `Add(T[] items)` - When the container is full or there is no available slots to add the items
+  * `AddAt(T item, int index)` - When the selected slot rejects the item
+  * `Replace(T item, int index)` now uses `Add()` when replacing an empty slot.
+* Some methods are now Obsolete and are going to be removed in the future
+  * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+  * `Add(T item)` -> Use `Add(params T[] items)` instead
+
+#### InventorySlot\<T\>
+* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full
+* `Replace(T item)` now throws `ArgumentNullException` when the param `item` is null
+
+### StackInventory\<T\>
+* Validation methods now have extra validations
+  * `CanAdd(T item)` - Checks if the Inventory is full or if there is no available slot to add the item
+  * `CanAdd(T[] items)` - Check if it is possible to add all the items in the array to the inventory
+  * `CanAddAt(T[] items, int index)` - Checks if the param `items` is empty
+* The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item)` - When the container is full or there is no available slots to add the item
+  * `Add(T[] items)` - When the container is full or there is no available slots to add the items
+  * `AddAt(T item, int index)` - When the slot is full or the item is different from the slot's content
+  * `AddAt(T[] items, int index)` - When the slot is full or the items are different from the slot's content
+* Some methods are now Obsolete and are going to be removed in the future
+  * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
+  * `Add(T item)` -> Use `Add(params T[] items)` instead
+
+#### InventoryStackSlot\<T\>
+* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
+* `Add(T[] items)` now throws `InvalidOperationException` when the param `items` is valid but the slot is full or the items are different from the slot's content.`
+
+### LazyStackInventory\<T\>
+* The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item, int amount = 1)` - When the container is full or there is no available slots to add the item
+  * `AddAt(T item, int index, int amount = 1)` - When the slot is full or the item is different from the slot's content
+* Some methods are now Obsolete and are going to be removed in the future
+  * `CanAdd(T item)` -> Use `CanAdd(T item, int amount)` instead
+  * `Add(T item)` -> Use `Add(T item, int amount)` instead.
+
+#### LazyInventoryStackSlot\<T\>
+* `Add(T item, int amount = 1)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
+
+## What's Removed
+* `AvailableAmount` property from `IInventoryStackSlot<T>` and `IInventoryLazyStackSlot<T>` (it belongs now to `IStackSlot<T>` and `ILazyStackSlot<T>`)
 
 ## Known Issues
 * The Current Architecture is not stable for the final version yet
 * No support for structs or value types 
-* `StackInventory<T>` class is too complex and needs some refactors 
-* Inventory classes have too many methods
-  * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
-  * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 * `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
-* Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+* Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
@@ -24,6 +97,7 @@
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.15.0...v0.16.0
 
+---
 # v0.15.0
 
 ## What's Added
@@ -74,6 +148,7 @@
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
 
+---
 # v0.14.0
 
 ## What's added
@@ -143,6 +218,7 @@
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
 
+---
 # v0.13.0
 
 ## What's Changed
@@ -165,6 +241,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.4...v0.13.0
 
+---
 # v0.12.4
 
 ## What's Fixed
@@ -208,6 +285,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.2...v0.12.3
 
+---
 # v0.12.2
 
 ## What's Fixed
@@ -232,6 +310,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.1...v0.12.2
 
+---
 # v0.12.1
 
 ## What's Fixed
@@ -249,6 +328,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.12.0...v0.12.1
 
+---
 # v0.12.0
 
 ## What's Changed
@@ -265,6 +345,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.11.1...v0.12.0
 
+---
 # v0.11.1
 
 ## What's Changed
@@ -282,6 +363,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.11.0...v0.11.1
 
+---
 # v0.11.0
 
 ## What's Added
@@ -316,6 +398,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.10.1...v0.11.0
 
+---
 # v0.10.0
 
 ## What's Added
@@ -341,6 +424,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.9.0...v0.10.0
 
+---
 # v0.9.0
 
 ## What's Added
@@ -375,6 +459,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.8.1...v0.9.0
 
+---
 # v0.8.1
 
 ## What's Fixed
@@ -392,6 +477,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.8.0...v0.8.1
 
+---
 # v0.8.0
 
 ## What's Changed
@@ -406,6 +492,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.7.1...v0.8.0
 
+---
 # v0.7.1
 
 ## What's Added
@@ -426,9 +513,9 @@
 * [#38](https://github.com/The-Chest/TheChest.Inventories/issues/38) - Inventories doesn't have `Replace` methods
 * [#37](https://github.com/The-Chest/TheChest.Inventories/issues/37) - `InventoryLazyStackSlot.Replace` needs to receive an array of item instead of an item and the amount number
 
-
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.7.0...v0.7.1
 
+---
 # v0.7.0
 
 ## What's Added
@@ -466,6 +553,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.6.0...v0.7.0
 
+---
 # v0.6.0
 
 ## What's Changed
@@ -475,6 +563,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.5.0...v0.6.0
 
+---
 # v0.5.0
 
 ## What's Changed
@@ -498,6 +587,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.5...v0.5.0
 
+---
 # v0.4.5
 
 ## What's Changed
@@ -518,6 +608,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.4...v0.4.5
 
+---
 # v0.4.4
 
 ## What's Changed
@@ -532,6 +623,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.3...v0.4.4
 
+---
 # v0.4.3
 
 ## What's Changed
@@ -545,6 +637,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.2...v0.4.3
 
+---
 # v0.4.2
 
 ## What's Changed
@@ -559,6 +652,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.1...v0.4.2
 
+---
 # v0.4.1
 
 ## What's Changed
@@ -576,6 +670,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.4.0...v0.4.1
 
+---
 # v0.4.0
 
 ## What's Added
@@ -595,6 +690,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.3.0...v0.4.0
 
+---
 # v0.3.0
 
 ## What's Added
@@ -616,6 +712,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.2.0...v0.3.0
 
+---
 # v0.2.0
 
 ## What's Added
@@ -632,6 +729,7 @@
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.1.0...v0.2.0
 
+---
 # v0.1.0
 
 ## What's Added

@@ -12,20 +12,20 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Checks whether the specified item can be added to the collection.
         /// </summary>
         /// <param name="item">The item to be evaluated.</param>
-        /// <returns>true if the item can be added; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be added; otherwise, <see langword="false"/>.</returns>
         bool CanAdd(T item);
         /// <summary>
-        /// Adds the item in the current Slot if <see cref="ISlot{T}.IsFull"/> is false
+        /// Adds the item in the current Slot if <see cref="ISlot{T}.IsFull"/> is <see langword="false"/>
         /// </summary>
         /// <param name="item">The item to be added</param>
-        /// <returns>True if the value is successful added</returns>
+        /// <returns><see langword="true"/> if the value is successful added</returns>
         bool Add(T item);
 
         /// <summary>
         /// Checks whether the specified item can replace the content of the slot.
         /// </summary>
         /// <param name="item">The item to be evaluated.</param>
-        /// <returns>true if the item can be replaced; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be replaced; otherwise, <see langword="false"/>.</returns>
         bool CanReplace(T item);
         /// <summary>
         /// Replaces the content of slot to item

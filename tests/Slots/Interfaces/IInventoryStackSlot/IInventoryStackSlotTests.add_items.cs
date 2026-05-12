@@ -42,15 +42,13 @@
         }
 
         [Test]
-        public void Add_FullSlot_DoesNotIncreaseAmount()
+        public void Add_FullSlot_ThrowsInvalidOperationException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.Full(items);
             var item = this.itemFactory.CreateDefault();
-            slot.Add(item);
-
-            Assert.That(slot.Amount, Is.EqualTo(stackSize));
+            Assert.That(() => slot.Add(item), Throws.InvalidOperationException);
         }
     }
 }
