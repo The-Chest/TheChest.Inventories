@@ -1,10 +1,10 @@
-using TheChest.Tests.Common.Attributes;
-﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
+using TheChest.Tests.Common.Extensions;
+
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void CanReplace_NullItems_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -15,24 +15,6 @@ using TheChest.Tests.Common.Attributes;
             var randomIndex = this.random.Next(0, size);
 
             Assert.That(() => inventory.CanReplace(null!, randomIndex), Throws.ArgumentNullException);
-        }
-
-        [Test]
-        [IgnoreIfValueType]
-        public void CanReplace_ItemsContainingNull_ThrowsArgumentNullException()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-
-            var index = this.random.Next(0, size);
-            var items = this.itemFactory
-                .CreateManyRandom(stackSize)
-                .Append(default)
-                .ToArray();
-            
-            Assert.That(() => inventory.CanReplace(items!, index), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -62,6 +44,26 @@ using TheChest.Tests.Common.Attributes;
                 Throws.InvalidOperationException
                     .With.Message.EqualTo("The max stack size is smaller than the number of items to replace.")
             );
+        }
+
+        [Test]
+        public void CanReplace_ItemsContainingNull_ReturnsFalse()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var index = this.random.Next(0, size);
+            var items = this.itemFactory
+                .CreateManyRandom(stackSize)
+                .Append(default)
+                .ToArray();
+            items.Shuffle();
+
+            var canReplace = inventory.CanReplace(items!, index);
+
+            Assert.That(canReplace, Is.False);
         }
     }
 }

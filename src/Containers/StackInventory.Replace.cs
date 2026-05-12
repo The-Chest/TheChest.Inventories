@@ -24,7 +24,7 @@ namespace TheChest.Inventories.Containers
 
             if (items.Length == 0)
                 return false;
-            if (items.HasAllEqualAndNoNull())
+            if (!items.HasAllEqualAndNoNull())
                 return false;
 
             return this.slots[index].CanReplace(items);
