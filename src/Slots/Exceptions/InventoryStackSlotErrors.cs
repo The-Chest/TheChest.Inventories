@@ -11,5 +11,11 @@
         internal const string SlotIsFull = "The slot is full";
         internal const string AddDifferentItemsFromSlot = "Cannot add items that are different from the items already in the slot";
         #endregion
+
+        #region Replacing Items
+        internal const string ReplaceEmptyArray = "Cannot replace using an empty item array";
+        internal const string ReplaceArrayWithNullValues = "Cannot add an array of items with null values";
+        internal const string ReplaceMaxStackSizeSmallerThanItems = "The max stack size is smaller than the number of items to replace.";
+        #endregion
     }
 }

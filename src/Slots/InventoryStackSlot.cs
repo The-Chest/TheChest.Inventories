@@ -219,7 +219,6 @@ namespace TheChest.Inventories.Slots
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-
             if (amount >= this.Amount)
                 return this.GetAll();
 
@@ -260,36 +259,30 @@ namespace TheChest.Inventories.Slots
             return true;
         }
         /// <inheritdoc/>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> size is zero or bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
         /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
         /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
         public virtual T[] Replace(T[] items)
         {
             if (items.Length == 0)
-                throw new ArgumentException("Cannot replace the slot for empty item array", nameof(items));
-
+                throw new ArgumentException(InventoryStackSlotErrors.ReplaceEmptyArray, nameof(items));
             if (items.Length > this.MaxAmount)
-                throw new ArgumentOutOfRangeException(nameof(items));
+                throw new ArgumentOutOfRangeException(nameof(items), InventoryStackSlotErrors.ReplaceMaxStackSizeSmallerThanItems);
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.ReplaceArrayWithNullValues);
+            if(!items.HasAllEqual())
+                throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
 
-            var firstItem = items[0];
-            for (int i = 1; i < items.Length; i++)
+            if (this.IsEmpty) 
             {
-                if (!firstItem.Equals(items[i]))
-                {
-                    throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
-                }
-            }
-
-            if(this.IsEmpty) 
-            {
-                this.Add(items);
+                this.AddItems(ref items);
                 return Array.Empty<T>();
             }
 
             var result = this.GetAll();
             if (this.CanAdd(items))
             {
-                this.Add(items);
+                this.AddItems(ref items);
                 return result; 
             }
 
@@ -314,7 +307,7 @@ namespace TheChest.Inventories.Slots
             var result = this.GetAll();
             if (this.CanAdd(item))
             {
-                this.Add(item);
+                this.AddItem(ref item);
                 return result;
             }
 
