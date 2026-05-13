@@ -23,7 +23,7 @@
 ### Global (These changes applies to the whole project)
 * Project's c# version is now 7.3 to increase compatibility
 * Exception messages are normalized now.
-* Inventories' classes are now divided in four files with the following organization:
+* Inventories' classes are now partial and divided in four files with the following organization:
   * `Add` 
   * `Replace`
   * `Move`

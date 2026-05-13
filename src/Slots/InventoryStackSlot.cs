@@ -258,6 +258,29 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+        /// <summary>
+        /// Replaces the current items in the current slot with the specified items.
+        /// </summary>
+        /// <param name="items">The items to add to the collection. If the slot is empty, these items are added directly.</param>
+        /// <returns>An array containing the items that were replaced. If the slot was empty, returns an empty array. If the specified items could not be added, returns the input <paramref name="items"/>.</returns>
+        protected virtual T[] ReplaceItems(params T[] items)
+        {
+            if (this.IsEmpty)
+            {
+                this.AddItems(ref items);
+                return Array.Empty<T>();
+            }
+
+            var result = this.GetAll();
+            if (this.CanAdd(items))
+            {
+                this.AddItems(ref items);
+                return result;
+            }
+
+            this.AddItems(ref result);
+            return items;
+        }
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> is bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
@@ -273,21 +296,7 @@ namespace TheChest.Inventories.Slots
             if(!items.HasAllEqual())
                 throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
 
-            if (this.IsEmpty) 
-            {
-                this.AddItems(ref items);
-                return Array.Empty<T>();
-            }
-
-            var result = this.GetAll();
-            if (this.CanAdd(items))
-            {
-                this.AddItems(ref items);
-                return result; 
-            }
-
-            this.AddItems(ref result);
-            return items;
+            return this.ReplaceItems(items);
         }
         /// <inheritdoc/>
         /// <param name="item">the item that will be attempt to replace</param>
@@ -298,21 +307,7 @@ namespace TheChest.Inventories.Slots
             if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
-            if (this.IsEmpty)
-            {
-                this.AddItem(ref item);
-                return Array.Empty<T>();
-            }
-
-            var result = this.GetAll();
-            if (this.CanAdd(item))
-            {
-                this.AddItem(ref item);
-                return result;
-            }
-
-            this.AddItems(ref result);
-            return new T[1]{ item };
+            return this.ReplaceItems(item);
         }
     }
 }
