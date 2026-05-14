@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-            if (index < 0 || index > this.Size)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             return this.slots[index].CanReplace(item, amount);

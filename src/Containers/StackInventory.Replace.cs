@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
-            if (index < 0 || index > this.Size)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             if (items.Length == 0)
