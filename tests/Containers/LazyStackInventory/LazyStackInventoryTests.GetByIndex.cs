@@ -1,4 +1,5 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
@@ -68,6 +69,48 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             
             var index = this.random.Next(0, size - 1);
             inventory.Get(index);
+        }
+
+        [Test]
+        public void Get_ByIndex_ValidIndex_ReturnsItem()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var expectedItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, expectedItem);
+
+            var randomIndex = this.random.Next(0, size - 1);
+            var result = inventory.Get(randomIndex);
+
+            Assert.That(result, Is.EqualTo(expectedItem));
+        }
+
+        [Test]
+        [IgnoreIfValueType]
+        public void Get_ByIndex_EmptySlot_ReturnsNull()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size - 1);
+            var result = inventory.Get(randomIndex);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Get_ByIndex_EmptySlotValueType_ReturnsDefault()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size - 1);
+            var result = inventory.Get(randomIndex);
+
+            Assert.That(result, Is.EqualTo(default(T)));
         }
     }
 }
