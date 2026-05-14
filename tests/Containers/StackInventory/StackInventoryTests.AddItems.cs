@@ -12,6 +12,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
             Assert.That(
                 () => inventory.Add(null), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
@@ -26,6 +27,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             
             var result = inventory.Add(Array.Empty<T>());
+
             Assert.That(result, Is.Empty);
         }
 
@@ -37,6 +39,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             inventory.Add(Array.Empty<T>());
+
             Assert.That(inventory.GetSlots(), Has.All.Matches<IStackSlot<T>>(x => x.IsEmpty));
         }
 
@@ -52,7 +55,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(
                 () => inventory.Add(items),
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items").And.Message.Contains("One of the items to add is null")
+                Throws.ArgumentNullException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.Contains("One of the items to add is null")
             );
         }
 
@@ -207,7 +212,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(
                 inventory.GetSlots(),
                 Has.One.Matches<IStackSlot<T>>(
-                    x => x.Amount == 1 && x.GetContents<T>()!.Contains(item)
+                    x => x.Amount == 1 && x.GetContents()!.Contains(item)
                 )
             );
         }

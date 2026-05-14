@@ -5,7 +5,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void Replace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -30,7 +30,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var randomIndex = this.random.Next(0, size);
             Assert.That(
                 () => inventory.Replace(Array.Empty<T>(), randomIndex),
-                Throws.TypeOf<ArgumentException>().With.Message.StartsWith("Cannot replace using an empty item array")
+                Throws.TypeOf<ArgumentException>()
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.StartsWith("Cannot replace using an empty item array")
             );
         }
 
@@ -46,7 +48,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(() =>
                 inventory.Replace(items, randomIndex),
-                Throws.TypeOf<ArgumentOutOfRangeException>().With.Message.StartsWith("The max stack size is smaller than the number of items to replace.")
+                Throws.TypeOf<ArgumentOutOfRangeException>()
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.StartsWith("The max stack size is smaller than the number of items to replace.")
             );
         }
 

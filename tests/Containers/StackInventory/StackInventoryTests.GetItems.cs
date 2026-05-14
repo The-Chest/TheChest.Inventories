@@ -1,7 +1,6 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
-using TheChest.Tests.Common.Attributes;
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
@@ -12,16 +11,21 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer();
             var item = this.itemFactory.CreateDefault();
 
-            Assert.That(() => inventory.Get(item, 0), Throws.TypeOf(typeof(ArgumentOutOfRangeException)));
+            Assert.That(
+                () => inventory.Get(item, 0), 
+                Throws.TypeOf(typeof(ArgumentOutOfRangeException)).With.Property("ParamName").EqualTo("amount")
+            );
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void GetItems_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
 
-            Assert.That(() => inventory.Get(default(T)!, 1), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.Get(default(T)!, 1), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [Test]

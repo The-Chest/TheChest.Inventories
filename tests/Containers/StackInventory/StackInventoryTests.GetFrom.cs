@@ -5,13 +5,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void GetFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
-            Assert.That(() => inventory.Get(index), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(
+                () => inventory.Get(index), 
+                Throws.InstanceOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
+            );
         }
 
         [Test]

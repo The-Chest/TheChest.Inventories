@@ -22,7 +22,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [TestCase(-1)]
-        [TestCase(100)]
+        [TestCase(MAX_SIZE_TEST)]
         public void CanReplace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

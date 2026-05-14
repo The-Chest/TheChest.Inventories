@@ -1,15 +1,16 @@
-using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void GetCount_InvalidItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
 
-            Assert.That(() => inventory.GetCount(default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.GetCount(default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
     }
 }

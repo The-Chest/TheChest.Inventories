@@ -1,4 +1,3 @@
-using TheChest.Tests.Common.Attributes;
 using TheChest.Tests.Common.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
@@ -6,15 +5,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void CanAddItems_NullItem_ThrowsArgumentNullException()
         {
             var inventory = this.inventoryFactory.EmptyContainer();
-            Assert.That(() => inventory.CanAdd(items: default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.CanAdd(items: default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+            );
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -25,7 +25,11 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 .Append(default!)
                 .ToArray();
             items.Shuffle();
-            Assert.That(() => inventory.CanAdd(items), Throws.ArgumentNullException);
+
+            Assert.That(
+                () => inventory.CanAdd(items), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+            );
         }
 
         [Test]
@@ -39,7 +43,11 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 .Append(this.itemFactory.CreateRandom())
                 .ToArray();
             items.Shuffle();
-            Assert.That(() => inventory.CanAdd(items.ToArray()), Throws.ArgumentException); 
+
+            Assert.That(
+                () => inventory.CanAdd(items.ToArray()), 
+                Throws.ArgumentException.With.Property("ParamName").EqualTo("items")
+            ); 
         }
     }
 }
