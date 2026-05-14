@@ -130,6 +130,8 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0 || amount > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));
+            if(amount > this.MaxAmount)
+                throw new InvalidOperationException(InventoryLazyStackSlotErrors.ReplaceMoreThanStackSize);
 
             if (this.IsEmpty)
             {

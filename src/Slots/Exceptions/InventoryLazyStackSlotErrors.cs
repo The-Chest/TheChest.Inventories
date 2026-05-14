@@ -7,5 +7,9 @@
         internal const string AddDifferentItemsFromSlot = "Cannot add items that are different from the items already in the slot";
         internal const string AddMoreThanAvailableAmount = "Cannot add more items than the available amount";
         #endregion
+
+        #region Replacing Items
+        internal const string ReplaceMoreThanStackSize = "The amount of items to replace exceeds the stack size of the slot.";
+        #endregion
     }
 }

@@ -65,8 +65,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.That(() =>
                 inventory.Replace(newItem, index, stackSize + 1),
-                Throws.InvalidOperationException
-                    .With.Message.EqualTo("The amount of items to replace exceeds the stack size of the slot.")
+                Throws.TypeOf<ArgumentOutOfRangeException>()
             );
         }
 
