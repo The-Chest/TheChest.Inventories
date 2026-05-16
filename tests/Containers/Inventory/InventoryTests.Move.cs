@@ -11,7 +11,24 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(origin, 2));
+
+            Assert.That(
+                () => inventory.Move(origin, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
+        }
+
+        [Test]
+        public void Move_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+
+            Assert.That(
+                () => inventory.Move(size, 0), 
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
         }
 
         [TestCase(-1)]
@@ -21,7 +38,45 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(0, target));
+
+            Assert.That(
+                () => inventory.Move(0, target),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void Move_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+
+            Assert.That(
+                () => inventory.Move(0, size),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void Move_OriginEqualToTarget_ThrowsArgumentException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+            Assert.Throws<ArgumentException>(() => inventory.Move(0, 0));
+        }
+
+        [Test]
+        public void Move_BothSlotsEmpty_ThrowsInvalidOperationException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            Assert.That(
+                () => inventory.Move(0, 1),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot move items when both origin and target slots are empty.")
+            );
         }
 
         [Test]
