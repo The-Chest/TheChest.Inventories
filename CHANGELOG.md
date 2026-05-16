@@ -82,6 +82,9 @@
 * `AvailableAmount` property from `IInventoryStackSlot<T>` and `IInventoryLazyStackSlot<T>` (it belongs now to `IStackSlot<T>` and `ILazyStackSlot<T>`)
 * Extra validations from `Inventory<T>.Replace` and `InventorySlot<T>.Add` usage when `Content` is null
 
+## What's Fixed
+* `LazyStackInventory` and `StackInventory` validation throwing `ArgumentOutOfRangeException` when the index was bigger than the inventory size or smaller than zero instead of throwing when the index was bigger than the inventory size - 1 or smaller than zero
+
 ## Known Issues
 * **No support for structs or value types** 
 * The Current Architecture is not stable for the final version yet
