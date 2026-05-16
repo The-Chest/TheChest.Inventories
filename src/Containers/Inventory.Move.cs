@@ -16,6 +16,8 @@ namespace TheChest.Inventories.Containers
                 return false;
             if (target < 0 || target >= this.Size)
                 return false;
+            if (origin == target)
+                return false;
             if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
                 return false;
 
