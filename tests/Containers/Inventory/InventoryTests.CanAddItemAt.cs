@@ -15,7 +15,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void CanAddAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
