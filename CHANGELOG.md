@@ -23,7 +23,7 @@
 ### Global (These changes applies to the whole project)
 * Project's c# version is now 7.3 to increase compatibility
 * Exception messages are normalized now.
-* Inventories' classes are now divided in four files with the following organization:
+* Inventories' classes are now partial and divided in four files with the following organization:
   * `Add` 
   * `Replace`
   * `Move`
@@ -35,7 +35,6 @@
   * `Add(T item)`- When the container is full
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
   * `AddAt(T item, int index)` - When the selected slot rejects the item
-  * `Replace(T item, int index)` now uses `Add()` when replacing an empty slot.
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
   * `Add(T item)` -> Use `Add(params T[] items)` instead
@@ -59,8 +58,14 @@
   * `Add(T item)` -> Use `Add(params T[] items)` instead
 
 #### InventoryStackSlot\<T\>
-* `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
-* `Add(T[] items)` now throws `InvalidOperationException` when the param `items` is valid but the slot is full or the items are different from the slot's content.`
+* Changes in some methods
+  * `Add(T item)` now throws `InvalidOperationException` when the param `item` is valid but the slot is full or the item is different from the slot's content.
+  * `Add(T[] items)` now throws `InvalidOperationException` when the param `items` is valid but the slot is full or the items are different from the slot's content.
+* Obsolete methods
+  * `CanAdd(T item)` -> Use `CanAdd(T[] items)` instead
+  * `Add(T item)` -> Use `Add(T[] items)` instead
+  * `CanReplace(T item)` -> Use `CanReplace(T[] items)` instead
+  * `Replace(T item)` -> Use `Replace(T[] items)` instead
 
 ### LazyStackInventory\<T\>
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
@@ -75,10 +80,14 @@
 
 ## What's Removed
 * `AvailableAmount` property from `IInventoryStackSlot<T>` and `IInventoryLazyStackSlot<T>` (it belongs now to `IStackSlot<T>` and `ILazyStackSlot<T>`)
+* Extra validations from `Inventory<T>.Replace` and `InventorySlot<T>.Add` usage when `Content` is null
+
+## What's Fixed
+* `LazyStackInventory` and `StackInventory` validation throwing `ArgumentOutOfRangeException` when the index was bigger than the inventory size or smaller than zero instead of throwing when the index was bigger than the inventory size - 1 or smaller than zero
 
 ## Known Issues
+* **No support for structs or value types** 
 * The Current Architecture is not stable for the final version yet
-* No support for structs or value types 
 * Event system will need an improvement on creation/dispatch
   * The new Event API is being planned
 * `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters

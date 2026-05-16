@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-            if (index < 0 || index > this.Size)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             return this.slots[index].CanReplace(item, amount);
@@ -37,11 +37,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var slot = this.slots[index];
-            if (!slot.CanReplace(item, amount))
-                throw new InvalidOperationException("The amount of items to replace exceeds the stack size of the slot.");
-
-            var replacedItems = slot.Replace(item, amount);
+            var replacedItems = this.slots[index].Replace(item, amount);
 
             if (replacedItems.Length > 0)
                 this.OnReplace?.Invoke(this, (replacedItems[0], replacedItems.Length, item, amount, index));

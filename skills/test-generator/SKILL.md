@@ -10,7 +10,7 @@ Use this skill whenever creating or updating tests in this repository.
 ## Test rules
 
 ### Detroit-school conventions
-- **No mocks by default** — Use factory classes to instantiate the class under test and its dependencies.
+- **No mocks by default** Use factory classes to instantiate the class under test and its dependencies.
 - One assertion per test (or one logical outcome).
 - Tests should be deterministic and independent of each other.
 - **Arrange-Act-Assert** structure in every test.

@@ -209,7 +209,7 @@ namespace TheChest.Inventories.Slots
             return this.GetItems(this.Amount);
         }
         /// <summary>
-        /// Gets an removes amount of items from slot.
+        /// Gets and removes amount of items from slot.
         /// If is bigger than <see cref="IStackSlot{T}.Amount"/> it returns the maximum amount possible.
         /// </summary>
         /// <param name="amount">Amount of items to get from slot</param>
@@ -219,7 +219,6 @@ namespace TheChest.Inventories.Slots
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-
             if (amount >= this.Amount)
                 return this.GetAll();
 
@@ -243,18 +242,10 @@ namespace TheChest.Inventories.Slots
         {
             if (items.Length == 0)
                 return false;
+            if (!items.HasAllEqualAndNoNull())
+                return false;
             if (items.Length > this.MaxAmount)
                 return false;
-
-            var firstItem = items[0];
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (!this.CanReplace(items[i]))
-                    return false;
-
-                if (!firstItem.Equals(items[i]))
-                    return false;
-            }
 
             return true;
         }
@@ -267,42 +258,45 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> dize is zero or bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
-        /// <exception cref="ArgumentException">When any of items in param are invalid</exception>
-        /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
-        public virtual T[] Replace(T[] items)
+        /// <summary>
+        /// Replaces the current items in the current slot with the specified items.
+        /// </summary>
+        /// <param name="items">The items to add to the collection. If the slot is empty, these items are added directly.</param>
+        /// <returns>An array containing the items that were replaced. If the slot was empty, returns an empty array. If the specified items could not be added, returns the input <paramref name="items"/>.</returns>
+        protected virtual T[] ReplaceItems(params T[] items)
         {
-            if (items.Length == 0)
-                throw new ArgumentException("Cannot replace the slot for empty item array", nameof(items));
-
-            if (items.Length > this.MaxAmount)
-                throw new ArgumentOutOfRangeException(nameof(items));
-
-            var firstItem = items[0];
-            for (int i = 1; i < items.Length; i++)
+            if (this.IsEmpty)
             {
-                if (!firstItem.Equals(items[i]))
-                {
-                    throw new ArgumentException($"Param \"items\" have items that are not equal ({i})", nameof(items));
-                }
-            }
-
-            if(this.IsEmpty) 
-            {
-                this.Add(items);
+                this.AddItems(ref items);
                 return Array.Empty<T>();
             }
 
             var result = this.GetAll();
             if (this.CanAdd(items))
             {
-                this.Add(items);
-                return result; 
+                this.AddItems(ref items);
+                return result;
             }
 
             this.AddItems(ref result);
             return items;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> is bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
+        /// <returns>The current items from content or <paramref name="items"/> if is not possible to replace</returns>
+        public virtual T[] Replace(T[] items)
+        {
+            if (items.Length == 0)
+                throw new ArgumentException(InventoryStackSlotErrors.ReplaceEmptyArray, nameof(items));
+            if (items.Length > this.MaxAmount)
+                throw new ArgumentOutOfRangeException(nameof(items), InventoryStackSlotErrors.ReplaceMaxStackSizeSmallerThanItems);
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.ReplaceArrayWithNullValues);
+            if(!items.HasAllEqual())
+                throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
+
+            return this.ReplaceItems(items);
         }
         /// <inheritdoc/>
         /// <param name="item">the item that will be attempt to replace</param>
@@ -313,21 +307,7 @@ namespace TheChest.Inventories.Slots
             if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
-            if (this.IsEmpty)
-            {
-                this.AddItem(ref item);
-                return Array.Empty<T>();
-            }
-
-            var result = this.GetAll();
-            if (this.CanAdd(item))
-            {
-                this.Add(item);
-                return result;
-            }
-
-            this.AddItems(ref result);
-            return new T[1]{ item };
+            return this.ReplaceItems(item);
         }
     }
 }

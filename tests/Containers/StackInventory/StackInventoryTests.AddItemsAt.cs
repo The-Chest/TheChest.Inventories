@@ -18,7 +18,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void AddItemsAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -81,7 +81,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var items = new T[] { validItem, default!, validItem };
             Assert.That(
                 () => inventory.AddAt(items, 0), 
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items").And.Message.Contains("One of the items to add is null")
+                Throws.ArgumentNullException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.Contains("One of the items to add is null")
             );
         }
 
@@ -98,7 +100,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(
                 () => inventory.AddAt(items, 0), 
-                Throws.ArgumentException.With.Property("ParamName").EqualTo("items").And.Message.Contains("Cannot add an array of items with different types")
+                Throws.ArgumentException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.Contains("Cannot add an array of items with different types")
             );
         }
 
@@ -221,6 +225,21 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.AddAt(items, index);
 
             Assert.That(raised, Is.True, "OnAdd event was not raised");
+        }
+
+
+        [Test]
+        public void AddItemsAt_EmptySlot_ReturnsEmpty()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var items = this.itemFactory.CreateMany(stackSize);
+            var index = this.random.Next(0, size);
+            var result = inventory.AddAt(items, index);
+
+            Assert.That(result, Is.Empty);
         }
     }
 }

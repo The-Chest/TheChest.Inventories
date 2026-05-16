@@ -6,7 +6,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
     public partial class InventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void AddAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -114,6 +114,19 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             inventory.AddAt(item, randomIndex);
 
             Assert.That(raised, Is.True, "OnAdd event was not raised");
+        }
+
+        [Test]
+        public void AddAt_EmptySlot_ReturnsTrue()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomIndex = this.random.Next(0, size);
+            var item = this.itemFactory.CreateDefault();
+            var result = inventory.AddAt(item, randomIndex);
+
+            Assert.That(result, Is.True);
         }
     }
 }

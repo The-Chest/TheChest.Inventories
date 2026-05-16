@@ -19,13 +19,13 @@ namespace TheChest.Inventories.Containers
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
-            if (index < 0 || index > this.Size)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
+
             if (items.Length == 0)
                 return false;
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
-            if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (!items.HasAllEqualAndNoNull())
+                return false;
 
             return this.slots[index].CanReplace(items);
         }
@@ -39,17 +39,13 @@ namespace TheChest.Inventories.Containers
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
-                throw new ArgumentException(StackInventoryErrors.CannotReplaceEmptyArray, nameof(items)); // why not?
+                throw new ArgumentException(StackInventoryErrors.CannotReplaceEmptyArray, nameof(items));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var slot = this.slots[index];
-            if (items.Length > slot.MaxAmount)
-                throw new InvalidOperationException(StackInventoryErrors.MaxStackSizeSmallerThanItemsToReplace);
-
-            var oldItems = slot.Replace(items);
+            var oldItems = this.slots[index].Replace(items);
             this.OnReplace?.Invoke(this, (index, oldItems, items));
 
             return oldItems;

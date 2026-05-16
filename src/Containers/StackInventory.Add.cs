@@ -202,7 +202,7 @@ namespace TheChest.Inventories.Containers
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
-            if (index > this.Size || index < 0)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var added = this.slots[index].Add(item);
@@ -222,7 +222,7 @@ namespace TheChest.Inventories.Containers
             if (items.Length == 0)
                 return Array.Empty<T>();
 
-            if (index < 0 || index > this.Size)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
