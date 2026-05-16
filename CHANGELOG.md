@@ -35,6 +35,7 @@
   * `Add(T item)`- When the container is full
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
   * `AddAt(T item, int index)` - When the selected slot rejects the item
+  * `Move(int origin, int target)` - When origin and target slots are both empty
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
   * `Add(T item)` -> Use `Add(params T[] items)` instead
