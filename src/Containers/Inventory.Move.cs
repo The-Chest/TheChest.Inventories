@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using TheChest.Inventories.Containers.Events;
+using TheChest.Inventories.Containers.Exceptions;
+using TheChest.Inventories.Extensions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -34,23 +36,29 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
+            if (origin == target)
+                throw new ArgumentException(InventoryErrors.CannotMoveItemToSameIndex, nameof(target));
+            if(this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
+                throw new InvalidOperationException(InventoryErrors.CannotMoveEmptySlots);
 
             var originItem = this.slots[origin].Get();
             var targetItem = this.slots[target].Get();
 
-            var events = new List<InventoryMoveItemEventData<T>>();
-            if (!EqualityComparer<T>.Default.Equals(originItem, default))
+            var events = new List<InventoryMoveItemEventData<T>>(1);
+            if (!originItem.IsNull())
             {
                 this.slots[target].Add(originItem);
                 events.Add(new InventoryMoveItemEventData<T>(originItem, origin, target));
             }
 
-            if (!EqualityComparer<T>.Default.Equals(targetItem, default))
+            if (!targetItem.IsNull())
             {
                 this.slots[origin].Add(targetItem);
                 events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
             }
-            this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
+
+            if (events.Count > 0)
+                this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }
     }
 }
