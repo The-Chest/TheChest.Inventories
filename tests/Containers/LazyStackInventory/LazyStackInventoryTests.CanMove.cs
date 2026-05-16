@@ -3,7 +3,7 @@
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void CanMove_InvalidOriginIndex_ThrowsArgumentOutOfRangeException(int origin)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -13,7 +13,7 @@
             Assert.That(() => inventory.CanMove(origin, 0), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void CanMove_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

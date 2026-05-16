@@ -6,7 +6,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void Get_ByIndex_ShouldThrowArgumentOutOfRangeException_WhenIndexIsInvalid(int index)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

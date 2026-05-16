@@ -3,7 +3,7 @@
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1, 1)]
-        [TestCase(MAX_SIZE_TEST + 1, 1)]
+        [TestCase(MAX_SIZE_TEST, 1)]
         public void Get_ByIndexAndAmount_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);

@@ -6,7 +6,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
     public partial class LazyStackInventoryTests<T>
     {
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void Move_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
@@ -18,7 +18,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [TestCase(-1)]
-        [TestCase(MAX_SIZE_TEST + 1)]
+        [TestCase(MAX_SIZE_TEST)]
         public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
