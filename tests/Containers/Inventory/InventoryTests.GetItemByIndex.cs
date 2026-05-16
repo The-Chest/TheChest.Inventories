@@ -70,20 +70,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void GetItemByIndex_ValidIndexEmptySlotValueType_ReturnsDefault()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-
-            Assert.That(result, Is.EqualTo(default(T)));
-        }
-
-        [Test]
-        [IgnoreIfValueType]
         public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
