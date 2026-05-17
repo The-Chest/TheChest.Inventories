@@ -33,6 +33,8 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
+        /// <exception cref="ArgumentException">When <paramref name="origin"/> and <paramref name="target"/> are the same</exception>
+        /// <exception cref="InvalidOperationException">When both slots are empty or when the max stack size of the two slots are different</exception>
         public virtual void Move(int origin, int target)
         {
             if (origin < 0 || origin >= this.Size)
