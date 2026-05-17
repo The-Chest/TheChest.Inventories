@@ -35,7 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void Move_EmptyOriginAndTarget_DoesNotCallOnMoveEvent()
+        public void Move_EmptyOriginAndTarget_ThrowsInvalidOperationException()
         {
             var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -43,25 +43,42 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.GetAll(targetIndex);
-            inventory.GetAll(originIndex);
-
-            inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
-
-            inventory.Move(originIndex, targetIndex);
+            Assert.That(
+                () => inventory.Move(originIndex, targetIndex), 
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot move empty slots.")
+            );
         }
 
         [Test]
-        public void Move_SameOriginAndTarget_DoesNotCallOnMoveEvent()
+        public void Move_SameOriginAndTarget_ThrowsArgumentException()
         {
             var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var inventory = this.inventoryFactory.EmptyContainer(inventorySize, stackSize);
-
-            inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
             
             var originIndex = this.random.Next(0, inventorySize - 1);
-            inventory.Move(originIndex, originIndex);
+            var targetIndex = originIndex;
+            Assert.That(
+                () => inventory.Move(originIndex, targetIndex), 
+                Throws.ArgumentException
+                    .With.Property("ParamName").EqualTo("target").And
+                    .Message.Contain("Cannot move an item to the same index.")
+            );
+        }
+
+        [Test]
+        [Ignore("This test is only relevant for inventories that allow different max stack sizes per slot.")]
+        public void Move_OriginAndTargetWithDifferentMaxStackSize_ThrowsInvalidOperationException()
+        {
+            var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(inventorySize, stackSize);
+            var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            Assert.That(
+                () => inventory.Move(originIndex, targetIndex), 
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot move items between slots with different max stack sizes.")
+            );
         }
 
         [Test]
@@ -76,10 +93,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.FullContainer(inventorySize, stackSize, slotItem);
             inventory.GetAll(originIndex);
-            var targetItems = inventory.GetItems(targetIndex);
 
             inventory.Move(originIndex, targetIndex);
 
+            var targetItems = inventory.GetItems(targetIndex);
             Assert.Multiple(() =>
             {
                 Assert.That(inventory.GetItems(originIndex), Is.EqualTo(targetItems));
@@ -122,7 +139,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void Move_OriginWithItems_EmptyTarget_MovesItem()
+        public void Move_OriginWithItems_EmptyTarget_MovesItems()
         {
             var inventorySize = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -134,8 +151,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var originIndex = this.random.Next(inventorySize / 2, inventorySize - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
             inventory.GetAll(targetIndex);
-            var originItems = inventory.GetItems(originIndex);
 
+            var originItems = inventory.GetItems(originIndex);
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
