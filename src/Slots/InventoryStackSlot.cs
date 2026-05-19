@@ -157,6 +157,7 @@ namespace TheChest.Inventories.Slots
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the slot is full or when trying to add an item that is different from the items already in the slot</exception>
         public virtual bool Add(T item)
         {
             if(item.IsNull())
@@ -236,28 +237,6 @@ namespace TheChest.Inventories.Slots
             return this.GetItem();
         }
 
-        /// <inheritdoc/>
-        /// <returns><see langword="true"/> if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
-        public virtual bool CanReplace(T[] items)
-        {
-            if (items.Length == 0)
-                return false;
-            if (!items.HasAllEqualAndNoNull())
-                return false;
-            if (items.Length > this.MaxAmount)
-                return false;
-
-            return true;
-        }
-        /// <inheritdoc/>
-        /// <returns><see langword="false"/> if the param <paramref name="item"/> is <see langword="null"/></returns>
-        public virtual bool CanReplace(T item)
-        {
-            if (item.IsNull())
-                return false;
-
-            return true;
-        }
         /// <summary>
         /// Replaces the current items in the current slot with the specified items.
         /// </summary>
@@ -280,6 +259,29 @@ namespace TheChest.Inventories.Slots
 
             this.AddItems(ref result);
             return items;
+        }
+
+        /// <inheritdoc/>
+        /// <returns><see langword="true"/> if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
+        public virtual bool CanReplace(T[] items)
+        {
+            if (items.Length == 0)
+                return false;
+            if (!items.HasAllEqualAndNoNull())
+                return false;
+            if (items.Length > this.MaxAmount)
+                return false;
+
+            return true;
+        }
+        /// <inheritdoc/>
+        /// <returns><see langword="false"/> if the param <paramref name="item"/> is <see langword="null"/></returns>
+        public virtual bool CanReplace(T item)
+        {
+            if (item.IsNull())
+                return false;
+
+            return true;
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>

@@ -19,6 +19,20 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             );
         }
 
+        [Test]
+        public void Move_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
+            
+            Assert.That(
+                () => inventory.Move(size, 0), 
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
+        }
+
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void Move_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)
@@ -30,6 +44,20 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(
                 () => inventory.Move(0, target), 
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void Move_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
+
+            Assert.That(
+                () => inventory.Move(0, size), 
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
