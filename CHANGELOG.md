@@ -36,6 +36,11 @@
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
   * `AddAt(T item, int index)` - When the selected slot rejects the item
   * `Move(int origin, int target)` - When origin and target slots are both empty
+* Validation methods now throw Exceptions when the params are invalid
+  * `CanAdd(T item)` - When the param `item` is null
+  * `CanAddAt(T item, int index)` - When the param `item` is null or the index is bigger than the inventory size or smaller than zero
+  * `CanReplace(T item, int index)` - When the param `item` is null or the index is bigger than the inventory size or smaller than zero
+  * `CanMove(int origin, int target)` - When origin and target indexes are bigger than the inventory size or smaller than zero
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
   * `Add(T item)` -> Use `Add(params T[] items)` instead

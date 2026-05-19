@@ -4,52 +4,56 @@
     {
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void CanMove_InvalidOrigin_ReturnsFalse(int origin)
+        public void CanMove_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(origin, 0);
-
-            Assert.That(canMove, Is.False);
+            Assert.That(
+                () => inventory.CanMove(origin, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
         }
 
         [Test]
-        public void CanMove_OriginEqualToSize_ReturnsFalse()
+        public void CanMove_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(size, 0);
-
-            Assert.That(canMove, Is.False);
+            Assert.That(
+                () => inventory.CanMove(size, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
         }
 
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void CanMove_InvalidTarget_ReturnsFalse(int target)
+        public void CanMove_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(0, target);
-
-            Assert.That(canMove, Is.False);
+            Assert.That(
+                () => inventory.CanMove(0, target),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
         }
 
         [Test]
-        public void CanMove_TargetEqualToSize_ReturnsFalse()
+        public void CanMove_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
         {
             var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(0, size);
-
-            Assert.That(canMove, Is.False);
+            Assert.That(
+                () => inventory.CanMove(0, size),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
         }
 
         [Test]

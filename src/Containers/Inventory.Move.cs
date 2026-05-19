@@ -12,17 +12,19 @@ namespace TheChest.Inventories.Containers
         public event InventoryMoveEventHandler<T> OnMove;
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are smaller than zero or bigger than the container size</exception>
         public virtual bool CanMove(int origin, int target)
         {
             if (origin < 0 || origin >= this.Size)
-                return false;
+                throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
-                return false;
+                throw new ArgumentOutOfRangeException(nameof(target));
+
             if (origin == target)
                 return false;
             if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
                 return false;
-
+            
             return true;
         }
         /// <inheritdoc/>
@@ -30,12 +32,15 @@ namespace TheChest.Inventories.Containers
         /// The method fires the <see cref="OnMove"/> event.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are smaller than zero or bigger than the container size</exception>
+        /// <exception cref="ArgumentException">When <paramref name="origin"/> and <paramref name="target"/> are the same</exception>
+        /// <exception cref="InvalidOperationException">When both <paramref name="origin"/> and <paramref name="target"/> slots are empty</exception>
         public virtual void Move(int origin, int target)
         {
             if (origin < 0 || origin >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
+
             if (origin == target)
                 throw new ArgumentException(InventoryErrors.CannotMoveItemToSameIndex, nameof(target));
             if(this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
