@@ -1,5 +1,4 @@
-﻿using TheChest.Tests.Common.Attributes;
-using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
@@ -9,8 +8,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [TestCase(MAX_SIZE_TEST)]
         public void GetFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
                 () => inventory.Get(index), 
@@ -21,8 +20,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
 
@@ -33,8 +32,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetFrom_SlotWithItems_RemovesItemFromSlot()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
@@ -47,8 +45,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetFrom_SlotWithItems_CallsOnGetEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
@@ -74,11 +71,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
 
         [Test]
-        [IgnoreIfValueType]
         public void GetFrom_EmptySlot_ReturnsNull()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             
             var index = this.random.Next(0, size);
             var item = inventory.Get(index);
@@ -87,23 +83,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void GetFrom_EmptySlotValueType_ReturnsDefault()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var index = this.random.Next(0, size);
-            var item = inventory.Get(index);
-
-            Assert.That(item, Is.EqualTo(default(T)));
-        }
-
-        [Test]
         public void GetFrom_SlotWithItems_ReturnsItem()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 

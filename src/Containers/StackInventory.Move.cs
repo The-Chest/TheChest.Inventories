@@ -18,12 +18,12 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
-            if (origin == target)
-                return false;
 
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
 
+            if (origin == target)
+                return false;
             if (slotOrigin.IsEmpty && slotTarget.IsEmpty)
                 return false;
             if (slotOrigin.MaxAmount != slotTarget.MaxAmount)
@@ -59,6 +59,7 @@ namespace TheChest.Inventories.Containers
 
             if (originItems.Length > 0)
             {
+                // maybe improve performance by using AddItems and making it internal?
                 slotTarget.Add(originItems);
                 events.Add(new StackInventoryMoveItemEventData<T>(originItems, origin, target));
             }

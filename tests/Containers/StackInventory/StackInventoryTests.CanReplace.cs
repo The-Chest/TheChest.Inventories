@@ -1,5 +1,4 @@
 ﻿using TheChest.Tests.Common.Extensions;
-using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
@@ -8,8 +7,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanReplace_NullItems_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -25,8 +23,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [TestCase(MAX_SIZE_TEST)]
         public void CanReplace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
@@ -39,8 +36,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanReplace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -57,8 +53,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanReplace_ItemsContainingNull_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 

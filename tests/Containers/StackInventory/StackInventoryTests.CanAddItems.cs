@@ -1,3 +1,4 @@
+using TheChest.Inventories.Tests.Containers.Extensions;
 using TheChest.Tests.Common.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
@@ -7,7 +8,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            
             Assert.That(
                 () => inventory.CanAdd(items: default!), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
@@ -17,10 +20,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
+
             var items = this.itemFactory.CreateMany(stackSize - 1)
                 .Append(default!)
                 .ToArray();
@@ -35,8 +37,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_ArrayContainingDifferentItemType_ThrowsArgumentException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize - 1)
@@ -54,8 +55,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_EmptyItemsArray_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             
             var canAdd = inventory.CanAdd(Array.Empty<T>());
@@ -66,8 +66,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_EmptyInventory_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize);
@@ -79,8 +78,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_InsufficientSpace_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var randomAmount = this.random.Next(2, size);
@@ -95,8 +93,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_SufficientSpaceWithDifferentItem_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -113,8 +110,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_SufficientSpaceWithSameItem_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -130,16 +126,11 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_SufficientSpaceWithSameItemInMultipleSlots_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
-            for (int i = 0; i < stackSize; i++)
-            {
-                var randomIndex = this.random.Next(0, size);
-                inventory.Get(randomIndex);
-            }
+            inventory.Remove(stackSize, this.random);
 
             var items = this.itemFactory.CreateMany(stackSize);
             var canAdd = inventory.CanAdd(items);
@@ -150,8 +141,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void CanAddItems_FullInventory_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 

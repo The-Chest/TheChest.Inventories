@@ -8,8 +8,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_NullItems_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             Assert.That(
                 () => inventory.AddAt(null!, 0),
@@ -21,8 +20,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [TestCase(MAX_SIZE_TEST)]
         public void AddItemsAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize);
@@ -35,8 +33,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_EmptyArray_ReturnsEmptyArray()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             
             var randomIndex = this.random.Next(0, size);
@@ -48,8 +45,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_EmptyArray_DoesNotAddToSlot()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var randomIndex = this.random.Next(0, size);
@@ -61,8 +57,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_EmptyArray_DoesNotCallOnAddEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             inventory.OnAdd += (sender, e) => Assert.Fail("OnAdd event should not be called when adding an empty array of items");  
@@ -73,8 +68,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_ItemsContainsNull_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var validItem = this.itemFactory.CreateDefault();
@@ -90,8 +84,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_ItemsAreNotAllEqual_ThrowsArgumentException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var first = this.itemFactory.CreateDefault();
@@ -109,8 +102,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventoryItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, inventoryItem);
 
@@ -123,8 +115,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_FullSlotWithSameItem_ThrowsInvalidOperationException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
@@ -136,8 +127,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_EmptySlot_AddsToStack()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize);
@@ -150,8 +140,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_EmptySlot_CallsOnAddEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize);
@@ -177,8 +166,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_SlotWithSameItem_AddsToStack()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
@@ -201,8 +189,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_SlotWithSameItem_CallsOnAddEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
             
@@ -231,8 +218,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void AddItemsAt_EmptySlot_ReturnsEmpty()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var items = this.itemFactory.CreateMany(stackSize);

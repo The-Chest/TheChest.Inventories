@@ -8,7 +8,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_InvalidItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            
             Assert.That(
                 () => inventory.GetAll(default(T)!), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
@@ -18,8 +20,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_EmptyInventory_DoesNotCallOnGetEvent()
         {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
 
@@ -29,8 +32,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_InventoryWithItems_RemovesItemsFromInventory()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItems = this.itemFactory.CreateMany(size / 2);
             var randomItems = this.itemFactory.CreateManyRandom(size / 2);
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
@@ -47,8 +49,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_InventoryWithItems_CallsOnGetEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItems = this.itemFactory.CreateMany(size / 2);
             var randomItems = this.itemFactory.CreateManyRandom(size / 2);
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
@@ -77,8 +78,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_EmptyInventory_ReturnsEmptyArray()
         {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = inventory.GetAll(item);
 
@@ -88,8 +90,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_InventoryWithItems_ReturnSearchedItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventoryItems = this.itemFactory.CreateManyRandom(size / 2)
                 .Append(item)
