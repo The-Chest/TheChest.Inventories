@@ -21,5 +21,8 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             this.inventoryFactory = this.configurations.Resolve<ILazyStackInventoryFactory<T>>();
             this.itemFactory = this.configurations.Resolve<IItemFactory<T>>();
         }
+
+        protected (int size, int stackSize) GenerateRandomSizeAndStackSize() =>
+            (this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST), this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST));
     }
 }

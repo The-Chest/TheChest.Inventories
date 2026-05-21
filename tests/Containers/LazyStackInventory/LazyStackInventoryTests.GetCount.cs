@@ -1,22 +1,23 @@
-using TheChest.Tests.Common.Attributes;
 ﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void GetCount_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.Throws<ArgumentNullException>(() => inventory.GetCount(default!));
+            Assert.That(
+                () => inventory.GetCount(default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [Test]
         public void GetCount_NotFoundItem_ReturnsZero()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var wrongItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, wrongItem);
 
@@ -29,8 +30,7 @@ using TheChest.Tests.Common.Attributes;
         [Test]
         public void GetCount_ExistingItem_ReturnsCorrectCount()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
