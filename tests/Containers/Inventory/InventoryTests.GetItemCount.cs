@@ -1,22 +1,21 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void GetCount_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             Assert.That(() => inventory.GetCount(item: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void GetCount_DoesNotRemoveItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
@@ -28,7 +27,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetCount_NoItems_ReturnsZero()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
@@ -40,7 +39,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetCount_ReturnsItemCount()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 

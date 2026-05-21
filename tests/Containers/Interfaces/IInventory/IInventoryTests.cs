@@ -5,7 +5,7 @@ using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 
 namespace TheChest.Inventories.Tests.Containers.Interfaces
 {
-    public abstract partial class IInventoryTests<T> : BaseTest<T>
+    public abstract class IInventoryTests<T> : BaseTest<T>
     {
         protected readonly IInventoryFactory<T> inventoryFactory;
         protected readonly IItemFactory<T> itemFactory;
@@ -18,5 +18,7 @@ namespace TheChest.Inventories.Tests.Containers.Interfaces
             this.inventoryFactory = this.configurations.Resolve<IInventoryFactory<T>>();
             this.itemFactory = this.configurations.Resolve<IItemFactory<T>>();
         }
+
+        protected int GenerateRandomSize() => this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
     }
 }

@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [TestCase(-1)]
         public void GetItems_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -22,14 +22,16 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [IgnoreIfValueType]
         public void GetItems_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             Assert.That(() => inventory.Get(item: default!, amount: 1), Throws.ArgumentNullException);
         }
 
         [Test]
         public void GetItems_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
             
@@ -60,7 +62,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItems_ValidAmountWithItems_ReturnsItemArrayWithMaxAvailable()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var expectedAmount = this.random.Next(1, size / 2);
             var items = this.itemFactory.CreateMany(expectedAmount);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
@@ -74,7 +76,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItems_ValidAmountFullInventory_ReturnsItemArrayWithAmountSize()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -87,7 +89,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItems_ValidAmountNotFoundItem_ReturnsEmptyArray()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 

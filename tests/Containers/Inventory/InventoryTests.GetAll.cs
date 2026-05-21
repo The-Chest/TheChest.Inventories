@@ -1,22 +1,22 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void GetAll_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             Assert.That(() => inventory.GetAll(item: default!), Throws.ArgumentNullException);
         }
 
         [Test]
         public void GetAll_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
 
@@ -26,7 +26,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetAll_WithItems_RemovesFromFoundSlots()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
@@ -40,7 +40,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetAll_NotFoundItem_DoesNotRemoveFromAnySlots()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
             var slots = inventory.GetSlots<T>()?.ToArray();
@@ -54,7 +54,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetAll_WithItems_CallsOnGetEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size / 2);
             var sameItems = this.itemFactory.CreateManyRandom(size / 2);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());
@@ -74,7 +74,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetAll_NotFoundItemm_ReturnsEmptyArray()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
@@ -87,7 +87,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetAll_FoundItems_ReturnsSearchingItem()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size / 2);
             var sameItems = this.itemFactory.CreateManyRandom(size / 2);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items.Concat(sameItems).ToArray());

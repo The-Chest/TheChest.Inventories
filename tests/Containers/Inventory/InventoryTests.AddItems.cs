@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_NoItems_ReturnsEmptyArray()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = this.itemFactory.CreateMany(0);
@@ -23,7 +23,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_EmptyItemsArray_ThrowsArgumentException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
@@ -35,7 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_ArrayContainingNullItems_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = this.itemFactory
@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_ArrayWithOnlyNullItems_ThrowsArgumentNullException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
@@ -69,7 +69,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_NotAvailabeSlotsForAllItems_ThrowsInvalidOperationException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var emptySlotsSize = this.random.Next(1, size);
             var itemAmount = size - emptySlotsSize;
             var items = this.itemFactory.CreateMany(itemAmount);
@@ -86,7 +86,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_FullInventory_ThrowsInvalidOperationException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -100,7 +100,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_EmptySlots_AddsAllItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomSize = this.random.Next(1, size);
@@ -116,7 +116,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_EmptySlots_CallsOnAddForAllItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomSize = this.random.Next(1, size);
@@ -136,7 +136,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void AddItems_SuccessAdding_ReturnsEmptyArray()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomSize = this.random.Next(1, size);
