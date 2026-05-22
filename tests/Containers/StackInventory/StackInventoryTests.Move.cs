@@ -166,7 +166,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItems = this.itemFactory.CreateMany(size / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(size / 2);
+            var randomItems = this.itemFactory.CreateManyRandom(size %2 == 0? size / 2 : size + 1 /2);
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
 
