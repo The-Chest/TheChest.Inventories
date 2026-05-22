@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
+using TheChest.Inventories.Containers.Exceptions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -20,12 +21,11 @@ namespace TheChest.Inventories.Containers
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
 
-            if (origin == target)
-                return false;
-
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
 
+            if (origin == target)
+                return false;
             if (slotOrigin.IsEmpty && slotTarget.IsEmpty)
                 return false;
             if (slotOrigin.MaxAmount != slotTarget.MaxAmount)
@@ -43,43 +43,38 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentException">When <paramref name="origin"/> and <paramref name="target"/> are equal</exception>
         public virtual void Move(int origin, int target)
         {
-            if (origin < 0 || origin > this.Size)
+            if (origin < 0 || origin >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(origin));
-            if (target < 0 || target > this.Size)
+            if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
             if (origin == target)
-                throw new ArgumentException("Origin and target cannot be the same");
+                throw new ArgumentException(LazyStackInventoryErrors.CannotMoveItemToSameIndex, nameof(target));
 
             var originSlot = this.slots[origin];
             var targetSlot = this.slots[target];
+
             if (originSlot.IsEmpty && targetSlot.IsEmpty)
-                return;
+                throw new InvalidOperationException(LazyStackInventoryErrors.CannotMoveEmptySlots);
+            if (originSlot.MaxAmount != targetSlot.MaxAmount)
+                throw new InvalidOperationException(LazyStackInventoryErrors.CannotMoveToDifferentMaxStackSize);
 
             var events = new List<LazyStackInventoryMoveItemEventData<T>>();
+
             var originItems = originSlot.GetAll();
-            var originItem = originItems.FirstOrDefault();
+            var targetItems = targetSlot.GetAll();
 
-            if (!EqualityComparer<T>.Default.Equals(originItem, default))
+            if (originItems.Length > 0)
             {
-                var targetItems = targetSlot.Replace(originItem, originItems.Length);
+                var originItem = originItems.FirstOrDefault();
+                targetSlot.Add(originItem, originItems.Length);
                 events.Add(new LazyStackInventoryMoveItemEventData<T>(originItem, originItems.Length, origin, target));
-                var targetItem = targetItems.FirstOrDefault();
-
-                if (!EqualityComparer<T>.Default.Equals(targetItem, default))
-                {
-                    originSlot.Replace(targetItem, targetItems.Length);
-                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem, targetItems.Length, target, origin));
-                }
             }
-            else
+
+            if (targetItems.Length > 0)
             {
-                var targetItems = targetSlot.GetAll();
                 var targetItem = targetItems.FirstOrDefault();
-                if (!EqualityComparer<T>.Default.Equals(targetItem, default))
-                {
-                    originSlot.Add(targetItem, targetItems.Length);
-                    events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem, targetItems.Length, target, origin));
-                }
+                originSlot.Add(targetItem, targetItems.Length);
+                events.Add(new LazyStackInventoryMoveItemEventData<T>(targetItem, targetItems.Length, target, origin));
             }
 
             this.OnMove?.Invoke(this, new LazyStackInventoryMoveEventArgs<T>(events.ToArray()));

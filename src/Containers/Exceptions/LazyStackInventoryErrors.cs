@@ -8,5 +8,11 @@
 
         internal const string NotPossibleToAddItem = "It is not possible to add the item to the inventory.";
         #endregion
+
+        #region Moving Items
+        internal const string CannotMoveEmptySlots = "Cannot move empty slots.";
+        internal const string CannotMoveItemToSameIndex = "Cannot move an item to the same index.";
+        internal const string CannotMoveToDifferentMaxStackSize = "Cannot move items to a slot with a different max stack size.";
+        #endregion
     }
 }
