@@ -78,7 +78,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void GetAllItems_EmptyInventory_ReturnsEmptyArray()
         {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var (size, _) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
