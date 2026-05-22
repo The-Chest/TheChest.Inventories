@@ -5,7 +5,8 @@
         [Test]
         public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet should not be called if no item is found");
             
@@ -15,7 +16,7 @@
         [Test]
         public void Clear_FullInventory_CallsOnGetEvent()
         {
-            var size = this.random.Next(10, 20);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateManyRandom(size / 2)
                 .Concat(this.itemFactory.CreateMany(size / 2))
                 .ToArray();
@@ -36,7 +37,7 @@
         [Test]
         public void Clear_FullInventory_ReturnsEveryItemFromInventory()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateManyRandom(size / 2)
                 .Concat(this.itemFactory.CreateMany(size / 2))
                 .ToArray();
@@ -50,7 +51,8 @@
         [Test]
         public void Clear_EmptyInventory_ReturnsEmptyArray()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var result = inventory.Clear();
 

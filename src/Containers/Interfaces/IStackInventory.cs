@@ -164,13 +164,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Moves an item from one index to another in the inventory
         /// </summary>
-        /// <param name="origin">Selected item</param>
-        /// <param name="target">Where the item will be placed</param>
+        /// <param name="origin">The zero-based index representing the items current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
         void Move(int origin, int target);
         /// <summary>
-        /// Gets every item from inventory
+        /// Removes all elements from the Inventory and returns the cleared elements as an array.
         /// </summary>
-        /// <returns>Returns an Array of items</returns>
+        /// <returns>An array containing the elements that were removed from the Inventory.</returns>
         T[] Clear();
         #endregion
     }

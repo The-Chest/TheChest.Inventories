@@ -16,5 +16,10 @@
         internal const string NotEnoughFreeSlots = "There are not enough free slots to add all the items.";
         internal const string CannotAddEmptyArray = "Cannot add an empty array of items.";
         #endregion
+
+        #region Moving Items
+        internal const string CannotMoveItemToSameIndex = "Cannot move an item to the same index.";
+        internal const string CannotMoveEmptySlots = "Cannot move items when both origin and target slots are empty.";
+        #endregion
     }
 }

@@ -5,7 +5,8 @@
         [Test]
         public void GetCount_InvalidItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
                 () => inventory.GetCount(default!), 
@@ -17,7 +18,8 @@
         [Test]
         public void GetCount_EmptyInventory_ReturnsZero()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             var item = this.itemFactory.CreateDefault();
 
             var count = inventory.GetCount(item);
@@ -28,8 +30,7 @@
         [Test]
         public void GetCount_InventoryWithItems_ReturnsItemCount()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventoryItems = this.itemFactory.CreateManyRandom(size - 2)
                 .Append(item)

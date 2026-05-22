@@ -10,8 +10,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [TestCase(MAX_SIZE_TEST, 1)]
         public void Replace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -25,8 +24,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [TestCase(0, -1)]
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -39,8 +37,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
@@ -55,8 +52,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var oldItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
@@ -72,8 +68,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_SlotWithItems_ReplacesItemOnSlot()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var oldItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
@@ -87,8 +82,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_SlotWithItems_CallsOnReplaceEventWithItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var oldItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
@@ -120,8 +114,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_Empty_AddsItemToSlot()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
@@ -135,8 +128,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [IgnoreIfValueType]
         public void Replace_EmptySlot_CallsOnReplaceEventWithNullOldItem()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();
@@ -168,8 +160,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_SlotWithItems_ReturnsItemFromSlot()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var oldItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, oldItem);
 
@@ -183,8 +174,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         [Test]
         public void Replace_EmptySlot_ReturnsEmptyArray()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var newItem = this.itemFactory.CreateRandom();

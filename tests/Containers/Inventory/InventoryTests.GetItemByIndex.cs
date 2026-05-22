@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [TestCase(MAX_SIZE_TEST)]
         public void GetItemByIndex_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -22,8 +22,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItemByIndex_ValidIndexEmptySlot_DoesNotCallOnGetEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             var index = this.random.Next(0, size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("Get(int index) should not be called if no item is found");
@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItemByIndex_ValidIndexFullSlot_RemovesItemFromSlot()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -47,7 +47,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItemByIndex_ExistingItemOnSlot_CallsOnGetEvent()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -70,23 +70,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void GetItemByIndex_ValidIndexEmptySlotValueType_ReturnsDefault()
-        {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-
-            Assert.That(result, Is.EqualTo(default(T)));
-        }
-
-        [Test]
-        [IgnoreIfValueType]
         public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomIndex = this.random.Next(0, size);
@@ -98,7 +84,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void GetItemByIndex_ValidIndexFullSlot_ReturnsItem()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 

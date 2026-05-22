@@ -7,7 +7,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void CanAddAt_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             Assert.That(
                 () => inventory.CanAddAt(item: default!, 0), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
@@ -18,7 +19,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [TestCase(MAX_SIZE_TEST)]
         public void CanAddAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             Assert.That(
@@ -30,7 +31,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void CanAddAt_FullInventory_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
@@ -43,7 +44,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void CanAddAt_SlotWithDifferentItem_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomIndex = this.random.Next(0, size);
@@ -59,7 +60,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void CanAddAt_SlotWithSameItem_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var randomIndex = this.random.Next(0, size);
@@ -74,7 +75,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void CanAddAt_EmptyInventory_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateDefault();

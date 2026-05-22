@@ -189,6 +189,7 @@ namespace TheChest.Inventories.Containers
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
 
+            //TODO: add check for available space and throw exception if there is not enough space to add the items
             if (this.IsFull)
                 throw new InvalidOperationException(StackInventoryErrors.InventoryIsFull);
 

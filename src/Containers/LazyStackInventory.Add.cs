@@ -106,6 +106,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
             if (this.IsFull)
                 throw new InvalidOperationException(LazyStackInventoryErrors.InventoryIsFull);
+            //TODO: add check for available space and throw exception if there is not enough space to add the items
 
             var events = new List<LazyStackInventoryAddItemEventData<T>>(amount);
             var indexes = this.slots.GetAddOrderIndexes(item, amount);

@@ -5,7 +5,9 @@
         [Test]
         public void CanAddItemAt_NullItem_ThrowsArgumentNullException()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            
             Assert.That(
                 () => inventory.CanAddAt(item: default!, 0), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
@@ -16,8 +18,8 @@
         [TestCase(MAX_SIZE_TEST)]
         public void CanAddItemAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
                 () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index), 
@@ -29,7 +31,8 @@
         [Test]
         public void CanAddItemAt_EmptyInventory_ReturnsTrue()
         {
-            var inventory = this.inventoryFactory.EmptyContainer();
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateDefault();
 
@@ -41,8 +44,7 @@
         [Test]
         public void CanAddItemAt_SlotWithSameItemsAndEnoughSpace_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(5, 10);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var randomIndex = this.random.Next(0, size);
@@ -56,8 +58,7 @@
         [Test]
         public void CanAddItemAt_SlotWithDifferentItemsAndEnoughSpace_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(5, 10);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             var randomIndex = this.random.Next(0, size);
@@ -72,8 +73,7 @@
         [Test]
         public void CanAddItemAt_FullInventory_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
-            var stackSize = this.random.Next(5, 10);
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 

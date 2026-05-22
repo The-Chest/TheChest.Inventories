@@ -4,38 +4,67 @@
     {
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void CanMove_InvalidOrigin_ReturnsFalse(int origin)
+        public void CanMove_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(origin, 0);
-
-            Assert.That(canMove, Is.False);
+            Assert.That(
+                () => inventory.CanMove(origin, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
         }
 
         [Test]
-        public void CanMove_OriginEqualToSize_ReturnsFalse()
+        public void CanMove_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(size, 0);
-
-            Assert.That(canMove, Is.False);
+            Assert.That(
+                () => inventory.CanMove(size, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
         }
 
         [TestCase(-1)]
-        [TestCase(100)]
-        public void CanMove_InvalidTarget_ReturnsFalse(int target)
+        [TestCase(MAX_SIZE_TEST)]
+        public void CanMove_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
 
-            var canMove = inventory.CanMove(0, target);
+            Assert.That(
+                () => inventory.CanMove(0, target),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void CanMove_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.GenerateRandomSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+
+            Assert.That(
+                () => inventory.CanMove(0, size),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void CanMove_OriginEqualToTarget_ReturnsFalse()
+        {
+            var size = this.GenerateRandomSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+
+            var randomIndex = this.random.Next(0, size);
+            var canMove = inventory.CanMove(randomIndex, randomIndex);
 
             Assert.That(canMove, Is.False);
         }
@@ -43,7 +72,7 @@
         [Test]
         public void CanMove_BothSlotsWithItems_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var firstItem = this.itemFactory.CreateRandom();
@@ -59,7 +88,7 @@
         [Test]
         public void CanMove_OriginWithItem_EmptyTarget_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
@@ -73,7 +102,7 @@
         [Test]
         public void CanMove_EmptyOrigin_TargetWithItem_ReturnsTrue()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
@@ -87,7 +116,7 @@
         [Test]
         public void CanMove_EmptyOrigin_EmptyTarget_ReturnsFalse()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var canMove = inventory.CanMove(0, 1);

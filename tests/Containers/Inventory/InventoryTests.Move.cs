@@ -8,26 +8,81 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [TestCase(MAX_SIZE_TEST)]
         public void Move_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(origin, 2));
+
+            Assert.That(
+                () => inventory.Move(origin, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
+        }
+
+        [Test]
+        public void Move_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.GenerateRandomSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+
+            Assert.That(
+                () => inventory.Move(size, 0), 
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
         }
 
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Move(0, target));
+
+            Assert.That(
+                () => inventory.Move(0, target),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void Move_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.GenerateRandomSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+
+            Assert.That(
+                () => inventory.Move(0, size),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void Move_OriginEqualToTarget_ThrowsArgumentException()
+        {
+            var size = this.GenerateRandomSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+            Assert.Throws<ArgumentException>(() => inventory.Move(0, 0));
+        }
+
+        [Test]
+        public void Move_BothSlotsEmpty_ThrowsInvalidOperationException()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            Assert.That(
+                () => inventory.Move(0, 1),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot move items when both origin and target slots are empty.")
+            );
         }
 
         [Test]
         public void Move_BothSlotsWithItems_SwapsItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateManyRandom(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
@@ -47,7 +102,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void Move_BothSlotsWithItems_CallsOnMoveWithTwoMovedItems()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateManyRandom(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
@@ -86,7 +141,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void Move_EmptyTarget_MovesItem()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
@@ -104,7 +159,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void Move_EmptyTarget_CallsOnMoveWithOnlyOriginData()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
@@ -133,7 +188,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void Move_EmptyOrigin_MovesItem()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
@@ -150,7 +205,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         [Test]
         public void Move_EmptyOrigin_CallsOnMoveWithOnlyTargetData()
         {
-            var size = this.random.Next(MIN_SIZE_TEST, MAX_SIZE_TEST);
+            var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();

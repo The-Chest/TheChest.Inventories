@@ -24,5 +24,11 @@
         internal const string CannotReplaceEmptyArray = "Cannot replace using an empty item array";
         internal const string MaxStackSizeSmallerThanItemsToReplace = "The max stack size is smaller than the number of items to replace.";
         #endregion
+
+        #region Moving Items
+        internal const string CannotMoveEmptySlots = "Cannot move empty slots.";
+        internal const string CannotMoveItemToSameIndex = "Cannot move an item to the same index.";
+        internal const string CannotMoveToDifferentMaxStackSize = "Cannot move items to a slot with a different max stack size.";
+        #endregion
     }
 }
