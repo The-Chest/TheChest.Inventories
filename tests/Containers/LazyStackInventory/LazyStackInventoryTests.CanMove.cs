@@ -14,6 +14,7 @@
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
+
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void CanMove_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)
@@ -53,6 +54,19 @@
             var canMove = inventory.CanMove(originIndex, targetIndex);
 
             Assert.That(canMove, Is.True);
+        }
+
+        [Test]
+        public void CanMove_EmptyOriginAndTarget_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            var canMove = inventory.CanMove(originIndex, targetIndex);
+
+            Assert.That(canMove, Is.False);
         }
 
         [Test]

@@ -56,10 +56,25 @@
         public void CanMove_SameOriginAndTarget_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var originIndex = this.random.Next(0, size - 1);
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var canMove = inventory.CanMove(originIndex, originIndex);
+            var originIndex = this.random.Next(0, size - 1);
+            var targetIndex = originIndex;
+            var canMove = inventory.CanMove(originIndex, targetIndex);
+
+            Assert.That(canMove, Is.False);
+        }
+
+
+        [Test]
+        public void CanMove_EmptyOriginAndTarget_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            var canMove = inventory.CanMove(originIndex, targetIndex);
 
             Assert.That(canMove, Is.False);
         }
