@@ -31,16 +31,16 @@
 
 ### Inventory\<T\>
 * `Add(params T[] items)` now throws `ArgumentNullException` when the param `items` contains a null item.
-* The Action methods in now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
-  * `Add(T item)`- When the container is full
-  * `Add(T[] items)` - When the container is full or there is no available slots to add the items
-  * `AddAt(T item, int index)` - When the selected slot rejects the item
-  * `Move(int origin, int target)` - When origin and target slots are both empty
 * Validation methods now throw Exceptions when the params are invalid
   * `CanAdd(T item)` - When the param `item` is null
   * `CanAddAt(T item, int index)` - When the param `item` is null or the index is bigger than the inventory size or smaller than zero
   * `CanReplace(T item, int index)` - When the param `item` is null or the index is bigger than the inventory size or smaller than zero
   * `CanMove(int origin, int target)` - When origin and target indexes are bigger than the inventory size or smaller than zero
+* The Action methods in now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
+  * `Add(T item)`- When the container is full
+  * `Add(T[] items)` - When the container is full or there is no available slots to add the items
+  * `AddAt(T item, int index)` - When the selected slot rejects the item
+  * `Move(int origin, int target)` - When origin and target slots are both empty
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
   * `Add(T item)` -> Use `Add(params T[] items)` instead
@@ -59,7 +59,8 @@
   * `Add(T[] items)` - When the container is full or there is no available slots to add the items
   * `AddAt(T item, int index)` - When the slot is full or the item is different from the slot's content
   * `AddAt(T[] items, int index)` - When the slot is full or the items are different from the slot's content
-* Some methods are now Obsolete and are going to be removed in the future
+  * `Move(int origin, int target)` - When origin and target slots are both empty or have different size
+* Obsolete methods
   * `CanAdd(T item)` -> Use `CanAdd(params T[] items)` instead
   * `Add(T item)` -> Use `Add(params T[] items)` instead
 
@@ -77,6 +78,7 @@
 * The Action methods now throws `InvalidOperationException` when the params are valid but the it couldn't add because of state validation.
   * `Add(T item, int amount = 1)` - When the container is full or there is no available slots to add the item
   * `AddAt(T item, int index, int amount = 1)` - When the slot is full or the item is different from the slot's content
+  * `Move(int origin, int target)` - When origin and target slots are both empty or have different size
 * Some methods are now Obsolete and are going to be removed in the future
   * `CanAdd(T item)` -> Use `CanAdd(T item, int amount)` instead
   * `Add(T item)` -> Use `Add(T item, int amount)` instead.
@@ -93,8 +95,8 @@
 
 ## Known Issues
 * **No support for structs or value types** 
-* The Current Architecture is not stable for the final version yet
-* Event system will need an improvement on creation/dispatch
+* **The Current Architecture is not stable for the final version yet**
+* **Event system will need an improvement on creation/dispatch**
   * The new Event API is being planned
 * `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 * Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
@@ -105,6 +107,8 @@
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
 * Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
+* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
+    * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
