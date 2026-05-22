@@ -19,6 +19,18 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             );
         }
 
+        [Test]
+        public void Move_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+            Assert.That(
+                () => inventory.Move(size, 0),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
+            );
+        }
+
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
@@ -34,13 +46,47 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void Move_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+            Assert.That(
+                () => inventory.Move(0, size),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
+            );
+        }
+
+        [Test]
+        public void Move_EmptyOriginAndTarget_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+
+            Assert.That(
+                () => inventory.Move(originIndex, targetIndex),
+                Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("Cannot move empty slots.")
+            );
+        }
+
+        [Test]
         public void Move_OriginEqualsToTarget_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
-            Assert.Throws<ArgumentException>(() => inventory.Move(1, 1));
+            var originIndex = this.random.Next(0, size);
+            var targetIndex = originIndex;
+            Assert.That(
+                () => inventory.Move(originIndex, targetIndex),
+                Throws.TypeOf<ArgumentException>()
+                    .With.Message.StartsWith("Cannot move an item to the same index.").And
+                    .With.Property("ParamName").EqualTo("target")
+            );
         }
 
         [Test]
@@ -50,16 +96,28 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var items = this.itemFactory.CreateManyRandom(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
-            var origin = 0;
-            var target = 1;
-            var itemFromOrigin = inventory.GetItems(origin);
-            var ItemFromTarget = inventory.GetItems(target);
-            inventory.Move(origin, target);
+            var originIndex = this.random.Next(size / 2, size);
+            var originItems = inventory.GetItems(originIndex);
+
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var targetItems = inventory.GetItems(targetIndex);
+
+            inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetItems(origin), Is.EqualTo(ItemFromTarget));
-                Assert.That(inventory.GetItems(target), Is.EqualTo(itemFromOrigin));
+                Assert.Multiple(() =>
+                {
+                    var originSlot = inventory.GetSlot(originIndex);
+
+                    Assert.That(originSlot.GetContent(), Is.EqualTo(targetItems[0]));
+                    Assert.That(originSlot.Amount, Is.EqualTo(targetItems.Length));
+                });
+                Assert.Multiple(() => {
+                    var targetSlot = inventory.GetSlot(targetIndex);
+                    Assert.That(targetSlot.GetContent(), Is.EqualTo(originItems[0]));
+                    Assert.That(targetSlot.Amount, Is.EqualTo(originItems.Length));
+                });
             });
         }
 
@@ -70,10 +128,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var items = this.itemFactory.CreateManyRandom(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
-            var origin = 0;
-            var target = 1;
-            var itemFromOrigin = inventory.GetItems(origin)[0];
-            var ItemFromTarget = inventory.GetItems(target)[0];
+            var originIndex = this.random.Next(size / 2, size);
+            var originItems = inventory.GetItems(originIndex);
+
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var targetItems = inventory.GetItems(targetIndex);
 
             var raised = false;
             inventory.OnMove += (o, args) =>
@@ -82,21 +141,23 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                 Assert.Multiple(() =>
                 {
                     var firstEvent = args.Data.FirstOrDefault();
-                    Assert.That(firstEvent.Item, Is.EqualTo(itemFromOrigin));
-                    Assert.That(firstEvent.FromIndex, Is.EqualTo(origin));
-                    Assert.That(firstEvent.ToIndex, Is.EqualTo(target));
+                    Assert.That(firstEvent.Item, Is.EqualTo(originItems[0]));
+                    Assert.That(firstEvent.Amount, Is.EqualTo(originItems.Length));
+                    Assert.That(firstEvent.FromIndex, Is.EqualTo(originIndex));
+                    Assert.That(firstEvent.ToIndex, Is.EqualTo(targetIndex));
                 });
 
                 Assert.Multiple(() =>
                 {
                     var secondEvent = args.Data.Skip(1).FirstOrDefault();
-                    Assert.That(secondEvent.Item, Is.EqualTo(ItemFromTarget));
-                    Assert.That(secondEvent.FromIndex, Is.EqualTo(target));
-                    Assert.That(secondEvent.ToIndex, Is.EqualTo(origin));
+                    Assert.That(secondEvent.Item, Is.EqualTo(targetItems[0]));
+                    Assert.That(secondEvent.Amount, Is.EqualTo(targetItems.Length));
+                    Assert.That(secondEvent.FromIndex, Is.EqualTo(targetIndex));
+                    Assert.That(secondEvent.ToIndex, Is.EqualTo(originIndex));
                 });
                 raised = true;
             };
-            inventory.Move(origin, target);
+            inventory.Move(originIndex, targetIndex);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
         }
@@ -108,20 +169,23 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
-            inventory.Add(item);
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var amount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, originIndex, amount);
 
-            inventory.Move(0, 1);
+            inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
-                var firstSlot = inventory.GetSlot(0);
-                Assert.That(firstSlot!.GetContent(), Is.Null);
-                Assert.That(firstSlot!.IsEmpty, Is.True);
+                var originSlot = inventory.GetSlot(originIndex);
+                Assert.That(originSlot.GetContent(), Is.Null);
+                Assert.That(originSlot.IsEmpty, Is.True);
             });
             Assert.Multiple(() => {
-                var secondSlot = inventory.GetSlot(1);
-                Assert.That(secondSlot.GetContent(), Is.EqualTo(item));
-                Assert.That(secondSlot.Amount, Is.EqualTo(1));
+                var targetSlot = inventory.GetSlot(targetIndex);
+                Assert.That(targetSlot.GetContent(), Is.EqualTo(item));
+                Assert.That(targetSlot.Amount, Is.EqualTo(amount));
             });
         }
 
@@ -131,10 +195,12 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
+            var originIndex = this.random.Next(size /2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var amount = this.random.Next(1, stackSize);
+
             var item = this.itemFactory.CreateRandom();
-            var originIndex = 0;
-            var targetIndex = 1;
-            inventory.Add(item);
+            inventory.AddAt(item, originIndex, amount);
 
             var raised = false;
             inventory.OnMove += (o, args) =>
@@ -146,6 +212,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                     Assert.That(firstEvent.Item, Is.EqualTo(item));
                     Assert.That(firstEvent.FromIndex, Is.EqualTo(originIndex));
                     Assert.That(firstEvent.ToIndex, Is.EqualTo(targetIndex));
+                    Assert.That(firstEvent.Amount, Is.EqualTo(amount));
                 });
                 raised = true;
             };
@@ -161,24 +228,25 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
-            var originIndex = 0;
-            var targetIndex = 1;
-            inventory.AddAt(item, targetIndex, 1);
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var amount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, targetIndex, amount);
 
             inventory.Move(originIndex, targetIndex);
 
             Assert.Multiple(() => {
-                var firstSlot = inventory.GetSlot(0);
+                var originSlot = inventory.GetSlot(originIndex);
 
-                Assert.That(firstSlot!.GetContent(), Is.EqualTo(item));
-                Assert.That(firstSlot!.Amount, Is.EqualTo(1));
+                Assert.That(originSlot!.GetContent(), Is.EqualTo(item));
+                Assert.That(originSlot!.Amount, Is.EqualTo(amount));
             });
             Assert.Multiple(() =>
             {
-                var secondSlot = inventory.GetSlot(1);
+                var targetSlot = inventory.GetSlot(targetIndex);
               
-                Assert.That(secondSlot!.GetContent(), Is.Null);
-                Assert.That(secondSlot!.IsEmpty, Is.True);
+                Assert.That(targetSlot!.GetContent(), Is.Null);
+                Assert.That(targetSlot!.IsEmpty, Is.True);
             });
         }
 
@@ -189,9 +257,10 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var item = this.itemFactory.CreateRandom();
-            var originIndex = 0;
-            var targetIndex = 1;
-            inventory.AddAt(item, targetIndex, 1);
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var amount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, targetIndex, amount);
 
             var raised = false;
             inventory.OnMove += (o, args) =>
