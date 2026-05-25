@@ -78,6 +78,12 @@ namespace TheChest.Inventories.Containers.Interfaces
         bool CanAdd(params T[] items);
 
         /// <summary>
+        /// Attempts to add the specified items to the Inventory.
+        /// </summary>
+        /// <param name="items">An array of items to add.</param>
+        /// <returns><see langword="true"/> if all items were added successfully; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(params T[] items);
+        /// <summary>
         /// Adds and array of item in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
@@ -144,6 +150,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">slot where the item will be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
+        /// <summary>
+        /// Attempts to add the specified item at the given index in the inventory.
+        /// </summary>
+        /// <param name="item">The item to add to the inventory.</param>
+        /// <param name="index">The zero-based index at which to insert the item.</param>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> was successfully added at the specified <paramref name="index"/>; otherwise, <see langword="false"/>.</returns>
+        bool TryAddAt(T item, int index);
         /// <summary>
         /// Adds an array of items inside the inventory
         /// </summary>
