@@ -152,6 +152,24 @@ namespace TheChest.Inventories.Containers
             return items;
         }
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
+        public virtual bool TryAdd(params T[] items)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (items.Length == 0)
+                return true;
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (!items.HasAllEqual())
+                throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
+
+            if (!this.CanAddItems(items))
+                return false;
+
+            return this.AddItems(items).Length == 0;
+        }
+        /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory. 
         /// </remarks>
@@ -211,6 +229,25 @@ namespace TheChest.Inventories.Containers
                 this.OnAdd?.Invoke(this, (new[] { item }, index));
 
             return added;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        public virtual bool TryAddAt(T item, int index)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            try
+            {
+                return this.AddAt(item, index);
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
