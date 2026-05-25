@@ -68,18 +68,6 @@ namespace TheChest.Inventories.Containers
 
             return this.CanAddItems(items);
         }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
-        public virtual bool CanAddAt(T item, int index)
-        {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            return this.slots[index].CanAdd(item);
-        }
 
         /// <summary>
         /// Attempts to add the specified items to the available slots and returns any items that could not be added.
@@ -127,6 +115,26 @@ namespace TheChest.Inventories.Containers
 
             return Array.Empty<T>();
         }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
+        /// </remarks>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="items"/> is empty.</exception>
+        public virtual bool TryAdd(params T[] items)
+        {
+            if (items.Length == 0)
+                throw new ArgumentException(InventoryErrors.CannotAddEmptyArray, nameof(items));
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), InventoryErrors.ItemArrayContainsNull);
+
+            if (items.Length > this.Size)
+                return false;
+            if (!this.CanAddItems(items))
+                return false;
+
+            return this.AddItems(items).Length == 0;
+        }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
@@ -164,6 +172,19 @@ namespace TheChest.Inventories.Containers
 
             return this.AddItems(items);
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanAddAt(T item, int index)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanAdd(item);
+        }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
@@ -183,8 +204,10 @@ namespace TheChest.Inventories.Containers
 
             return true;
         }
-
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event after the <paramref name="item"/> is added. 
+        /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         /// <returns><see langword="true"/> if the <paramref name="item"/> was successfully added at the specified <paramref name="index"/>; <see langword="false"/> if the the slot at <paramref name="index"/> is occupied</returns>

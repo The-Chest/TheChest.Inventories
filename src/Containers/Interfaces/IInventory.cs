@@ -66,14 +66,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
         /// <returns><see langword="true"/> if ALL <paramref name="items"/> can be added; otherwise, <see langword="false"/>.</returns>
         bool CanAdd(params T[] items);
-        /// <summary>
-        /// Determines whether the specified item can be added at the given index.
-        /// </summary>
-        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
-        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the collection.</param>
-        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
-        bool CanAddAt(T item, int index);
 
+        /// <summary>
+        /// Attempts to add the specified items to the Inventory.
+        /// </summary>
+        /// <param name="items">An array of items to add.</param>
+        /// <returns><see langword="true"/> if all items were added successfully; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(params T[] items);
         /// <summary>
         /// <para> Adds an item in a avaliable slot </para>
         /// <para> This method return will change to void in future versions. </para>
@@ -89,6 +88,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns>The items from param that were not possible to add</returns>
         T[] Add(params T[] items);
+
+        /// <summary>
+        /// Determines whether the specified item can be added at the given index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the collection.</param>
+        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
+        bool CanAddAt(T item, int index);
         /// <summary>
         /// <para>Adds an item in a specific slot </para>
         /// <para>This method return will change to void in future versions.</para>
