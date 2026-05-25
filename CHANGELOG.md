@@ -1,21 +1,3 @@
-# Unreleased
-
-## What's Added
-* `LazyStackInventory<T>` try-add APIs
-  * `ILazyStackInventory<T>.TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added.
-  * `ILazyStackInventory<T>.TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added.
-
-## What's Changed
-* `LazyStackInventory<T>` add implementation refactor
-  * Added protected helper `AddItem(T item, int amount)` to centralize inventory-wide add behavior and `OnAdd` event dispatch for successful additions.
-  * Added protected helper `AddItemAt(T item, int index, int amount)` to centralize add-at-index behavior and `OnAdd` event dispatch for successful additions.
-  * `Add(T item, int amount)`, `TryAdd(T item, int amount)`, `AddAt(T item, int index, int amount)`, and `TryAddAt(T item, int index, int amount)` now share the centralized add helpers.
-
-## What's Fixed
-* Added unit-test coverage for `TryAdd` and `TryAddAt` success/failure and argument-validation behavior.
-
----
-
 # v0.17.0
 
 ## What's Added
@@ -24,14 +6,21 @@
     * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
 
+  * `LazyStackInventory`
+    * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
+    * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
+
 ## What's Changed
-* 
+* `LazyStackInventory<T>` add implementation refactor
+  * Added protected helper `AddItem(T item, int amount)` to centralize inventory-wide add behavior and `OnAdd` event dispatch for successful additions
+  * Added protected helper `AddItemAt(T item, int index, int amount)` to centralize add-at-index behavior and `OnAdd` event dispatch for successful additions
+  * `Add(T item, int amount)`, `TryAdd(T item, int amount)`, `AddAt(T item, int index, int amount)`, and `TryAddAt(T item, int index, int amount)` now share the centralized add helpers
 
 ## What's Removed
 * 
 
 ## What's Fixed
-* 
+* Added unit-test coverage for `TryAdd` and `TryAddAt` success/failure and argument-validation behavior
 
 ## Known Issues
 * **No support for structs or value types** 
