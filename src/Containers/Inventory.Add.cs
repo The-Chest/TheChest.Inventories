@@ -183,5 +183,28 @@ namespace TheChest.Inventories.Containers
 
             return true;
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> was successfully added at the specified <paramref name="index"/>; <see langword="false"/> if the the slot at <paramref name="index"/> is occupied</returns>
+        public virtual bool TryAddAt(T item, int index)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            try 
+            {
+                this.slots[index].Add(item);
+                this.OnAdd?.Invoke(this, (item, index));
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }
     }
 }

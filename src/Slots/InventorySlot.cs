@@ -41,6 +41,7 @@ namespace TheChest.Inventories.Slots
                 throw new InvalidOperationException(InventorySlotErrors.FullSlot);
 
             this.Content = item;
+            
             return true;
         }
 

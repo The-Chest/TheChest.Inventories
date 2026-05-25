@@ -98,6 +98,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">Slot where the item will be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
+        /// <summary>
+        /// Attempts to add the specified item at the given index in the collection.
+        /// </summary>
+        /// <remarks>
+        /// This method does not throw an exception if the operation fails. Instead, it returns
+        /// <see langword="false"/> to indicate failure.
+        /// </remarks>
+        /// <param name="item">The item to add to the inventory.</param>
+        /// <param name="index">The zero-based index at which to insert the item.</param>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> was successfully added at the specified <paramref name="index"/>; otherwise, <see langword="false"/></returns>
+        bool TryAddAt(T item, int index);
 
         /// <summary>
         /// Raised when an item is replaced in a specific slot
