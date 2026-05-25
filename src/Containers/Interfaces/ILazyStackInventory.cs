@@ -98,6 +98,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>true if the <paramref name="item"/> can be added at the specified <paramref name="index"/> for the given <paramref name="amount"/>; otherwise, false.</returns>
         bool CanAddAt(T item, int index, int amount = 1);
         /// <summary>
+        /// Attempts to add the specified amount of <paramref name="item"/> to the inventory.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <param name="amount">The amount to add.</param>
+        /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(T item, int amount);
+        /// <summary>
         /// Adds items inside the inventory
         /// </summary>
         /// <param name="item">Array of item of the same type wich will be added to inventory</param>
@@ -112,6 +119,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">amount of the item</param>
         /// <returns>Returns the amount of items that couldn't be added</returns>
         int AddAt(T item, int index, int amount);
+        /// <summary>
+        /// Attempts to add the specified amount of <paramref name="item"/> at the given <paramref name="index"/>.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <param name="index">The slot index where the item should be added.</param>
+        /// <param name="amount">The amount to add.</param>
+        /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added at <paramref name="index"/>; otherwise, <see langword="false"/>.</returns>
+        bool TryAddAt(T item, int index, int amount);
         /// <summary>
         /// Checks if an item can be replaced in a specific slot
         /// </summary>
