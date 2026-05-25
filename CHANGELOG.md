@@ -1,3 +1,43 @@
+# v0.17.0
+
+## What's Added
+* New add methods with try add behavior to Inventories
+  * `Inventory`
+    * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
+    * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
+
+## What's Changed
+* 
+
+## What's Removed
+* 
+
+## What's Fixed
+* 
+
+## Known Issues
+* **No support for structs or value types** 
+* **The Current Architecture is not stable for the final version yet**
+* **Event system will need an improvement on creation/dispatch**
+  * The new Event API is being planned
+* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
+* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
+    * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
+
+## What's Next
+* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
+* [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
+
 # v0.16.0
 
 > This Changelog is going to be separated into subsections for each Inventory Type to make it more organized
