@@ -20,7 +20,7 @@
 * 
 
 ## What's Fixed
-* Added unit-test coverage for `TryAdd` and `TryAddAt` success/failure and argument-validation behavior
+* 
 
 ## Known Issues
 * **No support for structs or value types** 
