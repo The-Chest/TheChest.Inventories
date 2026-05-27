@@ -130,8 +130,27 @@ namespace TheChest.Inventories.Containers
 
             if (items.Length > this.Size)
                 return false;
-            if (!this.CanAddItems(items))
-                return false;
+
+            var addedAmount = 0;
+            var addedItems = new Dictionary<int, T>();
+
+            for (var index = 0; index < this.Size; index++)
+            {
+                var item = items[addedAmount];
+
+                var slot = this.slots[index];
+                if (slot.TryAdd(item))
+                {
+                    addedItems.Add(index, item);
+                    addedAmount++;
+
+                    if (addedAmount >= items.Length)
+                        break;
+                }
+            }
+
+            if (addedItems.Count > 0)
+                this.OnAdd?.Invoke(this, (addedItems.Values.ToArray(), addedItems.Keys.ToArray()));
 
             return this.AddItems(items).Length == 0;
         }
@@ -218,16 +237,9 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            try 
-            {
-                this.slots[index].Add(item);
-                this.OnAdd?.Invoke(this, (item, index));
-                return true;
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
+            var result = this.slots[index].TryAdd(item);
+            this.OnAdd?.Invoke(this, (item, index));
+            return result;
         }
     }
 }
