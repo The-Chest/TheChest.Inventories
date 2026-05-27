@@ -152,7 +152,7 @@ namespace TheChest.Inventories.Containers
             if (addedItems.Count > 0)
                 this.OnAdd?.Invoke(this, (addedItems.Values.ToArray(), addedItems.Keys.ToArray()));
 
-            return this.AddItems(items).Length == 0;
+            return addedAmount == items.Length;
         }
         /// <inheritdoc/>
         /// <remarks>
