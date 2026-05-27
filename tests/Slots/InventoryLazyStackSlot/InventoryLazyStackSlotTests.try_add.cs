@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.Full(item, stackSize);
+            var slot = this.slotFactory.FullSlot(item, stackSize);
 
             slot.TryAdd(item, 1);
 
@@ -42,6 +42,19 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             slot.TryAdd(item, addAmount);
 
             Assert.That(slot.Amount, Is.EqualTo(amount));
+        }
+
+        [Test]
+        public void TryAdd_AmountBiggerThanStackSizeOnEmptySlot_DoesNotChangeAmount()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Empty(stackSize);
+            var addAmount = stackSize + this.random.Next(1, 5);
+
+            slot.TryAdd(item, addAmount);
+
+            Assert.That(slot.Amount, Is.Zero);
         }
 
         [Test]

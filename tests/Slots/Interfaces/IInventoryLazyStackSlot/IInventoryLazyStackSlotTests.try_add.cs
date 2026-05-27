@@ -61,6 +61,19 @@
         }
 
         [Test]
+        public void TryAdd_AmountBiggerThanStackSizeOnEmptySlot_ReturnsFalse()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Empty(stackSize);
+            var addAmount = stackSize + this.random.Next(1, 5);
+
+            var result = slot.TryAdd(item, addAmount);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
         public void TryAdd_ValidInput_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);

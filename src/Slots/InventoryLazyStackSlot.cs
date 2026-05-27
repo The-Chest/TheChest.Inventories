@@ -93,7 +93,7 @@ namespace TheChest.Inventories.Slots
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
-            if (amount <= 0 || amount > this.MaxAmount)
+            if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             if (this.IsFull)
