@@ -175,7 +175,6 @@ namespace TheChest.Inventories.Containers
             return notAdded;
         }
 
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero, or <paramref name="index"/> is out of range.</exception>

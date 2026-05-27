@@ -238,10 +238,10 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <summary>
-        /// Replaces the current items in the current slot with the specified items.
+        /// Replaces the current items in the current slot with the specified items
         /// </summary>
-        /// <param name="items">The items to add to the collection. If the slot is empty, these items are added directly.</param>
-        /// <returns>An array containing the items that were replaced. If the slot was empty, returns an empty array. If the specified items could not be added, returns the input <paramref name="items"/>.</returns>
+        /// <param name="items">The items to add to the collection. If the slot is empty, these items are added directly</param>
+        /// <returns>An array containing the items that were replaced. If the slot was empty, returns an empty array. If the specified items could not be added, returns the input <paramref name="items"/></returns>
         protected virtual T[] ReplaceItems(params T[] items)
         {
             if (this.IsEmpty)

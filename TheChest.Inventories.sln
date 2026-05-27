@@ -53,9 +53,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ai", "ai", "{4FB574CE-4142-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skills", "skills", "{D4C4483F-797C-4877-9281-92C70D529986}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test-creation-skill", "test-creation-skill", "{FF04AD41-6658-429F-B530-FE09B7EF7E44}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test-creation", "test-creation", "{FF04AD41-6658-429F-B530-FE09B7EF7E44}"
 	ProjectSection(SolutionItems) = preProject
-		skills\test-generator\SKILL.md = skills\test-generator\SKILL.md
+		skills\test-creation\SKILL.md = skills\test-creation\SKILL.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "changelog-write", "changelog-write", "{191BB0D7-AD03-4A8B-8CF2-388419C8674B}"
+	ProjectSection(SolutionItems) = preProject
+		skills\changelog-write\SKILL.md = skills\changelog-write\SKILL.md
 	EndProjectSection
 EndProject
 Global
@@ -86,6 +91,7 @@ Global
 		{4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
 		{D4C4483F-797C-4877-9281-92C70D529986} = {4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA}
 		{FF04AD41-6658-429F-B530-FE09B7EF7E44} = {D4C4483F-797C-4877-9281-92C70D529986}
+		{191BB0D7-AD03-4A8B-8CF2-388419C8674B} = {D4C4483F-797C-4877-9281-92C70D529986}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF9A167E-B926-4A99-B692-8A3566AB0996}
