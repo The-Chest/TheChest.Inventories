@@ -156,6 +156,25 @@ namespace TheChest.Inventories.Slots
             return items;
         }
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or contains <see langword="null"/> values.</exception>
+        public virtual bool TryAdd(T[] items)
+        {
+            if (items is null || items.ContainsNull())
+                throw new ArgumentNullException(nameof(items));
+
+            if (this.IsFull)
+                return false;
+            if (items.Length > this.AvailableAmount)
+                return false;
+            if (!items.HasAllEqual())
+                return false;
+            if (!this.IsEmpty && !this.Contains(items))
+                return false;
+
+            this.AddItems(ref items);
+            return true;
+        }
+        /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">When the slot is full or when trying to add an item that is different from the items already in the slot</exception>
         public virtual bool Add(T item)

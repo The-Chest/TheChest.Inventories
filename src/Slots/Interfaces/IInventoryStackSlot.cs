@@ -41,6 +41,15 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="items">items to be added to the slot</param>
         /// <returns>The items that were not added to the slot</returns>
         T[] Add(T[] items);
+        /// <summary>
+        /// Tries to add an array of items to the slot.
+        /// </summary>
+        /// <remarks>
+        /// This method contract will change to have params instead of array in the future, but for now it will be an array for compatibility reasons.
+        /// </remarks>
+        /// <param name="items">items to be added to the slot</param>
+        /// <returns><see langword="true"/> if all items were added to the slot; otherwise <see langword="false"/></returns>
+        bool TryAdd(T[] items);
 
         /// <summary>
         /// Checks if is possible to replace an item
