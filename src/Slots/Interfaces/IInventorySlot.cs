@@ -20,6 +20,12 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="item">The item to be added</param>
         /// <returns><see langword="true"/> if the value is successful added</returns>
         bool Add(T item);
+        /// <summary>
+        /// Attempts to add the specified item to the collection.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <returns><see langword="true"/> if the item was added; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(T item);
 
         /// <summary>
         /// Checks whether the specified item can replace the content of the slot.

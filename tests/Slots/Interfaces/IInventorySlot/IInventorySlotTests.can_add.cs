@@ -3,13 +3,14 @@
     public partial class IInventorySlotTests<T>
     {
         [Test]
-        public void CanAdd_NullItem_ReturnsFalse()
+        public void CanAdd_NullItem_ThrowsArgumentNullException()
         {
             var slot = this.slotFactory.Empty();
 
-            var result = slot.CanAdd(default!);
-
-            Assert.That(result, Is.False);
+            Assert.That(
+                () => slot.CanAdd(default), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [Test]

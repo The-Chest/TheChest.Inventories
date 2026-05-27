@@ -28,8 +28,27 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual bool CanAdd(T item)
         {
-            return !this.IsFull && !item.IsNull();
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+
+            return !this.IsFull;
         }
+
+        /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        public virtual bool TryAdd(T item)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            
+            if (this.IsFull)
+                return false;
+
+            this.Content = item;
+
+            return true;
+        }
+
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">When the slot is full</exception>
@@ -61,6 +80,7 @@ namespace TheChest.Inventories.Slots
         {
             return !item.IsNull();
         }
+
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Replace(T item)
