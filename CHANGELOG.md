@@ -8,12 +8,15 @@
   * `StackInventory`
     * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
-
   * `LazyStackInventory`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
     * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
+* New add methods with try add behavior to Slots
+  * `InventorySlot`
+    * `TryAdd(T item)` - Tries to add an item to the slot and returns `true` on success; otherwise `false`
 
 ## What's Changed
+* `InventorySlot<T>.Add` method now throws `ArgumentNullException` when the param `item` is null instead of just returning false`
 * `LazyStackInventory<T>` add implementation refactor
   * Added protected helper `AddItem(T item, int amount)` to centralize inventory-wide add behavior and `OnAdd` event dispatch for successful additions
   * Added protected helper `AddItemAt(T item, int index, int amount)` to centralize add-at-index behavior and `OnAdd` event dispatch for successful additions
