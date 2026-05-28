@@ -23,7 +23,7 @@
   * `Add(T item, int amount)`, `TryAdd(T item, int amount)`, `AddAt(T item, int index, int amount)`, and `TryAddAt(T item, int index, int amount)` now share the centralized add helpers
 
 ## What's Removed
-* 
+* `IInteractiveContainer<T>` - The methods that were in this interface were moved to `IContainer<T>`.
 
 ## What's Fixed
 * 
