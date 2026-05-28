@@ -1,6 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
-
-namespace TheChest.Inventories.Tests.Containers.StackInventory
+﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
@@ -12,7 +10,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(
                 () => inventory.TryAddAt(default!, 0),
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
         }
 
