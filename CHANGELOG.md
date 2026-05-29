@@ -1,7 +1,8 @@
 # v0.17.0
 
 ## What's Added
-* New add methods with try add behavior to Inventories
+* New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the inventory state. 
+  * These methods return a boolean or the items that couldn't be added instead of throwing an exception.
   * `Inventory`
     * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
@@ -11,9 +12,11 @@
   * `LazyStackInventory`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
     * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
-* New add methods with try add behavior to Slots
+* New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the slot state. 
   * `InventorySlot`
     * `TryAdd(T item)` - Tries to add an item to the slot and returns `true` on success; otherwise `false`
+  * `InventoryStackSlot`
+    * `TryAdd(T[] items)` - Tries to add all items to the slot and returns `true` when all items are added; otherwise `false` 
 
 ## What's Changed
 * `InventorySlot<T>.Add` method now throws `ArgumentNullException` when the param `item` is null instead of just returning false`
@@ -48,6 +51,8 @@
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
 * [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
+* [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
+* [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
 
