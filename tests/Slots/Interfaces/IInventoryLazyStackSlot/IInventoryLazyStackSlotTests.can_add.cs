@@ -2,15 +2,28 @@
 {
     public partial class IInventoryLazyStackSlotTests<T>
     {
-        [Test]
-        public void CanAdd_NullItem_ReturnsFalse()
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void CanAdd_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
+            var item = this.itemFactory.CreateDefault();
+            Assert.That(
+                () => slot.CanAdd(item, amount),
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
+        }
 
-            var result = slot.CanAdd(default!, 1);
-
-            Assert.That(result, Is.False);
+        [Test]
+        public void CanAdd_NullItem_ThrowsArgumentNullException()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
+            Assert.That(
+                () => slot.CanAdd(item: default!, amount: 1), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [Test]
@@ -21,19 +34,6 @@
             var slot = this.slotFactory.FullSlot(item, stackSize);
 
             var result = slot.CanAdd(item, 1);
-
-            Assert.That(result, Is.False);
-        }
-
-        [TestCase(0)]
-        [TestCase(-1)]
-        public void CanAdd_InvalidAmount_ReturnsFalse(int amount)
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.Empty(stackSize);
-
-            var item = this.itemFactory.CreateDefault();
-            var result = slot.CanAdd(item, amount);
 
             Assert.That(result, Is.False);
         }
