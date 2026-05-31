@@ -1,4 +1,5 @@
 ﻿using System;
+using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -10,8 +11,9 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// This interface is still unstable. Some methods can be moved to separated interfaces.
     /// </remarks>
     /// <typeparam name="T">An item type</typeparam>
-    public interface IInventory<T> : IInteractiveContainer<T>
+    public interface IInventory<T> : IContainer<T>
     {
+        #region Get
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
@@ -42,17 +44,28 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">Item to be search</param>
         /// <returns>An array with all items that are equal to <paramref name="item"/> in the inventory</returns>
         T[] GetAll(T item);
+
+        /// <summary>
+        /// Gets every item from inventory
+        /// </summary>
+        /// <returns>Returns an Array of items</returns>
+        T[] Clear();
+        #endregion
+
+        #region Count
         /// <summary>
         /// Get the amount of an <paramref name="item"/> inside the inventory
         /// </summary>
         /// <param name="item">Item to be search</param>
         /// <returns>The current amount of the <paramref name="item"/> in the Inventory</returns>
         int GetCount(T item);
+        #endregion
 
         /// <summary>
         /// Raised when an amount of item is added to an index
         /// </summary>
         event InventoryAddEventHandler<T> OnAdd;
+        #region Add
         /// <summary>
         /// Checks if <paramref name="item"/> can be added to any slot.
         /// </summary>
@@ -66,13 +79,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
         /// <returns><see langword="true"/> if ALL <paramref name="items"/> can be added; otherwise, <see langword="false"/>.</returns>
         bool CanAdd(params T[] items);
+
         /// <summary>
-        /// Determines whether the specified item can be added at the given index.
+        /// Attempts to add the specified items to the Inventory.
         /// </summary>
-        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
-        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the collection.</param>
-        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
-        bool CanAddAt(T item, int index);
+        /// <param name="items">An array of items to add.</param>
+        /// <returns><see langword="true"/> if all items were added successfully; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(params T[] items);
 
         /// <summary>
         /// <para> Adds an item in a avaliable slot </para>
@@ -89,6 +102,29 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns>The items from param that were not possible to add</returns>
         T[] Add(params T[] items);
+        #endregion
+
+        #region AddAt
+        /// <summary>
+        /// Determines whether the specified item can be added at the given index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the collection.</param>
+        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
+        bool CanAddAt(T item, int index);
+
+        /// <summary>
+        /// Attempts to add the specified item at the given index in the collection.
+        /// </summary>
+        /// <remarks>
+        /// This method does not throw an exception if the operation fails. Instead, it returns
+        /// <see langword="false"/> to indicate failure.
+        /// </remarks>
+        /// <param name="item">The item to add to the inventory.</param>
+        /// <param name="index">The zero-based index at which to insert the item.</param>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> was successfully added at the specified <paramref name="index"/>; otherwise, <see langword="false"/></returns>
+        bool TryAddAt(T item, int index);
+
         /// <summary>
         /// <para>Adds an item in a specific slot </para>
         /// <para>This method return will change to void in future versions.</para>
@@ -98,7 +134,9 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">Slot where the item will be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
+        #endregion
 
+        #region Replace
         /// <summary>
         /// Raised when an item is replaced in a specific slot
         /// </summary>
@@ -117,10 +155,27 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">The index of the <paramref name="item"/> will ocupy</param>
         /// <returns>The old item from the slot on <paramref name="index"/></returns>
         T Replace(T item, int index);
+        #endregion
 
+        #region Move
         /// <summary>
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
         event InventoryMoveEventHandler<T> OnMove;
+
+        /// <summary>
+        /// Checks if the specified item can be moved from the origin index to the target index.
+        /// </summary>
+        /// <param name="origin">The zero-based index representing the item's current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        bool CanMove(int origin, int target);
+        /// <summary>
+        /// Moves an item from one index to another in the inventory
+        /// </summary>
+        /// <param name="origin">Selected item</param>
+        /// <param name="target">Where the item will be placed</param>
+        void Move(int origin, int target);
+        #endregion
     }
 }

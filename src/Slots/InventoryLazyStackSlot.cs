@@ -69,18 +69,20 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero</exception>
         /// <returns>true if <paramref name="item"/> is not <see langword="null"/>, <paramref name="amount"/> is bigger than zero and the slot is not full and either empty or contains the same item as <paramref name="item"/></returns>
         public virtual bool CanAdd(T item, int amount = 1)
         {
             if (item.IsNull())
-                return false;
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
 
             if (this.IsFull)
                 return false;
-
-            if (amount <= 0 || amount > this.AvailableAmount)
+            if (amount > this.AvailableAmount)
                 return false;
-
             if (!this.IsEmpty)
                 return this.Content.Equals(item);
 
@@ -89,6 +91,26 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero</exception>
+        public virtual bool TryAdd(T item, int amount = 1)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            if (this.IsFull)
+                return false;
+            if (amount > this.AvailableAmount)
+                return false;
+            if (!this.IsEmpty && !this.Content.Equals(item))
+                return false;
+
+            this.AddItems(item, amount);
+            return true;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
         public virtual int Add(T item, int amount = 1)
         {
             if (item.IsNull())

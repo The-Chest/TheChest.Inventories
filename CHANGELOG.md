@@ -1,3 +1,61 @@
+# v0.17.0
+
+## What's Added
+* New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the inventory state. 
+  * These methods return a boolean or the items that couldn't be added instead of throwing an exception.
+  * `Inventory`
+    * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
+    * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
+  * `StackInventory`
+    * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
+    * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
+  * `LazyStackInventory`
+    * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
+    * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
+* New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the slot state. 
+  * `InventorySlot`
+    * `TryAdd(T item)` - Tries to add an item to the slot and returns `true` on success; otherwise `false`
+  * `InventoryStackSlot`
+    * `TryAdd(T[] items)` - Tries to add all items to the slot and returns `true` when all items are added; otherwise `false` 
+
+## What's Changed
+* `InventorySlot<T>.Add` method now throws `ArgumentNullException` when the param `item` is null instead of just returning false`
+* `LazyStackInventory<T>` add implementation refactor
+  * Added protected helper `AddItem(T item, int amount)` to centralize inventory-wide add behavior and `OnAdd` event dispatch for successful additions
+  * Added protected helper `AddItemAt(T item, int index, int amount)` to centralize add-at-index behavior and `OnAdd` event dispatch for successful additions
+  * `Add(T item, int amount)`, `TryAdd(T item, int amount)`, `AddAt(T item, int index, int amount)`, and `TryAddAt(T item, int index, int amount)` now share the centralized add helpers
+
+## What's Removed
+* `IInteractiveContainer<T>` - The methods that were in this interface were moved to `IContainer<T>`.
+
+## What's Fixed
+* `CanAddItems` and `AddItems` from `LazyStackInventory<T>` now checks if the AvailableAmount in the slot is bigger than zero before trying to add items to it.
+
+## Known Issues
+* **No support for structs or value types** 
+* **The Current Architecture is not stable for the final version yet**
+* **Event system will need an improvement on creation/dispatch**
+  * The new Event API is being planned
+* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
+* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
+    * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
+
+## What's Next
+* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
+* [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
+* [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
+* [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
+
 # v0.16.0
 
 > This Changelog is going to be separated into subsections for each Inventory Type to make it more organized

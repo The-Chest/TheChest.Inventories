@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack;
 using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Extensions;
@@ -14,6 +13,109 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event StackInventoryAddEventHandler<T> OnAdd;
 
+        #region AddAt
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>"
+        public virtual bool CanAddAt(T item, int index)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanAdd(item);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>"
+        public virtual bool CanAddAt(T[] items, int index)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (items.Length == 0)
+                return true;
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+
+            return this.slots[index].CanAdd(items);
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="items"/> are added to the slot on <paramref name="index"/> on the inventory. 
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>
+        public virtual bool TryAddAt(T[] items, int index)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (items.Length == 0)
+                return true;
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (!this.slots[index].TryAdd(items))
+                return false;
+            
+            this.OnAdd?.Invoke(this, (items, index));
+            
+            return true;
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the slot on <paramref name="index"/> on the inventory. 
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>
+        /// <exception cref="InvalidOperationException">When the inventory is full or when the item cannot be added to the slot on <paramref name="index"/></exception>
+        public virtual bool AddAt(T item, int index)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var added = this.slots[index].Add(item);
+            if (added)
+                this.OnAdd?.Invoke(this, (new[] { item }, index));
+
+            return added;
+        }
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="items"/> are added to the slot on <paramref name="index"/> on the inventory. 
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the items cannot be added to the slot on <paramref name="index"/></exception>
+        public virtual T[] AddAt(T[] items, int index)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (items.Length == 0)
+                return Array.Empty<T>();
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (!items.HasAllEqual())
+                throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
+
+            var notAddedItems = this.slots[index].Add(items);
+            if (notAddedItems.Length != items.Length)
+                this.OnAdd?.Invoke(this, (items.Skip(notAddedItems.Length).ToArray(), index));
+
+            return notAddedItems;
+        }
+        #endregion
+
+        #region Add
         /// <summary>
         /// Determines whether all specified items can be added to the collection without exceeding available capacity.
         /// </summary>
@@ -44,6 +146,7 @@ namespace TheChest.Inventories.Containers
 
             return false;
         }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool CanAdd(T item)
@@ -76,33 +179,51 @@ namespace TheChest.Inventories.Containers
 
             return this.CanAddItems(items);
         }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
-        public virtual bool CanAddAt(T item, int index)
-        {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this.slots[index].CanAdd(item);
-        }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
-        public virtual bool CanAddAt(T[] items, int index)
+        public virtual bool TryAdd(params T[] items)
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 return true;
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (!items.HasAllEqual())
+                throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
-            return this.slots[index].CanAdd(items);
+            if (this.IsFull)
+                return false;
+            if (!this.CanAddItems(items))
+                return false;
+
+            var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
+            var addedAmount = 0;
+
+            for (var index = 0; index < this.Size; index++)
+            {
+                var slot = this.slots[index];
+                var itemsToAdd = items.Take(slot.AvailableAmount).ToArray();
+                if (slot.TryAdd(itemsToAdd))
+                {
+                    events.Add(
+                        new StackInventoryAddItemEventData<T>(
+                            items.Take(itemsToAdd.Length).ToArray(),
+                            index
+                        )
+                    );
+                    addedAmount++;
+
+                    if (addedAmount >= items.Length)
+                        break;
+                }
+            }
+
+            if (events.Count > 0)
+                this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
+
+            return true;
         }
 
         /// <summary>
@@ -151,6 +272,7 @@ namespace TheChest.Inventories.Containers
 
             return items;
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the inventory. 
@@ -195,46 +317,6 @@ namespace TheChest.Inventories.Containers
 
             return this.AddItems(items);
         }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        /// <exception cref="InvalidOperationException">When the inventory is full or when the item cannot be added to the slot on <paramref name="index"/></exception>
-        public virtual bool AddAt(T item, int index)
-        {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            var added = this.slots[index].Add(item);
-            if (added)
-                this.OnAdd?.Invoke(this, (new[] { item }, index));
-
-            return added;
-        }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
-        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
-        /// <exception cref="InvalidOperationException">When the items cannot be added to the slot on <paramref name="index"/></exception>
-        public virtual T[] AddAt(T[] items, int index)
-        {
-            if (items is null)
-                throw new ArgumentNullException(nameof(items));
-            if (items.Length == 0)
-                return Array.Empty<T>();
-
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
-            if (!items.HasAllEqual())
-                throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
-
-            var notAddedItems = this.slots[index].Add(items);
-            if (notAddedItems.Length != items.Length)
-                this.OnAdd?.Invoke(this, (items.Skip(notAddedItems.Length).ToArray(), index));
-
-            return notAddedItems;
-        }
+        #endregion
     }
 }

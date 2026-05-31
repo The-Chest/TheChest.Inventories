@@ -37,8 +37,11 @@ direction TB
 	        + bool CanAddAt(T[] items, int index)
 
             + bool Add(T item)
+            + bool TryAdd(params T[] items)
             + bool AddAt(T item, int index)
+            + bool TryAddAt(T item, int index)
             + T[] Add(params T[] items)
+            + T[] AddItems(params T[] items)
             + T[] AddAt(T[] items, int index)
 
             + T[] Clear()
@@ -90,7 +93,9 @@ direction TB
 	        + bool CanAddAt(T[] items, int index)
 
             + bool Add(T item)
+            + bool TryAdd(params T[] items)
             + bool AddAt(T item, int index)
+            + bool TryAddAt(T item, int index)
             + T[] Add(params T[] items)
             + T[] AddAt(T[] items, int index)
 

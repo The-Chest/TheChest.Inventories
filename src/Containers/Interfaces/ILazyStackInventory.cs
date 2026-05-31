@@ -10,30 +10,24 @@ namespace TheChest.Inventories.Containers.Interfaces
     /// <typeparam name="T">Item the Inventory accept</typeparam>
     public interface ILazyStackInventory<T> : ILazyStackContainer<T>
     {
+        #region Get
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
         event LazyStackInventoryGetEventHandler<T> OnGet;
-        /// <summary>
-        /// Raised when an amount of item is added to an index of the inventory
-        /// </summary>
-        event LazyStackInventoryAddEventHandler<T> OnAdd;
-        /// <summary>
-        /// Raised when one item is moved from an index to other on the inventory
-        /// </summary>
-        event LazyStackInventoryMoveEventHandler<T> OnMove;
-        /// <summary>
-        /// Raised when an amount of item is replaced on an index of the inventory
-        /// </summary>
-        event LazyStackInventoryReplaceEventHandler<T> OnReplace;
-
-        #region ILazyStackInventory
         /// <summary>
         /// Gets an item from inside a slot
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
         T Get(int index);
+        /// <summary>
+        /// Returns an amount of items inside the Inventory Slot
+        /// </summary>
+        /// <param name="index">Index of the slot</param>
+        /// <param name="amount">Amount of the item to be returned</param>
+        /// <returns>Returns the amount of items inside the slot (or the max it can)</returns>
+        T[] Get(int index, int amount);
         /// <summary>
         /// Search an Item from inventory
         /// </summary>
@@ -54,11 +48,40 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>Returns a list with all items founded in the inventory</returns>
         T[] GetAll(T item);
         /// <summary>
-        /// Returns the amount of an item inside the inventory
+        /// Returns all the items from the selected slot 
         /// </summary>
-        /// <param name="item">The item to de counted</param>
-        /// <returns>Returns the current amount of the item in the Inventory</returns>
-        int GetCount(T item);
+        /// <param name="index">Index of the slot</param>
+        /// <returns>An array with of items</returns>
+        T[] GetAll(int index);
+        #endregion
+
+        /// <summary>
+        /// Raised when an amount of item is added to an index of the inventory
+        /// </summary>
+        event LazyStackInventoryAddEventHandler<T> OnAdd;
+
+        #region Add
+        /// <summary>
+        /// Determines whether the specified amount of <paramref name="item"/> can be added to the inventory.
+        /// </summary>
+        /// <param name="item">The item to evaluate for addition.</param>
+        /// <param name="amount">The number of units of the <paramref name="item"/> to check for addability.</param>
+        /// <returns>true if the <paramref name="item"/> can be added in the specified <paramref name="amount"/>; otherwise, false.</returns>
+        bool CanAdd(T item, int amount = 1);
+        /// <summary>
+        /// Attempts to add the specified amount of <paramref name="item"/> to the inventory.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <param name="amount">The amount to add.</param>
+        /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(T item, int amount);
+        /// <summary>
+        /// Adds items inside the inventory
+        /// </summary>
+        /// <param name="item">Array of item of the same type wich will be added to inventory</param>
+        /// <param name="amount">Amount of the item to be returned</param>
+        /// <returns>Returns the amount of items that couldn't be added</returns>
+        int Add(T item, int amount);
         /// <summary>
         /// Adds an item in a avaliable slot
         /// </summary>
@@ -68,27 +91,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         bool Add(T item);
         #endregion
 
-        #region IInventory
-        /// <summary>
-        /// Returns an amount of items inside the Inventory Slot
-        /// </summary>
-        /// <param name="index">Index of the slot</param>
-        /// <param name="amount">Amount of the item to be returned</param>
-        /// <returns>Returns the amount of items inside the slot (or the max it can)</returns>
-        T[] Get(int index, int amount);
-        /// <summary>
-        /// Returns all the items from the selected slot 
-        /// </summary>
-        /// <param name="index">Index of the slot</param>
-        /// <returns>An array with of items</returns>
-        T[] GetAll(int index);
-        /// <summary>
-        /// Determines whether the specified amount of <paramref name="item"/> can be added to the inventory.
-        /// </summary>
-        /// <param name="item">The item to evaluate for addition.</param>
-        /// <param name="amount">The number of units of the <paramref name="item"/> to check for addability.</param>
-        /// <returns>true if the <paramref name="item"/> can be added in the specified <paramref name="amount"/>; otherwise, false.</returns>
-        bool CanAdd(T item, int amount = 1);
+        #region AddAt
         /// <summary>
         /// Determines whether the specified <paramref name="item"/> can be added at the given index in the inventory, for the specified <paramref name="amount"/>.
         /// </summary>
@@ -98,12 +101,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>true if the <paramref name="item"/> can be added at the specified <paramref name="index"/> for the given <paramref name="amount"/>; otherwise, false.</returns>
         bool CanAddAt(T item, int index, int amount = 1);
         /// <summary>
-        /// Adds items inside the inventory
+        /// Attempts to add the specified amount of <paramref name="item"/> at the given <paramref name="index"/>.
         /// </summary>
-        /// <param name="item">Array of item of the same type wich will be added to inventory</param>
-        /// <param name="amount">Amount of the item to be returned</param>
-        /// <returns>Returns the amount of items that couldn't be added</returns>
-        int Add(T item, int amount);
+        /// <param name="item">The item to add.</param>
+        /// <param name="index">The slot index where the item should be added.</param>
+        /// <param name="amount">The amount to add.</param>
+        /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added at <paramref name="index"/>; otherwise, <see langword="false"/>.</returns>
+        bool TryAddAt(T item, int index, int amount);
         /// <summary>
         /// Adds an amount of item in a specific slot
         /// </summary>
@@ -112,6 +116,35 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">amount of the item</param>
         /// <returns>Returns the amount of items that couldn't be added</returns>
         int AddAt(T item, int index, int amount);
+        #endregion
+
+        #region Move
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
+        event LazyStackInventoryMoveEventHandler<T> OnMove;
+        
+        /// <summary>
+        /// Checks if the specified items can be moved from the origin index to the target index.
+        /// </summary>
+        /// <param name="origin">The zero-based index representing the items current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        bool CanMove(int origin, int target);
+        /// <summary>
+        /// Move a item between two slots
+        /// </summary>
+        /// <param name="origin">Selected item</param>
+        /// <param name="target">Where the item will be placed</param>
+        void Move(int origin, int target);
+        #endregion
+
+        #region Replace
+        /// <summary>
+        /// Raised when an amount of item is replaced on an index of the inventory
+        /// </summary>
+        event LazyStackInventoryReplaceEventHandler<T> OnReplace;
+
         /// <summary>
         /// Checks if an item can be replaced in a specific slot
         /// </summary>
@@ -130,20 +163,16 @@ namespace TheChest.Inventories.Containers.Interfaces
         T[] Replace(T item, int index, int amount);
         #endregion
 
-        #region IInteractive
+        #region Count
         /// <summary>
-        /// Checks if the specified items can be moved from the origin index to the target index.
+        /// Returns the amount of an item inside the inventory
         /// </summary>
-        /// <param name="origin">The zero-based index representing the items current position.</param>
-        /// <param name="target">The zero-based index representing the desired target position.</param>
-        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
-        bool CanMove(int origin, int target);
-        /// <summary>
-        /// Move a item between two slots
-        /// </summary>
-        /// <param name="origin">Selected item</param>
-        /// <param name="target">Where the item will be placed</param>
-        void Move(int origin, int target);
+        /// <param name="item">The item to de counted</param>
+        /// <returns>Returns the current amount of the item in the Inventory</returns>
+        int GetCount(T item);
+        #endregion
+
+        #region Clear
         /// <summary>
         /// Returns every item from the inventory
         /// </summary>

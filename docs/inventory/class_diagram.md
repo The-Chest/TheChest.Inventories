@@ -30,11 +30,14 @@ direction TB
 	        + T[] Clear()
 
 	        + bool CanAdd(T item)
-	        + bool CanAdd(params T[] items)
-	        + bool CanAddAt(T item, int index)
-
 	        + bool Add(T item)
+
+			+ bool TryAdd(params T[] items)
+	        + bool CanAdd(params T[] items)
 	        + T[] Add(params T[] items)
+
+			+ bool TryAddAt(T item, int index)
+	        + bool CanAddAt(T item, int index)
 	        + bool AddAt(T item, int index)
 
 	        + void Move(int origin, int target)
@@ -72,14 +75,16 @@ direction TB
 	        + bool CanAdd(T item)
 	        + bool Add(T item)
 
+			+ bool TryAdd(params T[] items)
 	        + bool CanAdd(params T[] items)
-            + T[] Add(params T[] items)
+	        + T[] Add(params T[] items)
 
+			+ bool TryAddAt(T item, int index)
 	        + bool CanAddAt(T item, int index)
 	        + bool AddAt(T item, int index)
 
             # bool CanAddItems(T[] items)
-            # T[] AddItems(params T[] items)
+			# bool AddItems(T[] items)
 
 	        + T[] Clear()
 

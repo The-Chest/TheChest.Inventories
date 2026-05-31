@@ -1,9 +1,9 @@
 ---
-name: test-creation-skill
+name: test-creation
 description: Repository-specific guidance for generating and organizing unit tests using BaseTests<T>, factories, fixture types, naming conventions, and partial-class file structure.
 ---
 
-# Test Creation Skill
+# Test Creation
 
 Use this skill whenever creating or updating tests in this repository.
 

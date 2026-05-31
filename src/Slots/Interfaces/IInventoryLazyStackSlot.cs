@@ -24,6 +24,13 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <returns>true if is possible to add the amount of the <paramref name="item"/> inside the slot</returns>
         bool CanAdd(T item, int amount = 1);
         /// <summary>
+        /// Tries to add an amount of items to the current slot.
+        /// </summary>
+        /// <param name="item">The item to be added.</param>
+        /// <param name="amount">The amount of items to be added.</param>
+        /// <returns><see langword="true"/> when the items were added, otherwise <see langword="false"/>.</returns>
+        bool TryAdd(T item, int amount = 1);
+        /// <summary>
         /// Add an amount of items inside the current slot
         /// </summary>
         /// <param name="item">The item to be added </param>

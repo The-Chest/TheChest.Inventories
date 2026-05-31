@@ -31,7 +31,9 @@ namespace TheChest.Inventories.Containers
             {
                 var slot = this.slots[index];
                 var addAmount = Math.Min(totalAmount, slot.AvailableAmount);
-
+                
+                if (addAmount <= 0)
+                    continue;
                 if (!slot.CanAdd(item, addAmount))
                     continue;
 
@@ -75,6 +77,60 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <summary>
+        /// Adds the specified amount of <paramref name="item"/> to the inventory using the slot add order.
+        /// </summary>
+        /// <param name="item">Item to be added to the inventory.</param>
+        /// <param name="amount">Amount of the item to add.</param>
+        /// <returns>Returns the amount of items that could not be added.</returns>
+        protected int AddItem(T item, int amount)
+        {
+            var events = new List<LazyStackInventoryAddItemEventData<T>>(amount);
+            var indexes = this.slots.GetAddOrderIndexes(item, amount);
+
+            foreach (var index in indexes)
+            {
+                var slot = this.slots[index];
+
+                var toAddAmount = Math.Min(amount, slot.AvailableAmount);
+
+                if (toAddAmount <= 0)
+                    continue;
+
+                var notAddedAmount = slot.Add(item, toAddAmount);
+                var addedItemsCount = toAddAmount - notAddedAmount;
+
+                if (addedItemsCount <= 0)
+                    continue;
+
+                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedItemsCount));
+
+                amount -= addedItemsCount;
+                if (amount == 0)
+                    break;
+            }
+
+            if (events.Count > 0)
+                this.OnAdd?.Invoke(this, new LazyStackInventoryAddEventArgs<T>(events));
+
+            return amount;
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero.</exception>
+        public virtual bool TryAdd(T item, int amount)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            if (!this.CanAdd(item, amount))
+                return false;
+
+            return this.AddItem(item, amount) == 0;
+        }
+        /// <summary>
         /// Adds an item to the first available slot
         /// </summary>
         /// <remarks>
@@ -108,32 +164,43 @@ namespace TheChest.Inventories.Containers
                 throw new InvalidOperationException(LazyStackInventoryErrors.InventoryIsFull);
             //TODO: add check for available space and throw exception if there is not enough space to add the items
 
-            var events = new List<LazyStackInventoryAddItemEventData<T>>(amount);
-            var indexes = this.slots.GetAddOrderIndexes(item, amount);
+            return this.AddItem(item, amount);
+        }
 
-            foreach (var index in indexes)
-            {
-                var slot = this.slots[index];
+        /// <summary>
+        /// Adds the specified amount of <paramref name="item"/> to the slot at <paramref name="index"/>.
+        /// </summary>
+        /// <param name="item">Item to be added to the slot.</param>
+        /// <param name="index">Index of the slot that will receive the item.</param>
+        /// <param name="amount">Amount of the item to add.</param>
+        /// <returns>Returns the amount of items that could not be added to the slot.</returns>
+        protected int AddItemAt(T item, int index, int amount)
+        {
+            var notAdded = this.slots[index].Add(item, amount);
+            if (notAdded < amount)
+                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
 
-                var toAddAmount = Math.Min(amount, slot.AvailableAmount);
+            return notAdded;
+        }
 
-                var notAddedAmount = slot.Add(item, toAddAmount);
-                var addedItemsCount = toAddAmount - notAddedAmount;
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero, or <paramref name="index"/> is out of range.</exception>
+        public virtual bool TryAddAt(T item, int index, int amount)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
 
-                if (addedItemsCount <= 0)
-                    continue;
+            if (!this.slots[index].TryAdd(item, amount))
+                return false;
 
-                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedItemsCount));
+            this.OnAdd?.Invoke(this, (item, index, amount));
 
-                amount -= addedItemsCount;
-                if (amount == 0)
-                    break;
-            }
-
-            if (events.Count > 0)
-                this.OnAdd?.Invoke(this, new LazyStackInventoryAddEventArgs<T>(events));
-
-            return amount;
+            return true;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -150,11 +217,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var notAdded = this.slots[index].Add(item, amount);
-            if (notAdded < amount)
-                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
-
-            return notAdded;
+            return this.AddItemAt(item, index, amount);
         }
     }
 }

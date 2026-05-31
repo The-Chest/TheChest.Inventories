@@ -13,5 +13,14 @@ namespace TheChest.Inventories.Tests.Containers.Extensions
                 inventory.Get(randomIndex);
             }
         }
+
+        internal static int RemoveRandomAt<T>(this IStackInventory<T> inventory, int index, int maxSize, Random? random = null)
+        {
+            random ??= new Random(); 
+            var randomAmount = random.Next(0, maxSize);
+            inventory.Get(index, randomAmount);
+
+            return randomAmount;
+        }
     }
 }
