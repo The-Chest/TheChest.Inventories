@@ -31,7 +31,9 @@ namespace TheChest.Inventories.Containers
             {
                 var slot = this.slots[index];
                 var addAmount = Math.Min(totalAmount, slot.AvailableAmount);
-
+                
+                if (addAmount <= 0)
+                    continue;
                 if (!slot.CanAdd(item, addAmount))
                     continue;
 
@@ -74,7 +76,6 @@ namespace TheChest.Inventories.Containers
             return this.slots[index].CanAdd(item, amount);
         }
 
-
         /// <summary>
         /// Adds the specified amount of <paramref name="item"/> to the inventory using the slot add order.
         /// </summary>
@@ -111,12 +112,16 @@ namespace TheChest.Inventories.Containers
             return amount;
         }
 
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero.</exception>
         public virtual bool TryAdd(T item, int amount)
         {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
             if (!this.CanAdd(item, amount))
                 return false;
 
@@ -180,10 +185,19 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero, or <paramref name="index"/> is out of range.</exception>
         public virtual bool TryAddAt(T item, int index, int amount)
         {
-            if (!this.CanAddAt(item, index, amount))
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (!this.slots[index].TryAdd(item, amount))
                 return false;
 
-            return this.AddItemAt(item, index, amount) == 0;
+            this.OnAdd?.Invoke(this, (item, index, amount));
+
+            return true;
         }
         /// <inheritdoc/>
         /// <remarks>
