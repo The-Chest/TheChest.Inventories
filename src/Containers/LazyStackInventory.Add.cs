@@ -93,6 +93,9 @@ namespace TheChest.Inventories.Containers
 
                 var toAddAmount = Math.Min(amount, slot.AvailableAmount);
 
+                if (toAddAmount <= 0)
+                    continue;
+
                 var notAddedAmount = slot.Add(item, toAddAmount);
                 var addedItemsCount = toAddAmount - notAddedAmount;
 
