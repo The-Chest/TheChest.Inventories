@@ -237,9 +237,11 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var result = this.slots[index].TryAdd(item);
+            if (!this.slots[index].TryAdd(item))
+                return false;
+
             this.OnAdd?.Invoke(this, (item, index));
-            return result;
+            return true;
         }
     }
 }
