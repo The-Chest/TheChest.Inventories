@@ -149,6 +149,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns><see langword="true"/> if the <paramref name="item"/> can be replaced in the <paramref name="index"/> slot; otherwise, <see langword="false"/>.</returns>
         bool CanReplace(T item, int index);
         /// <summary>
+        /// Tries to replace an item in a specific slot
+        /// </summary>
+        /// <param name="item">The item to be placed in the specified slot</param>
+        /// <param name="index">The index of the slot where the item will be placed</param>
+        /// <param name="oldItem">When this method returns <see langword="true"/>, contains the item that was replaced, if the replacement was successful; otherwise, the default value for the type of the item.</param>
+        /// <returns><see langword="true"/> if the item was successfully replaced; otherwise, <see langword="false"/>.</returns>
+        bool TryReplace(T item, int index, out T oldItem);
+        /// <summary>
         /// Replaces an item in a specific slot
         /// </summary>
         /// <param name="item">The item that will now ocupy the slot on <paramref name="index"/></param>

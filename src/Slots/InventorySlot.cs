@@ -83,6 +83,25 @@ namespace TheChest.Inventories.Slots
 
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        public bool TryReplace(T item, out T oldItem)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+
+            if (this.IsEmpty)
+            {
+                this.Content = item;
+                oldItem = default;
+                return true;
+            }
+
+            oldItem = this.Content;
+            this.Content = item;
+            return true;
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Replace(T item)
         {
             if (item.IsNull())
