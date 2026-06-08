@@ -43,6 +43,7 @@ direction TB
 	        + void Move(int origin, int target)
 
 	        + bool CanReplace(T item, int index)
+			+ bool TryReplace(T item, int index, out T oldItem)
 	        + T Replace(T item, int index)
 
 	        + int GetCount(T item)
@@ -98,6 +99,7 @@ direction TB
             + bool CanMove(int origin, int target)
 
 	        + bool CanReplace(T item, int index)
+			+ bool TryReplace(T item, int index, out T oldItem)
 	        + T Replace(T item, int index)
 
 	        + void Move(int origin, int target)

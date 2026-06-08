@@ -6,6 +6,7 @@
   * `Inventory`
     * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
+    * `TryReplace(T item, int index, out T oldItem)` - Tries to replace an item in a specific index, returns `true` on success and outputs the replaced item; otherwise `false` and default value of `T` as the output
   * `StackInventory`
     * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
