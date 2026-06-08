@@ -34,6 +34,13 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <returns><see langword="true"/> if the item can be replaced; otherwise, <see langword="false"/>.</returns>
         bool CanReplace(T item);
         /// <summary>
+        /// Attempts to replace the content of the slot with the specified item.
+        /// </summary>
+        /// <param name="item">The item to replace the current content with.</param>
+        /// <param name="oldItem">When this method returns <see langword="true"/>, contains the item that was replaced, if the replacement was successful; otherwise, the default value for the type of the item.</param>
+        /// <returns><see langword="true"/> if the item was successfully replaced; otherwise, <see langword="false"/>.</returns>
+        bool TryReplace(T item, out T oldItem);
+        /// <summary>
         /// Replaces the content of slot to item
         /// </summary>
         /// <param name="item">Item to replace</param>

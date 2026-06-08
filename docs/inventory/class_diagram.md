@@ -150,6 +150,7 @@ namespace TheChest.Inventories {
         + T Get()
 
         + bool CanReplace(T item)
+		+ bool TryReplace(T item, out T oldItem)
         + T Replace(T item)
     }
     class InventorySlot~T~ {
@@ -164,6 +165,7 @@ namespace TheChest.Inventories {
         + T Get()
 
         + bool CanReplace(T item)
+		+ bool TryReplace(T item, out T oldItem)
         + T Replace(T item)
     }
 }

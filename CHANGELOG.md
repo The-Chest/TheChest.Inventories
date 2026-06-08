@@ -15,9 +15,11 @@
 * New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the slot state. 
   * `InventorySlot`
     * `TryAdd(T item)` - Tries to add an item to the slot and returns `true` on success; otherwise `false`
+    * `TryReplace(T item, out T oldItem)` - Tries to replace the item in the slot and returns `true` on success; otherwise `false`
   * `InventoryStackSlot`
     * `TryAdd(T[] items)` - Tries to add all items to the slot and returns `true` when all items are added; otherwise `false` 
-
+  * `InventoryLazyStackSlot`
+    * `TryAdd(T item, int amount)` - Tries to add the requested amount to the slot and returns `true` only when all requested items are added
 ## What's Changed
 * `InventorySlot<T>.Add` method now throws `ArgumentNullException` when the param `item` is null instead of just returning false`
 * `LazyStackInventory<T>` add implementation refactor
