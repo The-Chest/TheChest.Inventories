@@ -37,8 +37,18 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            
-            return this.slots[index].TryReplace(items, out oldItems);
+
+            oldItems = null;
+            if (items.Length == 0)
+                return false;
+            if (!items.HasAllEqualAndNoNull())
+                return false;
+
+            var replaced = this.slots[index].TryReplace(items, out oldItems);
+            if (replaced)
+                this.OnReplace?.Invoke(this, (index, oldItems, items));
+
+            return replaced;
         }
 
         /// <inheritdoc/>
