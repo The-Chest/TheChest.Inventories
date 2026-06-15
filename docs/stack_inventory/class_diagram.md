@@ -60,6 +60,7 @@ direction TB
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)
+            + bool TryReplace(T[] items, int index, out T[] oldItems)
             + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
@@ -114,6 +115,7 @@ direction TB
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)
+            + bool TryReplace(T[] items, int index, out T[] oldItems)
             + T[] Replace(T[] items, int index)
         }
     }
