@@ -302,6 +302,21 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+        /// <returns><see langword="false"/> if the array is bigger than <see cref="StackSlot{T}.MaxAmount"/>, is empty or when any of the items in <paramref name="items"/> is different from the others</returns>
+        /// <inheritdoc/>
+        public virtual bool TryReplace(T[] items, out T[] oldItems)
+        {
+            oldItems = null;
+            if (items.Length == 0)
+                return false;
+            if (items.Length > this.MaxAmount)
+                return false;
+            if (!items.HasAllEqualAndNoNull())
+                return false;
+
+            oldItems = this.ReplaceItems(items);
+            return false;
+        }
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> is bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>

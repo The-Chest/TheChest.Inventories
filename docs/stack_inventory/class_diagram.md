@@ -73,6 +73,7 @@ direction TB
 
             + bool CanReplace(T item)
             + bool CanReplace(T[] items)
+            + bool TryReplace(T[] items, out T[] oldItems)
             + T[] Replace(ref T[] items)
             + T[] Replace(ref T item)
 
@@ -157,7 +158,7 @@ namespace TheChest.Inventories {
 
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
-
+        + bool TryReplace(T[] items, out T[] oldItems)
         + T[] Replace(T item)
         + T[] Replace(T[] items)
 
@@ -185,6 +186,7 @@ namespace TheChest.Inventories {
         
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
+        + bool TryReplace(T[] items, out T[] oldItems)
         + T[] Replace(T item)
         + T[] Replace(T[] items)
         
