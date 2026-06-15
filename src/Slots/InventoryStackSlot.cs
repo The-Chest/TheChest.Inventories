@@ -315,7 +315,7 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             oldItems = this.ReplaceItems(items);
-            return false;
+            return true;
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>
