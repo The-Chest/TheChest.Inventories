@@ -23,6 +23,7 @@
     * `TryReplace(T[] items, out T[] oldItems)` - Tries to replace the items in the slot and returns `true` on success and outputs the replaced items; otherwise `false` and default value of `T[]` as the output
   * `InventoryLazyStackSlot`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the slot and returns `true` only when all requested items are added
+
 ## What's Changed
 * `InventorySlot<T>.Add` method now throws `ArgumentNullException` when the param `item` is null instead of just returning false`
 * `LazyStackInventory<T>` add implementation refactor

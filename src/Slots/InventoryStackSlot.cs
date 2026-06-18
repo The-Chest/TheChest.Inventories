@@ -74,17 +74,10 @@ namespace TheChest.Inventories.Slots
             item = default;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         /// <remarks>
         /// This method checks whether the slot is full or already contains the specified item. 
-        /// <para>
-        /// Override this method to customize the criteria for adding <paramref name="item"/>.
-        /// </para>
         /// </remarks>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><see langword="true"/> if the item can be added to the slot; otherwise, <see langword="false"/>.</returns>
         public virtual bool CanAdd(T item)
         {
             if (item.IsNull())
