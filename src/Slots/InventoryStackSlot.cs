@@ -275,7 +275,7 @@ namespace TheChest.Inventories.Slots
         /// <returns><see langword="true"/> if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
         {
-            if (items.Length == 0)
+            if (items is null || items.Length == 0)
                 return false;
             if (!items.HasAllEqualAndNoNull())
                 return false;
@@ -295,8 +295,12 @@ namespace TheChest.Inventories.Slots
         }
         /// <returns><see langword="false"/> if the array is bigger than <see cref="StackSlot{T}.MaxAmount"/>, is empty or when any of the items in <paramref name="items"/> is different from the others</returns>
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
         public virtual bool TryReplace(T[] items, out T[] oldItems)
         {
+            if (items is null || items.ContainsNull())
+                throw new ArgumentNullException(nameof(items));
+
             oldItems = null;
             if (items.Length == 0)
                 return false;
@@ -306,6 +310,7 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             oldItems = this.ReplaceItems(items);
+            
             return true;
         }
         /// <inheritdoc/>
