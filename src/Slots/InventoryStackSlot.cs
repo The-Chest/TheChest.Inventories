@@ -137,6 +137,7 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.AddArrayWithNullValues);
             if (!items.HasAllEqual())
                 throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
+
             if (this.IsFull)
                 throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
             if (items.Length > this.AvailableAmount)
@@ -165,6 +166,7 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             this.AddItems(ref items);
+            
             return true;
         }
         /// <inheritdoc/>
@@ -179,13 +181,9 @@ namespace TheChest.Inventories.Slots
             if (!this.IsEmpty && !this.Contains(item))
                 throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
-            if (this.CanAdd(item))
-            {
-                this.AddItem(ref item);
-                return true;
-            }
-
-            return false;
+            this.AddItem(ref item);
+            
+            return true;
         }
 
         /// <summary>
