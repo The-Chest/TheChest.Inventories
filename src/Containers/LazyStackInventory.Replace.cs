@@ -46,5 +46,24 @@ namespace TheChest.Inventories.Containers
 
             return replacedItems;
         }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When <paramref name="amount"/> exceeds the stack size of the slot on <paramref name="index"/>.</exception>
+        public virtual bool TryReplace(T item, int index, int amount, out T[] oldItems)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (index < 0 || index > this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var replaced = this.slots[index].TryReplace(item, amount, out oldItems);
+            if (replaced)
+                this.OnReplace?.Invoke(this, (oldItems[0], oldItems.Length, item, amount, index));
+
+            return replaced;
+        }
     }
 }
