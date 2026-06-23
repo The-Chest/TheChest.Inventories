@@ -178,10 +178,7 @@ namespace TheChest.Inventories.Slots
             if (amount > this.MaxAmount)
                 return false;
             
-            if (this.IsEmpty)
-                oldItems = Array.Empty<T>();
-            else
-                oldItems = this.GetContent(this.Amount);
+            oldItems = this.IsEmpty ? Array.Empty<T>() : this.GetContent(this.Amount);
 
             this.SetContent(item, amount);
 
