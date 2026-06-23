@@ -60,9 +60,9 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var replaced = this.slots[index].TryReplace(item, amount, out oldItems);
-            if (replaced)
+            if (replaced && oldItems.Length > 0)
                 this.OnReplace?.Invoke(this, (oldItems[0], oldItems.Length, item, amount, index));
-            else
+            else if (replaced)
                 this.OnReplace?.Invoke(this, (default, 0, item, amount, index));
 
             return replaced;
