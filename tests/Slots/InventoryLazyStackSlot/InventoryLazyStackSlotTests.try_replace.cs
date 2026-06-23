@@ -36,9 +36,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
+
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, maxAmount);
-
             slot.TryReplace(item, amount, out var oldItems);
 
             Assert.That(oldItems, Is.Empty);
@@ -49,9 +49,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
+
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, maxAmount);
-
             slot.TryReplace(item, amount, out _);
 
             Assert.That(slot.GetContent(), Is.EqualTo(item));
@@ -62,9 +62,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
+
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, maxAmount);
-
             slot.TryReplace(item, amount, out _);
 
             Assert.That(slot.Amount, Is.EqualTo(amount));
@@ -75,9 +75,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
+
             var item = this.itemFactory.CreateDefault();
             var amount = this.random.Next(1, maxAmount);
-
             var result = slot.TryReplace(item, amount, out _);
 
             Assert.That(result, Is.True);
@@ -89,11 +89,11 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var initialItem = this.itemFactory.CreateDefault();
             var initialAmount = this.random.Next(1, maxAmount);
+            var expectedOldItems = Enumerable.Repeat(initialItem, initialAmount).ToArray();
             var slot = this.slotFactory.WithItem(initialItem, initialAmount, maxAmount);
+
             var item = this.itemFactory.CreateRandom();
             var amount = this.random.Next(1, maxAmount);
-            var expectedOldItems = Enumerable.Repeat(initialItem, initialAmount).ToArray();
-
             slot.TryReplace(item, amount, out var oldItems);
 
             Assert.That(oldItems, Is.EqualTo(expectedOldItems));
@@ -106,9 +106,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var initialItem = this.itemFactory.CreateDefault();
             var initialAmount = this.random.Next(1, maxAmount);
             var slot = this.slotFactory.WithItem(initialItem, initialAmount, maxAmount);
+
             var item = this.itemFactory.CreateRandom();
             var amount = this.random.Next(1, maxAmount);
-
             slot.TryReplace(item, amount, out _);
 
             Assert.That(slot.GetContent(), Is.EqualTo(item));
@@ -121,9 +121,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var initialItem = this.itemFactory.CreateDefault();
             var initialAmount = this.random.Next(1, maxAmount);
             var slot = this.slotFactory.WithItem(initialItem, initialAmount, maxAmount);
+
             var item = this.itemFactory.CreateRandom();
             var amount = this.random.Next(1, maxAmount);
-
             slot.TryReplace(item, amount, out _);
 
             Assert.That(slot.Amount, Is.EqualTo(amount));
@@ -136,9 +136,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var initialItem = this.itemFactory.CreateDefault();
             var initialAmount = this.random.Next(1, maxAmount);
             var slot = this.slotFactory.WithItem(initialItem, initialAmount, maxAmount);
+
             var item = this.itemFactory.CreateRandom();
             var amount = this.random.Next(1, maxAmount);
-
             var result = slot.TryReplace(item, amount, out _);
 
             Assert.That(result, Is.True);
