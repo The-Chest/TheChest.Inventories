@@ -38,6 +38,7 @@
 
 ## What's Fixed
 * `CanAddItems` and `AddItems` from `LazyStackInventory<T>` now checks if the AvailableAmount in the slot is bigger than zero before trying to add items to it.
+* `StackInventory` methods that have `index` params doesn't throw `ArgumentOutOfException` anymore when searched index was equal to `Size`
 
 ## Known Issues
 * **No support for structs or value types** 

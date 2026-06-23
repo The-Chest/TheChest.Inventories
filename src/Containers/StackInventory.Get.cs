@@ -44,7 +44,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T Get(int index)
         {
-            if (index > this.Size || index < 0)
+            if (index >= this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var item = this.slots[index].Get();
