@@ -14,6 +14,7 @@
   * `LazyStackInventory`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
     * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
+    * `TryReplace(T item, int index, int amount, out T[] oldItems)` - Tries to replace the requested amount to a specific slot and returns `true` only when the item is successfully replaced
 * New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the slot state. 
   * `InventorySlot`
     * `TryAdd(T item)` - Tries to add an item to the slot and returns `true` on success; otherwise `false`

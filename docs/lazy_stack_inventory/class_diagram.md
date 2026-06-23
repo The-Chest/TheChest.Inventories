@@ -33,11 +33,17 @@ namespace TheChest.Inventories.Containers {
 	    + ~~event~~ OnMove: LazyStackInventoryMoveEventHandler~T~ 
 	    + ~~event~~ OnReplace: LazyStackInventoryReplaceEventHandler~T~ 
 
+        ~ bool CanAddItems(T item, int amount = 1)
         + bool CanAdd(T item, int amount = 1)
         + bool CanAddAt(T item, int index, int amount = 1)
 
+        ~ int AddItem(T item, int amount)
         + bool Add(T item)
+        + bool TryAdd(T item, int amount)
         + int Add(T item, int amount)
+
+        ~ int AddItemAt(T item, int index, int amount)
+        + bool TryAddAt(T item, int index, int amount)
         + int AddAt(T item, int index, int amount)
 
         + T[] Clear()
@@ -55,6 +61,7 @@ namespace TheChest.Inventories.Containers {
         + void Move(int origin, int target)
 
         + bool CanReplace(T item, int index, int amount)
+        + bool TryReplace(T item, int index, int amount, out T[] oldItems)
         + T[] Replace(T item, int index, int amount)
     }
 }
@@ -67,6 +74,7 @@ namespace TheChest.Inventories.Slots.Interfaces {
         + int Add(T item, int amount = 1)
 
         + bool CanReplace(T item, int amount = 1)
+        + bool TryReplace(T item, int amount, out T[] oldItems)
         + T[] Replace(T item, int amount = 1)
         
         + T[] Get(int amount = 1)
@@ -105,6 +113,7 @@ namespace TheChest.Inventories.Containers.Interfaces {
         + T[] Clear()
         
         + bool CanReplace(T item, int index, int amount)
+        + bool TryReplace(T item, int index, int amount, out T[] oldItems)
         + T[] Replace(T item, int index, int amount)
     }
 }
@@ -141,6 +150,7 @@ namespace TheChest.Inventories {
         + int Add(T item, int amount = 1)
 
         + bool CanReplace(T item, int amount = 1)
+        + bool TryReplace(T item, int amount, out T[] oldItems)
         + T[] Replace(T item, int amount = 1)
 
         + T[] Get(int amount = 1)
@@ -151,14 +161,21 @@ namespace TheChest.Inventories {
         + InventoryLazyStackSlot()
         + InventoryLazyStackSlot(T content, int amount = 1, int maxStackAmount = 1)
         
+        ~ void SetContent(T item, int amount)
+
         + bool Contains(T item)
         
+        ~ int AddItems(T item, int amount = 1)
         + bool CanAdd(T item, int amount = 1)
+        + bool TryAdd(T item, int amount = 1)
         + int Add(T item, int amount = 1)
         
         + bool CanReplace(T item, int amount = 1)
+        + bool TryReplace(T item, int amount, out T[] oldItems)
         + T[] Replace(T item, int amount = 1)
         
+        ~ T[] Clear()
+        ~ T[] GetContent(int requestedAmount)
         + T[] Get(int amount = 1)
         + T[] GetAll()
     }

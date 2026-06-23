@@ -161,6 +161,15 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">Amount of the item to be placed</param>
         /// <returns>The item that was replaced by <paramref name="item"/></returns>
         T[] Replace(T item, int index, int amount);
+        /// <summary>
+        /// Replaces elements in the specified array at the given index and outputs the replaced elements.
+        /// </summary>
+        /// <param name="item">The item in which elements are to be replaced.</param>
+        /// <param name="index">The zero-based index at which to perform the replacement.</param>
+        /// <param name="amount">The amount of items that will be added to the slot.</param>
+        /// <param name="oldItems">When this method returns <see langword="true"/>, contains the elements that were replaced.</param>
+        /// <returns><see langword="true"/> if the replacement was successful; otherwise, <see langword="false"/>.</returns>
+        bool TryReplace(T item, int index, int amount, out T[] oldItems);
         #endregion
 
         #region Count
