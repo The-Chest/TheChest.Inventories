@@ -17,7 +17,7 @@ namespace TheChest.Inventories.Tests.Containers.Extensions
         internal static int RemoveRandomAt<T>(this IStackInventory<T> inventory, int index, int maxSize, Random? random = null)
         {
             random ??= new Random(); 
-            var randomAmount = random.Next(0, maxSize);
+            var randomAmount = random.Next(1, maxSize);
             inventory.Get(index, randomAmount);
 
             return randomAmount;

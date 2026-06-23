@@ -141,9 +141,7 @@ namespace TheChest.Inventories.Slots
             return true;
         }
         /// <inheritdoc/>
-        /// <remarks>
-        /// If the slot is Empty, it'll try to add the max possible amount of items and returning the amount left
-        /// </remarks>
+        /// <exception cref="InvalidOperationException">When adding an amount bigger than the slot's capacity</exception>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
         public virtual T[] Replace(T item, int amount = 1)
@@ -164,6 +162,27 @@ namespace TheChest.Inventories.Slots
             var slotItems = this.GetContent(this.Amount);
             this.SetContent(item,amount);
             return slotItems;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
+        public virtual bool TryReplace(T item, int amount, out T[] oldItems)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0 || amount > this.MaxAmount)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            
+            oldItems = null;
+            
+            if (amount > this.MaxAmount)
+                return false;
+            
+            oldItems = this.IsEmpty ? Array.Empty<T>() : this.GetContent(this.Amount);
+
+            this.SetContent(item, amount);
+
+            return true;
         }
 
         /// <summary>

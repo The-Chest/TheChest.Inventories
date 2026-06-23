@@ -44,7 +44,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         public virtual T Get(int index)
         {
-            if (index > this.Size || index < 0)
+            if (index >= this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var item = this.slots[index].Get();
@@ -117,9 +117,8 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(int index, int amount)
         {
-            if (index > this.Size || index < 0)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 

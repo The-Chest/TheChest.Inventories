@@ -64,7 +64,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentException(StackInventoryErrors.CannotReplaceEmptyArray, nameof(items));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
-            if (index < 0 || index > this.Size)
+            if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var oldItems = this.slots[index].Replace(items);
