@@ -12,9 +12,7 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
-        /// <exception cref="InvalidOperationException">When the amount of <paramref name="items"/> to replace exceeds the stack size of the slot on <paramref name="index"/>.</exception>
         public virtual bool CanReplace(T[] items, int index)
         {
             if (items is null)
@@ -29,6 +27,30 @@ namespace TheChest.Inventories.Containers
 
             return this.slots[index].CanReplace(items);
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot size or smaller than zero</exception>
+        public virtual bool TryReplace(T[] items, int index, out T[] oldItems)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            oldItems = null;
+            if (items.Length == 0)
+                return false;
+            if (!items.HasAllEqualAndNoNull())
+                return false;
+
+            var replaced = this.slots[index].TryReplace(items, out oldItems);
+            if (replaced)
+                this.OnReplace?.Invoke(this, (index, oldItems, items));
+
+            return replaced;
+        }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentException">When <paramref name="items"/> length is zero</exception>"

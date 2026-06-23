@@ -149,7 +149,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when an item is removed from an index of the inventory
         /// </summary>
         event StackInventoryReplaceEventHandler<T> OnReplace;
-
+        /// <summary>
+        /// Replaces elements in the specified array at the given index and outputs the replaced elements.
+        /// </summary>
+        /// <param name="items">The array in which elements are to be replaced.</param>
+        /// <param name="index">The zero-based index at which to perform the replacement.</param>
+        /// <param name="oldItems">When this method returns, contains the elements that were replaced.</param>
+        /// <returns><see langword="true"/> if the replacement was successful; otherwise, <see langword="false"/>.</returns>
+        bool TryReplace(T[] items, int index, out T[] oldItems);
         /// <summary>
         /// Checks if it's possible to replace the items in a specific slot with the given items
         /// </summary>

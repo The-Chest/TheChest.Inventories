@@ -10,6 +10,7 @@
   * `StackInventory`
     * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
+    * `TryReplace(T[] items, int index, out T[] oldItems)` - Tries to replace items in a specific index, returns `true` on success and outputs the replaced items; otherwise `false` and default value of `T[]` as the output
   * `LazyStackInventory`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
     * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
@@ -19,8 +20,10 @@
     * `TryReplace(T item, out T oldItem)` - Tries to replace the item in the slot and returns `true` on success; otherwise `false`
   * `InventoryStackSlot`
     * `TryAdd(T[] items)` - Tries to add all items to the slot and returns `true` when all items are added; otherwise `false` 
+    * `TryReplace(T[] items, out T[] oldItems)` - Tries to replace the items in the slot and returns `true` on success and outputs the replaced items; otherwise `false` and default value of `T[]` as the output
   * `InventoryLazyStackSlot`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the slot and returns `true` only when all requested items are added
+
 ## What's Changed
 * `InventorySlot<T>.Add` method now throws `ArgumentNullException` when the param `item` is null instead of just returning false`
 * `LazyStackInventory<T>` add implementation refactor

@@ -60,6 +60,7 @@ direction TB
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)
+            + bool TryReplace(T[] items, int index, out T[] oldItems)
             + T[] Replace(T[] items, int index)
         }    
         class IInventoryStackSlot~T~ {
@@ -72,6 +73,7 @@ direction TB
 
             + bool CanReplace(T item)
             + bool CanReplace(T[] items)
+            + bool TryReplace(T[] items, out T[] oldItems)
             + T[] Replace(ref T[] items)
             + T[] Replace(ref T item)
 
@@ -114,6 +116,7 @@ direction TB
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)
+            + bool TryReplace(T[] items, int index, out T[] oldItems)
             + T[] Replace(T[] items, int index)
         }
     }
@@ -155,7 +158,7 @@ namespace TheChest.Inventories {
 
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
-
+        + bool TryReplace(T[] items, out T[] oldItems)
         + T[] Replace(T item)
         + T[] Replace(T[] items)
 
@@ -183,6 +186,7 @@ namespace TheChest.Inventories {
         
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
+        + bool TryReplace(T[] items, out T[] oldItems)
         + T[] Replace(T item)
         + T[] Replace(T[] items)
         

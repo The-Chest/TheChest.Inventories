@@ -74,17 +74,10 @@ namespace TheChest.Inventories.Slots
             item = default;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         /// <remarks>
         /// This method checks whether the slot is full or already contains the specified item. 
-        /// <para>
-        /// Override this method to customize the criteria for adding <paramref name="item"/>.
-        /// </para>
         /// </remarks>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><see langword="true"/> if the item can be added to the slot; otherwise, <see langword="false"/>.</returns>
         public virtual bool CanAdd(T item)
         {
             if (item.IsNull())
@@ -144,6 +137,7 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.AddArrayWithNullValues);
             if (!items.HasAllEqual())
                 throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
+
             if (this.IsFull)
                 throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
             if (items.Length > this.AvailableAmount)
@@ -172,6 +166,7 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             this.AddItems(ref items);
+            
             return true;
         }
         /// <inheritdoc/>
@@ -186,13 +181,9 @@ namespace TheChest.Inventories.Slots
             if (!this.IsEmpty && !this.Contains(item))
                 throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
-            if (this.CanAdd(item))
-            {
-                this.AddItem(ref item);
-                return true;
-            }
-
-            return false;
+            this.AddItem(ref item);
+            
+            return true;
         }
 
         /// <summary>
@@ -284,7 +275,7 @@ namespace TheChest.Inventories.Slots
         /// <returns><see langword="true"/> if the array is bigger than <see cref="IStackSlot{T}.MaxAmount"/> or is empty</returns>
         public virtual bool CanReplace(T[] items)
         {
-            if (items.Length == 0)
+            if (items is null || items.Length == 0)
                 return false;
             if (!items.HasAllEqualAndNoNull())
                 return false;
@@ -300,6 +291,26 @@ namespace TheChest.Inventories.Slots
             if (item.IsNull())
                 return false;
 
+            return true;
+        }
+        /// <returns><see langword="false"/> if the array is bigger than <see cref="StackSlot{T}.MaxAmount"/>, is empty or when any of the items in <paramref name="items"/> is different from the others</returns>
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
+        public virtual bool TryReplace(T[] items, out T[] oldItems)
+        {
+            if (items is null || items.ContainsNull())
+                throw new ArgumentNullException(nameof(items));
+
+            oldItems = null;
+            if (items.Length == 0)
+                return false;
+            if (items.Length > this.MaxAmount)
+                return false;
+            if (!items.HasAllEqualAndNoNull())
+                return false;
+
+            oldItems = this.ReplaceItems(items);
+            
             return true;
         }
         /// <inheritdoc/>

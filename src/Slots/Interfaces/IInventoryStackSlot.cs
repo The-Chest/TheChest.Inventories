@@ -65,6 +65,13 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <returns><see langword="true"/> if is possible to replace</returns>
         bool CanReplace(T[] items);
         /// <summary>
+        /// Tries to replace the current items in the slot with <paramref name="items"/>
+        /// </summary>
+        /// <param name="items">The items that will replace the current items in the slot</param>
+        /// <param name="oldItems">The items that were replaced</param>
+        /// <returns><see langword="true"/> if the replacement was successful; otherwise, <see langword="false"/></returns>
+        bool TryReplace(T[] items, out T[] oldItems);
+        /// <summary>
         /// Replaces the items from the slot to one <paramref name="item"/>
         /// </summary>
         /// <param name="item">The item that will replace items from slots</param>
