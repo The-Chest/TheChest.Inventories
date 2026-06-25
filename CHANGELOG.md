@@ -56,6 +56,8 @@
 * Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
 * `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
     * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
+* `Move` methods implementation are a bit unstable but it is working 
+    * It might have a basic rework
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
