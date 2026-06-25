@@ -72,14 +72,14 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        public void TryMove_BothSlotsEmpty_ReturnsTrue()
+        public void TryMove_BothSlotsEmpty_ReturnsFalse()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var moved = inventory.TryMove(0, 1);
 
-            Assert.That(moved, Is.True);
+            Assert.That(moved, Is.False);
         }
 
         [Test]
