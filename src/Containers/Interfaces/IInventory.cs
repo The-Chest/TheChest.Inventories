@@ -179,6 +179,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
         bool CanMove(int origin, int target);
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        bool TryMove(int origin, int target);
+        /// <summary>
         /// Moves an item from one index to another in the inventory
         /// </summary>
         /// <param name="origin">Selected item</param>
