@@ -7,6 +7,7 @@
     * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
     * `TryReplace(T item, int index, out T oldItem)` - Tries to replace an item in a specific index, returns `true` on success and outputs the replaced item; otherwise `false` and default value of `T` as the output
+    * `TryMove(int origin, int target)` - Tries to move an item from on index to another,  returns `true` on success and outputs the replaced item
   * `StackInventory`
     * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
@@ -56,6 +57,8 @@
 * Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
 * `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
     * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
+* `Move` methods implementation are a bit unstable but it is working 
+    * It might have a basic rework
 
 ## What's Next
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases

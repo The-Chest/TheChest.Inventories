@@ -26,6 +26,17 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc />
+        public virtual T Get()
+        {
+            if (this.IsEmpty)
+                return (T)(object)null;
+
+            var content = this.Content;
+            this.Content = default;
+            return content;
+        }
+
+        /// <inheritdoc />
         public virtual bool CanAdd(T item)
         {
             if (item.IsNull())
@@ -33,7 +44,6 @@ namespace TheChest.Inventories.Slots
 
             return !this.IsFull;
         }
-
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool TryAdd(T item)
@@ -48,7 +58,6 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">When the slot is full</exception>
@@ -65,22 +74,10 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc />
-        public virtual T Get()
-        {
-            if (this.IsEmpty)
-                return (T)(object)null;
-
-            var content = this.Content;
-            this.Content = default;
-            return content;    
-        }
-
-        /// <inheritdoc />
         public virtual bool CanReplace(T item)
         {
             return !item.IsNull();
         }
-
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public bool TryReplace(T item, out T oldItem)
@@ -99,7 +96,6 @@ namespace TheChest.Inventories.Slots
             this.Content = item;
             return true;
         }
-
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Replace(T item)

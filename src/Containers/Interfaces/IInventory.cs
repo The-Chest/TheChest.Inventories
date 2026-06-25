@@ -176,10 +176,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="origin">The zero-based index representing the item's current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
-        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be moved to the target index; otherwise, <see langword="false"/>.</returns>
         bool CanMove(int origin, int target);
         /// <summary>
-        /// Moves an item from one index to another in the inventory
+        /// Tries to move an item from on index to another
+        /// </summary>
+        /// <param name="origin">The zero-based index representing the item's current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns><see langword="true"/> if the item is successfully moved to the target index; otherwise, <see langword="false"/>.</returns>
+        bool TryMove(int origin, int target);
+        /// <summary>
+        /// Moves an item from one index to another
         /// </summary>
         /// <param name="origin">Selected item</param>
         /// <param name="target">Where the item will be placed</param>
