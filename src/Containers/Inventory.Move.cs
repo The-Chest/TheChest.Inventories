@@ -11,6 +11,22 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event InventoryMoveEventHandler<T> OnMove;
 
+        /// <summary>
+        /// Checks if the specified item can be moved from the origin index to the target index.
+        /// </summary>
+        /// <param name="origin">The zero-based index representing the item's current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        protected bool CanMoveItems(int origin, int target)
+        {
+            if (origin == target)
+                return false;
+            if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
+                return false;
+
+            return true;
+        }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are smaller than zero or bigger than the container size</exception>
         public virtual bool CanMove(int origin, int target)
@@ -19,13 +35,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
-
-            if (origin == target)
-                return false;
-            if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
-                return false;
             
-            return true;
+            return this.CanMoveItems(origin, target);
         }
 
         /// <inheritdoc/>
@@ -36,7 +47,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
-            if (origin == target)
+
+            if (!this.CanMoveItems(origin, target))
                 return false;
 
             var originItem = this.slots[origin].Get();

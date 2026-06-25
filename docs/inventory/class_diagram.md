@@ -40,6 +40,8 @@ direction TB
 	        + bool CanAddAt(T item, int index)
 	        + bool AddAt(T item, int index)
 
+	        + bool CanMove(int origin, int target)
+	        + bool TryMove(int origin, int target)
 	        + void Move(int origin, int target)
 
 	        + bool CanReplace(T item, int index)
@@ -96,12 +98,12 @@ direction TB
 
 	        + int GetCount(T item)
 
-            + bool CanMove(int origin, int target)
-
 	        + bool CanReplace(T item, int index)
 			+ bool TryReplace(T item, int index, out T oldItem)
 	        + T Replace(T item, int index)
 
+	        + bool CanMove(int origin, int target)
+	        + bool TryMove(int origin, int target)
 	        + void Move(int origin, int target)
         }
         class IInteractiveContainer~T~{
