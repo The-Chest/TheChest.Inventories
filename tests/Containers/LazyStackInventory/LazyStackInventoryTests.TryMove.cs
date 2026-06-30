@@ -8,26 +8,26 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         #region Invalid Origin
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void Move_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
+        public void TryMove_InvalidOrigin_ThrowsArgumentOutOfRangeException(int origin)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             Assert.That(
-                () => inventory.Move(origin, 0),
+                () => inventory.TryMove(origin, 0),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
 
         [Test]
-        public void Move_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
+        public void TryMove_OriginEqualToSize_ThrowsArgumentOutOfRangeException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             Assert.That(
-                () => inventory.Move(size, 0),
+                () => inventory.TryMove(size, 0),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
@@ -36,26 +36,26 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         #region Invalid Target
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void Move_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
+        public void TryMove_InvalidTarget_ThrowsArgumentOutOfRangeException(int target)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             Assert.That(
-                () => inventory.Move(0, target),
+                () => inventory.TryMove(0, target),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
 
         [Test]
-        public void Move_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
+        public void TryMove_TargetEqualToSize_ThrowsArgumentOutOfRangeException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
             Assert.That(
-                () => inventory.Move(0, size),
+                () => inventory.TryMove(0, size),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
@@ -63,7 +63,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
         #region Empty Origin and Target
         [Test]
-        public void Move_EmptyOriginAndTarget_ThrowsInvalidOperationException()
+        public void TryMove_EmptyOriginAndTarget_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -71,14 +71,13 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var originIndex = this.random.Next(size / 2, size);
             var targetIndex = this.random.Next(0, size / 2 - 1);
 
-            Assert.That(
-                () => inventory.Move(originIndex, targetIndex),
-                Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("Cannot move empty slots.")
-            );
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.False);
         }
 
         [Test]
-        public void Move_EmptyOriginAndTarget_DoesNotCallOnMove()
+        public void TryMove_EmptyOriginAndTarget_DoesNotCallOnMove()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -87,17 +86,14 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var targetIndex = this.random.Next(0, size / 2 - 1);
 
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
-           
-            Assert.That(
-                () => inventory.Move(originIndex, targetIndex),
-                Throws.TypeOf<InvalidOperationException>()
-            );
+
+            inventory.TryMove(originIndex, targetIndex);
         }
         #endregion
 
         #region Same Origin and Target
         [Test]
-        public void Move_OriginEqualsToTarget_ThrowsArgumentException()
+        public void TryMove_OriginEqualsToTarget_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -105,16 +101,14 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var originIndex = this.random.Next(0, size);
             var targetIndex = originIndex;
-            Assert.That(
-                () => inventory.Move(originIndex, targetIndex),
-                Throws.TypeOf<ArgumentException>()
-                    .With.Message.StartsWith("Cannot move an item to the same index.").And
-                    .With.Property("ParamName").EqualTo("target")
-            );
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+            
+            Assert.That(result, Is.False);
         }
 
         [Test]
-        public void Move_OriginEqualsToTarget_DoesNotCallOnMove()
+        public void TryMove_OriginEqualsToTarget_DoesNotCallOnMove()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -122,16 +116,16 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             var originIndex = this.random.Next(0, size);
             var targetIndex = originIndex;
-            Assert.That(
-                () => inventory.Move(originIndex, targetIndex),
-                Throws.TypeOf<ArgumentException>()
-            );
+
+            inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
+            
+            inventory.TryMove(originIndex, targetIndex);
         }
         #endregion
 
         #region Origin and Target with items
         [Test]
-        public void Move_OriginAndTargetWithItems_SwapsItems()
+        public void TryMove_OriginAndTargetWithItems_SwapsItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateManyRandom(size);
@@ -143,7 +137,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var targetIndex = this.random.Next(0, size / 2 - 1);
             var targetItems = inventory.GetItems(targetIndex);
 
-            inventory.Move(originIndex, targetIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
@@ -163,7 +157,22 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Move_OriginAndTargetWithItems_CallsOnMove()
+        public void TryMove_OriginAndTargetWithItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var items = this.itemFactory.CreateManyRandom(size);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
+
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void TryMove_OriginAndTargetWithItems_CallsOnMove()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateManyRandom(size);
@@ -198,7 +207,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                 });
                 raised = true;
             };
-            inventory.Move(originIndex, targetIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
         }
@@ -206,7 +215,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
         #region Origin with items and empty Target
         [Test]
-        public void Move_OriginWithItems_EmptyTarget_MovesItem()
+        public void TryMove_OriginWithItems_EmptyTarget_MovesItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -217,7 +226,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var amount = this.random.Next(1, stackSize);
             inventory.AddAt(item, originIndex, amount);
 
-            inventory.Move(originIndex, targetIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
             Assert.Multiple(() =>
             {
@@ -233,7 +242,24 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Move_OriginWithItems_EmptyTarget_CallsOnMoveEventOnlyWithOrigin()
+        public void TryMove_OriginWithItems_EmptyTarget_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var item = this.itemFactory.CreateRandom();
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var amount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, originIndex, amount);
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void TryMove_OriginWithItems_EmptyTarget_CallsOnMoveEventOnlyWithOrigin()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -259,7 +285,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                 });
                 raised = true;
             };
-            inventory.Move(originIndex, targetIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
         }
@@ -267,7 +293,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
         #region Empty Origin and Target with items
         [Test]
-        public void Move_EmptyOrigin_MovesItem()
+        public void TryMove_EmptyOrigin_TargetWithItems_MovesItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -278,7 +304,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var amount = this.random.Next(1, stackSize);
             inventory.AddAt(item, targetIndex, amount);
 
-            inventory.Move(originIndex, targetIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
             Assert.Multiple(() => {
                 var originSlot = inventory.GetSlot(originIndex);
@@ -296,7 +322,24 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Move_EmptyOrigin_CallsOnMoveEventOnlyWithTarget()
+        public void TryMove_EmptyOrigin_TargetWithItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var item = this.itemFactory.CreateRandom();
+            var originIndex = this.random.Next(size / 2, size);
+            var targetIndex = this.random.Next(0, size / 2 - 1);
+            var amount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, targetIndex, amount);
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void TryMove_EmptyOrigin_TargetWithItems_CallsOnMoveEventOnlyWithTarget()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -320,7 +363,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
                 });
                 raised = true;
             };
-            inventory.Move(originIndex, targetIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
         }

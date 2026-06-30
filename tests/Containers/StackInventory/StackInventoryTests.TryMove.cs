@@ -4,7 +4,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
-        #region Exceptions
+        #region Invalid Origin
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void TryMove_InvalidOriginIndex_ThrowsArgumentOutOfRangeException(int origin)
@@ -33,7 +33,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
+        #endregion
 
+        #region Invalid Target
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void TryMove_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)

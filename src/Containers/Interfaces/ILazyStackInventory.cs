@@ -123,19 +123,26 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
         event LazyStackInventoryMoveEventHandler<T> OnMove;
-        
+
         /// <summary>
         /// Checks if the specified items can be moved from the origin index to the target index.
         /// </summary>
         /// <param name="origin">The zero-based index representing the items current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
-        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        /// <returns><see langword="true"/> if the item can be moved to the target index; otherwise, <see langword="false"/>.</returns>
         bool CanMove(int origin, int target);
         /// <summary>
-        /// Move a item between two slots
+        /// Tries to move all of the items from one index to another in the inventory
         /// </summary>
-        /// <param name="origin">Selected item</param>
-        /// <param name="target">Where the item will be placed</param>
+        /// <param name="origin">The zero-based index representing the items current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns><see langword="true"/> if the items has been successfully moved; otherwise, <see langword="false"/>.</returns>
+        bool TryMove(int origin, int target);
+        /// <summary>
+        /// Moves all of the items from one index to another in the inventory
+        /// </summary>
+        /// <param name="origin">The zero-based index representing the items current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
         void Move(int origin, int target);
         #endregion
 
