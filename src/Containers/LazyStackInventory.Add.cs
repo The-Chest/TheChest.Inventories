@@ -151,7 +151,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be added</param>
-        /// <returns>Empty array when is succesfully added, otherwise it'll return an array with not added items</returns>
+        /// <returns>Empty array when is successfully added, otherwise it'll return an array with not added items</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual int Add(T item, int amount)
