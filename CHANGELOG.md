@@ -1,3 +1,43 @@
+# v0.18.0
+
+## What's Added
+* 
+
+## What's Changed
+* Project is now using `TheChest.Core` v0.18.1
+
+## What's Removed
+*
+
+## What's Fixed
+* Typos in `LazyStackInventory.Add` return method XML docs
+
+## Known Issues
+* **The Current Architecture is not stable for the final version yet**
+* **Event system will need an improvement on creation/dispatch**
+  * The new Event API is being planned
+* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
+* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
+    * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
+* `Move` methods implementation are a bit unstable but it is working 
+    * It might have a basic rework
+
+## What's Next
+* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
+* [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
+* [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
+* [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
+
 # v0.17.0
 
 ## What's Added
