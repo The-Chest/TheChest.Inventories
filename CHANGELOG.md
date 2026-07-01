@@ -17,7 +17,8 @@
 * **Event system will need an improvement on creation/dispatch**
   * The new Event API is being planned
 * `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
-* Project size is increasing. The library is not "lightweight" anymore and might need to be separated into multiple packages in the future.
+* Project size is increasing and the library is not "lightweight" anymore 
+  * The project might be separated into multiple packages in the future
   * Inventory classes have too many methods
     * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
     * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
