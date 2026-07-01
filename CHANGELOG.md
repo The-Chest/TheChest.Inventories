@@ -31,8 +31,6 @@
     * It might have a basic rework
 
 ## What's Next
-* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
-* [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 
@@ -103,7 +101,6 @@
     * It might have a basic rework
 
 ## What's Next
-* [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
 * [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
