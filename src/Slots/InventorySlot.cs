@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Exceptions;
@@ -25,16 +26,33 @@ namespace TheChest.Inventories.Slots
             this.Content = currentItem;
         }
 
+        private void Clear()
+        {
+            // TODO: check how to hangle this properly for value type without:
+            // exposing the private content or creating a status change on `Slot<T>`
+            if (!typeof(T).IsValueType)
+            {
+                this.Content = default;
+            }
+            else
+            {
+                //TODO: avoid using reflection
+                var field = typeof(Slot<T>).GetField(
+                    "content",
+                    bindingAttr: BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                field.SetValue(this, null);
+            }
+        }
         /// <inheritdoc />
         /// <exception cref="InvalidOperationException">When the slot is empty</exception>
         public virtual T Get()
         {
             if (this.IsEmpty)
                 throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
-            
+
             var content = this.Content;
-            this.Content = null;
-            
+            this.Clear();
             return content;
         }
 
@@ -67,6 +85,7 @@ namespace TheChest.Inventories.Slots
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            
             if (this.IsFull)
                 throw new InvalidOperationException(InventorySlotErrors.FullSlot);
 

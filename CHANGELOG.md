@@ -21,7 +21,7 @@
 * **The Current Architecture is not stable for the final version yet**
 * **Event system will need an improvement on creation/dispatch**
   * The new Event API is being planned
-* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* `Exception`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 * Project size is increasing and the library is not "lightweight" anymore 
   * The project might be separated into multiple packages in the future
   * Inventory classes have too many methods
@@ -30,11 +30,12 @@
     * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
-* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
 * `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
     * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
 * `Move` methods implementation are a bit unstable but it is working 
     * It might have a basic rework
+* Slot removing methods using `System.Reflection` for value type checking and setting content to null
+  * Changes in `TheChest.Core` are needed to improve a way to set the content
 
 ## What's Next
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
