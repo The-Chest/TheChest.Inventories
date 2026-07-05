@@ -5,6 +5,11 @@
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
+* `Inventory`
+  * `InventorySlot` 
+    * `Get` method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+* `StackInventory`
+* `LazyStackInventory`
 
 ## What's Removed
 *

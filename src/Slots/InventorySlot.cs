@@ -26,13 +26,15 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc />
+        /// <exception cref="InvalidOperationException">When the slot is empty</exception>
         public virtual T Get()
         {
             if (this.IsEmpty)
-                return (T)(object)null;
-
+                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
+            
             var content = this.Content;
-            this.Content = default;
+            this.Content = null;
+            
             return content;
         }
 
