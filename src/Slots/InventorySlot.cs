@@ -28,7 +28,7 @@ namespace TheChest.Inventories.Slots
 
         private void Clear()
         {
-            // TODO: check how to hangle this properly for value type without:
+            // TODO: check how to handle this properly for value type without:
             // exposing the private content or creating a status change on `Slot<T>`
             if (!typeof(T).IsValueType)
             {
@@ -38,8 +38,8 @@ namespace TheChest.Inventories.Slots
             {
                 //TODO: avoid using reflection
                 var field = typeof(Slot<T>).GetField(
-                    "content",
-                    bindingAttr: BindingFlags.NonPublic | BindingFlags.Instance
+                    "content", 
+                    BindingFlags.NonPublic | BindingFlags.Instance
                 );
                 field.SetValue(this, null);
             }
@@ -127,7 +127,8 @@ namespace TheChest.Inventories.Slots
             if (this.IsEmpty)
             {
                 this.Content = item;
-                return (T)(object)null;
+                //How to check the difference of default from empty and full slot
+                return default;
             }
 
             var content = this.Content;
