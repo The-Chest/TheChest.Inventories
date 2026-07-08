@@ -9,16 +9,30 @@
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
+
+### Inventory
 * `Inventory`
-  * `Clear()` 
-    * Now it checks if the slot is empty before trying to clear it
-    * It allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
   * `Get(int index)`
     * Now it checks if the slot is empty before trying to clear it
-  * `InventorySlot` 
-    * `Get()` method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+  * `Clear()` 
+    * Now it checks if the slot is empty before trying to clear it
+    * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
+  * `Move(int origin, int target)` & `TryMove(int origin, int target)`
+    * Now it checks if the slot is empty before trying to move it
+* `InventorySlot` 
+  * `Get()` - method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+
+### Stack
 * `StackInventory`
+  * 
+* `InventoryStackSlot` 
+  * 
+
+### LazyStack
 * `LazyStackInventory`
+  * 
+* `InventoryLazyStackSlot` 
+  * 
 
 ## What's Removed
 *
@@ -46,6 +60,7 @@
     * It might have a basic rework
 * Slot removing methods using `System.Reflection` for value type checking and setting content to null
   * Changes in `TheChest.Core` are needed to improve a way to set the content
+* No idea about how is the code performance...
 
 ## What's Next
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
