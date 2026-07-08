@@ -17,16 +17,20 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         public virtual T[] Clear()
         {
-            var items = new List<T>();
-            var indexes = new List<int>();
+            var quarter = this.Size / 4;
+
+            var items = new List<T>(quarter);
+            var indexes = new List<int>(quarter);
+
             for (int i = 0; i < this.Size; i++)
             {
-                var item = this.slots[i].Get();
-                if (!item.IsNull())
-                {
-                    indexes.Add(i);
-                    items.Add(item);
-                }
+                if(this.slots[i].IsEmpty)
+                    continue;
+
+                var item = this.slots[i].Get(); 
+
+                indexes.Add(i);
+                items.Add(item);
             }
 
             if (items.Count > 0)
@@ -72,9 +76,12 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
+            if (this.slots[index].IsEmpty)
+                return default;
+
             var item = this.slots[index].Get();
 
-            if (!EqualityComparer<T>.Default.Equals(item, default))
+            if (!item.IsNull())
                 this.OnGet?.Invoke(this, (item, index));
 
             return item;

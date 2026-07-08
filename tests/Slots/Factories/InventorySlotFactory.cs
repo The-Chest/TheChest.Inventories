@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Slots.Factories
     {
         public virtual IInventorySlot<Item> Empty()
         {
-            var slot = Activator.CreateInstance(typeof(Slot), default(Item));
+            var slot = Activator.CreateInstance(typeof(Slot));
             return (IInventorySlot<Item>)slot!;
         }
 

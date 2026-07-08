@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        public void GetAll_NotFoundItemm_ReturnsEmptyArray()
+        public void GetAll_NotFoundItem_ReturnsEmptyArray()
         {
             var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);

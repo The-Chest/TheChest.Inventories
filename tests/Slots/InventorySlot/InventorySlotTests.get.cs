@@ -1,10 +1,39 @@
-﻿using TheChest.Tests.Common.Extensions.Slots;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
+        #region Empty
         [Test]
+        public void GetOne_EmptySlot_ThrowsInvalidOperationException()
+        {
+            var slot = this.slotFactory.Empty();
+
+            Assert.That(
+                () => slot.Get(), 
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
+            );
+        }
+        #endregion
+
+        #region Full
+        [Test]
+        [IgnoreIfValueType]
+        public void GetOne_FullSlot_ReturnsItem()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Full(item);
+
+            var result = slot.Get();
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.EqualTo(item));
+        }
+
+        [Test]
+        [IgnoreIfValueType]
         public void GetOne_FullSlot_RemovesItemFromSlot()
         {
             var item = this.itemFactory.CreateDefault();
@@ -12,28 +41,40 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             slot.Get();
 
-            Assert.That(slot.GetContent(), Is.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(slot.IsEmpty, Is.True);
+                Assert.That(slot.GetContent(), Is.Null);
+            });
         }
 
         [Test]
-        public void GetOne_FullSlot_ReturnsExistingItem()
+        [IgnoreIfReferenceType]
+        public void GetOne_FullSlot_DefaultItem_RemovesItemFromSlot()
         {
-            var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.Full(item);
+            var item = default(T);
+            var slot = this.slotFactory.Full(item!);
+
+            slot.Get();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(slot.IsEmpty, Is.True);
+                Assert.That(slot.GetContent(), Is.EqualTo(item));
+            });
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetOne_FullSlot_DefaultItem_ReturnsItem()
+        {
+            var item = default(T);
+            var slot = this.slotFactory.Full(item!);
 
             var result = slot.Get();
 
             Assert.That(result, Is.EqualTo(item));
         }
-
-        [Test]
-        public void GetOne_EmptySlot_ReturnsNull()
-        {
-            var slot = this.slotFactory.Empty();
-
-            var result = slot.Get();
-
-            Assert.That(result, Is.Null);
-        }
+        #endregion
     }
 }

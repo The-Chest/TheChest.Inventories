@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Exceptions;
@@ -25,14 +26,33 @@ namespace TheChest.Inventories.Slots
             this.Content = currentItem;
         }
 
+        private void Clear()
+        {
+            // TODO: check how to handle this properly for value type without:
+            // exposing the private content or creating a status change on `Slot<T>`
+            if (!typeof(T).IsValueType)
+            {
+                this.Content = default;
+            }
+            else
+            {
+                //TODO: avoid using reflection
+                var field = typeof(Slot<T>).GetField(
+                    "content", 
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                field.SetValue(this, null);
+            }
+        }
         /// <inheritdoc />
+        /// <exception cref="InvalidOperationException">When the slot is empty</exception>
         public virtual T Get()
         {
             if (this.IsEmpty)
-                return (T)(object)null;
+                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
 
             var content = this.Content;
-            this.Content = default;
+            this.Clear();
             return content;
         }
 
@@ -65,6 +85,7 @@ namespace TheChest.Inventories.Slots
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
+            
             if (this.IsFull)
                 throw new InvalidOperationException(InventorySlotErrors.FullSlot);
 
@@ -80,7 +101,7 @@ namespace TheChest.Inventories.Slots
         }
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        public bool TryReplace(T item, out T oldItem)
+        public virtual bool TryReplace(T item, out T oldItem)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
@@ -106,7 +127,8 @@ namespace TheChest.Inventories.Slots
             if (this.IsEmpty)
             {
                 this.Content = item;
-                return (T)(object)null;
+                //How to check the difference of default from empty and full slot
+                return default;
             }
 
             var content = this.Content;

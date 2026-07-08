@@ -1,22 +1,48 @@
 # v0.18.0
 
 ## What's Added
-* 
+* Value Type for all of Inventory and Slot classes
+  * *It is using `System.Reflection` for value type checking so performance might be an issue* 
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
+
+### Inventory
+* `Inventory`
+  * `Get(int index)`
+    * Now it checks if the slot is empty before trying to clear it
+  * `Clear()` 
+    * Now it checks if the slot is empty before trying to clear it
+    * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
+  * `Move(int origin, int target)` & `TryMove(int origin, int target)`
+    * Now it checks if the slot is empty before trying to move it
+* `InventorySlot` 
+  * `Get()` - method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+
+### Stack
+* `StackInventory`
+  * 
+* `InventoryStackSlot` 
+  * 
+
+### LazyStack
+* `LazyStackInventory`
+  * 
+* `InventoryLazyStackSlot` 
+  * 
 
 ## What's Removed
 *
 
 ## What's Fixed
 * Typos in `LazyStackInventory.Add` return method XML docs
+* `InventorySlot.TryReplace` is now marked as `virtual`
 
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
 * **Event system will need an improvement on creation/dispatch**
   * The new Event API is being planned
-* `ArgumentNullException`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* `Exception`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
 * Project size is increasing and the library is not "lightweight" anymore 
   * The project might be separated into multiple packages in the future
   * Inventory classes have too many methods
@@ -30,6 +56,9 @@
     * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
 * `Move` methods implementation are a bit unstable but it is working 
     * It might have a basic rework
+* Slot removing methods using `System.Reflection` for value type checking and setting content to null
+  * Changes in `TheChest.Core` are needed to improve a way to set the content
+* No idea about how is the code performance...
 
 ## What's Next
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts

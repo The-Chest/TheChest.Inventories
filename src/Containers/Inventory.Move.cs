@@ -51,8 +51,8 @@ namespace TheChest.Inventories.Containers
             if (!this.CanMoveItems(origin, target))
                 return false;
 
-            var originItem = this.slots[origin].Get();
-            var targetItem = this.slots[target].Get();
+            var originItem = this.slots[origin].IsEmpty ? default : this.slots[origin].Get();
+            var targetItem = this.slots[target].IsEmpty ? default : this.slots[target].Get();
 
             var events = new List<InventoryMoveItemEventData<T>>(1);
             if (!originItem.IsNull())
@@ -92,8 +92,8 @@ namespace TheChest.Inventories.Containers
             if(this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
                 throw new InvalidOperationException(InventoryErrors.CannotMoveEmptySlots);
 
-            var originItem = this.slots[origin].Get();
-            var targetItem = this.slots[target].Get();
+            var originItem = this.slots[origin].IsEmpty ? default : this.slots[origin].Get();
+            var targetItem = this.slots[target].IsEmpty ? default : this.slots[target].Get();
 
             var events = new List<InventoryMoveItemEventData<T>>(1);
             if (!originItem.IsNull())
