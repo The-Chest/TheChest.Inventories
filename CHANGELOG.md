@@ -1,11 +1,8 @@
 # v0.18.0
 
 ## What's Added
-* Value Type for Inventory and Slot classes
+* Value Type for all of Inventory and Slot classes
   * *It is using `System.Reflection` for value type checking so performance might be an issue* 
-  * `Inventory<T>` and `InventorySlot<T>` now support value types (structs) as the generic type parameter `T`
-  * `StackInventory<T>` and `InventoryStackSlot<T>` now support value types (structs) as the generic type parameter `T`
-  * `LazyStackInventory<T>` and `InventoryLazyStackSlot<T>` now support value types (structs) as the generic type parameter `T`
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
