@@ -76,9 +76,12 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
+            if (this.slots[index].IsEmpty)
+                return default;
+
             var item = this.slots[index].Get();
 
-            if (!EqualityComparer<T>.Default.Equals(item, default))
+            if (!item.IsNull())
                 this.OnGet?.Invoke(this, (item, index));
 
             return item;

@@ -10,11 +10,13 @@
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
 * `Inventory`
-  * `Clear` 
+  * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
-    * It allocates internally an List with the size of a quarter of the inventory size to store the cleared items
+    * It allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
+  * `Get(int index)`
+    * Now it checks if the slot is empty before trying to clear it
   * `InventorySlot` 
-    * `Get` method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+    * `Get()` method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 * `StackInventory`
 * `LazyStackInventory`
 
