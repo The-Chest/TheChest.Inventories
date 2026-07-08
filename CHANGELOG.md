@@ -26,7 +26,7 @@
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
 * Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
-* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
+* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesn't throw `InvalidOperationException` when has no available space to add the items
     * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
 * `Move` methods implementation are a bit unstable but it is working 
     * It might have a basic rework
