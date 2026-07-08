@@ -1,15 +1,18 @@
 ﻿using TheChest.Inventories.Containers;
 using TheChest.Inventories.Slots;
-using TheChest.Tests.Common.Items.ReferenceType;
 using TheChest.Inventories.Tests.Containers.Factories;
 using TheChest.Inventories.Tests.Containers.Interfaces;
 using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 using TheChest.Inventories.Tests.Slots.Factories;
 using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
+using TheChest.Tests.Common.Items.ReferenceType;
+using TheChest.Tests.Common.Items.ValueType;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     [TestFixture(typeof(TestItem))]
+    [TestFixture(typeof(TestEnumItem))]
+    [TestFixture(typeof(TestStructItem))]
     public partial class InventoryTests<T> : IInventoryTests<T>
     {
         public InventoryTests() : base(configure =>
