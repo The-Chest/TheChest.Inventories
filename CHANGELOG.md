@@ -51,7 +51,7 @@
     * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
     * `TryReplace(T[] items, int index, out T[] oldItems)` - Tries to replace items in a specific index, returns `true` on success and outputs the replaced items; otherwise `false` and default value of `T[]` as the output
-    * `TryMove(int origin, int target)` - Tries to move all items from on index to another, returns `true` on success
+    * `TryMove(int origin, int target)` - Tries to move all items from one index to another, returns `true` on success
   * `LazyStackInventory`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
     * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
