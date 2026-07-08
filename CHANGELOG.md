@@ -51,7 +51,8 @@
     * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
   * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
   * `StackInventory<T>` class is too complex and needs some refactors 
-* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesnt throw `InvalidOperationException` when has no available space to add the items
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
+* `StackInventory<T>` and `LazyStackInventory<T>` Add methods doesn't throw `InvalidOperationException` when has no available space to add the items
     * it just returns the amount of items that couldn't be added, this will be changed in the future to throw an exception instead. 
 * `Move` methods implementation are a bit unstable but it is working 
     * It might have a basic rework
@@ -74,17 +75,17 @@
     * `TryAdd(T[] items)` - Tries to add all the items in the array to the inventory, returns the items that couldn't be added
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific index, returns the item if it couldn't be added
     * `TryReplace(T item, int index, out T oldItem)` - Tries to replace an item in a specific index, returns `true` on success and outputs the replaced item; otherwise `false` and default value of `T` as the output
-    * `TryMove(int origin, int target)` - Tries to move an item from on index to another,  returns `true` on success
+    * `TryMove(int origin, int target)` - Tries to move an item from one index to another,  returns `true` on success
   * `StackInventory`
     * `TryAdd(params T[] items)` - Tries to add all items to the inventory and returns `true` when all items are added; otherwise `false`
     * `TryAddAt(T item, int index)` - Tries to add an item to a specific stack slot and returns `true` on success; otherwise `false`
     * `TryReplace(T[] items, int index, out T[] oldItems)` - Tries to replace items in a specific index, returns `true` on success and outputs the replaced items; otherwise `false` and default value of `T[]` as the output
-    * `TryMove(int origin, int target)` - Tries to move all items from on index to another, returns `true` on success
+    * `TryMove(int origin, int target)` - Tries to move all items from one index to another, returns `true` on success
   * `LazyStackInventory`
     * `TryAdd(T item, int amount)` - Tries to add the requested amount to the inventory and returns `true` only when all requested items are added
     * `TryAddAt(T item, int index, int amount)` - Tries to add the requested amount to a specific slot and returns `true` only when all requested items are added
     * `TryReplace(T item, int index, int amount, out T[] oldItems)` - Tries to replace the requested amount to a specific slot and returns `true` only when the item is successfully replaced
-    * `TryMove(int origin, int target)` - Tries to move all itemsa from on index to another,  returns `true` on success and outputs the replaced item
+    * `TryMove(int origin, int target)` - Tries to move all items from on index to another,  returns `true` on success and outputs the replaced item
 * New add methods with attempting to do an action without throwing exceptions when the action is not possible to be done because of the slot state. 
   * `InventorySlot`
     * `TryAdd(T item)` - Tries to add an item to the slot and returns `true` on success; otherwise `false`
