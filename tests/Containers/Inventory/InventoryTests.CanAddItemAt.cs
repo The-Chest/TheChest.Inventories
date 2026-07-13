@@ -19,13 +19,28 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
         [Test]
         [IgnoreIfReferenceType]
-        public void CanAddAt_DefaultValue_ReturnsTrue()
+        public void CanAddAt_DefaultValue_EmptySlot_ReturnsTrue()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
             var randomIndex = this.random.Next(0, size);
+
             var canAdd = inventory.CanAddAt(default!, randomIndex);
+
             Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddAt_DefaultValue_FullSlot_ReturnsFalse()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+            var randomIndex = this.random.Next(0, size);
+
+            var canAdd = inventory.CanAddAt(default!, randomIndex);
+
+            Assert.That(canAdd, Is.False);
         }
 
         [TestCase(-1)]

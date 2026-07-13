@@ -1,4 +1,5 @@
 ﻿using TheChest.Inventories.Slots.Interfaces;
+using TheChest.Tests.Common.Attributes;
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
@@ -7,6 +8,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void AddItem_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -15,6 +17,25 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 () => inventory.Add(item: default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddItem_DefaultValue_AddsItemToFirstSlot()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var item = default(T);
+            inventory.Add(item);
+
+            Assert.Multiple(() =>
+            {
+                var firstSlot = inventory.GetSlot(0);
+                Assert.That(firstSlot, Is.Not.Null);
+                Assert.That(firstSlot.IsEmpty, Is.False);
+                Assert.That(firstSlot.GetContent(), Is.EqualTo(item));
+            });
         }
 
         [Test]
@@ -39,14 +60,17 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var inventory = this.inventoryFactory.FullContainer(size, items);
 
             var item = this.itemFactory.CreateRandom();
-            Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
 
-            Assert.That(
-                inventory.GetSlots(),
-                Is.All.Matches<IInventorySlot<T>>(
-                    x => x.IsFull && !x.GetContent()!.Equals(item)
-                )
-            );
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => inventory.Add(item), Throws.InvalidOperationException);
+                Assert.That(
+                    inventory.GetSlots(),
+                    Is.All.Matches<IInventorySlot<T>>(
+                        x => x.IsFull && !x.GetContent()!.Equals(item)
+                    )
+                );
+            });
         }
 
         [Test]
