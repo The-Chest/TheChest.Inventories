@@ -17,7 +17,8 @@
   * `Move(int origin, int target)` & `TryMove(int origin, int target)`
     * Now it checks if the slot is empty before trying to move it
 * `InventorySlot` 
-  * `Get()` - method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+  * `Get()` 
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 
 ### Stack
 * `StackInventory`
