@@ -1,5 +1,4 @@
-﻿using TheChest.Inventories.Slots.Interfaces;
-using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 using TheChest.Tests.Common.Extensions;
 

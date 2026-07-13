@@ -1,10 +1,12 @@
 ﻿using NUnit.Framework.Internal;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanAddAt_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -13,6 +15,17 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 () => inventory.CanAddAt(item: default!, 0), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddAt_DefaultValue_ReturnsTrue()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var randomIndex = this.random.Next(0, size);
+            var canAdd = inventory.CanAddAt(default!, randomIndex);
+            Assert.That(canAdd, Is.True);
         }
 
         [TestCase(-1)]

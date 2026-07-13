@@ -1,5 +1,5 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Attributes;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
@@ -28,6 +28,23 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 () => inventory.AddAt(default!, 0), 
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddAt_DefaultValue_AddsItem()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomIndex = this.random.Next(0, size);
+            inventory.AddAt(default!, randomIndex);
+
+            Assert.Multiple(() =>
+            {
+                var randomItem = inventory.GetItem(randomIndex);
+                Assert.That(randomItem, Is.EqualTo(default(T)));
+            });
         }
 
         [Test]

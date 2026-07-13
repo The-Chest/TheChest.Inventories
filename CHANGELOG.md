@@ -66,6 +66,7 @@
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
 
+---
 # v0.17.0
 
 ## What's Added
@@ -137,6 +138,7 @@
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
 
+---
 # v0.16.0
 
 > This Changelog is going to be separated into subsections for each Inventory Type to make it more organized
