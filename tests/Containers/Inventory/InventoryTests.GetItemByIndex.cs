@@ -14,7 +14,19 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             Assert.That(
                 () => inventory.Get(index), 
-                Throws.Exception.TypeOf<ArgumentOutOfRangeException>()
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
+            );
+        }
+
+        [Test]
+        public void GetItemByIndex_IndexEqualToSize_ThrowsArgumentOutOfRangeException()
+        {
+            var size = this.GenerateRandomSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, item);
+            Assert.That(
+                () => inventory.Get(size), 
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
 
@@ -23,11 +35,27 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var index = this.random.Next(0, size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("Get(int index) should not be called if no item is found");
-            
-            inventory.Get(index);
+
+            var randomIndex = this.random.Next(0, size);
+            Assert.That(
+                () => inventory.Get(randomIndex),
+                Throws.Exception.TypeOf<InvalidOperationException>()
+            );
+        }
+
+        [Test]
+        public void GetItemByIndex_ValidIndexEmptySlot_ThrowsInvalidOperationException()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomIndex = this.random.Next(0, size);
+            Assert.That(
+                () => inventory.Get(randomIndex),
+                Throws.Exception.TypeOf<InvalidOperationException>().With.Message.EqualTo("The slot is empty.")
+            );
         }
 
         [Test]
@@ -66,18 +94,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             inventory.Get(randomIndex); 
             
             Assert.That(raised, Is.True, "OnGet event was not raised");
-        }
-
-        [Test]
-        public void GetItemByIndex_ValidIndexEmptySlot_ReturnsNull()
-        {
-            var size = this.GenerateRandomSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var result = inventory.Get(randomIndex);
-
-            Assert.That(result, Is.Null);
         }
 
         [Test]

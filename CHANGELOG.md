@@ -9,8 +9,8 @@
 
 ### Inventory
 * `Inventory`
-  * `Get(int index)`
-    * Now it checks if the slot is empty before trying to clear it
+  * `Get(int index)` 
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
   * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
     * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
@@ -60,10 +60,12 @@
 * Slot removing methods using `System.Reflection` for value type checking and setting content to null
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
+* Now that Get Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet` method to avoid throwing exceptions in some cases 
 
 ## What's Next
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
+* [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
 
