@@ -1,15 +1,44 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void GetCount_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            Assert.That(() => inventory.GetCount(item: default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.GetCount(default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetCount_DefaultValue_EmptyContainer_ReturnsZero()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var result = inventory.GetCount(default!);
+
+            Assert.That(result, Is.Zero);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetCount_DefaultValue_FullContainer_ReturnsItemsAmount()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+
+            var result = inventory.GetCount(default!);
+
+            Assert.That(result, Is.EqualTo(size));
         }
 
         [Test]

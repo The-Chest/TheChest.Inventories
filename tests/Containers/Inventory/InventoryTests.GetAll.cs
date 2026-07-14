@@ -1,15 +1,45 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void GetAll_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            Assert.That(() => inventory.GetAll(item: default!), Throws.ArgumentNullException);
+
+            Assert.That(
+                () => inventory.GetAll(item: default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetAll_DefaultValue_EmptyInventory_ReturnsEmptyArray()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var result = inventory.GetAll(default!);
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetAll_DefaultValue_FullInventory_ReturnsArrayWithItems()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+
+            var result = inventory.GetAll(default!);
+
+            Assert.That(result, Has.Length.EqualTo(size));
         }
 
         [Test]
@@ -34,7 +64,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var randomItem = items[index];
             inventory.GetAll(randomItem);
 
-            Assert.That(inventory.GetSlots()![index].IsEmpty, Is.True);
+            Assert.That(inventory.GetSlot(index).IsEmpty, Is.True);
         }
 
         [Test]
@@ -43,12 +73,12 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
-            var slots = inventory.GetSlots<T>()?.ToArray();
+            var slots = inventory.GetSlots()?.ToArray();
 
             var randomItem = this.itemFactory.CreateRandom();
             inventory.GetAll(randomItem);
 
-            Assert.That(inventory.GetSlots<T>(), Is.EqualTo(slots));
+            Assert.That(inventory.GetSlots(), Is.EqualTo(slots));
         }
 
         [Test]
