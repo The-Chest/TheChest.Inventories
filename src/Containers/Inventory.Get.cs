@@ -87,11 +87,13 @@ namespace TheChest.Inventories.Containers
 
             return item;
         }
+        
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when <paramref name="item"/> is found.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the item is not found in the inventory</exception>
         public virtual T Get(T item)
         {
             if (item.IsNull())
@@ -106,8 +108,9 @@ namespace TheChest.Inventories.Containers
                 }
             }
 
-            return default;
+            throw new InvalidOperationException(InventorySlotErrors.ItemNotFound);
         }
+        
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when the maximum possible <paramref name="amount"/> of <paramref name="item"/> is found.

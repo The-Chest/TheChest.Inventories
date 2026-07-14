@@ -11,6 +11,8 @@
 * `Inventory`
   * `Get(int index)` 
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+  * `Get(T item)` 
+    * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
   * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
     * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
@@ -61,6 +63,7 @@
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
 * Now that Get Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet` method to avoid throwing exceptions in some cases 
+* No nullable support for value types yet, it might be added in the future
 
 ## What's Next
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
