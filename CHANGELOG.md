@@ -13,6 +13,8 @@
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
   * `Get(T item)` 
     * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
+  * `TryAdd(params T[] items)` 
+    * Now it throws `ArgumentNullException` when the param `items` is null instead of returning false
   * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
     * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items

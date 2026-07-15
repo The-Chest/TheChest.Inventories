@@ -30,6 +30,7 @@ namespace TheChest.Inventories.Slots
         {
             // TODO: check how to handle this properly for value type without:
             // exposing the private content or creating a status change on `Slot<T>`
+            // use a RawContent property to set the content to null for reference types and default for value types
             if (!typeof(T).IsValueType)
             {
                 this.Content = default;
