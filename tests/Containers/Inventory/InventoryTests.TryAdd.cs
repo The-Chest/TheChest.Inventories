@@ -1,6 +1,7 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 using TheChest.Tests.Common.Extensions;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
@@ -18,6 +19,18 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        public void TryAddItems_NullItemsArray_ThrowsArgumentNullException()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer(this.GenerateRandomSize());
+
+            Assert.That(
+                () => inventory.TryAdd(null!),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+            );
+        }
+
+        [Test]
+        [IgnoreIfValueType]
         public void TryAddItems_ArrayContainingNullItems_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -59,7 +72,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             inventory.TryAdd(addItems);
 
-            Assert.That(called, Is.True);
+            Assert.That(called, Is.True, "OnAdd event was not called for added items.");
         }
 
         [Test]

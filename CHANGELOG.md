@@ -18,7 +18,7 @@
   * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
     * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
-  * `Move(int origin, int target)` & `TryMove(int origin, int target)`
+  * `Move(int origin, int target)` and `TryMove(int origin, int target)`
     * Now it checks if the slot is empty before trying to move it
 * `InventorySlot` 
   * `Get()` 
