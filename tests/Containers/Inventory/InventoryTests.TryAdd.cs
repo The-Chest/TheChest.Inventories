@@ -48,6 +48,24 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfReferenceType]
+        public void TryAddItems_ArrayContainingDefaultValue_AddsDefaultValue()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var items = new T[] { default! };
+
+            var result = inventory.TryAdd(items);
+
+            Assert.That(result, Is.True);
+
+            var firstContent = inventory.GetSlots().First().GetContent();
+            var expected = default(T);
+            Assert.That(firstContent, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void TryAddItems_ItemsBiggerThanInventorySize_ReturnsFalse()
         {
             var size = this.GenerateRandomSize();
@@ -76,19 +94,20 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        public void TryAddItems_NotEnoughAvailableSlots_AddsOnlyUntilNoSlotsAvailable()
+        public void TryAddItems_NotEnoughAvailableSlots_AddsOnlyUntilHaveNoSlotsAvailable()
         {
             var size = this.GenerateRandomSize();
             var existingItems = this.itemFactory.CreateMany(size - 1);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, existingItems);
             var addItems = this.itemFactory.CreateManyRandom(2);
-            var slotsBefore = inventory.GetSlots().Select(slot => slot.GetContent()).ToArray();
+
+            var filledBefore = inventory.GetSlots().Count(slot => slot.IsFull);
 
             inventory.TryAdd(addItems);
 
             var filledAfter = inventory.GetSlots().Count(slot => slot.IsFull);
 
-            Assert.That(filledAfter, Is.EqualTo(slotsBefore.Count(x => x is not null) + 1));
+            Assert.That(filledAfter, Is.EqualTo(filledBefore + 1));
         }
 
         [Test]
@@ -113,7 +132,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
-            var result = inventory.TryAdd(this.itemFactory.CreateMany(1));
+            var amount = this.random.Next(1, size);
+            var result = inventory.TryAdd(this.itemFactory.CreateMany(amount));
 
             Assert.That(result, Is.True);
         }
