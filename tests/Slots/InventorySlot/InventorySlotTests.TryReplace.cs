@@ -21,33 +21,33 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Empty Slot
         [Test]
-        public void TryReplace_EmptySlot_ReturnsTrue()
+        public void TryReplace_EmptySlot_ReturnsFalse()
         {
             var slot = this.slotFactory.Empty();
             var item = this.itemFactory.CreateDefault();
 
             var result = slot.TryReplace(item, out _);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_AddsItem()
+        public void TryReplace_EmptySlot_DoesNotAddsItem()
         {
             var slot = this.slotFactory.Empty();
-            var item = this.itemFactory.CreateDefault();
 
+            var item = this.itemFactory.CreateRandom();
             slot.TryReplace(item, out _);
 
-            Assert.That(slot.GetContent(), Is.EqualTo(item));
+            Assert.That(slot.GetContent(), Is.Not.EqualTo(item));
         }
 
         [Test]
         public void TryReplace_EmptySlot_SetsOldItemToDefault()
         {
             var slot = this.slotFactory.Empty();
-            var item = this.itemFactory.CreateDefault();
 
+            var item = this.itemFactory.CreateDefault();
             slot.TryReplace(item, out var oldItem);
 
             Assert.That(oldItem, Is.EqualTo(default(T)));
@@ -55,19 +55,19 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_EmptySlot_DefaultItem_ReturnsTrue()
+        public void TryReplace_EmptySlot_DefaultItem_ReturnsFalse()
         {
             var slot = this.slotFactory.Empty();
 
             var item = default(T);
             var result = slot.TryReplace(item!, out _);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_EmptySlot_DefaultItem_AddsDefault()
+        public void TryReplace_EmptySlot_DefaultItem_DoesNotAddsItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -77,7 +77,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
             Assert.Multiple(() =>
             {
                 Assert.That(slot.GetContent(), Is.EqualTo(default(T)));
-                Assert.That(slot.IsFull, Is.True);
+                Assert.That(slot.IsFull, Is.False);
             });
         }
 

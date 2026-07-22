@@ -8,7 +8,8 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         [IgnoreIfValueType]
         public void CanReplace_NullItem_ReturnsFalse()
         {
-            var slot = this.slotFactory.Empty();
+            var item = this.itemFactory.CreateRandom();
+            var slot = this.slotFactory.Full(item);
 
             var result = slot.CanReplace(default!);
 
@@ -19,7 +20,8 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         [IgnoreIfReferenceType]
         public void CanReplace_DefaultItem_ReturnsTrue()
         {
-            var slot = this.slotFactory.Empty();
+            var item = this.itemFactory.CreateRandom();
+            var slot = this.slotFactory.Full(item);
 
             var result = slot.CanReplace(default!);
 
@@ -27,14 +29,14 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanReplace_EmptySlot_ReturnsTrue()
+        public void CanReplace_EmptySlot_ReturnsFalse()
         {
             var slot = this.slotFactory.Empty();
-            var newItem = this.itemFactory.CreateDefault();
 
+            var newItem = this.itemFactory.CreateDefault();
             var result = slot.CanReplace(newItem);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         [Test]
