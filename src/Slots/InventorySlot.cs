@@ -45,6 +45,7 @@ namespace TheChest.Inventories.Slots
                 field.SetValue(this, null);
             }
         }
+        
         /// <inheritdoc />
         /// <exception cref="InvalidOperationException">When the slot is empty</exception>
         public virtual T Get()
@@ -98,20 +99,20 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         public virtual bool CanReplace(T item)
         {
-            return !item.IsNull();
+            return !this.IsEmpty && !item.IsNull();
         }
+
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool TryReplace(T item, out T oldItem)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
-
+            
             if (this.IsEmpty)
             {
-                this.Content = item;
                 oldItem = default;
-                return true;
+                return false;
             }
 
             oldItem = this.Content;
@@ -120,17 +121,14 @@ namespace TheChest.Inventories.Slots
         }
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the slot is empty</exception>
         public virtual T Replace(T item)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
-            
+
             if (this.IsEmpty)
-            {
-                this.Content = item;
-                //How to check the difference of default from empty and full slot
-                return default;
-            }
+                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
 
             var content = this.Content;
             this.Content = item;
