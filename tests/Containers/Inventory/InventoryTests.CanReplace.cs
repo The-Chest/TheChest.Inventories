@@ -5,6 +5,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanReplace_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -14,6 +15,19 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 () => inventory.CanReplace(default!, 0),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanReplace_DefaultItem_ReturnsTrue()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomIndex = this.random.Next(0, size);
+            var canReplace = inventory.CanReplace(default!, randomIndex);
+
+            Assert.That(canReplace, Is.True);
         }
 
         [TestCase(-1)]
@@ -46,8 +60,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var randomIndex = this.random.Next(0, size);
 
+            var randomIndex = this.random.Next(0, size);
             var canReplace = inventory.CanReplace(this.itemFactory.CreateDefault(), randomIndex);
 
             Assert.That(canReplace, Is.True);
