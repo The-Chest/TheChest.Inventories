@@ -21,54 +21,27 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Empty Slot
         [Test]
-        [IgnoreIfValueType]
-        public void Replace_EmptySlot_ReturnsNull()
+        public void Replace_EmptySlot_ThrowsInvalidOperationException()
         {
             var slot = this.slotFactory.Empty();
+
             var newItem = this.itemFactory.CreateDefault();
-
-            var result = slot.Replace(newItem);
-
-            Assert.That(result, Is.Null);
+            Assert.That(
+                () => slot.Replace(newItem),
+                Throws.InvalidOperationException.With.Message.EqualTo("Slot is empty.")
+            );
         }
 
         [Test]
-        [IgnoreIfValueType]
-        public void Replace_EmptySlot_AddsItem()
+        public void Replace_EmptySlot_DoesNotReplacesItem()
         {
             var slot = this.slotFactory.Empty();
+
             var newItem = this.itemFactory.CreateDefault();
-
-            slot.Replace(newItem);
-
-            Assert.That(slot.GetContent(), Is.EqualTo(newItem));
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Replace_EmptySlot_DefaultItem_ReturnsDefault()
-        {
-            var slot = this.slotFactory.Empty();
-
-            var newItem = default(T);
-            var result = slot.Replace(newItem!);
-
-            Assert.That(result, Is.EqualTo(default(T)));
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Replace_EmptySlot_DefaultItem_AddsDefault()
-        {
-            var slot = this.slotFactory.Empty();
-
-            var newItem = default(T);
-            slot.Replace(newItem!);
-
             Assert.Multiple(() =>
             {
-                Assert.That(slot.GetContent(), Is.EqualTo(default(T)));
-                Assert.That(slot.IsFull, Is.True);
+                Assert.That(() => slot.Replace(newItem), Throws.InvalidOperationException);
+                Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
             });
         }
         #endregion
