@@ -25,10 +25,10 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         {
             var slot = this.slotFactory.Empty();
 
-            var newItem = this.itemFactory.CreateDefault();
+            var newItem = this.itemFactory.CreateRandom();
             Assert.That(
                 () => slot.Replace(newItem),
-                Throws.InvalidOperationException.With.Message.EqualTo("Slot is empty.")
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
             );
         }
 
@@ -37,12 +37,10 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         {
             var slot = this.slotFactory.Empty();
 
-            var newItem = this.itemFactory.CreateDefault();
-            Assert.Multiple(() =>
-            {
-                Assert.That(() => slot.Replace(newItem), Throws.InvalidOperationException);
-                Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
-            });
+            var newItem = this.itemFactory.CreateRandom();
+            
+            Assert.That(() => slot.Replace(newItem), Throws.InvalidOperationException);
+            Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
         }
         #endregion
 
