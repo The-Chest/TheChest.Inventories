@@ -1,10 +1,12 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -13,6 +15,18 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             Assert.That(
                 () => inventory.TryReplace(default!, 0, out _),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_DefaultValue_ThrowsNothing()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+            Assert.That(
+                () => inventory.TryReplace(default!, 0, out _),
+                Throws.Nothing
             );
         }
 

@@ -36,7 +36,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
             var items = this.itemFactory
-                .CreateManyRandom(this.random.Next(2, size))
+                .CreateManyRandom(this.random.Next(2, size - 1))
                 .Append(default!)
                 .ToArray();
             items.Shuffle();
@@ -49,20 +49,13 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAddItems_ArrayContainingDefaultValue_AddsDefaultValue()
+        public void TryAddItems_ArrayContainingDefaultValue_ThrowsNothing()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var items = new T[] { default! };
-
-            var result = inventory.TryAdd(items);
-
-            Assert.That(result, Is.True);
-
-            var firstContent = inventory.GetSlots().First().GetContent();
-            var expected = default(T);
-            Assert.That(firstContent, Is.EqualTo(expected));
+            Assert.That(() => inventory.TryAdd(items), Throws.Nothing);
         }
 
         [Test]

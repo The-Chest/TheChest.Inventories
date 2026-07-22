@@ -50,7 +50,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetOne_FullSlot_DefaultItem_RemovesItemFromSlot()
+        public void GetOne_FullSlot_DefaultValue_RemovesItemFromSlot()
         {
             var item = default(T);
             var slot = this.slotFactory.Full(item!);
@@ -60,13 +60,13 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
             Assert.Multiple(() =>
             {
                 Assert.That(slot.IsEmpty, Is.True);
-                Assert.That(slot.GetContent(), Is.EqualTo(item));
+                Assert.That(slot.GetContent(), Is.EqualTo(default(T)));
             });
         }
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetOne_FullSlot_DefaultItem_ReturnsItem()
+        public void GetOne_FullSlot_DefaultValue_ReturnsItem()
         {
             var item = default(T);
             var slot = this.slotFactory.Full(item!);

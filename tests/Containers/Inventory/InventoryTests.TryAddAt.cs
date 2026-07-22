@@ -18,6 +18,16 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
         [Test]
         [IgnoreIfReferenceType]
+        public void TryAddAt_DefaultItem_ThrowsNothing()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            Assert.That(() => inventory.TryAddAt(default!, 0), Throws.Nothing);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
         public void TryAddAt_DefaultValue_EmptySlot_ReturnsTrue()
         {
             var size = this.GenerateRandomSize();

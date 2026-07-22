@@ -18,7 +18,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void CanReplace_DefaultItem_ReturnsTrue()
+        public void CanReplace_DefaultValue_ReturnsTrue()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);

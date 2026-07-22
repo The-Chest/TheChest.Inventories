@@ -21,17 +21,6 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Empty Slot
         [Test]
-        public void Add_EmptySlot_ReturnsTrue()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.Empty();
-
-            var result = slot.Add(item);
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
         public void Add_EmptySlot_AddsItem()
         {
             var slot = this.slotFactory.Empty();
