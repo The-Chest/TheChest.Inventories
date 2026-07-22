@@ -23,7 +23,12 @@
 * `InventorySlot` 
   * `Get()` 
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
-
+  * `CanReplace`
+    * Now it checks if the current slot is empty, if it is empty it returns false
+  * `TryReplace`
+    * Now it checks if the current slot is empty, if it is empty it returns false
+  * `Replace`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 ### Stack
 * `StackInventory`
   * 
@@ -64,7 +69,7 @@
 * Slot removing methods using `System.Reflection` for value type checking and setting content to null
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
-* Now that Get Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet` method to avoid throwing exceptions in some cases 
+* Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
 * No nullable support for value types yet, it might be added in the future
 
 ## What's Next
