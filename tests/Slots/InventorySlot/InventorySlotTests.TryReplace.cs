@@ -24,8 +24,8 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         public void TryReplace_EmptySlot_ReturnsFalse()
         {
             var slot = this.slotFactory.Empty();
-            var item = this.itemFactory.CreateDefault();
 
+            var item = this.itemFactory.CreateRandom();
             var result = slot.TryReplace(item, out _);
 
             Assert.That(result, Is.False);
@@ -47,7 +47,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         {
             var slot = this.slotFactory.Empty();
 
-            var item = this.itemFactory.CreateDefault();
+            var item = this.itemFactory.CreateRandom();
             slot.TryReplace(item, out var oldItem);
 
             Assert.That(oldItem, Is.EqualTo(default(T)));
