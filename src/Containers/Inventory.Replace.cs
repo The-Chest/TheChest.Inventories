@@ -2,6 +2,7 @@
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Extensions;
+using TheChest.Inventories.Slots.Exceptions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -54,8 +55,8 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (this.slots[index].IsEmpty)
-                throw new InvalidOperationException("The slot is empty.");
-            
+                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
+
             var oldItem = this.slots[index].Replace(item);
             this.OnReplace?.Invoke(this, (index, oldItem, item));
 
