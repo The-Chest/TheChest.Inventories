@@ -1,6 +1,8 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Extensions.Slots;
+﻿using System.Linq;
+using TheChest.Tests.Common.Attributes;
 using TheChest.Tests.Common.Extensions;
+using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
@@ -33,6 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_ArrayContainingNullItems_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -53,6 +56,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void AddItems_ArrayWithOnlyNullItems_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -63,6 +67,50 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 Throws.ArgumentNullException
                     .With.Property("ParamName").EqualTo("items").And
                     .With.Message.EqualTo("One of the items to add is null (Parameter 'items')")
+            );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddItems_ArrayContainingDefaultValues_AddsAllItems()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomSize = this.random.Next(1, size);
+            var items = this.itemFactory
+                .CreateManyRandom(randomSize)
+                .Append(default!)
+                .ToArray();
+            items.Shuffle();
+
+            inventory.Add(items);
+
+            Assert.That(
+                inventory.GetSlots()
+                    .Take(randomSize + 1)
+                    .Select(x => x.GetContent()),
+                Is.EqualTo(items)
+            );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddItems_ArrayWithOnlyDefaultValues_AddsAllItems()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomSize = this.random.Next(1, size);
+            var items = Enumerable.Repeat(default(T), randomSize).ToArray();
+
+            inventory.Add(items);
+
+            Assert.That(
+                inventory.GetSlots()
+                    .Take(randomSize)
+                    .Select(x => x.GetContent()),
+                Is.EqualTo(items)
             );
         }
 

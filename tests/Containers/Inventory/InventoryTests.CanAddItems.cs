@@ -1,24 +1,68 @@
+using NUnit.Framework.Internal;
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanAddItems_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
+
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            Assert.That(() => inventory.CanAdd(items: default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.CanAdd(items: default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+            );
         }
 
         [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddItems_ArrayContainingDefaultValue_AvailableInventory_ReturnsTrue()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var randomSize = this.random.Next(1, size - 1);
+            var items = this.itemFactory.CreateMany(randomSize).ToList();
+            items.Add(default!);
+            var canAdd = inventory.CanAdd(items.ToArray());
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddItems_ArrayContainingDefaultValue_FullInventory_ReturnsFalse()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+
+            var randomSize = this.random.Next(1, size - 1);
+            var items = this.itemFactory.CreateMany(randomSize).ToList();
+            items.Add(default!);
+            var canAdd = inventory.CanAdd(items.ToArray());
+
+            Assert.That(canAdd, Is.False);
+        }
+
+        [Test]
+        [IgnoreIfValueType]
         public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var items = this.itemFactory.CreateMany(5).ToList();
+
+            var randomSize = this.random.Next(1, size - 1);
+            var items = this.itemFactory.CreateMany(randomSize).ToList();
             items.Add(default!);
 
-            Assert.That(() => inventory.CanAdd(items.ToArray()), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.CanAdd(items.ToArray()), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+            );
         }
 
         [Test]
@@ -26,8 +70,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var items = this.itemFactory.CreateMany(size + 1);
 
+            var items = this.itemFactory.CreateMany(size + 1);
             var canAdd = inventory.CanAdd(items);
 
             Assert.That(canAdd, Is.False);

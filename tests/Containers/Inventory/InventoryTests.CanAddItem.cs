@@ -1,8 +1,11 @@
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanAddItem_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -11,6 +14,32 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 () => inventory.CanAdd(item: default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddItem_DefaultValue_AvailableInventory_ReturnsTrue()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var item = default(T);
+            var canAdd = inventory.CanAdd(item);
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddItem_DefaultValue_FullInventory_ReturnsFalse()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+
+            var item = default(T);
+            var canAdd = inventory.CanAdd(item);
+
+            Assert.That(canAdd, Is.False);
         }
 
         [Test]

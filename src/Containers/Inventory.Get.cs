@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Extensions;
+using TheChest.Inventories.Slots.Exceptions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -71,13 +72,13 @@ namespace TheChest.Inventories.Containers
         /// The method fires the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        /// <exception cref="InvalidOperationException">When the slot in <paramref name="index"/> is empty</exception>
         public virtual T Get(int index)
         {
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
-
             if (this.slots[index].IsEmpty)
-                return default;
+                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
 
             var item = this.slots[index].Get();
 
@@ -86,11 +87,13 @@ namespace TheChest.Inventories.Containers
 
             return item;
         }
+        
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when <paramref name="item"/> is found.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When the item is not found in the inventory</exception>
         public virtual T Get(T item)
         {
             if (item.IsNull())
@@ -105,8 +108,9 @@ namespace TheChest.Inventories.Containers
                 }
             }
 
-            return default;
+            throw new InvalidOperationException(InventorySlotErrors.ItemNotFound);
         }
+        
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when the maximum possible <paramref name="amount"/> of <paramref name="item"/> is found.

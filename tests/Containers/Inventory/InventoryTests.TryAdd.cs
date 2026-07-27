@@ -1,7 +1,7 @@
-﻿using TheChest.Inventories.Slots.Interfaces;
-using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 using TheChest.Tests.Common.Extensions;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
@@ -19,12 +19,24 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
+        public void TryAddItems_NullItemsArray_ThrowsArgumentNullException()
+        {
+            var inventory = this.inventoryFactory.EmptyContainer(this.GenerateRandomSize());
+
+            Assert.That(
+                () => inventory.TryAdd(null!),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+            );
+        }
+
+        [Test]
+        [IgnoreIfValueType]
         public void TryAddItems_ArrayContainingNullItems_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
             var items = this.itemFactory
-                .CreateManyRandom(this.random.Next(2, size))
+                .CreateManyRandom(this.random.Next(2, size - 1))
                 .Append(default!)
                 .ToArray();
             items.Shuffle();
@@ -33,6 +45,17 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 () => inventory.TryAdd(items),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryAddItems_ArrayContainingDefaultValue_ThrowsNothing()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            var items = new T[] { default! };
+            Assert.That(() => inventory.TryAdd(items), Throws.Nothing);
         }
 
         [Test]
@@ -60,23 +83,24 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             inventory.TryAdd(addItems);
 
-            Assert.That(called, Is.True);
+            Assert.That(called, Is.True, "OnAdd event was not called for added items.");
         }
 
         [Test]
-        public void TryAddItems_NotEnoughAvailableSlots_AddsOnlyUntilNoSlotsAvailable()
+        public void TryAddItems_NotEnoughAvailableSlots_AddsOnlyUntilHaveNoSlotsAvailable()
         {
             var size = this.GenerateRandomSize();
             var existingItems = this.itemFactory.CreateMany(size - 1);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, existingItems);
             var addItems = this.itemFactory.CreateManyRandom(2);
-            var slotsBefore = inventory.GetSlots().Select(slot => slot.GetContent()).ToArray();
+
+            var filledBefore = inventory.GetSlots().Count(slot => slot.IsFull);
 
             inventory.TryAdd(addItems);
 
             var filledAfter = inventory.GetSlots().Count(slot => slot.IsFull);
 
-            Assert.That(filledAfter, Is.EqualTo(slotsBefore.Count(x => x is not null) + 1));
+            Assert.That(filledAfter, Is.EqualTo(filledBefore + 1));
         }
 
         [Test]
@@ -101,7 +125,8 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
-            var result = inventory.TryAdd(this.itemFactory.CreateMany(1));
+            var amount = this.random.Next(1, size);
+            var result = inventory.TryAdd(this.itemFactory.CreateMany(amount));
 
             Assert.That(result, Is.True);
         }

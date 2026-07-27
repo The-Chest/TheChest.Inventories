@@ -1,10 +1,13 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
+        #region Invalid parameter
         [Test]
+        [IgnoreIfValueType]
         public void Replace_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
@@ -40,28 +43,84 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
+        #endregion
 
+        #region Empty slot
         [Test]
-        public void Replace_EmptySlot_AddsItemToSlot()
+        public void Replace_EmptySlot_ThrowsInvalidOperationException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var randomIndex = this.random.Next(0, size);
+
             var item = this.itemFactory.CreateDefault();
-
-            inventory.Replace(item, randomIndex);
-
-            Assert.That(inventory.GetItem<T>(randomIndex), Is.EqualTo(item));
+            var randomIndex = this.random.Next(0, size);
+            Assert.That(
+                () => inventory.Replace(item, randomIndex),
+                Throws.Exception.TypeOf<InvalidOperationException>().With.Message.EqualTo("The slot is empty.")
+            );
         }
 
         [Test]
-        public void Replace_EmptySlot_CallsOnReplaceEventWithEmptyOldItem()
+        public void Replace_EmptySlot_DoesNotCallsOnReplace()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var randomIndex = this.random.Next(0, size);
-            var item = this.itemFactory.CreateDefault();
+
             var raised = false;
+            inventory.OnReplace += (_,_) => raised = true;
+
+            Assert.Multiple(() =>
+            {
+                var item = this.itemFactory.CreateDefault();
+                var randomIndex = this.random.Next(0, size);
+                Assert.That(() => inventory.Replace(item, randomIndex), Throws.Exception);
+                Assert.That(raised, Is.False, "OnReplace event was raised");
+            });
+        }
+        #endregion
+
+        #region Full slot
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Replace_DefaultValue_FullSlot_ReturnsOldItem()
+        {
+            var size = this.GenerateRandomSize();
+            var initialItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, initialItem);
+
+            var newItem = default(T);
+            var randomIndex = this.random.Next(0, size);
+            var result = inventory.Replace(newItem, randomIndex);
+
+            Assert.That(result, Is.EqualTo(initialItem));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Replace_DefaultValue_FullSlot_ReplacesItemInSlot()
+        {
+            var size = this.GenerateRandomSize();
+            var initialItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, initialItem);
+
+            var newItem = default(T);
+            var randomIndex = this.random.Next(0, size);
+            inventory.Replace(newItem, randomIndex);
+
+            Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(newItem));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Replace_DefaultValue_FullSlot_CallsOnReplaceEvent()
+        {
+            var size = this.GenerateRandomSize();
+            var initialItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, initialItem);
+
+            var raised = false;
+            var randomIndex = this.random.Next(0, size);
+            var newItem = default(T);
 
             inventory.OnReplace += (sender, args) =>
             {
@@ -69,13 +128,13 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 {
                     Assert.That(sender, Is.EqualTo(inventory));
                     Assert.That(args.Data.Select(x => x.Index), Has.All.EqualTo(randomIndex));
-                    Assert.That(args.Data.Select(x => x.OldItem), Has.All.Null);
-                    Assert.That(args.Data.Select(x => x.NewItem), Has.All.EqualTo(item));
+                    Assert.That(args.Data.Select(x => x.OldItem), Has.All.EqualTo(initialItem));
+                    Assert.That(args.Data.Select(x => x.NewItem), Has.All.EqualTo(newItem));
                 });
                 raised = true;
             };
 
-            inventory.Replace(item, randomIndex);
+            inventory.Replace(newItem, randomIndex);
 
             Assert.That(raised, Is.True, "OnReplace event was not raised");
         }
@@ -86,9 +145,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var initialItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, initialItem);
-            var randomIndex = this.random.Next(0, size);
-            var newItem = this.itemFactory.CreateRandom();
 
+            var newItem = this.itemFactory.CreateRandom();
+            var randomIndex = this.random.Next(0, size);
             inventory.Replace(newItem, randomIndex);
 
             Assert.That(inventory.GetItem(randomIndex), Is.EqualTo(newItem));
@@ -100,9 +159,10 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var initialItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, initialItem);
+
+            var raised = false;
             var randomIndex = this.random.Next(0, size);
             var newItem = this.itemFactory.CreateRandom();
-            var raised = false;
 
             inventory.OnReplace += (sender, args) =>
             {
@@ -134,18 +194,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             Assert.That(result, Is.EqualTo(initialItem));
         }
-
-        [Test]
-        public void Replace_EmptySlot_ReturnsNull()
-        {
-            var size = this.GenerateRandomSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var randomIndex = this.random.Next(0, size);
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.Replace(item, randomIndex);
-
-            Assert.That(result, Is.Null);
-        }
+        #endregion
     }
 }

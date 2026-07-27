@@ -121,8 +121,11 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
         /// <exception cref="ArgumentException">Thrown when <paramref name="items"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="items"/> is <see langword="null"/> or contains a <see langword="null"/> item.</exception>
         public virtual bool TryAdd(params T[] items)
         {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 throw new ArgumentException(InventoryErrors.CannotAddEmptyArray, nameof(items));
             if (items.ContainsNull())

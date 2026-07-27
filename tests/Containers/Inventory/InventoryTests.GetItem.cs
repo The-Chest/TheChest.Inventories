@@ -1,26 +1,71 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void GetItem_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            Assert.That(() => inventory.Get(item: default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => inventory.Get(item: default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [Test]
-        public void GetItem_EmptyInventory_DoesNotCallOnGetEvent()
+        [IgnoreIfReferenceType]
+        public void GetItem_DefaultValue_FullContainer_ReturnsItem()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+
+            var item = default(T)!;
+            var result = inventory.Get(item);
+
+            Assert.That(result, Is.EqualTo(item));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetItem_DefaultValue_FullContainer_ReturnsItemFromFirstAvailableSlot()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.FullContainer(size, default!);
+
+            inventory.Get(item: default!);
+
+            Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
+        }
+
+        [Test]
+        public void GetItem_NotFoundItem_ThrowsInvalidOperationException()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+
+            Assert.That(
+                () => inventory.Get(this.itemFactory.CreateRandom()),
+                Throws.InvalidOperationException.With.Message.EqualTo("The item was not found in the inventory.")
+            );
+        }
+
+        [Test]
+        public void GetItem_NotFoundItem_DoesNotCallOnGetEvent()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             inventory.OnGet += (sender, args) => Assert.Fail("Get(T item) should not be called if no item is found");
 
-            inventory.Get(this.itemFactory.CreateRandom());
+            Assert.That(
+                () => inventory.Get(this.itemFactory.CreateRandom()),
+                Throws.InvalidOperationException
+            );
         }
 
         [Test]
@@ -32,7 +77,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
             inventory.Get(item);
 
-            Assert.That(inventory.GetItem<T>(0), Is.Null);
+            Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
         }
 
         [Test]
@@ -67,19 +112,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var result = inventory.Get(item);
 
             Assert.That(result, Is.Not.Null.And.EqualTo(item));
-        }
-
-        [Test]
-        public void GetItem_NotFoundItem_ReturnsNull()
-        {
-            var size = this.GenerateRandomSize();
-            var items = this.itemFactory.CreateMany(size / 2);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
-
-            var searchItem = this.itemFactory.CreateRandom();
-            var result = inventory.Get(searchItem);
-
-            Assert.That(result, Is.Null);
         }
     }
 }

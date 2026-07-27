@@ -9,22 +9,31 @@
 
 ### Inventory
 * `Inventory`
-  * `Get(int index)`
-    * Now it checks if the slot is empty before trying to clear it
+  * `Get(int index)` 
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+  * `Get(T item)` 
+    * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
+  * `TryAdd(params T[] items)` 
+    * Now it throws `ArgumentNullException` when the param `items` is null instead of returning false
   * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
     * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
-  * `Move(int origin, int target)` & `TryMove(int origin, int target)`
-    * Now it checks if the slot is empty before trying to move it
+  * `Move(int origin, int target)`
+    * Now it throws `InvalidOperationException` when the origin and target slots are both empty
 * `InventorySlot` 
-  * `Get()` - method now throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
-
+  * `Get()` 
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+  * `CanReplace`
+    * Now it checks if the current slot is empty, if it is empty it returns false
+  * `TryReplace`
+    * Now it checks if the current slot is empty, if it is empty it returns false
+  * `Replace`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 ### Stack
 * `StackInventory`
   * 
 * `InventoryStackSlot` 
   * 
-
 ### LazyStack
 * `LazyStackInventory`
   * 
@@ -59,13 +68,17 @@
 * Slot removing methods using `System.Reflection` for value type checking and setting content to null
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
+* Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
+* No nullable support for value types yet, it might be added in the future
 
 ## What's Next
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
+* [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
 
+---
 # v0.17.0
 
 ## What's Added
@@ -137,6 +150,7 @@
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
 
+---
 # v0.16.0
 
 > This Changelog is going to be separated into subsections for each Inventory Type to make it more organized
