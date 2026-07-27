@@ -1,4 +1,5 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
@@ -99,12 +100,12 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         public void TryMove_BothSlotsWithItems_SwapsItems()
         {
             var size = this.GenerateRandomSize();
-            var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var itemFromTarget = inventory.GetItem(target);
+            var (itemFromOrigin, itemFromTarget) = this.CreateDistinctItems();
+            inventory.AddAt(itemFromOrigin, origin);
+            inventory.AddAt(itemFromTarget, target);
 
             inventory.TryMove(origin, target);
 
@@ -119,12 +120,12 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         public void TryMove_BothSlotsWithItems_CallsOnMoveWithTwoMovedItems()
         {
             var size = this.GenerateRandomSize();
-            var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var itemFromTarget = inventory.GetItem(target);
+            var (itemFromOrigin, itemFromTarget) = this.CreateDistinctItems();
+            inventory.AddAt(itemFromOrigin, origin);
+            inventory.AddAt(itemFromTarget, target);
             var raised = false;
             inventory.OnMove += (sender, args) =>
             {
@@ -193,6 +194,25 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             inventory.TryMove(0, 1);
 
             Assert.That(raised, Is.True);
+        }
+
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryMove_DefaultValueItemToEmptyTarget_MovesItem()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var item = default(T);
+            inventory.Add(item);
+
+            inventory.TryMove(0, 1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem(1), Is.EqualTo(item));
+            });
         }
 
         [Test]

@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers.Inventory
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {
@@ -92,6 +94,21 @@
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
             var item = this.itemFactory.CreateRandom();
+            inventory.Add(item);
+
+            var canMove = inventory.CanMove(0, 1);
+
+            Assert.That(canMove, Is.True);
+        }
+
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanMove_DefaultValueItemToEmptyTarget_ReturnsTrue()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var item = default(T);
             inventory.Add(item);
 
             var canMove = inventory.CanMove(0, 1);

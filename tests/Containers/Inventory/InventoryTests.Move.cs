@@ -1,4 +1,5 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
 {
@@ -83,18 +84,17 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         public void Move_BothSlotsWithItems_SwapsItems()
         {
             var size = this.GenerateRandomSize();
-            var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
-
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var ItemFromTarget = inventory.GetItem(target);
+            var (itemFromOrigin, itemFromTarget) = this.CreateDistinctItems();
+            inventory.AddAt(itemFromOrigin, origin);
+            inventory.AddAt(itemFromTarget, target);
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetItem(origin), Is.EqualTo(ItemFromTarget));
+                Assert.That(inventory.GetItem(origin), Is.EqualTo(itemFromTarget));
                 Assert.That(inventory.GetItem(target), Is.EqualTo(itemFromOrigin));
             });
         }
@@ -103,13 +103,12 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         public void Move_BothSlotsWithItems_CallsOnMoveWithTwoMovedItems()
         {
             var size = this.GenerateRandomSize();
-            var items = this.itemFactory.CreateManyRandom(size);
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
-
+            var inventory = this.inventoryFactory.EmptyContainer(size);
             var origin = 0;
             var target = 1;
-            var itemFromOrigin = inventory.GetItem(origin);
-            var ItemFromTarget = inventory.GetItem(target);
+            var (itemFromOrigin, itemFromTarget) = this.CreateDistinctItems();
+            inventory.AddAt(itemFromOrigin, origin);
+            inventory.AddAt(itemFromTarget, target);
 
             var raised = false;
             inventory.OnMove += (sender, args) =>
@@ -126,7 +125,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(dataArray[1].Item, Is.EqualTo(ItemFromTarget));
+                    Assert.That(dataArray[1].Item, Is.EqualTo(itemFromTarget));
                     Assert.That(dataArray[1].FromIndex, Is.EqualTo(1));
                     Assert.That(dataArray[1].ToIndex, Is.EqualTo(0));
                 });
@@ -183,6 +182,25 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             inventory.Move(0, 1);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
+        }
+
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Move_DefaultValueItemToEmptyTarget_MovesItem()
+        {
+            var size = this.GenerateRandomSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size);
+            var item = default(T);
+            inventory.Add(item);
+
+            inventory.Move(0, 1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem(1), Is.EqualTo(item));
+            });
         }
 
         [Test]
