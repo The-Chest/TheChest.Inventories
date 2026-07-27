@@ -18,8 +18,8 @@
   * `Clear()` 
     * Now it checks if the slot is empty before trying to clear it
     * It now allocates internally an `List<T>` with the size of a quarter of the inventory's size to store the cleared items
-  * `Move(int origin, int target)` and `TryMove(int origin, int target)`
-    * Now it checks if the slot is empty before trying to move it
+  * `Move(int origin, int target)`
+    * Now it throws `InvalidOperationException` when the origin and target slots are both empty
 * `InventorySlot` 
   * `Get()` 
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
