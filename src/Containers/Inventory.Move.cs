@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Exceptions;
-using TheChest.Inventories.Extensions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -46,6 +45,9 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// It is assumed that the caller has already verified that the move operation is valid.
         /// </remarks>
+        /// <remarks>
+        /// The method fires the <see cref="OnMove"/>.
+        /// </remarks>
         /// <param name="origin">The zero-based index representing the item's current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
         protected void MoveItems(int origin, int target)
@@ -81,9 +83,8 @@ namespace TheChest.Inventories.Containers
                 originSlot.Add(targetItem);
                 events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
             }
-
-            if (events.Count > 0)
-                this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
+            
+            this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
         }
 
         /// <inheritdoc/>
