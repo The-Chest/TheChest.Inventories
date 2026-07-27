@@ -92,6 +92,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Gets a single item from the slot
         /// </summary>
         /// <returns>an item from the slot</returns>
+        [Obsolete("Use Get(int) or GetAll() instead. This method will be removed in future versions.")]
         T Get();
         /// <summary>
         /// Gets an amount of items from the slot.

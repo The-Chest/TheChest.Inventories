@@ -33,7 +33,10 @@
 * `StackInventory`
   * 
 * `InventoryStackSlot` 
-  * 
+  * `Get()`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T[]`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(int amount)` instead
+
 ### LazyStack
 * `LazyStackInventory`
   * 
