@@ -34,7 +34,6 @@
   * 
 * `InventoryStackSlot` 
   * 
-
 ### LazyStack
 * `LazyStackInventory`
   * 

@@ -21,6 +21,7 @@ namespace TheChest.Inventories.Containers
         {
             if (origin == target)
                 return false;
+
             if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
                 return false;
 
@@ -39,7 +40,56 @@ namespace TheChest.Inventories.Containers
             return this.CanMoveItems(origin, target);
         }
 
+        /// <summary>
+        /// Moves items between the specified origin and target indices. This method does not perform any validation checks on the indices or the slots' contents. 
+        /// </summary>
+        /// <remarks>
+        /// It is assumed that the caller has already verified that the move operation is valid.
+        /// </remarks>
+        /// <param name="origin">The zero-based index representing the item's current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        protected void MoveItems(int origin, int target)
+        {
+            var originSlot = this.slots[origin];
+            var targetSlot = this.slots[target];
+
+            var events = new List<InventoryMoveItemEventData<T>>(1);
+
+            if (originSlot.IsEmpty || targetSlot.IsEmpty)
+            {
+                if (originSlot.IsEmpty)
+                {
+                    var targetItem = targetSlot.Get();
+                    originSlot.Add(targetItem);
+                    events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
+                }
+                else
+                {
+                    var originItem = originSlot.Get();
+                    targetSlot.Add(originItem);
+                    events.Add(new InventoryMoveItemEventData<T>(originItem, origin, target));
+                }
+            }
+            else
+            {
+                var originItem = originSlot.Get();
+                var targetItem = targetSlot.Get();
+
+                targetSlot.Add(originItem);
+                events.Add(new InventoryMoveItemEventData<T>(originItem, origin, target));
+
+                originSlot.Add(targetItem);
+                events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
+            }
+
+            if (events.Count > 0)
+                this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
+        }
+
         /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires the <see cref="OnMove"/> event if it returns <see langword="true"/>.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are smaller than zero or bigger than the container size</exception>
         public virtual bool TryMove(int origin, int target)
         {
@@ -51,31 +101,14 @@ namespace TheChest.Inventories.Containers
             if (!this.CanMoveItems(origin, target))
                 return false;
 
-            var originItem = this.slots[origin].IsEmpty ? default : this.slots[origin].Get();
-            var targetItem = this.slots[target].IsEmpty ? default : this.slots[target].Get();
-
-            var events = new List<InventoryMoveItemEventData<T>>(1);
-            if (!originItem.IsNull())
-            {
-                this.slots[target].Add(originItem);
-                events.Add(new InventoryMoveItemEventData<T>(originItem, origin, target));
-            }
-
-            if (!targetItem.IsNull())
-            {
-                this.slots[origin].Add(targetItem);
-                events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
-            }
-
-            if (events.Count > 0)
-                this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
+            this.MoveItems(origin, target);
 
             return true;
         }
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The method fires the <see cref="OnMove"/> event.
+        /// The method fires the <see cref="OnMove"/> event when the move operation is successful.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are smaller than zero or bigger than the container size</exception>
         /// <exception cref="ArgumentException">When <paramref name="origin"/> and <paramref name="target"/> are the same</exception>
@@ -89,27 +122,11 @@ namespace TheChest.Inventories.Containers
 
             if (origin == target)
                 throw new ArgumentException(InventoryErrors.CannotMoveItemToSameIndex, nameof(target));
-            if(this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
+
+            if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
                 throw new InvalidOperationException(InventoryErrors.CannotMoveEmptySlots);
 
-            var originItem = this.slots[origin].IsEmpty ? default : this.slots[origin].Get();
-            var targetItem = this.slots[target].IsEmpty ? default : this.slots[target].Get();
-
-            var events = new List<InventoryMoveItemEventData<T>>(1);
-            if (!originItem.IsNull())
-            {
-                this.slots[target].Add(originItem);
-                events.Add(new InventoryMoveItemEventData<T>(originItem, origin, target));
-            }
-
-            if (!targetItem.IsNull())
-            {
-                this.slots[origin].Add(targetItem);
-                events.Add(new InventoryMoveItemEventData<T>(targetItem, target, origin));
-            }
-
-            if (events.Count > 0)
-                this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
+            this.MoveItems(origin, target);
         }
     }
 }
