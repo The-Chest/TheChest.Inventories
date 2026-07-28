@@ -164,7 +164,7 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
 
             if (this.IsFull)
-                throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
+                throw new InvalidOperationException(InventoryStackSlotErrors.FullSlot);
             if (items.Length > this.AvailableAmount)
                 throw new InvalidOperationException(InventoryStackSlotErrors.AddMoreThanAvailableAmount);
             if (!this.IsEmpty && !this.Contains(items))
@@ -182,7 +182,7 @@ namespace TheChest.Inventories.Slots
             if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (this.IsFull)
-                throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
+                throw new InvalidOperationException(InventoryStackSlotErrors.FullSlot);
             if (!this.IsEmpty && !this.Contains(item))
                 throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
@@ -193,8 +193,6 @@ namespace TheChest.Inventories.Slots
         #endregion
 
         #region Get
-        //TODO: check if this class might follow the same logic as InventorySlot or return an Empty Array
-
         /// <summary>
         /// Gets and removes amount of items from slot with no previous validation.
         /// </summary>
@@ -224,7 +222,7 @@ namespace TheChest.Inventories.Slots
         public virtual T[] GetAll()
         {
             if (this.IsEmpty)
-                return Array.Empty<T>();//TODO: ponder this option, maybe throw an exception instead of returning an empty array
+                return Array.Empty<T>();
 
             return this.GetItems(this.Amount);
         }
@@ -239,6 +237,7 @@ namespace TheChest.Inventories.Slots
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
+            
             if (amount >= this.Amount)
                 return this.GetAll();
 
@@ -251,7 +250,7 @@ namespace TheChest.Inventories.Slots
         public virtual T Get()
         {
             if (this.IsEmpty)
-                return default;//TODO: ponder this option, maybe throw an exception instead of returning null
+                throw new InvalidOperationException(InventoryStackSlotErrors.EmptySlot);
 
             return this.GetItem();
         }
