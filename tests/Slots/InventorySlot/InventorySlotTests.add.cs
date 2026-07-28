@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Empty Slot
         [Test]
-        public void Add_EmptySlot_AddsItem()
+        public void Add_Empty_AddsItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Add_EmptySlot_DefaultItem_AddsItem()
+        public void Add_Empty_DefaultItem_AddsItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -44,9 +44,8 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
         #endregion
 
-        #region Full Slot
         [Test]
-        public void Add_FullSlot_ThrowsInvalidOperationException()
+        public void Add_Full_ThrowsInvalidOperationException()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -59,7 +58,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Add_FullSlot_DoesNotAddItem()
+        public void Add_Full_DoesNotAddItem()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -74,7 +73,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Add_DefaultItem_FullSlot_ThrowsInvalidOperationException()
+        public void Add_Full_DefaultItem_ThrowsInvalidOperationException()
         {
             var slot = this.slotFactory.Full(default!);
 
@@ -87,7 +86,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Add_DefaultItem_FullSlot_DoesNotAddsItem()
+        public void Add_Full_DefaultItem_DoesNotAddsItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -99,6 +98,5 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
                 Assert.That(slot.GetContent(), Is.Not.EqualTo(paramItem));
             });
         }
-        #endregion
     }
 }

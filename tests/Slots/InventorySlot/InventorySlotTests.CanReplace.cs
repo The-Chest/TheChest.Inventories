@@ -29,7 +29,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanReplace_EmptySlot_ReturnsFalse()
+        public void CanReplace_Empty_ReturnsFalse()
         {
             var slot = this.slotFactory.Empty();
 
@@ -40,7 +40,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanReplace_FullSlot_ReturnsTrue()
+        public void CanReplace_Full_ReturnsTrue()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -52,7 +52,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanReplace_FullSlot_SameItem_ReturnsTrue()
+        public void CanReplace_Full_SameItem_ReturnsTrue()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -63,7 +63,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanReplace_FullSlot_DifferentItem_ReturnsTrue()
+        public void CanReplace_Full_DifferentItem_ReturnsTrue()
         {
             var originalItem = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(originalItem);

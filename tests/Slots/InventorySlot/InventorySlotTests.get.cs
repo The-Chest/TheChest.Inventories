@@ -20,10 +20,9 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Full
         [Test]
-        [IgnoreIfValueType]
         public void GetOne_FullSlot_ReturnsItem()
         {
-            var item = this.itemFactory.CreateDefault();
+            var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
 
             var result = slot.Get();
@@ -33,10 +32,9 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        [IgnoreIfValueType]
         public void GetOne_FullSlot_RemovesItemFromSlot()
         {
-            var item = this.itemFactory.CreateDefault();
+            var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
 
             slot.Get();
@@ -44,7 +42,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
             Assert.Multiple(() =>
             {
                 Assert.That(slot.IsEmpty, Is.True);
-                Assert.That(slot.GetContent(), Is.Null);
+                Assert.That(slot.GetContent(), Is.Not.EqualTo(item));
             });
         }
 

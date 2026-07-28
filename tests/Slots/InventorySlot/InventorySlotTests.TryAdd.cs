@@ -5,24 +5,25 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
-        #region Null Item
         [Test]
         [IgnoreIfValueType]
         public void TryAdd_NullItem_ThrowsArgumentNullException()
         {
             var slot = this.slotFactory.Empty();
 
-            Assert.That(() => slot.TryAdd(default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => slot.TryAdd(default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+             );
         }
-        #endregion
 
         #region Empty Slot
         [Test]
         public void TryAdd_EmptySlot_AddsItem()
         {
             var slot = this.slotFactory.Empty();
-            var item = this.itemFactory.CreateDefault();
 
+            var item = this.itemFactory.CreateRandom();
             slot.TryAdd(item);
 
             Assert.That(slot.GetContent(), Is.EqualTo(item));
@@ -90,7 +91,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         [IgnoreIfReferenceType]
         public void TryAdd_DefaultItem_FullSlot_DoesNotAddItem()
         {
-            var item = this.itemFactory.CreateDefault();
+            var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
 
             var paramItem = default(T);

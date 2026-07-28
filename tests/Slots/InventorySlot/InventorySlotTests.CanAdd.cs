@@ -4,7 +4,6 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
-        #region Null and Default Item
         [Test]
         [IgnoreIfValueType]
         public void CanAdd_NullItem_ThrowsArgumentNullException()
@@ -29,11 +28,9 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             Assert.That(result, Is.True);
         }
-        #endregion
 
-        #region Empty
         [Test]
-        public void CanAdd_EmptySlot_ReturnsTrue()
+        public void CanAdd_Empty_ReturnsTrue()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Empty();
@@ -42,11 +39,9 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             Assert.That(result, Is.True);
         }
-        #endregion
 
-        #region Full
         [Test]
-        public void CanAdd_FullSlot_ReturnsFalse()
+        public void CanAdd_Full_ReturnsFalse()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -55,6 +50,5 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             Assert.That(result, Is.False);
         }
-        #endregion
     }
 }
