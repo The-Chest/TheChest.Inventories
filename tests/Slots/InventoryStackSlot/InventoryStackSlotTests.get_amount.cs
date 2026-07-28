@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetAmount_Full_ValueType_RemovesFromContent()
+        public void GetAmount_Full_ValueType_RemovesAmountFromContent()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
@@ -84,7 +84,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_EnoughItems_RemovesFromContent()
+        public void GetAmount_EnoughItems_RemovesAmountFromContent()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -110,7 +110,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_NotEnoughItems_ReturnsItemsFromSlot()
+        public void GetAmount_NotEnoughItems_ReturnsItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var halfStack = stackSize / 2;
@@ -124,7 +124,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_NotEnoughItems_RemovesFromContent()
+        public void GetAmount_NotEnoughItems_RemovesAmountFromContent()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var halfStack = stackSize / 2;
@@ -138,7 +138,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_LessItemsThanRequested_ReturnsAllItemsFromSlot()
+        public void GetAmount_LessItemsThanRequested_ReturnsAllItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(stackSize);

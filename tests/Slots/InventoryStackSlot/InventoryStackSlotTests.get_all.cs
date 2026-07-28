@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAll_PartiallyFilled_ReturnsAllItemFromSlot()
+        public void GetAll_PartiallyFilled_ReturnsAllItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var amount = this.random.Next(1, stackSize - 1);
