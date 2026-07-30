@@ -44,28 +44,27 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
             Assert.That(slot.AvailableAmount, Is.EqualTo(0));
         }
-        // TODO: why are these features inverse?
-        // Maybe the Factory has a problem :(
+
         [Test]
         [IgnoreIfReferenceType]
-        public void AvailableAmount_Full_ValueType_ReturnsMaxAmount()
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = Enumerable.Repeat(default(T), stackSize).ToArray();
-            var slot = this.slotFactory.Full(items!);
-
-            Assert.That(slot.AvailableAmount, Is.EqualTo(stackSize));
-        }
-
-        [Test]
-        [IgnoreIfValueType]
-        public void AvailableAmount_Full_ReferenceType_ReturnsZero()
+        public void AvailableAmount_Full_ValueType_ReturnsZero()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
             var slot = this.slotFactory.Full(items!);
 
             Assert.That(slot.AvailableAmount, Is.Zero);
+        }
+
+        [Test]
+        [IgnoreIfValueType]
+        public void AvailableAmount_Full_ReferenceType_ReturnsMaxAmount()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var items = Enumerable.Repeat(default(T), stackSize).ToArray();
+            var slot = this.slotFactory.Full(items!);
+
+            Assert.That(slot.AvailableAmount, Is.EqualTo(stackSize));
         }
     }
 }
