@@ -44,7 +44,7 @@
   * 
 
 ## What's Removed
-*
+* `CanAdd` method call on protected `InventoryStackSlot<T>`.`ReplaceItems` method
 
 ## What's Fixed
 * Typos in `LazyStackInventory.Add` return method XML docs

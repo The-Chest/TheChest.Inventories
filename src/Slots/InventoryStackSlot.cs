@@ -271,14 +271,9 @@ namespace TheChest.Inventories.Slots
             }
 
             var result = this.GetAll();
-            if (this.CanAdd(items))
-            {
-                this.AddItems(ref items);
-                return result;
-            }
-
-            this.AddItems(ref result);
-            return items;
+            this.AddItems(ref items);
+            
+            return result;
         }
 
         /// <inheritdoc/>
