@@ -7,9 +7,7 @@ description: Repository-specific guidance for generating and organizing unit tes
 
 Use this skill whenever creating or updating tests in this repository.
 
-## Test rules
-
-### Detroit-school conventions
+## Detroit-school conventions
 
 * **No mocks by default.** Use factory classes to instantiate the class under test and its dependencies.
 * One assertion per test, or one logical outcome.
@@ -17,7 +15,7 @@ Use this skill whenever creating or updating tests in this repository.
 * Use **Arrange-Act-Assert** structure in every test.
 * Do not add comments to tests. The test name should be descriptive enough to explain the test case.
 
-### Tests
+## Tests
 
 * Tests should ALWAYS:
 
@@ -56,7 +54,7 @@ Use this skill whenever creating or updating tests in this repository.
     * `TestStructItem`
 * If the test throws `InvalidOperationException`, it must test that the item was not added to the slot and that the `OnAdd` event was not called. Other exceptions only need to test that the exception was thrown.
 
-### Class organization
+## Class organization
 * Test classes are organized by methods in partial classes.
   * Example:
     * `Container<T>.Add` -> `ContainerTests.Add.cs`
@@ -66,22 +64,7 @@ Use this skill whenever creating or updating tests in this repository.
     * `Container<T>.Get(int index)` -> `ContainerTests.GetByIndex.cs`
     * `Container<T>.Get(T item)` -> `ContainerTests.GetItem.cs`
 
-### Naming
-
-Tests must follow this naming pattern:
-
-```text
-[MethodName]_[Class_Context/State]_[ParamContext]*_[ExpectedResult]
-```
-
-The naming convention is composed of four parts:
-
-1. `MethodName`
-2. `Class_Context/State`
-3. `ParamContext`
-4. `ExpectedResult`
-
-### Common namespace and extensions
+## Common namespace and extensions
 
 * Common classes must always be inside namespace `TheChest.Tests.Common`.
 * Extension methods used only by tests should be `internal` and in namespace `TheChest.Tests.Common.Extensions`.
