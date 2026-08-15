@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
     {
         #region Empty
         [Test]
-        public void GetOne_EmptySlot_ThrowsInvalidOperationException()
+        public void Get_EmptySlot_ThrowsInvalidOperationException()
         {
             var slot = this.slotFactory.Empty();
 
@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Full
         [Test]
-        public void GetOne_FullSlot_ReturnsItem()
+        public void Get_FullSlot_ReturnsItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void GetOne_FullSlot_RemovesItemFromSlot()
+        public void Get_FullSlot_RemovesItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -48,7 +48,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetOne_FullSlot_DefaultValue_RemovesItemFromSlot()
+        public void Get_FullSlot_DefaultItem_RemovesItem()
         {
             var item = default(T);
             var slot = this.slotFactory.Full(item!);
@@ -64,7 +64,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetOne_FullSlot_DefaultValue_ReturnsItem()
+        public void Get_FullSlot_DefaultItem_ReturnsItem()
         {
             var item = default(T);
             var slot = this.slotFactory.Full(item!);

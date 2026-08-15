@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region State Validation
         [Test]
-        public void Add_Full_ThrowsInvalidOperationException()
+        public void Add_FullSlot_ThrowsInvalidOperationException()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Add_Full_DoesNotAddItem()
+        public void Add_FullSlot_DoesntAddItem()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -49,7 +49,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Add_Full_DefaultItem_ThrowsInvalidOperationException()
+        public void Add_FullSlot_DefaultItem_ThrowsInvalidOperationException()
         {
             var slot = this.slotFactory.Full(default!);
 
@@ -62,7 +62,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Add_Full_DefaultItem_DoesNotAddsItem()
+        public void Add_FullSlot_DefaultItem_DoesntAddItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -78,7 +78,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         #region Behavior
         [Test]
-        public void Add_Empty_AddsItem()
+        public void Add_EmptySlot_AddsItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -90,7 +90,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Add_Empty_DefaultItem_AddsItem()
+        public void Add_EmptySlot_DefaultItem_AddsItem()
         {
             var slot = this.slotFactory.Empty();
 

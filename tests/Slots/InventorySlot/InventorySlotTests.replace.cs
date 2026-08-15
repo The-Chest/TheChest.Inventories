@@ -18,7 +18,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Replace_Empty_ThrowsInvalidOperationException()
+        public void Replace_EmptySlot_ThrowsInvalidOperationException()
         {
             var slot = this.slotFactory.Empty();
 
@@ -30,7 +30,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Replace_Empty_DoesNotReplacesItem()
+        public void Replace_EmptySlot_DoesntReplaceItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -43,7 +43,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Replace_Full_ReturnsOldItem()
+        public void Replace_FullSlot_ReturnsOldItem()
         {
             var initialItem = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(initialItem);
@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Replace_Full_AddsNewItem()
+        public void Replace_FullSlot_ReplacesItem()
         {
             var initialItem = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(initialItem);
@@ -68,7 +68,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Replace_DefaultValue_Full_ReturnsItem()
+        public void Replace_FullSlot_DefaultItem_ReturnsOldItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -81,7 +81,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Replace_DefaultValue_Full_AddsDefault()
+        public void Replace_FullSlot_DefaultItem_ReplacesItemWithDefault()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -98,7 +98,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Replace_FullWithDefaultContent_ReturnsDefault()
+        public void Replace_FullSlotWithDefaultContent_ReturnsDefault()
         {
             var slot = this.slotFactory.Full(default!);
 
@@ -110,7 +110,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Replace_FullWithDefaultContent_AddsItem()
+        public void Replace_FullSlotWithDefaultContent_ReplacesDefaultWithItem()
         {
             var slot = this.slotFactory.Full(default!);
 
