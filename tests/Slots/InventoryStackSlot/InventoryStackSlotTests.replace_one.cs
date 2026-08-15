@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void ReplaceOne_EmptySlot_ReturnsEmptyArray()
+        public void ReplaceItem_EmptySlot_ReturnsEmptyArray()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void ReplaceOne_ItemDifferentFromSlot_ReturnsItemsFromSlot()
+        public void ReplaceItem_SlotWithDifferentItem_ReturnsItemsFromSlot()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
@@ -45,7 +45,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void ReplaceOne_ItemEqualToSlot_ReturnsItemsFromSlot()
+        public void ReplaceItem_SlotWithSameItem_ReturnsItemsFromSlot()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);

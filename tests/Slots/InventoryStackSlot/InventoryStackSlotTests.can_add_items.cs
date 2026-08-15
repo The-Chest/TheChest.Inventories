@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 {
     public partial class InventoryStackSlotTests<T>
     {
@@ -20,6 +22,21 @@
             var slot = this.slotFactory.Empty(stackSize);
 
             var result = slot.CanAdd(Array.Empty<T>());
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        [IgnoreIfValueType]
+        public void CanAddItems_ItemsContainingNull_ReturnsFalse()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var checkItems = this.itemFactory.CreateMany(stackSize - 1)
+                .Append(default!)
+                .ToArray();
+            var result = slot.CanAdd(checkItems);
 
             Assert.That(result, Is.False);
         }

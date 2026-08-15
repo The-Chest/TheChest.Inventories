@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     {
         [TestCase(0)]
         [TestCase(-1)]
-        public void GetAmount_InvalidAmount_ThrowsArgumentException(int amount)
+        public void GetAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
