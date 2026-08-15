@@ -159,6 +159,34 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
+        public void TryAdd_ItemsContainingDifferentValues_ReturnsFalse()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var addingItems = this.itemFactory.CreateMany(stackSize - 1)
+                .Append(this.itemFactory.CreateRandom())
+                .ToArray();
+            var result = slot.TryAdd(addingItems);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void TryAdd_ItemsContainingDifferentValues_DoesntAddItems()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var addingItems = this.itemFactory.CreateMany(stackSize - 1)
+                .Append(this.itemFactory.CreateRandom())
+                .ToArray();
+            slot.TryAdd(addingItems);
+
+            Assert.That(slot.GetContents(), Is.Empty);
+        }
+
+        [Test]
         public void TryAdd_SlotWithAvailableSpace_ValidItems_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);

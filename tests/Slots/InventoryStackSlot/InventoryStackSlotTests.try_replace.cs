@@ -90,6 +90,19 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
+        public void TryReplace_ItemsExceedingMaxAmount_DoesntReplaceItems()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slotItems = this.itemFactory.CreateMany(stackSize);
+            var slot = this.slotFactory.WithItems(slotItems, stackSize);
+
+            var items = this.itemFactory.CreateMany(stackSize + 1);
+            slot.TryReplace(items, out _);
+
+            Assert.That(slot.GetContents(), Is.EqualTo(slotItems));
+        }
+
+        [Test]
         public void TryReplace_ItemsContainingDifferentValues_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -99,6 +112,31 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             var result = slot.TryReplace(items, out _);
 
             Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void TryReplace_ItemsContainingDifferentValues_SetsOldItemsToNull()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var items = new[] { this.itemFactory.CreateDefault(), this.itemFactory.CreateRandom() };
+            slot.TryReplace(items, out var oldItems);
+
+            Assert.That(oldItems, Is.Null);
+        }
+
+        [Test]
+        public void TryReplace_ItemsContainingDifferentValues_DoesntReplaceItems()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slotItems = this.itemFactory.CreateMany(stackSize);
+            var slot = this.slotFactory.WithItems(slotItems, stackSize);
+
+            var items = new[] { this.itemFactory.CreateDefault(), this.itemFactory.CreateRandom() };
+            slot.TryReplace(items, out _);
+
+            Assert.That(slot.GetContents(), Is.EqualTo(slotItems));
         }
 
         [Test]

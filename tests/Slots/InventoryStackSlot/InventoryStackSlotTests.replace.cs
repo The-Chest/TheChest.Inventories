@@ -89,7 +89,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Replace_ItemsDifferentFromSlot_ReturnsItemsFromSlot()
+        public void ReplaceItems_SlotWithDifferentItems_ReturnsItemsFromSlot()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
@@ -103,7 +103,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Replace_ItemsEqualToSlot_ReturnsItemsFromSlot()
+        public void ReplaceItems_SlotWithSameItems_ReturnsItemsFromSlot()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);

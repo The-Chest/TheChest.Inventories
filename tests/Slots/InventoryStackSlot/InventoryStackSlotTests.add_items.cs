@@ -155,6 +155,19 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
+        public void AddItems_EmptySlot_ReturnsEmptyArray()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var addingAmount = this.random.Next(1, stackSize);
+            var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
+            var result = slot.Add(addingItems);
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test]
         public void AddItems_SlotWithSameItems_IncreasesAmount()
         {
             var stackSize = this.GetRandomStackSize();
