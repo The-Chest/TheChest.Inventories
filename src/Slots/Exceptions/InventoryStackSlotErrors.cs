@@ -2,7 +2,7 @@
 {
     internal static class InventoryStackSlotErrors
     {
-        internal const string EmptySlot = "The slot is empty.";
+        internal const string EmptySlot = "The slot is empty";
         internal const string FullSlot = "The slot is full";
 
         #region Add Items

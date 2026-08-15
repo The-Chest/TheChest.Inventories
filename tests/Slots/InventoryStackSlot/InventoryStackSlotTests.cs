@@ -15,5 +15,10 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         public InventoryStackSlotTests() : base(configure => {
             configure.Register<IInventoryStackSlotFactory<T>, InventoryStackSlotFactory<InventoryStackSlot<T>, T>>();
         }) { }
+
+        private int GetRandomStackSize()
+        {
+            return this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+        }
     }
 }
