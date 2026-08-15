@@ -68,6 +68,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test-naming", "test-naming"
 		skills\test-naming\SKILL.md = skills\test-naming\SKILL.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "references", "references", "{3CDDB48A-73D8-4B86-828B-9CB1F65486EB}"
+	ProjectSection(SolutionItems) = preProject
+		skills\test-naming\references\examples.md = skills\test-naming\references\examples.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +103,7 @@ Global
 		{FF04AD41-6658-429F-B530-FE09B7EF7E44} = {D4C4483F-797C-4877-9281-92C70D529986}
 		{191BB0D7-AD03-4A8B-8CF2-388419C8674B} = {D4C4483F-797C-4877-9281-92C70D529986}
 		{0370FED6-F09A-45DF-A4A5-8BB2D6D0C346} = {D4C4483F-797C-4877-9281-92C70D529986}
+		{3CDDB48A-73D8-4B86-828B-9CB1F65486EB} = {0370FED6-F09A-45DF-A4A5-8BB2D6D0C346}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF9A167E-B926-4A99-B692-8A3566AB0996}
