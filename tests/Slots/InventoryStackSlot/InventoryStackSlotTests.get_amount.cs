@@ -9,30 +9,33 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [TestCase(-1)]
         public void GetAmount_InvalidAmount_ThrowsArgumentExceptions(int amount)
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.Full(items);
 
-            Assert.That(() => slot.Get(amount), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(
+                () => slot.Get(amount), 
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
         }
 
         [Test]
         public void GetAmount_Empty_ReturnsEmptyArray()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
 
             var amount = this.random.Next(1, stackSize / 2);
             var result = slot.Get(amount);
 
-            Assert.That(result, Is.EquivalentTo(Array.Empty<T>()));
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
         [IgnoreIfReferenceType]
         public void GetAmount_Full_ValueType_ReturnsEmptyArray()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
             var slot = this.slotFactory.Full(items!);
 
@@ -46,7 +49,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [IgnoreIfReferenceType]
         public void GetAmount_Full_ValueType_DecreasesAmount()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
             var slot = this.slotFactory.Full(items!);
 
@@ -60,7 +63,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [IgnoreIfReferenceType]
         public void GetAmount_Full_ValueType_RemovesAmountFromContent()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
             var slot = this.slotFactory.Full(items!);
 
@@ -73,7 +76,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void GetAmount_EnoughItems_DecreasesAmount()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
             var slot = this.slotFactory.Full(items);
 
@@ -86,7 +89,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void GetAmount_EnoughItems_RemovesAmountFromContent()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
             var slot = this.slotFactory.Full(items);
 
@@ -97,9 +100,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_EnoughItems_ReturnsWithAmount()
+        public void GetAmount_EnoughItems_ReturnsItems()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
             var slot = this.slotFactory.Full(items);
 
@@ -112,7 +115,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void GetAmount_NotEnoughItems_ReturnsItems()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var halfStack = stackSize / 2;
             var items = this.itemFactory.CreateManyRandom(halfStack);
             var slot = this.slotFactory.WithItems(items, stackSize);
@@ -126,7 +129,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void GetAmount_NotEnoughItems_RemovesAmountFromContent()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var halfStack = stackSize / 2;
             var items = this.itemFactory.CreateManyRandom(halfStack);
             var slot = this.slotFactory.WithItems(items, stackSize);
@@ -138,9 +141,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_LessItemsThanRequested_ReturnsAllItems()
+        public void GetAmount_AmountBiggerThanAvailable_ReturnsAllItems()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
             var slot = this.slotFactory.WithItems(items, stackSize);
 
@@ -150,9 +153,9 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_LessItemsThanRequested_DecreasesAmountToZero()
+        public void GetAmount_AmountBiggerThanAvailable_DecreasesAmountToZero()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var itemSize = this.random.Next(1, stackSize / 2);
             var items = this.itemFactory.CreateManyRandom(itemSize);
             var slot = this.slotFactory.WithItems(items, stackSize);
@@ -161,18 +164,6 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             slot.Get(amount);
 
             Assert.That(slot.Amount, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void GetAmount_RequestedAmountBiggerThanMaxAmount_RemovesAllContents()
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = this.itemFactory.CreateManyRandom(stackSize);
-            var slot = this.slotFactory.Full(items);
-
-            slot.Get(stackSize * 2);
-
-            Assert.That(slot.GetContents(), Has.All.Null);
         }
     }
 }

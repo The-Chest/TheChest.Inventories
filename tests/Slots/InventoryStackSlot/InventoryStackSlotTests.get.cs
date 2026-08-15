@@ -8,17 +8,20 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void Get_Empty_ThrowsInvalidOperationException()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
 
-            Assert.That(() => slot.Get(), Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty."));
+            Assert.That(
+                () => slot.Get(), 
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty")
+            );
         }
 
         [Test]
         [IgnoreIfReferenceType]
         public void Get_Full_ValueType_ReturnsItem()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
             var slot = this.slotFactory.Full(items!);
 
@@ -30,7 +33,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void Get_Full_ReturnsItem()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
             var slot = this.slotFactory.Full(items);
 
@@ -42,7 +45,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void Get_Full_DecreasesAmountByOne()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.Full(items);
 
@@ -54,7 +57,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         [Test]
         public void Get_Full_RemovesOneItemFromSlot()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.Full(items);
 

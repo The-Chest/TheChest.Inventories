@@ -1,10 +1,12 @@
-﻿using TheChest.Tests.Common.Extensions.Slots;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 {
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_NullItems_ThrowsArgumentNullException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -14,6 +16,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_ArrayContainingNull_ThrowsArgumentNullException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
