@@ -13,7 +13,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             Assert.That(
                 () => slot.TryAdd(default!), 
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
              );
         }
 

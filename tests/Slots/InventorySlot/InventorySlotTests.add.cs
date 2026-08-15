@@ -5,7 +5,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
-        #region Null and Default Item Argument
+        #region Argument Validation
         [Test]
         [IgnoreIfValueType]
         public void Add_NullItem_ThrowsArgumentNullException()
@@ -19,31 +19,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
         #endregion
 
-        #region Empty Slot
-        [Test]
-        public void Add_Empty_AddsItem()
-        {
-            var slot = this.slotFactory.Empty();
-
-            var item = this.itemFactory.CreateDefault();
-            slot.Add(item);
-
-            Assert.That(slot.GetContent(), Is.EqualTo(item));
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Add_Empty_DefaultItem_AddsItem()
-        {
-            var slot = this.slotFactory.Empty();
-
-            var item = default(T);
-            slot.Add(item!);
-
-            Assert.That(slot.GetContent(), Is.EqualTo(item));
-        }
-        #endregion
-
+        #region State Validation
         [Test]
         public void Add_Full_ThrowsInvalidOperationException()
         {
@@ -98,5 +74,31 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
                 Assert.That(slot.GetContent(), Is.Not.EqualTo(paramItem));
             });
         }
+        #endregion
+
+        #region Behavior
+        [Test]
+        public void Add_Empty_AddsItem()
+        {
+            var slot = this.slotFactory.Empty();
+
+            var item = this.itemFactory.CreateDefault();
+            slot.Add(item);
+
+            Assert.That(slot.GetContent(), Is.EqualTo(item));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Add_Empty_DefaultItem_AddsItem()
+        {
+            var slot = this.slotFactory.Empty();
+
+            var item = default(T);
+            slot.Add(item!);
+
+            Assert.That(slot.GetContent(), Is.EqualTo(item));
+        }
+        #endregion
     }
 }
