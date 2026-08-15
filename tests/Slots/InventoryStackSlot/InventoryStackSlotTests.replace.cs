@@ -5,7 +5,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
-        public void Replace_EmptyItemReplace_ThrowsArgumentException()
+        public void ReplaceItems_EmptyItems_ThrowsArgumentException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItems = this.itemFactory.CreateMany(stackSize);
@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Replace_ItemsBiggerThanMaxAmount_ThrowsArgumentOutOfRangeException()
+        public void ReplaceItems_ItemsExceedingMaxAmount_ThrowsArgumentOutOfRangeException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -26,7 +26,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Replace_EmptySlot_AddsItem()
+        public void ReplaceItems_EmptySlot_ReplacesItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -39,7 +39,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Replace_ItemsDifferentFromSlot_AddsItemsToSlot()
+        public void ReplaceItems_SlotWithDifferentItems_ReplacesItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
@@ -54,7 +54,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Replace_ItemsEqualToSlot_AddsItemsToSlot()
+        public void ReplaceItems_SlotWithSameItems_ReplacesItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var halfStackSize = stackSize / 2;

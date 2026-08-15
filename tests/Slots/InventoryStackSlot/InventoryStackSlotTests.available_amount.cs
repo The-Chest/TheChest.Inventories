@@ -5,7 +5,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
-        public void AvailableAmount_Empty_ReturnsMaxStackAmount()
+        public void AvailableAmount_EmptySlot_ReturnsMaxAmount()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -15,7 +15,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void AvailableAmount_PartiallyFilled_ValueType_ReturnsMaxStackAmountMinusAmount()
+        public void AvailableAmount_PartiallyFilledSlot_ValueType_ReturnsAvailableSpace()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var amount = this.random.Next(1, stackSize);
@@ -25,7 +25,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AvailableAmount_PartiallyFilled_ReturnsMaxStackAmountMinusAmount()
+        public void AvailableAmount_PartiallyFilledSlot_ReturnsAvailableSpace()
         {
             var item = this.itemFactory.CreateRandom();
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
@@ -36,7 +36,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AvailableAmount_Full_ReturnsZero()
+        public void AvailableAmount_FullSlot_ReturnsZero()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -47,7 +47,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void AvailableAmount_Full_ValueType_ReturnsZero()
+        public void AvailableAmount_FullSlot_ValueType_ReturnsZero()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfValueType]
-        public void AvailableAmount_Full_ReferenceType_ReturnsMaxAmount()
+        public void AvailableAmount_FullSlot_ReferenceType_ReturnsMaxAmount()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();

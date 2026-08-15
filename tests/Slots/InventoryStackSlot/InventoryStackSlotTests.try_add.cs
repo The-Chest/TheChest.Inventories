@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfValueType]
-        public void TryAdd_ArrayContainingNull_ThrowsArgumentNullException()
+        public void TryAdd_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -46,7 +46,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_FullSlot_DoesNotAddItems()
+        public void TryAdd_FullSlot_DoesntAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var slotItems = this.itemFactory.CreateMany(stackSize);
@@ -60,7 +60,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_NotEnoughCapacity_ReturnsFalse()
+        public void TryAdd_SlotWithLimitedSpace_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var currentAmount = this.random.Next(1, stackSize - 1);
@@ -75,7 +75,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_NotEnoughCapacity_DoesNotAddItems()
+        public void TryAdd_SlotWithLimitedSpace_DoesntAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var currentAmount = this.random.Next(1, stackSize - 1);
@@ -91,7 +91,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_ArrayContainingDefault_AddsToContent()
+        public void TryAdd_EmptySlot_ItemsContainingDefault_AddsItems()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -104,7 +104,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_ArrayContainingDefault_IncreasesAmount()
+        public void TryAdd_EmptySlot_ItemsContainingDefault_IncreasesAmount()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -117,7 +117,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_ArrayContainingDefault_ReturnsTrue()
+        public void TryAdd_EmptySlot_ItemsContainingDefault_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -129,7 +129,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_SlotWithDifferentItems_DoesNotAddItems()
+        public void TryAdd_SlotWithDifferentItems_DoesntAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var currentAmount = this.random.Next(1, stackSize - 1);
@@ -159,7 +159,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_ValidItems_ReturnsTrue()
+        public void TryAdd_SlotWithAvailableSpace_ValidItems_ReturnsTrue()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var currentAmount = this.random.Next(1, stackSize - 1);

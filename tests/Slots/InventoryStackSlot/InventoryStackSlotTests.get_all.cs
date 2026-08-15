@@ -5,7 +5,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
-        public void GetAll_Empty_ReturnsEmptyArray()
+        public void GetAll_EmptySlot_ReturnsEmptyArray()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -16,7 +16,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAll_Full_RemovesAllContents()
+        public void GetAll_FullSlot_RemovesAllItems()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -28,7 +28,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAll_Full_DecreasesAmountToZero()
+        public void GetAll_FullSlot_DecreasesAmountToZero()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -40,7 +40,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAll_Full_ReturnsAllItems()
+        public void GetAll_FullSlot_ReturnsAllItems()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -52,7 +52,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAll_PartiallyFilled_ReturnsAllItems()
+        public void GetAll_PartiallyFilledSlot_ReturnsAllItems()
         {
             var stackSize = this.GetRandomStackSize();
             var amount = this.random.Next(1, stackSize - 1);

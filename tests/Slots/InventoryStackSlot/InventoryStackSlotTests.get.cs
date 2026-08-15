@@ -6,7 +6,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
-        public void Get_Empty_ThrowsInvalidOperationException()
+        public void Get_EmptySlot_ThrowsInvalidOperationException()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void Get_Full_ValueType_ReturnsItem()
+        public void Get_FullSlot_ValueType_ReturnsItem()
         {
             var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
@@ -31,7 +31,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Get_Full_ReturnsItem()
+        public void Get_FullSlot_ReturnsItem()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -43,7 +43,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Get_Full_DecreasesAmountByOne()
+        public void Get_FullSlot_DecreasesAmountByOne()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void Get_Full_RemovesOneItemFromSlot()
+        public void Get_FullSlot_RemovesItem()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);

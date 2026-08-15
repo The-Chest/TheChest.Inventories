@@ -3,7 +3,7 @@
     public partial class InventoryStackSlotTests<T>
     {
         [Test]
-        public void CanAddItems_NullArray_ReturnsFalse()
+        public void CanAddItems_NullItems_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -14,7 +14,7 @@
         }
 
         [Test]
-        public void CanAddItems_EmptyArray_ReturnsFalse()
+        public void CanAddItems_EmptyItems_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -25,7 +25,7 @@
         }
 
         [Test]
-        public void CanAddItems_Empty_ReturnsTrue()
+        public void CanAddItems_EmptySlot_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -37,7 +37,7 @@
         }
 
         [Test]
-        public void CanAddItems_Full_ReturnsFalse()
+        public void CanAddItems_FullSlot_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
@@ -50,7 +50,7 @@
         }
 
         [Test]
-        public void CanAddItems_DifferentItems_ReturnsFalse()
+        public void CanAddItems_ItemsWithDifferentValues_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -65,7 +65,7 @@
         }
 
         [Test]
-        public void CanAddItems_NoAvailableSpace_ReturnsFalse()
+        public void CanAddItems_SlotWithoutAvailableSpace_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
@@ -78,7 +78,7 @@
         }
 
         [Test]
-        public void CanAddItems_AvailableSpace_ReturnsTrue()
+        public void CanAddItems_SlotWithAvailableSpace_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var itemsSize = stackSize / 2;
@@ -93,7 +93,7 @@
         }
 
         [Test]
-        public void CanAddItems_EqualItems_ReturnsTrue()
+        public void CanAddItems_SlotWithSameItems_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStackSize = stackSize / 2;

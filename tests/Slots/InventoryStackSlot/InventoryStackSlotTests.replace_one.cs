@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     {
         [Test]
         [IgnoreIfValueType]
-        public void ReplaceOne_NullItemReplace_ThrowsArgumentNullException()
+        public void ReplaceItem_NullItem_ThrowsArgumentNullException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItems = this.itemFactory.CreateMany(stackSize);
@@ -17,7 +17,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void ReplaceOne_EmptySlot_AddsItem()
+        public void ReplaceItem_EmptySlot_ReplacesItem()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void ReplaceOne_ItemDifferentFromSlot_AddsItemsToSlot()
+        public void ReplaceItem_SlotWithDifferentItem_ReplacesItem()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize);
@@ -48,7 +48,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void ReplaceOne_ItemEqualToSlot_AddsItemsToSlot()
+        public void ReplaceItem_SlotWithSameItem_ReplacesItem()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var items = this.itemFactory.CreateMany(stackSize / 2);
