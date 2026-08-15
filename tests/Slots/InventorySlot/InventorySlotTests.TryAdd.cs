@@ -77,7 +77,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void TryAdd_FullSlot_DoesNotAddItem()
+        public void TryAdd_FullSlot_DoesntAddItem()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -89,7 +89,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_DefaultItem_FullSlot_DoesNotAddItem()
+        public void TryAdd_FullSlot_DefaultItem_DoesntAddItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -102,7 +102,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_DefaultItem_FullSlot_ReturnsFalse()
+        public void TryAdd_FullSlot_DefaultItem_ReturnsFalse()
         {
             var slot = this.slotFactory.Full(default!);
 

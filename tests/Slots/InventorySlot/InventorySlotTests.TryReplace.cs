@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void TryReplace_EmptySlot_DoesNotAddsItem()
+        public void TryReplace_EmptySlot_DoesntAddItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -67,7 +67,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_EmptySlot_DefaultItem_DoesNotAddsItem()
+        public void TryReplace_EmptySlot_DefaultItem_DoesntAddItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -133,7 +133,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_DefaultItem_FullSlot_ReturnsTrue()
+        public void TryReplace_FullSlot_DefaultItem_ReturnsTrue()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -146,7 +146,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_DefaultItem_FullSlot_AddsDefault()
+        public void TryReplace_FullSlot_DefaultItem_ReplacesItemWithDefault()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -163,7 +163,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_DefaultItem_FullSlot_SetsOldItemToInitialItem()
+        public void TryReplace_FullSlot_DefaultItem_SetsOldItemToInitialItem()
         {
             var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
@@ -176,7 +176,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_DefaultItem_FullSlot_DefaultContent_ReturnsTrue()
+        public void TryReplace_FullSlotWithDefaultContent_ReturnsTrue()
         {
             var slot = this.slotFactory.Full(default!);
 
@@ -188,7 +188,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_DefaultItem_FullSlot_DefaultContent_AddsItem()
+        public void TryReplace_FullSlotWithDefaultContent_ReplacesDefaultWithItem()
         {
             var slot = this.slotFactory.Full(default!);
 
@@ -200,7 +200,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_DefaultItem_FullSlot_DefaultContent_SetsOldItemToDefault()
+        public void TryReplace_FullSlotWithDefaultContent_SetsOldItemToDefault()
         {
             var slot = this.slotFactory.Full(default!);
 

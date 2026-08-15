@@ -30,7 +30,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanAdd_Empty_ReturnsTrue()
+        public void CanAdd_EmptySlot_ReturnsTrue()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Empty();
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void CanAdd_Full_ReturnsFalse()
+        public void CanAdd_FullSlot_ReturnsFalse()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
