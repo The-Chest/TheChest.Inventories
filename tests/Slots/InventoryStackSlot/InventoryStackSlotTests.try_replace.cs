@@ -17,7 +17,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfValueType]
-        public void TryReplace_ArrayContainingNull_ThrowsArgumentNullException()
+        public void TryReplace_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -53,7 +53,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryReplace_EmptyItems_DoesNotReplaceItems()
+        public void TryReplace_EmptyItems_DoesntReplaceItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slotItems = this.itemFactory.CreateMany(stackSize);
@@ -66,7 +66,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryReplace_ItemsBiggerThanMaxAmount_ReturnsFalse()
+        public void TryReplace_ItemsExceedingMaxAmount_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -78,7 +78,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryReplace_ItemsBiggerThanMaxAmount_SetsOldItemsToNull()
+        public void TryReplace_ItemsExceedingMaxAmount_SetsOldItemsToNull()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -90,7 +90,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryReplace_ItemsWithDifferentValues_ReturnsFalse()
+        public void TryReplace_ItemsContainingDifferentValues_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -126,7 +126,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryReplace_EmptySlot_AddsItems()
+        public void TryReplace_EmptySlot_ReplacesItems()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);

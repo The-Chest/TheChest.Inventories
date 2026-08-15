@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     {
         #region Param Validation Tests
         [Test]
-        public void AddItems_EmptyArray_ThrowsArgumentException()
+        public void AddItems_EmptyItems_ThrowsArgumentException()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -23,7 +23,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfValueType]
-        public void AddItems_ArrayContainingNull_ThrowsArgumentNullException()
+        public void AddItems_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_ArrayContainingDifferentItems_ThrowsArgumentException()
+        public void AddItems_ItemsContainingDifferentValues_ThrowsArgumentException()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -77,7 +77,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_MoreItemsThanMaxAmount_ThrowsInvalidOperationException()
+        public void AddItems_EmptySlot_ItemsExceedingMaxAmount_ThrowsInvalidOperationException()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -92,7 +92,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_MoreThanAvailableAmount_ThrowsInvalidOperationException()
+        public void AddItems_SlotWithLimitedSpace_ItemsExceedingAvailableAmount_ThrowsInvalidOperationException()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStackSize = stackSize / 2;
@@ -109,7 +109,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_DifferentItemsFromSlot_ThrowsInvalidOperationException()
+        public void AddItems_SlotWithDifferentItems_ThrowsInvalidOperationException()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStackSize = stackSize / 2;
@@ -141,7 +141,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_EmptySlot_AddsToContent()
+        public void AddItems_EmptySlot_AddsItems()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -155,7 +155,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_SlotContainingSameItems_IncreasesAmount()
+        public void AddItems_SlotWithSameItems_IncreasesAmount()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStackSize = stackSize / 2;
@@ -171,7 +171,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void AddItems_SlotContainingSameItems_AddsToContent()
+        public void AddItems_SlotWithSameItems_AddsItems()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStackSize = stackSize / 2;

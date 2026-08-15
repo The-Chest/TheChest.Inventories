@@ -7,7 +7,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
     {
         [TestCase(0)]
         [TestCase(-1)]
-        public void GetAmount_InvalidAmount_ThrowsArgumentExceptions(int amount)
+        public void GetAmount_InvalidAmount_ThrowsArgumentException(int amount)
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_Empty_ReturnsEmptyArray()
+        public void GetAmount_EmptySlot_ReturnsEmptyArray()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetAmount_Full_ValueType_ReturnsEmptyArray()
+        public void GetAmount_FullSlot_ValueType_ReturnsEmptyArray()
         {
             var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
@@ -47,7 +47,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetAmount_Full_ValueType_DecreasesAmount()
+        public void GetAmount_FullSlot_ValueType_DecreasesAmount()
         {
             var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
@@ -61,7 +61,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetAmount_Full_ValueType_RemovesAmountFromContent()
+        public void GetAmount_FullSlot_ValueType_RemovesItems()
         {
             var stackSize = this.GetRandomStackSize();
             var items = Enumerable.Repeat(default(T), stackSize).ToArray();
@@ -74,7 +74,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_EnoughItems_DecreasesAmount()
+        public void GetAmount_SlotWithEnoughItems_DecreasesAmount()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -87,7 +87,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_EnoughItems_RemovesAmountFromContent()
+        public void GetAmount_SlotWithEnoughItems_RemovesItems()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -100,7 +100,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_EnoughItems_ReturnsItems()
+        public void GetAmount_SlotWithEnoughItems_ReturnsItems()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -113,7 +113,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_NotEnoughItems_ReturnsItems()
+        public void GetAmount_SlotWithoutEnoughItems_ReturnsAllItems()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStack = stackSize / 2;
@@ -127,7 +127,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_NotEnoughItems_RemovesAmountFromContent()
+        public void GetAmount_SlotWithoutEnoughItems_RemovesAllItems()
         {
             var stackSize = this.GetRandomStackSize();
             var halfStack = stackSize / 2;
@@ -141,7 +141,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_AmountBiggerThanAvailable_ReturnsAllItems()
+        public void GetAmount_AmountExceedingAvailable_ReturnsAllItems()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateManyRandom(stackSize);
@@ -153,7 +153,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void GetAmount_AmountBiggerThanAvailable_DecreasesAmountToZero()
+        public void GetAmount_AmountExceedingAvailable_DecreasesAmountToZero()
         {
             var stackSize = this.GetRandomStackSize();
             var itemSize = this.random.Next(1, stackSize / 2);

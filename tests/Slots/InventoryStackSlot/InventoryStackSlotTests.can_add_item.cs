@@ -18,7 +18,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void CanAddItem_DefaultItem_ReturnsTrue()
+        public void CanAddItem_DefaultValueItem_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -29,7 +29,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void CanAddItem_Empty_ReturnsTrue()
+        public void CanAddItem_EmptySlot_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void CanAddItem_AvailableSpace_DifferentItem_ReturnsFalse()
+        public void CanAddItem_SlotWithAvailableSpace_DifferentItem_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var itemsAmount = this.random.Next(1, stackSize - 1);
@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void CanAddItem_AvailableSpace_SameItem_ReturnsTrue()
+        public void CanAddItem_SlotWithAvailableSpace_SameItem_ReturnsTrue()
         {
             var stackSize = this.GetRandomStackSize();
             var itemsAmount = this.random.Next(1, stackSize - 1);
@@ -69,7 +69,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void CanAddItem_Full_ReturnsFalse()
+        public void CanAddItem_FullSlot_ReturnsFalse()
         {
             var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
