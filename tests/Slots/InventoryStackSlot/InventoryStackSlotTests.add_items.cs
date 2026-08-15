@@ -1,120 +1,203 @@
-﻿using TheChest.Tests.Common.Extensions.Slots;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 {
     public partial class InventoryStackSlotTests<T>
     {
+        #region Param Validation Tests
         [Test]
-        public void AddItems_AddingDifferentItems_ThrowsArgumentException()
+        public void AddItems_EmptyItems_ThrowsArgumentException()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
 
-            var randomSize = this.random.Next(1, stackSize);
-            var addingItems = this.itemFactory
-                .CreateManyRandom(randomSize)
+            Assert.That(
+                () => slot.Add(Array.Empty<T>()),
+                Throws.ArgumentException
+                    .With.Message.StartsWith("Cannot add empty list of items")
+                    .And.Property("ParamName").EqualTo("items")
+            );
+        }
+
+        [Test]
+        [IgnoreIfValueType]
+        public void AddItems_ItemsContainingNull_ThrowsArgumentNullException()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var items = this.itemFactory.CreateMany(stackSize - 1)
+                .Append(default!)
+                .ToShuffledArray(this.random);
+
+            Assert.That(
+                () => slot.Add(items),
+                Throws.ArgumentNullException
+                    .With.Message.StartsWith("Cannot add an array of items with null values")
+                    .And.Property("ParamName").EqualTo("items")
+            );
+        }
+
+        [Test]
+        public void AddItems_ItemsContainingDifferentValues_ThrowsArgumentException()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var addingItems = this.itemFactory.CreateMany(stackSize - 1)
                 .Append(this.itemFactory.CreateRandom())
-                .ToArray();
+                .ToShuffledArray(this.random);
 
-            Assert.That(() => slot.Add(addingItems), Throws.ArgumentException);
+            Assert.That(
+                () => slot.Add(addingItems),
+                Throws.ArgumentException
+                    .With.Message.StartsWith("Cannot add an array of items with different types")
+                    .And.Property("ParamName").EqualTo("items")
+            );
         }
+        #endregion
 
+        #region State Validation Tests
         [Test]
-        public void AddItems_DifferentItemsFromSlot_WithMoreThanAvailableAmount_ThrowsInvalidOperationException()
+        public void AddItems_FullSlot_ThrowsInvalidOperationException()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = new T[1] {  this.itemFactory.CreateRandom() };
-            var slot = this.slotFactory.WithItems(items, stackSize);
-
-            var addingItems = this.itemFactory.CreateManyRandom(stackSize);
-
-            Assert.That(() => slot.Add(addingItems), Throws.InvalidOperationException);
-        }
-
-        [Test]
-        public void AddItems_OneItemDifferentFromSlot_ThrowsArgumentException()
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = new T[1] { this.itemFactory.CreateRandom() };
-            var slot = this.slotFactory.WithItems(items, stackSize);
-
-            var addingItems = this.itemFactory.CreateMany(stackSize)
-                .Append(this.itemFactory.CreateRandom())
-                .ToArray();
-
-            Assert.That(() => slot.Add(addingItems), Throws.ArgumentException);
-        }
-
-        [Test]
-        public void AddItems_AddingNoItems_ThrowsArgumentException()
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.Empty(stackSize);
-
-            var addingItems = Array.Empty<T>();
-
-            Assert.That(() => slot.Add(addingItems), Throws.ArgumentException);
-        }
-
-        [Test]
-        public void AddItems_EmptySlot_WithMoreItemsThanMaxAmount_ThrowsInvalidOperationException()
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.Empty(stackSize);
-
-            var randomSize = this.random.Next(stackSize + 1, stackSize + 20);
-            var addingItems = this.itemFactory.CreateManyRandom(randomSize);
-            Assert.That(() => slot.Add(addingItems), Throws.InvalidOperationException);
-        }
-
-
-        [Test]
-        public void AddItems_FullSlot_WithMultipleItems_ThrowsInvalidOperationException()
-        {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
             var items = this.itemFactory.CreateMany(stackSize);
             var slot = this.slotFactory.Full(items);
 
-            var addingItems = this.itemFactory.CreateMany(stackSize);
-            Assert.That(() => slot.Add(addingItems), Throws.InvalidOperationException);
+            var addingAmount = this.random.Next(1, stackSize);
+            var addingItems = this.itemFactory.CreateMany(addingAmount);
+
+            Assert.That(
+                () => slot.Add(addingItems),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is full")
+            );
         }
 
         [Test]
-        public void AddItems_EmptySlot_ReturnsEmptyRemainingItems()
+        public void AddItems_EmptySlot_ItemsExceedingMaxAmount_ThrowsInvalidOperationException()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var addingAmount = this.random.Next(slot.MaxAmount + 1, stackSize * 2);
+            var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
+
+            Assert.That(
+                () => slot.Add(addingItems),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot add more items than the available amount")
+            );
+        }
+
+        [Test]
+        public void AddItems_SlotWithLimitedSpace_ItemsExceedingAvailableAmount_ThrowsInvalidOperationException()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var halfStackSize = stackSize / 2;
+            var items = this.itemFactory.CreateMany(halfStackSize);
+            var slot = this.slotFactory.WithItems(items, stackSize);
+
+            var addingAmount = this.random.Next(slot.AvailableAmount + 1, stackSize * 2);
+            var addingItems = this.itemFactory.CreateMany(addingAmount);
+
+            Assert.That(
+                () => slot.Add(addingItems),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot add more items than the available amount")
+            );
+        }
+
+        [Test]
+        public void AddItems_SlotWithDifferentItems_ThrowsInvalidOperationException()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var halfStackSize = stackSize / 2;
+            var items = this.itemFactory.CreateMany(halfStackSize);
+            var slot = this.slotFactory.WithItems(items, stackSize);
+
+            var addingAmount = this.random.Next(1, halfStackSize);
+            var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
+
+            Assert.That(
+                () => slot.Add(addingItems),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot add items that are different from the items already in the slot")
+            );
+        }
+        #endregion
+
+        #region Behavior Tests
+        [Test]
+        public void AddItems_EmptySlot_IncreasesAmount()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var addingAmount = this.random.Next(1, stackSize - 1);
+            var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
+            slot.Add(addingItems);
+
+            Assert.That(slot.Amount, Is.EqualTo(addingAmount));
+        }
+
+        [Test]
+        public void AddItems_EmptySlot_AddsItems()
+        {
+            var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);
 
             var addingAmount = this.random.Next(1, stackSize);
             var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
 
-            var remainingItems = slot.Add(addingItems);
+            slot.Add(addingItems);
 
-            Assert.That(remainingItems, Is.Empty);
+            Assert.That(slot.GetContents()[0..addingAmount], Is.EquivalentTo(addingItems));
         }
 
         [Test]
-        public void AddItems_FullSlot_ThrowsInvalidOperationException()
+        public void AddItems_EmptySlot_ReturnsEmptyArray()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = this.itemFactory.CreateMany(stackSize);
-            var slot = this.slotFactory.Full(items);
+            var stackSize = this.GetRandomStackSize();
+            var slot = this.slotFactory.Empty(stackSize);
 
-            var addingItems = this.itemFactory.CreateMany(1);
+            var addingAmount = this.random.Next(1, stackSize);
+            var addingItems = this.itemFactory.CreateManyRandom(addingAmount);
+            var result = slot.Add(addingItems);
 
-            Assert.That(() => slot.Add(addingItems), Throws.InvalidOperationException);
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
-        public void AddItems_DifferentItemsFromSlot_ThrowsInvalidOperationException()
+        public void AddItems_SlotWithSameItems_IncreasesAmount()
         {
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var items = new T[1] { this.itemFactory.CreateRandom() };
+            var stackSize = this.GetRandomStackSize();
+            var halfStackSize = stackSize / 2;
+            var items = this.itemFactory.CreateMany(halfStackSize);
             var slot = this.slotFactory.WithItems(items, stackSize);
 
-            var addingItems = this.itemFactory.CreateManyRandom(1);
+            var addingAmount = this.random.Next(1, halfStackSize);
+            var addingItems = this.itemFactory.CreateMany(addingAmount);
 
-            Assert.That(() => slot.Add(addingItems), Throws.InvalidOperationException);
+            slot.Add(addingItems);
+
+            Assert.That(slot.Amount, Is.EqualTo(halfStackSize + addingAmount));
         }
+
+        [Test]
+        public void AddItems_SlotWithSameItems_AddsItems()
+        {
+            var stackSize = this.GetRandomStackSize();
+            var halfStackSize = stackSize / 2;
+            var items = this.itemFactory.CreateMany(halfStackSize);
+            var slot = this.slotFactory.WithItems(items, stackSize);
+
+            var addingAmount = this.random.Next(1, halfStackSize);
+            var addingItems = this.itemFactory.CreateMany(addingAmount);
+
+            slot.Add(addingItems);
+
+            Assert.That(slot.GetContents()[0..addingAmount], Is.EquivalentTo(addingItems));
+        }
+        #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace TheChest.Inventories.Slots
     /// <typeparam name="T">The item collection inside the slot accepts</typeparam>
     public class InventoryStackSlot<T> : StackSlot<T>, IInventoryStackSlot<T>
     {
+        #region Constructors
         /// <summary>
         /// Creates an empty <see cref="InventoryStackSlot{T}"/>
         /// </summary>
@@ -32,7 +33,9 @@ namespace TheChest.Inventories.Slots
         /// Creates an Inventory Slot with default items stacked
         /// </summary>
         public InventoryStackSlot(T[] items, int maxStackAmount) : base(items, maxStackAmount) { }
+        #endregion
 
+        #region Add
         /// <summary>
         /// Adds an array of items inside the Content with no previous validation.
         /// <para>
@@ -122,33 +125,7 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
-        /// </remarks>
-        /// <exception cref="ArgumentException">When any of the items in <paramref name="items"/> is invalid or when the items are different from the items already in the slot</exception>
-        /// <exception cref="InvalidOperationException">When the slot is full or when trying to add items that are different from the items already in the slot</exception>
-        /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
-        public virtual T[] Add(T[] items)
-        {
-            if (items.Length == 0)
-                throw new ArgumentException(InventoryStackSlotErrors.AddEmptyItems, nameof(items));
-            if (items.ContainsNull())
-                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.AddArrayWithNullValues);
-            if (!items.HasAllEqual())
-                throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
 
-            if (this.IsFull)
-                throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
-            if (items.Length > this.AvailableAmount)
-                throw new InvalidOperationException(InventoryStackSlotErrors.AddMoreThanAvailableAmount);
-            if (!this.IsEmpty && !this.Contains(items))
-                throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
-
-            this.AddItems(ref items);
-
-            return items;
-        }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or contains <see langword="null"/> values.</exception>
         public virtual bool TryAdd(T[] items)
@@ -166,8 +143,36 @@ namespace TheChest.Inventories.Slots
                 return false;
 
             this.AddItems(ref items);
-            
+
             return true;
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The items must be the same in it and in the slot (if is not empty) or it'll throw an <see cref="ArgumentException"/>. 
+        /// </remarks>
+        /// <exception cref="ArgumentException">When any of the items in <paramref name="items"/> is invalid or when the items are different from the items already in the slot</exception>
+        /// <exception cref="InvalidOperationException">When the slot is full or when trying to add items that are different from the items already in the slot</exception>
+        /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
+        public virtual T[] Add(T[] items)
+        {
+            if (items.Length == 0)
+                throw new ArgumentException(InventoryStackSlotErrors.AddEmptyItems, nameof(items));
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), InventoryStackSlotErrors.AddArrayWithNullValues);
+            if (!items.HasAllEqual())
+                throw new ArgumentException(InventoryStackSlotErrors.AddArrayWithDifferentTypes, nameof(items));
+
+            if (this.IsFull)
+                throw new InvalidOperationException(InventoryStackSlotErrors.FullSlot);
+            if (items.Length > this.AvailableAmount)
+                throw new InvalidOperationException(InventoryStackSlotErrors.AddMoreThanAvailableAmount);
+            if (!this.IsEmpty && !this.Contains(items))
+                throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
+
+            this.AddItems(ref items);
+
+            return items;
         }
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
@@ -177,7 +182,7 @@ namespace TheChest.Inventories.Slots
             if(item.IsNull())
                 throw new ArgumentNullException(nameof(item));
             if (this.IsFull)
-                throw new InvalidOperationException(InventoryStackSlotErrors.SlotIsFull);
+                throw new InvalidOperationException(InventoryStackSlotErrors.FullSlot);
             if (!this.IsEmpty && !this.Contains(item))
                 throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
@@ -185,7 +190,9 @@ namespace TheChest.Inventories.Slots
             
             return true;
         }
+        #endregion
 
+        #region Get
         /// <summary>
         /// Gets and removes amount of items from slot with no previous validation.
         /// </summary>
@@ -230,6 +237,7 @@ namespace TheChest.Inventories.Slots
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
+            
             if (amount >= this.Amount)
                 return this.GetAll();
 
@@ -242,11 +250,13 @@ namespace TheChest.Inventories.Slots
         public virtual T Get()
         {
             if (this.IsEmpty)
-                return default;
+                throw new InvalidOperationException(InventoryStackSlotErrors.EmptySlot);
 
             return this.GetItem();
         }
+        #endregion
 
+        #region Replace
         /// <summary>
         /// Replaces the current items in the current slot with the specified items
         /// </summary>
@@ -261,14 +271,9 @@ namespace TheChest.Inventories.Slots
             }
 
             var result = this.GetAll();
-            if (this.CanAdd(items))
-            {
-                this.AddItems(ref items);
-                return result;
-            }
-
-            this.AddItems(ref result);
-            return items;
+            this.AddItems(ref items);
+            
+            return result;
         }
 
         /// <inheritdoc/>
@@ -293,6 +298,7 @@ namespace TheChest.Inventories.Slots
 
             return true;
         }
+
         /// <returns><see langword="false"/> if the array is bigger than <see cref="StackSlot{T}.MaxAmount"/>, is empty or when any of the items in <paramref name="items"/> is different from the others</returns>
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
@@ -313,6 +319,7 @@ namespace TheChest.Inventories.Slots
             
             return true;
         }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">When <paramref name="items"/> is empty or when any of the items in <paramref name="items"/> is different from the others</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="items"/> is bigger than <see cref="IStackSlot{T}.MaxAmount"/></exception>
@@ -341,5 +348,6 @@ namespace TheChest.Inventories.Slots
 
             return this.ReplaceItems(item);
         }
+        #endregion
     }
 }

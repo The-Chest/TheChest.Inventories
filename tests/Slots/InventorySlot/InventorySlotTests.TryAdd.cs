@@ -5,24 +5,25 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
-        #region Null Item
         [Test]
         [IgnoreIfValueType]
         public void TryAdd_NullItem_ThrowsArgumentNullException()
         {
             var slot = this.slotFactory.Empty();
 
-            Assert.That(() => slot.TryAdd(default!), Throws.ArgumentNullException);
+            Assert.That(
+                () => slot.TryAdd(default!), 
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+             );
         }
-        #endregion
 
         #region Empty Slot
         [Test]
         public void TryAdd_EmptySlot_AddsItem()
         {
             var slot = this.slotFactory.Empty();
-            var item = this.itemFactory.CreateDefault();
 
+            var item = this.itemFactory.CreateRandom();
             slot.TryAdd(item);
 
             Assert.That(slot.GetContent(), Is.EqualTo(item));
@@ -76,7 +77,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void TryAdd_FullSlot_DoesNotAddItem()
+        public void TryAdd_FullSlot_DoesntAddItem()
         {
             var item = this.itemFactory.CreateDefault();
             var slot = this.slotFactory.Full(item);
@@ -88,9 +89,9 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_DefaultItem_FullSlot_DoesNotAddItem()
+        public void TryAdd_FullSlot_DefaultItem_DoesntAddItem()
         {
-            var item = this.itemFactory.CreateDefault();
+            var item = this.itemFactory.CreateRandom();
             var slot = this.slotFactory.Full(item);
 
             var paramItem = default(T);
@@ -101,7 +102,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryAdd_DefaultItem_FullSlot_ReturnsFalse()
+        public void TryAdd_FullSlot_DefaultItem_ReturnsFalse()
         {
             var slot = this.slotFactory.Full(default!);
 

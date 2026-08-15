@@ -5,7 +5,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
-        #region Null and Default Item Argument
+        #region Argument Validation
         [Test]
         [IgnoreIfValueType]
         public void Add_NullItem_ThrowsArgumentNullException()
@@ -19,7 +19,64 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
         #endregion
 
-        #region Empty Slot
+        #region State Validation
+        [Test]
+        public void Add_FullSlot_ThrowsInvalidOperationException()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Full(item);
+
+            var newItem = this.itemFactory.CreateRandom();
+            Assert.That(
+                () => slot.Add(newItem), 
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is already full.")
+            );
+        }
+
+        [Test]
+        public void Add_FullSlot_DoesntAddItem()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.Full(item);
+
+            Assert.Multiple(() =>
+            {
+                var newItem = this.itemFactory.CreateRandom();
+                Assert.That(() => slot.Add(newItem), Throws.InvalidOperationException);
+                Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
+            });
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Add_FullSlot_DefaultItem_ThrowsInvalidOperationException()
+        {
+            var slot = this.slotFactory.Full(default!);
+
+            var item = default(T);
+            Assert.That(
+                () => slot.Add(item!),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is already full.")
+            );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Add_FullSlot_DefaultItem_DoesntAddItem()
+        {
+            var item = this.itemFactory.CreateRandom();
+            var slot = this.slotFactory.Full(item);
+
+            Assert.Multiple(() =>
+            {
+                var paramItem = default(T);
+                Assert.That(() => slot.Add(paramItem!), Throws.InvalidOperationException);
+                Assert.That(slot.GetContent(), Is.Not.EqualTo(paramItem));
+            });
+        }
+        #endregion
+
+        #region Behavior
         [Test]
         public void Add_EmptySlot_AddsItem()
         {
@@ -41,63 +98,6 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
             slot.Add(item!);
 
             Assert.That(slot.GetContent(), Is.EqualTo(item));
-        }
-        #endregion
-
-        #region Full Slot
-        [Test]
-        public void Add_FullSlot_ThrowsInvalidOperationException()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.Full(item);
-
-            var newItem = this.itemFactory.CreateRandom();
-            Assert.That(
-                () => slot.Add(newItem), 
-                Throws.InvalidOperationException.With.Message.EqualTo("The slot is already full.")
-            );
-        }
-
-        [Test]
-        public void Add_FullSlot_DoesNotAddItem()
-        {
-            var item = this.itemFactory.CreateDefault();
-            var slot = this.slotFactory.Full(item);
-
-            Assert.Multiple(() =>
-            {
-                var newItem = this.itemFactory.CreateRandom();
-                Assert.That(() => slot.Add(newItem), Throws.InvalidOperationException);
-                Assert.That(slot.GetContent(), Is.Not.EqualTo(newItem));
-            });
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Add_DefaultItem_FullSlot_ThrowsInvalidOperationException()
-        {
-            var slot = this.slotFactory.Full(default!);
-
-            var item = default(T);
-            Assert.That(
-                () => slot.Add(item!),
-                Throws.InvalidOperationException.With.Message.EqualTo("The slot is already full.")
-            );
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void Add_DefaultItem_FullSlot_DoesNotAddsItem()
-        {
-            var item = this.itemFactory.CreateRandom();
-            var slot = this.slotFactory.Full(item);
-
-            Assert.Multiple(() =>
-            {
-                var paramItem = default(T);
-                Assert.That(() => slot.Add(paramItem!), Throws.InvalidOperationException);
-                Assert.That(slot.GetContent(), Is.Not.EqualTo(paramItem));
-            });
         }
         #endregion
     }
