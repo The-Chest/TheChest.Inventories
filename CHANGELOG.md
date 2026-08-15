@@ -2,7 +2,7 @@
 
 ## What's Added
 * Value Type for all of Inventory and Slot classes
-  * *It is using `System.Reflection` for value type checking so performance might be an issue* 
+  * *It is using `System.Reflection` in the `Inventory` class for value type checking so performance might be an issue* 
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
@@ -29,6 +29,7 @@
     * Now it checks if the current slot is empty, if it is empty it returns false
   * `Replace`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+
 ### Stack
 * `StackInventory`
   * 
@@ -36,6 +37,8 @@
   * `Get()`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T[]`
     * It is marked as `Obsolete` and will be removed in the future, use `Get(int amount)` instead
+  * `Get(int amount)`
+    * Will soon have the default value of `amount` as 1, so it can be used as a replacement for the `Get()` method
 
 ### LazyStack
 * `LazyStackInventory`
