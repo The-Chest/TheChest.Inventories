@@ -4,7 +4,6 @@ using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Extensions;
-using TheChest.Inventories.Slots.Exceptions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -91,7 +90,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (this.slots[index].IsEmpty)
-                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
+                throw new InvalidOperationException(InventoryErrors.EmptySlot);
 
             return this.GetItem(index);
         }
