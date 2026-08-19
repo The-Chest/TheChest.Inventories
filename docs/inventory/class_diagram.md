@@ -91,6 +91,7 @@ direction TB
 
 	        + T[] Clear()
 
+			~ T GetItem(int index)
 	        + T[] GetAll(T item)
 	        + T Get(int index)
 	        + T Get(T item)

@@ -46,8 +46,8 @@ direction TB
 
             + T[] Clear()
 
-            + T? Get(int index)
-            + T? Get(T item)
+            + T Get(int index)
+            + T Get(T item)
             + T[] Get(T item, int amount)
             + T[] Get(int index, int amount)
 
@@ -78,7 +78,7 @@ direction TB
             + T[] Replace(ref T[] items)
             + T[] Replace(ref T item)
 
-            + T? Get()
+            + T Get()
             + T[] Get(int amount)
             + T[] GetAll()
 
@@ -102,13 +102,14 @@ direction TB
             + T[] Add(params T[] items)
             + T[] AddAt(T[] items, int index)
 
-            + T? Get(int index)
-            + T? Get(T item)
+            + T Get(int index)
+            + T Get(T item)
             + T[] Get(T item, int amount)
             + T[] Get(int index, int amount)
             + T[] GetAll(int index)
             + T[] GetAll(T item)
-
+	        ~ T[] GetItem(T item, int amount = 1)
+            
             + int GetCount(T item)
 
             + T[] Clear()
