@@ -35,7 +35,12 @@
 
 ### Stack
 * `StackInventory`
-  * 
+  * `Get(int index)`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(int index, int amount)` instead
+  * `Get(T item)`
+    * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(T item, int amount)` instead
 * `InventoryStackSlot` 
   * `Get()`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T[]`

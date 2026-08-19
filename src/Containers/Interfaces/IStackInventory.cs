@@ -24,12 +24,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
+        [Obsolete("Use Get(int index, int amount) instead. This method will be removed in future versions.")]
         T Get(int index);
         /// <summary>
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
         /// <returns>Returns the first item found</returns>
+        [Obsolete("Use Get(T item, int amount) instead. This method will be removed in future versions.")]
         T Get(T item);
 
         /// <summary>
