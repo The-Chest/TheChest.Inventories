@@ -97,7 +97,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [Ignore("This test is not working due Inventory creation")]
         public void AddItemAt_SlotWithDifferentItem_DoNotAddItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();

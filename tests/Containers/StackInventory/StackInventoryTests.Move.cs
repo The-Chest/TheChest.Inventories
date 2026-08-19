@@ -97,7 +97,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [Ignore("This test is only relevant for inventories that allow different max stack sizes per slot.")]
         public void Move_OriginAndTargetWithDifferentMaxStackSize_ThrowsInvalidOperationException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();

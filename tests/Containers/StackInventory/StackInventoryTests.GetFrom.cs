@@ -18,7 +18,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [Ignore("For now")]
         public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -72,7 +71,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
 
         [Test]
-        [Ignore("For now")]
         public void GetFrom_EmptySlot_ReturnsNull()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
