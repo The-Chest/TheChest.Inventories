@@ -3,6 +3,9 @@
 ## What's Added
 * Value Type for all of Inventory and Slot classes
   * *It is using `System.Reflection` in the `Inventory` class for value type checking so performance might be an issue* 
+* `Inventory<T>` and `StackInventory<T>` now has the protected method `GetItem`
+    * It returns the item from the inventory with no validation, it is used internally by the `Get`
+    * It also fires the `OnGet` event when the item is successfully retrieved from the inventory
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
@@ -47,7 +50,7 @@
   * 
 
 ## What's Removed
-* `CanAdd` method call on protected `InventoryStackSlot<T>`.`ReplaceItems` method
+* `Add` method call on protected `InventoryStackSlot<T>.ReplaceItems` method
 
 ## What's Fixed
 * Typos in `LazyStackInventory.Add` return method XML docs
