@@ -64,7 +64,7 @@ namespace TheChest.Inventories.Containers
             if (index >= this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (this.slots[index].IsEmpty)
-                throw new InvalidOperationException(StackInventoryErrors.ItemNotFound);
+                throw new InvalidOperationException(StackInventoryErrors.EmptySlot);
 
             return this.GetItems(index)[0];
         }
@@ -73,6 +73,7 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When <paramref name="item"/> is not found in the inventory</exception>
         public virtual T Get(T item)
         {
             if (item.IsNull())
@@ -84,7 +85,7 @@ namespace TheChest.Inventories.Containers
                     return this.GetItems(index)[0];
             }
 
-            throw new InvalidOperationException();
+            throw new InvalidOperationException(StackInventoryErrors.ItemNotFound);
         }
         /// <inheritdoc/>
         /// <remarks>
