@@ -24,14 +24,12 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
-        [Obsolete("Use Get(int index, int amount) or GetAll(int index) instead. This method will be removed in future versions.")]
         T Get(int index);
         /// <summary>
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
         /// <returns>Returns the first item found</returns>
-        [Obsolete("Use Get(T, int) or GetAll(T) instead. This method will be removed in future versions.")]
         T Get(T item);
 
         /// <summary>
@@ -69,7 +67,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         event StackInventoryAddEventHandler<T> OnAdd;
 
         #region Add
-        #warning These methods are going to be removed in future versions.
         /// <summary>
         /// Checks if <paramref name="item"/> can be added to any slot on inventory.
         /// </summary>
