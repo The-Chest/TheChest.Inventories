@@ -272,5 +272,28 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(result, Is.Empty);
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddItems_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.Add(null!), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddItems_ValueType_ItemsContainingDefault_AddsItems()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
+
+            inventory.Add(items);
+
+            Assert.That(inventory.GetCount(default!), Is.EqualTo(items.Length));
+        }
     }
 }

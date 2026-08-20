@@ -218,5 +218,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(result, Is.True);
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void AddItem_ValueType_DefaultItem_AddsItem()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            inventory.Add((T)default!);
+
+            Assert.That(inventory.GetCount(default!), Is.EqualTo(1));
+        }
     }
 }

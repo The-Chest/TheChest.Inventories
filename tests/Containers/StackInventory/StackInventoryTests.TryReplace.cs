@@ -287,5 +287,67 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(result, Is.True);
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.TryReplace(null!, 0, out _), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_EmptyItems_SetsOldItemsToDefault()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var index = this.random.Next(0, size);
+
+            inventory.TryReplace(Array.Empty<T>(), index, out var oldItems);
+
+            Assert.That(oldItems, Is.Null);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_ItemsContainingDefault_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
+
+            Assert.That(inventory.TryReplace(items, 0, out _), Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_ItemsContainingDefault_ReplacesItemsInSlot()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
+
+            inventory.TryReplace(items, 0, out _);
+
+            Assert.That(inventory.GetItems(0), Is.EqualTo(items));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_ItemsContainingDefault_CallsOnReplaceEvent()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
+            var called = false;
+            inventory.OnReplace += (_, _) => called = true;
+
+            inventory.TryReplace(items, 0, out _);
+
+            Assert.That(called, Is.True);
+        }
     }
 }

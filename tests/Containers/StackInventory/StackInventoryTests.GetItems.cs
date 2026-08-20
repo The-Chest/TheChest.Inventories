@@ -156,5 +156,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(result, Has.Length.EqualTo(stackSize));
             Assert.That(result, Has.All.EqualTo(item));
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetItems_ValueType_DefaultItem_ReturnsEmptyItems()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(inventory.Get((T)default!, 1), Is.Empty);
+        }
     }
 }

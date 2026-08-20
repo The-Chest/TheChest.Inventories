@@ -208,5 +208,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             
             Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryAddItemsAt_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.TryAddAt(null!, 0), Throws.ArgumentNullException);
+        }
     }
 }

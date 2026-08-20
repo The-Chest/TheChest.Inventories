@@ -116,5 +116,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(() => inventory.Get(item), Throws.InvalidOperationException);
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetItem_ValueType_DefaultItem_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.Get((T)default!), Throws.InvalidOperationException);
+        }
     }
 }

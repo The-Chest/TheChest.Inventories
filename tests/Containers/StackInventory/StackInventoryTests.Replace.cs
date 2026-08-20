@@ -210,5 +210,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(canReplace, Is.True);
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void Replace_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.Replace(null!, 0), Throws.ArgumentNullException);
+        }
     }
 }

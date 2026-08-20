@@ -46,5 +46,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(count, Is.EqualTo(stackSize * 2));
         }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetCount_ValueType_DefaultItem_ReturnsZero()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(inventory.GetCount(default!), Is.Zero);
+        }
     }
 }
