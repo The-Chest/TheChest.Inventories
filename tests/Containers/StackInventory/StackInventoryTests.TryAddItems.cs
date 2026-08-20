@@ -23,17 +23,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_EmptyItems_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var result = inventory.TryAdd(Array.Empty<T>());
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
         [IgnoreIfValueType]
         public void TryAddItems_ItemsContainingNull_ThrowsArgumentNullException()
         {
@@ -49,6 +38,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                     .With.Property("ParamName").EqualTo("items").And
                     .Message.Contains("One of the items to add is null")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryAddItems_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.TryAdd(null!), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -107,6 +106,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void TryAddItems_EmptyItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var result = inventory.TryAdd(Array.Empty<T>());
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
         public void TryAddItems_ItemsFit_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -116,16 +126,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var result = inventory.TryAdd(items);
 
             Assert.That(result, Is.True);
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void TryAddItems_ValueType_NullItems_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(() => inventory.TryAdd(null!), Throws.ArgumentNullException);
         }
 
         [Test]

@@ -22,6 +22,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             );
         }
 
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanReplace_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.CanReplace(null!, 0), Throws.ArgumentNullException);
+        }
+
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void CanReplace_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
@@ -74,13 +84,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void CanReplace_ValueType_NullItems_ThrowsArgumentNullException()
+        public void CanReplace_EmptyItems_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
-            Assert.That(() => inventory.CanReplace(null!, 0), Throws.ArgumentNullException);
+            var randomIndex = this.random.Next(0, size);
+            var canReplace = inventory.CanReplace(Array.Empty<T>(), randomIndex);
+
+            Assert.That(canReplace, Is.False);
         }
 
         [Test]
@@ -92,6 +105,33 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var items = new T[] { default!, default! };
 
             Assert.That(inventory.CanReplace(items, 0), Is.True);
+        }
+
+        [Test]
+        public void CanReplace_SlotWithItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            var canReplace = inventory.CanReplace(newItems, randomIndex);
+
+            Assert.That(canReplace, Is.True);
+        }
+
+        [Test]
+        public void CanReplace_EmptySlot_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            var canReplace = inventory.CanReplace(newItems, randomIndex);
+
+            Assert.That(canReplace, Is.True);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.CanAddAt(items: default!, 0), 
+                () => inventory.CanAddAt(items: default!, 0),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
         }
@@ -28,9 +28,19 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             items.Add(default!);
 
             Assert.That(
-                () => inventory.CanAddAt(items.ToArray(), 0), 
+                () => inventory.CanAddAt(items.ToArray(), 0),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddItemsAt_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.CanAddAt(null!, 0), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -44,37 +54,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 () => inventory.CanAddAt(this.itemFactory.CreateMany(stackSize), index),
                 Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
-        }
-
-
-        [Test]
-        public void CanAddItemsAt_EmptyInventory_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var items = this.itemFactory.CreateMany(stackSize);
-
-            var randomIndex = this.random.Next(0, size);
-            var canAdd = inventory.CanAddAt(items, randomIndex);
-
-            Assert.That(canAdd, Is.True);
-        }
-
-        [Test]
-        public void CanAddItemsAt_SlotWithSameItemsAndEnoughSpace_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-
-            var randomIndex = this.random.Next(0, size);
-            inventory.Get(randomIndex, stackSize);
-
-            var items = this.itemFactory.CreateMany(stackSize);
-            var canAdd = inventory.CanAddAt(items, randomIndex);
-            
-            Assert.That(canAdd, Is.True);
         }
 
         [Test]
@@ -125,13 +104,33 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void CanAddItemsAt_ValueType_NullItems_ThrowsArgumentNullException()
+        public void CanAddItemsAt_EmptyInventory_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(() => inventory.CanAddAt(null!, 0), Throws.ArgumentNullException);
+            var items = this.itemFactory.CreateMany(stackSize);
+
+            var randomIndex = this.random.Next(0, size);
+            var canAdd = inventory.CanAddAt(items, randomIndex);
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        public void CanAddItemsAt_SlotWithSameItemsAndEnoughSpace_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var randomIndex = this.random.Next(0, size);
+            inventory.Get(randomIndex, stackSize);
+
+            var items = this.itemFactory.CreateMany(stackSize);
+            var canAdd = inventory.CanAddAt(items, randomIndex);
+
+            Assert.That(canAdd, Is.True);
         }
 
         [Test]

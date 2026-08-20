@@ -12,7 +12,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.Get(index, stackSize), 
+                () => inventory.Get(index, stackSize),
                 Throws.InstanceOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
@@ -26,9 +26,37 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var index = this.random.Next(0, size);
             Assert.That(
-                () => inventory.Get(index, amount), 
+                () => inventory.Get(index, amount),
                 Throws.InstanceOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
             );
+        }
+
+        [Test]
+        public void GetByIndexAndAmount_SlotWithItems_RemovesItemsFromSlot()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var amount = this.random.Next(1, stackSize);
+            var index = this.random.Next(0, size);
+            inventory.Get(index, amount);
+
+            Assert.That(inventory.GetSlot(index)!.Amount, Is.EqualTo(stackSize - amount));
+        }
+
+        [Test]
+        public void GetByIndexAndAmount_AmountExceedsSlotItems_RemovesAllItemsFromSlot()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var index = this.random.Next(0, size);
+            var amount = this.random.Next(stackSize + 1, stackSize * 2);
+            inventory.Get(index, amount);
+
+            Assert.That(inventory.GetSlot(index)!.Amount, Is.Zero);
         }
 
         [Test]
@@ -48,20 +76,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.Get(randomIndex, stackSize);
 
             Assert.That(raised, Is.True);
-        }
-
-        [Test]
-        public void GetByIndexAndAmount_SlotWithItems_RemovesItemsFromSlot()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
-
-            var amount = this.random.Next(1, stackSize);
-            var index = this.random.Next(0, size);
-            inventory.Get(index, amount);
-
-            Assert.That(inventory.GetSlot(index)!.Amount, Is.EqualTo(stackSize - amount));
         }
 
         [Test]
@@ -92,20 +106,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetByIndexAndAmount_AmountExceedsSlotItems_RemovesAllItemsFromSlot()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
-
-            var index = this.random.Next(0, size);
-            var amount = this.random.Next(stackSize + 1, stackSize * 2);
-            inventory.Get(index, amount);
-
-            Assert.That(inventory.GetSlot(index)!.Amount, Is.Zero);
-        }
-
-        [Test]
         public void GetByIndexAndAmount_AmountExceedsSlotItems_CallsOnGetEventWithMaximumAvailableAmount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -132,17 +132,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
-
         [Test]
         public void GetByIndexAndAmount_EmptySlot_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
+
             var index = this.random.Next(0, size);
             var amount = this.random.Next(1, stackSize);
             var item = inventory.Get(index, amount);
-            
+
             Assert.That(item, Is.Empty);
         }
 

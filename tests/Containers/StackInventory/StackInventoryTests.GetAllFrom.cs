@@ -13,7 +13,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.GetAll(index), 
+                () => inventory.GetAll(index),
                 Throws.InstanceOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
@@ -73,7 +73,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(raised, Is.True, "OnGet event was not raised");
         }
-
 
         [Test]
         public void GetAllByIndex_EmptySlot_ReturnsEmptyItems()

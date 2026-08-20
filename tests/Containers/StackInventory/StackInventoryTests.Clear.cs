@@ -26,6 +26,18 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void Clear_FullInventory_RemovesItemsFromInventory()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            inventory.Clear();
+
+            Assert.That(inventory.IsEmpty, Is.True);
+        }
+
+        [Test]
         public void Clear_InventoryWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -44,19 +56,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(raised, Is.True);
         }
-
-        [Test]
-        public void Clear_FullInventory_RemovesItemsFromInventory()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-
-            inventory.Clear();
-
-            Assert.That(inventory.IsEmpty, Is.True);
-        }
-
 
         [Test]
         public void Clear_EmptyInventory_ReturnsEmptyItems()

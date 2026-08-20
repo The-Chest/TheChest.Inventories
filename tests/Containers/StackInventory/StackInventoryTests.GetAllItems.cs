@@ -13,9 +13,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
+
             Assert.That(
-                () => inventory.GetAll(default(T)!), 
+                () => inventory.GetAll(default(T)!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
@@ -76,7 +76,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(raised, Is.True, "OnGet event was not raised");
         }
-
 
         [Test]
         public void GetAllByItem_EmptyInventory_ReturnsEmptyItems()

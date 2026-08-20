@@ -8,19 +8,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        public void GetItems_NonPositiveAmount_ThrowsArgumentOutOfRangeException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var item = this.itemFactory.CreateDefault();
-
-            Assert.That(
-                () => inventory.Get(item, 0), 
-                Throws.TypeOf(typeof(ArgumentOutOfRangeException)).With.Property("ParamName").EqualTo("amount")
-            );
-        }
-
-        [Test]
         [IgnoreIfValueType]
         public void GetItems_NullItem_ThrowsArgumentNullException()
         {
@@ -28,8 +15,21 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.Get(default(T)!, 1), 
+                () => inventory.Get(default(T)!, 1),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
+        [Test]
+        public void GetItems_NonPositiveAmount_ThrowsArgumentOutOfRangeException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+
+            Assert.That(
+                () => inventory.Get(item, 0),
+                Throws.TypeOf(typeof(ArgumentOutOfRangeException)).With.Property("ParamName").EqualTo("amount")
             );
         }
 
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var item = this.itemFactory.CreateDefault();
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
-            
+
             inventory.Get(item, 1);
         }
 
@@ -107,7 +107,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             };
             inventory.Get(item, 100);
         }
-
 
         [Test]
         public void GetItems_ItemNotFound_ReturnsEmptyItems()

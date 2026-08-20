@@ -13,6 +13,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(() => inventory.CanAdd(item: default!), Throws.ArgumentNullException);
         }
 
+        [Test]
+        public void CanAddItem_FullInventory_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var canAdd = inventory.CanAdd(item);
+
+            Assert.That(canAdd, Is.False);
+        }
 
         [Test]
         public void CanAddItem_EmptyInventory_ReturnsTrue()
@@ -52,18 +63,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var randomItem = this.itemFactory.CreateRandom();
             var canAdd = inventory.CanAdd(randomItem);
-
-            Assert.That(canAdd, Is.False);
-        }
-
-        [Test]
-        public void CanAddItem_FullInventory_ReturnsFalse()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-
-            var canAdd = inventory.CanAdd(item);
 
             Assert.That(canAdd, Is.False);
         }

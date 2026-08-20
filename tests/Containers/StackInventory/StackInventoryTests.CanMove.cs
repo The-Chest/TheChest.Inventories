@@ -10,7 +10,7 @@
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.CanMove(origin, 0), 
+                () => inventory.CanMove(origin, 0),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
@@ -22,7 +22,7 @@
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.CanMove(size, 0), 
+                () => inventory.CanMove(size, 0),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
@@ -35,7 +35,7 @@
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.CanMove(0, target), 
+                () => inventory.CanMove(0, target),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
@@ -47,7 +47,7 @@
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.CanMove(0, size), 
+                () => inventory.CanMove(0, size),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
@@ -64,7 +64,6 @@
 
             Assert.That(canMove, Is.False);
         }
-
 
         [Test]
         public void CanMove_EmptyOriginAndTarget_ReturnsFalse()

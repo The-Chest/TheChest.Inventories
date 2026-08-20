@@ -12,11 +12,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.GetCount(default!), 
+                () => inventory.GetCount(default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
-
 
         [Test]
         public void GetCount_EmptyInventory_ReturnsZero()
