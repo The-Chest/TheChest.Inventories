@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetItems_ItemNotFound_DoesntCallOnGetEvent()
+        public void GetItems_ItemNotFound_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

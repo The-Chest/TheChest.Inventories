@@ -59,7 +59,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryReplace_EmptyItems_DoesntCallOnReplaceEvent()
+        public void TryReplace_EmptyItems_DoesNotCallOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -88,7 +88,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfValueType]
-        public void TryReplace_ItemsContainingNull_DoesntReplaceItemsInSlot()
+        public void TryReplace_ItemsContainingNull_DoesNotReplaceItemsInSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var initialItem = this.itemFactory.CreateDefault();
@@ -103,7 +103,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfValueType]
-        public void TryReplace_ItemsContainingNull_DoesntCallOnReplaceEvent()
+        public void TryReplace_ItemsContainingNull_DoesNotCallOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -131,7 +131,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryReplace_ItemsExceedStackSize_DoesntReplaceItemsInSlot()
+        public void TryReplace_ItemsExceedStackSize_DoesNotReplaceItemsInSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var initialItem = this.itemFactory.CreateDefault();
@@ -145,7 +145,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryReplace_ItemsExceedStackSize_DoesntCallOnReplaceEvent()
+        public void TryReplace_ItemsExceedStackSize_DoesNotCallOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

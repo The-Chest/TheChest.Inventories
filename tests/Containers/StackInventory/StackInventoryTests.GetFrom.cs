@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
 
         [Test]
-        public void GetByIndex_EmptySlot_DoesntCallOnGetEvent()
+        public void GetByIndex_EmptySlot_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

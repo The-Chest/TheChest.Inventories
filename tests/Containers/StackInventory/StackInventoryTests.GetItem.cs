@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetItem_EmptyInventory_DoesntCallOnGetEvent()
+        public void GetItem_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -70,7 +70,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetItem_InventoryWithDifferentItems_DoesntCallOnGetEvent()
+        public void GetItem_InventoryWithDifferentItems_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();

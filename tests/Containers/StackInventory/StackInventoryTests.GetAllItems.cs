@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetAllByItem_EmptyInventory_DoesntCallOnGetEvent()
+        public void GetAllByItem_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();

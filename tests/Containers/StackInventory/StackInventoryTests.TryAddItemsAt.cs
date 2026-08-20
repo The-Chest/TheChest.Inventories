@@ -106,7 +106,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItemsAt_ItemsExceedStackSize_DoesntAddItemsToInventory()
+        public void TryAddItemsAt_ItemsExceedStackSize_DoesNotAddItemsToInventory()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -133,7 +133,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItemsAt_SlotWithDifferentItem_DoesntAddItemsToInventory()
+        public void TryAddItemsAt_SlotWithDifferentItem_DoesNotAddItemsToInventory()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItems = this.itemFactory.CreateMany(size);

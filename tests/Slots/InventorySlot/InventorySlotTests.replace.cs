@@ -30,7 +30,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void Replace_EmptySlot_DoesntReplaceItem()
+        public void Replace_EmptySlot_DoesNotReplaceItem()
         {
             var slot = this.slotFactory.Empty();
 

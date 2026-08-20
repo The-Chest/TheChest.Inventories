@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItems_EmptyItems_DoesntAddItems()
+        public void AddItems_EmptyItems_DoesNotAddItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

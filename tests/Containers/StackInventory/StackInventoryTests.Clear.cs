@@ -3,7 +3,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        public void Clear_EmptyInventory_DoesntCallOnGetEvent()
+        public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

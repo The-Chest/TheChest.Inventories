@@ -81,7 +81,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_NotEnoughSpace_DoesntAddItems()
+        public void TryAddItems_NotEnoughSpace_DoesNotAddItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -94,7 +94,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_NotEnoughSpace_DoesntCallOnAddEvent()
+        public void TryAddItems_NotEnoughSpace_DoesNotCallOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();

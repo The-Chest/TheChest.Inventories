@@ -46,7 +46,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_EmptyItems_DoesntAddToSlot()
+        public void AddItemsAt_EmptyItems_DoesNotAddToSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_EmptyItems_DoesntCallOnAddEvent()
+        public void AddItemsAt_EmptyItems_DoesNotCallOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

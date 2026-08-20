@@ -84,7 +84,7 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         }
 
         [Test]
-        public void TryMove_BothSlotsEmpty_DoesntCallOnMove()
+        public void TryMove_BothSlotsEmpty_DoesNotCallOnMove()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
