@@ -1,5 +1,7 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
@@ -19,6 +21,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void GetAmount_InvalidItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();

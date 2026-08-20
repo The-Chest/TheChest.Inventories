@@ -1,10 +1,13 @@
 ﻿using TheChest.Tests.Common.Extensions;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanReplace_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -51,6 +54,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void CanReplace_ItemsContainingNull_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();

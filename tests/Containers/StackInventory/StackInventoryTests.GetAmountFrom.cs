@@ -32,15 +32,22 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetAmountFrom_EmptySlot_CallsOnGetEvent()
+        public void GetAmountFrom_EmptySlot_CallsOnGetEventWithEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+            var raised = false;
+            inventory.OnGet += (sender, args) =>
+            {
+                Assert.That(args.Data.Single().Items, Is.Empty);
+                raised = true;
+            };
 
             var randomIndex = this.random.Next(0, size);
             inventory.Get(randomIndex, stackSize);
+
+            Assert.That(raised, Is.True);
         }
 
         [Test]

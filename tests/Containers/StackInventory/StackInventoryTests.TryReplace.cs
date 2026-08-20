@@ -1,10 +1,13 @@
 using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -43,6 +46,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_EmptyItems_SetsOldItemsToNull()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -69,6 +73,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_ItemsContainingNull_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -82,6 +87,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_ItemsContainingNull_DoesNotReplaceItemsInSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -96,6 +102,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_ItemsContainingNull_DoesNotCallOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();

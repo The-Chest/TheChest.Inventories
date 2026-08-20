@@ -1,10 +1,13 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void AddItemAt_InvalidItem_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -105,8 +108,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var index = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
-            inventory.AddAt(item, index);
 
+            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
             Assert.That(inventory.GetItems(index), Has.No.AnyOf(item));
         }
 

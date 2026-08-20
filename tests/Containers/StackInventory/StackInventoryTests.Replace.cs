@@ -1,5 +1,7 @@
 using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
@@ -52,6 +54,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void Replace_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -149,7 +152,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         public void Replace_EmptySlot_CallsOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var randomIndex = this.random.Next(0, size);
             var newItems = this.itemFactory.CreateManyRandom(stackSize);

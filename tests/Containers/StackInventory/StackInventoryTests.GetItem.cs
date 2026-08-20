@@ -1,10 +1,13 @@
 ﻿using TheChest.Tests.Common.Extensions.Containers;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void GetItem_InvalidItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -25,7 +28,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             
             var item = this.itemFactory.CreateDefault();
-            inventory.Get(item);
+
+            Assert.That(() => inventory.Get(item), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -75,19 +79,18 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
             
             var item = this.itemFactory.CreateDefault();
-            inventory.Get(item);
+
+            Assert.That(() => inventory.Get(item), Throws.InvalidOperationException);
         }
 
         [Test]
-        public void GetItem_EmptyInventory_ReturnsNull()
+        public void GetItem_EmptyInventory_ThrowsInvalidOperationException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var foundItem = inventory.Get(item);
-            
-            Assert.That(foundItem, Is.Null);
+            Assert.That(() => inventory.Get(item), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -103,16 +106,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetItem_InventoryWithDifferentItems_ReturnsNull()
+        public void GetItem_InventoryWithDifferentItems_ThrowsInvalidOperationException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
             var item = this.itemFactory.CreateDefault();
-            var result = inventory.Get(item);
 
-            Assert.That(result, Is.Null);
+            Assert.That(() => inventory.Get(item), Throws.InvalidOperationException);
         }
     }
 }

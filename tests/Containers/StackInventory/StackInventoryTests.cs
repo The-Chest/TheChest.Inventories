@@ -7,10 +7,13 @@ using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
 using TheChest.Tests.Common;
 using TheChest.Tests.Common.Items.Interfaces;
 using TheChest.Tests.Common.Items.ReferenceType;
+using TheChest.Tests.Common.Items.ValueType;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     [TestFixture(typeof(TestItem))]
+    [TestFixture(typeof(TestEnumItem))]
+    [TestFixture(typeof(TestStructItem))]
     public partial class StackInventoryTests<T> : BaseTest<T>
     {
         protected readonly IStackInventoryFactory<T> inventoryFactory;
