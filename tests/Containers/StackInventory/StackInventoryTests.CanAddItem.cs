@@ -1,8 +1,11 @@
-﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanAddItem_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -10,6 +13,17 @@
             Assert.That(() => inventory.CanAdd(item: default!), Throws.ArgumentNullException);
         }
 
+        [Test]
+        public void CanAddItem_FullInventory_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var canAdd = inventory.CanAdd(item);
+
+            Assert.That(canAdd, Is.False);
+        }
 
         [Test]
         public void CanAddItem_EmptyInventory_ReturnsTrue()
@@ -54,15 +68,13 @@
         }
 
         [Test]
-        public void CanAddItem_FullInventory_ReturnsFalse()
+        [IgnoreIfReferenceType]
+        public void CanAddItem_ValueType_DefaultItem_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var canAdd = inventory.CanAdd(item);
-
-            Assert.That(canAdd, Is.False);
+            Assert.That(inventory.CanAdd((T)default!), Is.True);
         }
     }
 }

@@ -1,9 +1,24 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
+
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
+        [Test]
+        [IgnoreIfValueType]
+        public void GetAmount_NullItem_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(
+                () => inventory.Get(default(T)!, 10),
+                Throws.InstanceOf<ArgumentNullException>().With.Property("ParamName").EqualTo("item")
+            );
+        }
+
         [TestCase(-1)]
         [TestCase(0)]
         public void GetAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
@@ -13,20 +28,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.Get(item, amount), 
+                () => inventory.Get(item, amount),
                 Throws.InstanceOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
-            );
-        }
-
-        [Test]
-        public void GetAmount_InvalidItem_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(
-                () => inventory.Get(default(T)!, 10),
-                Throws.InstanceOf<ArgumentNullException>().With.Property("ParamName").EqualTo("item")
             );
         }
 
@@ -56,6 +59,22 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void GetAmount_InventoryWithItems_RemovesItemsFromMultipleSlotsInOrder()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItem = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            inventory.Get(slotItem, stackSize + (stackSize - 2));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetSlot(0)!.Amount, Is.EqualTo(0));
+                Assert.That(inventory.GetSlot(1)!.Amount, Is.EqualTo(2));
+            });
+        }
+
+        [Test]
         public void GetAmount_InventoryWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -76,22 +95,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.Get(slotItem, stackSize);
 
             Assert.That(raised, Is.True, "OnGet event was not raised");
-        }
-
-        [Test]
-        public void GetAmount_InventoryWithItems_RemovesItemsFromMultipleSlotsInOrder()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItem = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
-
-            inventory.Get(slotItem, stackSize + (stackSize - 2));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetSlot(0)!.Amount, Is.EqualTo(0));
-                Assert.That(inventory.GetSlot(1)!.Amount, Is.EqualTo(2));
-            });
         }
 
         [Test]
@@ -126,16 +129,15 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
-
         [Test]
-        public void GetAmount_EmptyInventory_ReturnsEmptyArray()
+        public void GetAmount_EmptyInventory_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
+
             var amount = inventory.Get(item, 10);
-            
+
             Assert.That(amount, Is.Empty);
         }
 
@@ -157,6 +159,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 Assert.That(items, Has.Length.EqualTo(stackSize));
                 Assert.That(items, Has.All.EqualTo(item));
             });
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetAmount_ValueType_DefaultItem_ReturnsEmptyItems()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(inventory.Get((T)default!, stackSize), Is.Empty);
         }
     }
 }

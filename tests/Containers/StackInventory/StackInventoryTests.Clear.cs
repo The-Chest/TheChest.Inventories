@@ -1,4 +1,4 @@
-﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
@@ -14,11 +14,23 @@
         }
 
         [Test]
-        public void Clear_InventoryWithItems_RemoveItemsFromInventory()
+        public void Clear_InventoryWithItems_RemovesItemsFromInventory()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateManyRandom(size * stackSize);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
+
+            inventory.Clear();
+
+            Assert.That(inventory.IsEmpty, Is.True);
+        }
+
+        [Test]
+        public void Clear_FullInventory_RemovesItemsFromInventory()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             inventory.Clear();
 
@@ -46,20 +58,7 @@
         }
 
         [Test]
-        public void Clear_FullInventory_RemoveItemsFromInventory()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-
-            inventory.Clear();
-
-            Assert.That(inventory.IsEmpty, Is.True);
-        }
-
-
-        [Test]
-        public void Clear_EmptyInventory_ReturnsEmptyArray()
+        public void Clear_EmptyInventory_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

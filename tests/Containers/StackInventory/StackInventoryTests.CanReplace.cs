@@ -1,10 +1,13 @@
 ﻿using TheChest.Tests.Common.Extensions;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanReplace_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -17,6 +20,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 () => inventory.CanReplace(null!, randomIndex),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanReplace_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.CanReplace(null!, 0), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -34,7 +47,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void CanReplace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
+        public void CanReplace_ItemsExceedStackSize_ThrowsArgumentOutOfRangeException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -51,6 +64,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void CanReplace_ItemsContainingNull_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -67,6 +81,57 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var canReplace = inventory.CanReplace(items!, index);
 
             Assert.That(canReplace, Is.False);
+        }
+
+        [Test]
+        public void CanReplace_EmptyItems_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var randomIndex = this.random.Next(0, size);
+            var canReplace = inventory.CanReplace(Array.Empty<T>(), randomIndex);
+
+            Assert.That(canReplace, Is.False);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanReplace_ValueType_ItemsContainingDefault_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
+
+            Assert.That(inventory.CanReplace(items, 0), Is.True);
+        }
+
+        [Test]
+        public void CanReplace_SlotWithItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            var canReplace = inventory.CanReplace(newItems, randomIndex);
+
+            Assert.That(canReplace, Is.True);
+        }
+
+        [Test]
+        public void CanReplace_EmptySlot_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var randomIndex = this.random.Next(0, size);
+            var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            var canReplace = inventory.CanReplace(newItems, randomIndex);
+
+            Assert.That(canReplace, Is.True);
         }
     }
 }

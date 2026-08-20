@@ -1,19 +1,21 @@
-﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
-        public void GetCount_InvalidItem_ThrowsArgumentNullException()
+        [IgnoreIfValueType]
+        public void GetCount_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.GetCount(default!), 
+                () => inventory.GetCount(default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
-
 
         [Test]
         public void GetCount_EmptyInventory_ReturnsZero()
@@ -42,6 +44,16 @@
             var count = inventory.GetCount(item);
 
             Assert.That(count, Is.EqualTo(stackSize * 2));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetCount_ValueType_DefaultItem_ReturnsZero()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(inventory.GetCount(default!), Is.Zero);
         }
     }
 }

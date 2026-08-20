@@ -77,12 +77,13 @@ Use `ReturnsTrue` or `ReturnsFalse` when the boolean result itself is the releva
 #### Event and Callback Results
 
 Describe whether the expected event or callback was invoked.
-Use `Calls[EventOrCallback]` and `DoesntCall[EventOrCallback]` consistently.
+Use `Calls[EventOrCallback]` and `DoesNotCall[EventOrCallback]` consistently.
 
 #### Negative Results
 
-When the important outcome is that something does **not** happen, use `Doesnt[Behavior]`.
-The negative result should identify the behavior that is expected not to occur. Avoid vague names such as `DoesntFail` or `NoChange` unless the absence of any state change is itself the specific contract being tested.
+When the important outcome is that something does **not** happen, use `DoesNot[Behavior]`.
+Always spell this segment as `DoesNot`; do not use a contraction.
+The negative result should identify the behavior that is expected not to occur. Avoid vague names such as `DoesNotFail` or `NoChange` unless the absence of any state change is itself the specific contract being tested.
 
 ## Combining Context and State
 

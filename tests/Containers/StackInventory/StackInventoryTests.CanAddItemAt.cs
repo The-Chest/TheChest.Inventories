@@ -1,58 +1,33 @@
-﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void CanAddItemAt_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
+
             Assert.That(
-                () => inventory.CanAddAt(item: default!, 0), 
+                () => inventory.CanAddAt(item: default!, 0),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
 
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void CanAddItemAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
+        public void CanAddItemAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index), 
+                () => inventory.CanAddAt(this.itemFactory.CreateDefault(), index),
                 Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
-        }
-
-
-        [Test]
-        public void CanAddItemAt_EmptyInventory_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var item = this.itemFactory.CreateDefault();
-
-            var canAdd = inventory.CanAddAt(item, 0);
-
-            Assert.That(canAdd, Is.True);
-        }
-
-        [Test]
-        public void CanAddItemAt_SlotWithSameItemsAndEnoughSpace_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-            var randomIndex = this.random.Next(0, size);
-            inventory.Get(randomIndex, stackSize - 1);
-
-            var canAdd = inventory.CanAddAt(item, randomIndex);
-            
-            Assert.That(canAdd, Is.True);
         }
 
         [Test]
@@ -82,6 +57,43 @@
             var canAdd = inventory.CanAddAt(item, randomIndex);
 
             Assert.That(canAdd, Is.False);
+        }
+
+        [Test]
+        public void CanAddItemAt_EmptyInventory_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var item = this.itemFactory.CreateDefault();
+
+            var canAdd = inventory.CanAddAt(item, 0);
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        public void CanAddItemAt_SlotWithSameItemsAndEnoughSpace_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+            var randomIndex = this.random.Next(0, size);
+            inventory.Get(randomIndex, stackSize - 1);
+
+            var canAdd = inventory.CanAddAt(item, randomIndex);
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void CanAddItemAt_ValueType_DefaultItem_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(inventory.CanAddAt((T)default!, 0), Is.True);
         }
     }
 }

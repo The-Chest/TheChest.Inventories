@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
@@ -15,7 +15,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
 
             Assert.That(
-                () => inventory.TryMove(origin, 0), 
+                () => inventory.TryMove(origin, 0),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
@@ -27,15 +27,13 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
-            
+
             Assert.That(
-                () => inventory.TryMove(size, 0), 
+                () => inventory.TryMove(size, 0),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("origin")
             );
         }
-        #endregion
 
-        #region Invalid Target
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void TryMove_InvalidTargetIndex_ThrowsArgumentOutOfRangeException(int target)
@@ -46,7 +44,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
 
             Assert.That(
-                () => inventory.TryMove(0, target), 
+                () => inventory.TryMove(0, target),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
@@ -60,13 +58,11 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
 
             Assert.That(
-                () => inventory.TryMove(0, size), 
+                () => inventory.TryMove(0, size),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("target")
             );
         }
-        #endregion
 
-        #region Empty Origin and Target
         [Test]
         public void TryMove_EmptyOriginAndTarget_ReturnsFalse()
         {
@@ -82,6 +78,20 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void TryMove_SameOriginAndTarget_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var originIndex = this.random.Next(0, size - 1);
+            var targetIndex = originIndex;
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
         public void TryMove_EmptyOriginAndTarget_DoesNotCallOnMove()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -89,26 +99,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var originIndex = this.random.Next(size / 2, size - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
-            
+
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
 
             inventory.TryMove(originIndex, targetIndex);
-        }
-        #endregion
-
-        #region Same Origin and Target
-        [Test]
-        public void TryMove_SameOriginAndTarget_ReturnsFalse()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
-            var originIndex = this.random.Next(0, size - 1);
-            var targetIndex = originIndex;
-
-            var result = inventory.TryMove(originIndex, targetIndex);
-
-            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -121,12 +115,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var targetIndex = originIndex;
 
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
-            
+
             inventory.TryMove(originIndex, targetIndex);
         }
-        #endregion
 
-        #region Empty Origin Target with items
         [Test]
         public void TryMove_EmptyOrigin_TargetWithItems_MovesItem()
         {
@@ -150,20 +142,74 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryMove_EmptyOrigin_TargetWithItems_ReturnsTrue()
+        public void TryMove_OriginWithItems_EmptyTarget_MovesItems()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItems = this.itemFactory.CreateMany(size / 2);
+            var randomItems = this.itemFactory.CreateManyRandom(size %2 == 0? size / 2 : size + 1 /2);
+            var inventoryItems = slotItems.Concat(randomItems).ToArray();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            inventory.GetAll(targetIndex);
+
+            var originItems = inventory.GetItems(originIndex);
+            inventory.TryMove(originIndex, targetIndex);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetSlot(originIndex)?.IsEmpty, Is.True);
+                Assert.That(inventory.GetItems(targetIndex), Is.EqualTo(originItems));
+            });
+        }
+
+        [Test]
+        public void TryMove_OriginAndTargetWithSameItems_MovesItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
 
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
             var originIndex = this.random.Next(size / 2, size - 1);
             var targetIndex = this.random.Next(0, originIndex - 1);
+            inventory.Get(originIndex, random.Next(1, stackSize - 1));
+            var originItems = inventory.GetItems(originIndex);
+            var targetItems = inventory.GetItems(targetIndex);
 
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
-            inventory.GetAll(originIndex);
+            inventory.TryMove(originIndex, targetIndex);
 
-            var result = inventory.TryMove(originIndex, targetIndex);
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetItems(originIndex), Is.EquivalentTo(targetItems));
+                Assert.That(inventory.GetItems(targetIndex), Is.EquivalentTo(originItems));
+            });
+        }
 
-            Assert.That(result, Is.True);
+        [Test]
+        public void TryMove_OriginAndTargetWithDifferentItems_MovesItemToOrigin()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItems = this.itemFactory.CreateMany(size / 2);
+            var randomItems = this.itemFactory.CreateManyRandom(size / 2);
+            var inventoryItems = slotItems.Concat(randomItems).ToArray();
+
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var originItems = inventory.GetItems(originIndex);
+
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            var targetItems = inventory.GetItems(targetIndex);
+
+            inventory.TryMove(originIndex, targetIndex);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetItems(originIndex), Is.EqualTo(targetItems));
+                Assert.That(inventory.GetItems(targetIndex), Is.EqualTo(originItems));
+            });
         }
 
         [Test]
@@ -198,49 +244,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(wasRaised, "Expected OnMove event to be raised.");
         }
-        #endregion
-
-        #region Origin with items empty Target
-        [Test]
-        public void TryMove_OriginWithItems_EmptyTarget_MovesItems()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItems = this.itemFactory.CreateMany(size / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(size %2 == 0? size / 2 : size + 1 /2);
-            var inventoryItems = slotItems.Concat(randomItems).ToArray();
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.GetAll(targetIndex);
-
-            var originItems = inventory.GetItems(originIndex);
-            inventory.TryMove(originIndex, targetIndex);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetSlot(originIndex)?.IsEmpty, Is.True);
-                Assert.That(inventory.GetItems(targetIndex), Is.EqualTo(originItems));
-            });
-        }
-
-        [Test]
-        public void TryMove_OriginWithItems_EmptyTarget_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItems = this.itemFactory.CreateMany(size / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(size % 2 == 0 ? size / 2 : size + 1 / 2);
-            var inventoryItems = slotItems.Concat(randomItems).ToArray();
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.GetAll(targetIndex);
-
-            var result = inventory.TryMove(originIndex, targetIndex);
-
-            Assert.That(result, Is.True);
-        }
 
         [Test]
         public void TryMove_OriginWithItems_EmptyTarget_CallsOnMoveEvent()
@@ -273,48 +276,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.TryMove(originIndex, targetIndex);
 
             Assert.That(wasRaised, "Expected OnMove event to be raised.");
-        }
-        #endregion
-
-        #region Origin and Target with same items
-        [Test]
-        public void TryMove_OriginAndTargetWithSameItems_MovesItems()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItem = this.itemFactory.CreateDefault();
-
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.Get(originIndex, random.Next(1, stackSize - 1));
-            var originItems = inventory.GetItems(originIndex);
-            var targetItems = inventory.GetItems(targetIndex);
-
-            inventory.TryMove(originIndex, targetIndex);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetItems(originIndex), Is.EquivalentTo(targetItems));
-                Assert.That(inventory.GetItems(targetIndex), Is.EquivalentTo(originItems));
-            });
-        }
-
-        [Test]
-        public void TryMove_OriginAndTargetWithSameItems_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItem = this.itemFactory.CreateDefault();
-
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.Get(originIndex, random.Next(1, stackSize - 1));
-
-            var result = inventory.TryMove(originIndex, targetIndex);
-            
-            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -356,51 +317,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(wasRaised, "Expected OnMove event to be raised.");
         }
-        #endregion
-
-        #region Origin and Target with different items
-        [Test]
-        public void TryMove_OriginAndTargetWithDifferentItems_MovesItemToOrigin()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItems = this.itemFactory.CreateMany(size / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(size / 2);
-            var inventoryItems = slotItems.Concat(randomItems).ToArray();
-
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var originItems = inventory.GetItems(originIndex);
-
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            var targetItems = inventory.GetItems(targetIndex);
-
-            inventory.TryMove(originIndex, targetIndex);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(inventory.GetItems(originIndex), Is.EqualTo(targetItems));
-                Assert.That(inventory.GetItems(targetIndex), Is.EqualTo(originItems));
-            });
-        }
-
-        [Test]
-        public void TryMove_OriginAndTargetWithDifferentItems_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var slotItems = this.itemFactory.CreateMany(size / 2);
-            var randomItems = this.itemFactory.CreateManyRandom(size / 2);
-            var inventoryItems = slotItems.Concat(randomItems).ToArray();
-
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
-            var result = inventory.TryMove(originIndex, targetIndex);
-            
-            Assert.That(result, Is.True);
-        }
 
         [Test]
         public void TryMove_OriginAndTargetWithDifferentItems_CallsOnMoveEvent()
@@ -432,8 +348,78 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                     Assert.That(secondEvent.ToIndex, Is.EqualTo(originIndex));
                 });
             };
-            
+
             inventory.TryMove(originIndex, targetIndex);
+        }
+
+        [Test]
+        public void TryMove_EmptyOrigin_TargetWithItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItem = this.itemFactory.CreateDefault();
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+            inventory.GetAll(originIndex);
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void TryMove_OriginWithItems_EmptyTarget_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItems = this.itemFactory.CreateMany(size / 2);
+            var randomItems = this.itemFactory.CreateManyRandom(size % 2 == 0 ? size / 2 : size + 1 / 2);
+            var inventoryItems = slotItems.Concat(randomItems).ToArray();
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            inventory.GetAll(targetIndex);
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void TryMove_OriginAndTargetWithSameItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItem = this.itemFactory.CreateDefault();
+
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            inventory.Get(originIndex, random.Next(1, stackSize - 1));
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void TryMove_OriginAndTargetWithDifferentItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var slotItems = this.itemFactory.CreateMany(size / 2);
+            var randomItems = this.itemFactory.CreateManyRandom(size / 2);
+            var inventoryItems = slotItems.Concat(randomItems).ToArray();
+
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
+
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+
+            var result = inventory.TryMove(originIndex, targetIndex);
+
+            Assert.That(result, Is.True);
         }
         #endregion
     }
