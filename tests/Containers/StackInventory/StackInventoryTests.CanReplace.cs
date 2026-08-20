@@ -37,7 +37,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void CanReplace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
+        public void CanReplace_ItemsExceedStackSize_ThrowsArgumentOutOfRangeException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();

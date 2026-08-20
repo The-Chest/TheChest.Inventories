@@ -37,7 +37,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void Replace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
+        public void Replace_ItemsExceedStackSize_ThrowsArgumentOutOfRangeException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -136,7 +136,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void Replace_EmptySlot_ReturnsEmptyArray()
+        public void Replace_EmptySlot_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

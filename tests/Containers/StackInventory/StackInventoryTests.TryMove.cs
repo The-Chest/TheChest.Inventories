@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
@@ -82,7 +82,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryMove_EmptyOriginAndTarget_DoesNotCallOnMove()
+        public void TryMove_EmptyOriginAndTarget_DoesntCallOnMove()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -112,7 +112,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryMove_SameOriginAndTarget_DoesNotCallOnMove()
+        public void TryMove_SameOriginAndTarget_DoesntCallOnMove()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

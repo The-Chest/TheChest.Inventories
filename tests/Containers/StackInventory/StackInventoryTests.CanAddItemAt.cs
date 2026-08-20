@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void CanAddItemAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
+        public void CanAddItemAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

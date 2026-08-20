@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
 using TheChest.Tests.Common.Attributes;
@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_EmptyArray_ReturnsEmptyArray()
+        public void AddItemsAt_EmptyItems_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -46,7 +46,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_EmptyArray_DoesNotAddToSlot()
+        public void AddItemsAt_EmptyItems_DoesntAddToSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_EmptyArray_DoesNotCallOnAddEvent()
+        public void AddItemsAt_EmptyItems_DoesntCallOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -70,7 +70,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfValueType]
-        public void AddItemsAt_ItemsContainsNull_ThrowsArgumentNullException()
+        public void AddItemsAt_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -86,7 +86,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_ItemsAreNotAllEqual_ThrowsArgumentException()
+        public void AddItemsAt_DifferentItems_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

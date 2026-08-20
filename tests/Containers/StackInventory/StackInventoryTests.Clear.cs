@@ -1,9 +1,9 @@
-﻿namespace TheChest.Inventories.Tests.Containers.StackInventory
+namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
-        public void Clear_EmptyInventory_DoesNotCallOnGetEvent()
+        public void Clear_EmptyInventory_DoesntCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -14,7 +14,7 @@
         }
 
         [Test]
-        public void Clear_InventoryWithItems_RemoveItemsFromInventory()
+        public void Clear_InventoryWithItems_RemovesItemsFromInventory()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateManyRandom(size * stackSize);
@@ -46,7 +46,7 @@
         }
 
         [Test]
-        public void Clear_FullInventory_RemoveItemsFromInventory()
+        public void Clear_FullInventory_RemovesItemsFromInventory()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
@@ -59,7 +59,7 @@
 
 
         [Test]
-        public void Clear_EmptyInventory_ReturnsEmptyArray()
+        public void Clear_EmptyInventory_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

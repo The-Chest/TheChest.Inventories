@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     {
         [Test]
         [IgnoreIfValueType]
-        public void CanAddItems_NullItem_ThrowsArgumentNullException()
+        public void CanAddItems_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -22,7 +22,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfValueType]
-        public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
+        public void CanAddItems_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -39,7 +39,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void CanAddItems_ArrayContainingDifferentItemType_ThrowsArgumentException()
+        public void CanAddItems_DifferentItemTypes_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -57,7 +57,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
 
         [Test]
-        public void CanAddItems_EmptyItemsArray_ReturnsTrue()
+        public void CanAddItems_EmptyItems_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);

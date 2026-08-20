@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 
 using TheChest.Tests.Common.Attributes;
 
@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     {
         [Test]
         [IgnoreIfValueType]
-        public void AddItemAt_InvalidItem_ThrowsArgumentException()
+        public void AddItemAt_NullItem_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -100,7 +100,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemAt_SlotWithDifferentItem_DoNotAddItem()
+        public void AddItemAt_SlotWithDifferentItem_DoesntAddItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateManyRandom(size);
@@ -114,7 +114,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemAt_SlotWithDifferentItem_ThrowsAndDoesNotCallOnAddEvent()
+        public void AddItemAt_SlotWithDifferentItem_DoesntCallOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var containerItem = this.itemFactory.CreateRandom();
@@ -174,7 +174,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemAt_FullSlotWithSameItem_ThrowsAndDoNotCallsOnAddEvent()
+        public void AddItemAt_FullSlotWithSameItem_DoesntCallOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var containerItem = this.itemFactory.CreateDefault();

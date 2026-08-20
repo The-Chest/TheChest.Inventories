@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
@@ -23,7 +23,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_EmptyArray_ReturnsTrue()
+        public void TryAddItems_EmptyItems_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -35,7 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfValueType]
-        public void TryAddItems_ItemsContainsNull_ThrowsArgumentNullException()
+        public void TryAddItems_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -52,7 +52,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_ItemsAreNotAllEqual_ThrowsArgumentException()
+        public void TryAddItems_DifferentItems_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -81,7 +81,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_NotEnoughSpace_DoesNotAddItems()
+        public void TryAddItems_NotEnoughSpace_DoesntAddItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -94,7 +94,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_NotEnoughSpace_DoesNotCallOnAddEvent()
+        public void TryAddItems_NotEnoughSpace_DoesntCallOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();

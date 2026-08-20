@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
@@ -19,7 +19,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfValueType]
-        public void CanAddItemsAt_ArrayContainingNullItem_ThrowsArgumentNullException()
+        public void CanAddItemsAt_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -35,7 +35,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void CanAddItemsAt_InvalidSlotIndex_ThrowsArgumentOutOfRangeException(int index)
+        public void CanAddItemsAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -78,7 +78,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void CanAddItemsAt_ItemsAmountBiggerThanSlotSize_ReturnsFalse()
+        public void CanAddItemsAt_ItemsAmountExceedsStackSize_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();

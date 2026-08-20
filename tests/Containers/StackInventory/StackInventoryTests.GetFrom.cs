@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 
 using TheChest.Tests.Common.Attributes;
 
@@ -8,7 +8,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     {
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void GetFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
+        public void GetByIndex_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -20,7 +20,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetFrom_EmptySlot_ThrowsInvalidOperationException()
+        public void GetByIndex_EmptySlot_ThrowsInvalidOperationException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -31,7 +31,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetFrom_SlotWithItems_RemovesItemFromSlot()
+        public void GetByIndex_SlotWithItems_RemovesItemFromSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
@@ -44,7 +44,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetFrom_SlotWithItems_CallsOnGetEvent()
+        public void GetByIndex_SlotWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
@@ -72,7 +72,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
 
         [Test]
-        public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
+        public void GetByIndex_EmptySlot_DoesntCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -84,7 +84,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetFrom_SlotWithItems_ReturnsItem()
+        public void GetByIndex_SlotWithItems_ReturnsItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();

@@ -101,17 +101,21 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         [Test]
         public void Move_OriginAndTargetWithDifferentMaxStackSize_ThrowsInvalidOperationException()
         {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
-            var inventory = new StackInventory<T>(new[]
-            {
-                new InventoryStackSlot<T>(new[] { item }, 1),
-                new InventoryStackSlot<T>(2),
-            });
+            var originIndex = this.random.Next(size / 2, size - 1);
+            var targetIndex = this.random.Next(0, originIndex - 1);
+            var slots = Enumerable.Range(0, size)
+                .Select(_ => new InventoryStackSlot<T>(stackSize))
+                .ToArray();
+            slots[originIndex] = new InventoryStackSlot<T>(new[] { item }, stackSize);
+            slots[targetIndex] = new InventoryStackSlot<T>(stackSize + this.random.Next(1, MAX_SIZE_TEST));
+            var inventory = new StackInventory<T>(slots);
             
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
 
             Assert.That(
-                () => inventory.Move(0, 1), 
+                () => inventory.Move(originIndex, targetIndex),
                 Throws.InvalidOperationException.With.Message.EqualTo("Cannot move items to a slot with a different max stack size.")
             );
         }

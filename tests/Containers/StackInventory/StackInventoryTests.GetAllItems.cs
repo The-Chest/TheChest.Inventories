@@ -1,4 +1,4 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 
 using TheChest.Tests.Common.Attributes;
@@ -9,7 +9,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     {
         [Test]
         [IgnoreIfValueType]
-        public void GetAllItems_InvalidItem_ThrowsArgumentNullException()
+        public void GetAllByItem_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -21,7 +21,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetAllItems_EmptyInventory_DoesNotCallOnGetEvent()
+        public void GetAllByItem_EmptyInventory_DoesntCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
@@ -33,7 +33,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetAllItems_InventoryWithItems_RemovesItemsFromInventory()
+        public void GetAllByItem_InventoryWithItems_RemovesItemsFromInventory()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItems = this.itemFactory.CreateMany(size / 2);
@@ -50,7 +50,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetAllItems_InventoryWithItems_CallsOnGetEvent()
+        public void GetAllByItem_InventoryWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItems = this.itemFactory.CreateMany(size / 2);
@@ -79,7 +79,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
 
         [Test]
-        public void GetAllItems_EmptyInventory_ReturnsEmptyArray()
+        public void GetAllByItem_EmptyInventory_ReturnsEmptyItems()
         {
             var (size, _) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateRandom();
@@ -91,7 +91,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetAllItems_InventoryWithItems_ReturnSearchedItems()
+        public void GetAllByItem_InventoryWithItems_ReturnsSearchedItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
