@@ -1,4 +1,5 @@
-﻿using TheChest.Tests.Common.Attributes;
+﻿using TheChest.Inventories.Tests.Common.Extensions;
+using TheChest.Tests.Common.Attributes;
 using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory
@@ -65,7 +66,13 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, item);
-            Assert.Throws<ArgumentException>(() => inventory.Move(0, 0));
+
+            var index = this.random.Next(0, size);
+
+            Assert.That(
+                () => inventory.Move(index, index),
+                Throws.ArgumentException.With.Message.Contains("Cannot move an item to the same index.")
+            );
         }
 
         [Test]
@@ -74,8 +81,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
             Assert.That(
-                () => inventory.Move(0, 1),
+                () => inventory.Move(origin, target),
                 Throws.InvalidOperationException.With.Message.EqualTo("Cannot move items when both origin and target slots are empty.")
             );
         }
@@ -85,11 +93,15 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var origin = 0;
-            var target = 1;
-            var (itemFromOrigin, itemFromTarget) = this.CreateDistinctItems();
+
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
+
+            var itemFromOrigin = this.itemFactory.CreateRandom();
+            var itemFromTarget = this.itemFactory.CreateRandomDifferentFrom(itemFromOrigin);
+
             inventory.AddAt(itemFromOrigin, origin);
             inventory.AddAt(itemFromTarget, target);
+            
             inventory.Move(origin, target);
 
             Assert.Multiple(() =>
@@ -104,11 +116,12 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var origin = 0;
-            var target = 1;
-            var (itemFromOrigin, itemFromTarget) = this.CreateDistinctItems();
-            inventory.AddAt(itemFromOrigin, origin);
-            inventory.AddAt(itemFromTarget, target);
+
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
+            var (originItem, targetItem) = this.itemFactory.CreateRandomDistinctPair();
+
+            inventory.AddAt(originItem, origin);
+            inventory.AddAt(targetItem, target);
 
             var raised = false;
             inventory.OnMove += (sender, args) =>
@@ -118,16 +131,16 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 Assert.That(dataArray, Has.Length.EqualTo(2));
                 Assert.Multiple(() =>
                 {
-                    Assert.That(dataArray[0].Item, Is.EqualTo(itemFromOrigin));
-                    Assert.That(dataArray[0].FromIndex, Is.EqualTo(0));
-                    Assert.That(dataArray[0].ToIndex, Is.EqualTo(1));
+                    Assert.That(dataArray[0].Item, Is.EqualTo(originItem));
+                    Assert.That(dataArray[0].FromIndex, Is.EqualTo(origin));
+                    Assert.That(dataArray[0].ToIndex, Is.EqualTo(target));
                 });
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(dataArray[1].Item, Is.EqualTo(itemFromTarget));
-                    Assert.That(dataArray[1].FromIndex, Is.EqualTo(1));
-                    Assert.That(dataArray[1].ToIndex, Is.EqualTo(0));
+                    Assert.That(dataArray[1].Item, Is.EqualTo(targetItem));
+                    Assert.That(dataArray[1].FromIndex, Is.EqualTo(target));
+                    Assert.That(dataArray[1].ToIndex, Is.EqualTo(origin));
                 });
                 raised = true;
             };
@@ -143,15 +156,16 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
             var item = this.itemFactory.CreateRandom();
-            inventory.Add(item);
+            inventory.AddAt(item, origin);
 
-            inventory.Move(0, 1);
+            inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
-                Assert.That(inventory.GetItem(1), Is.EqualTo(item));
+                Assert.That(inventory.GetSlot(origin).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem(target), Is.EqualTo(item));
             });
         }
 
@@ -161,8 +175,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
             var item = this.itemFactory.CreateRandom();
-            inventory.Add(item);
+            inventory.AddAt(item, origin);
 
             var raised = false;
             inventory.OnMove += (sender, args) =>
@@ -173,13 +188,13 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 Assert.Multiple(() =>
                 {
                     Assert.That(dataArray[0].Item, Is.EqualTo(item));
-                    Assert.That(dataArray[0].FromIndex, Is.EqualTo(0));
-                    Assert.That(dataArray[0].ToIndex, Is.EqualTo(1));
+                    Assert.That(dataArray[0].FromIndex, Is.EqualTo(origin));
+                    Assert.That(dataArray[0].ToIndex, Is.EqualTo(target));
                 });
                 raised = true;
             };
 
-            inventory.Move(0, 1);
+            inventory.Move(origin, target);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
         }
@@ -191,15 +206,17 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
-            var item = default(T);
-            inventory.Add(item);
 
-            inventory.Move(0, 1);
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
+            var item = default(T);
+            inventory.AddAt(item, origin);
+
+            inventory.Move(origin, target);
 
             Assert.Multiple(() =>
             {
-                Assert.That(inventory.GetSlot(0).IsEmpty, Is.True);
-                Assert.That(inventory.GetItem(1), Is.EqualTo(item));
+                Assert.That(inventory.GetSlot(origin).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem(target), Is.EqualTo(item));
             });
         }
 
@@ -209,14 +226,15 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
             var item = this.itemFactory.CreateRandom();
-            inventory.AddAt(item, 1);
+            inventory.AddAt(item, target);
 
-            inventory.Move(0, 1);
+            inventory.Move(origin, target);
 
             Assert.Multiple(() => {
-                Assert.That(inventory.GetItem(0), Is.EqualTo(item));
-                Assert.That(inventory.GetSlot(1).IsEmpty, Is.True);
+                Assert.That(inventory.GetItem(origin), Is.EqualTo(item));
+                Assert.That(inventory.GetSlot(target).IsEmpty, Is.True);
             });
         }
 
@@ -226,8 +244,9 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
+            var (origin, target) = this.random.GetRandomOriginAndTarget(size);
             var item = this.itemFactory.CreateRandom();
-            inventory.AddAt(item, 1);
+            inventory.AddAt(item, target);
 
             var raised = false;
             inventory.OnMove += (sender, args) =>
@@ -238,12 +257,12 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
                 Assert.Multiple(() =>
                 {
                     Assert.That(dataArray[0].Item, Is.EqualTo(item));
-                    Assert.That(dataArray[0].FromIndex, Is.EqualTo(1));
-                    Assert.That(dataArray[0].ToIndex, Is.EqualTo(0));
+                    Assert.That(dataArray[0].FromIndex, Is.EqualTo(target));
+                    Assert.That(dataArray[0].ToIndex, Is.EqualTo(origin));
                 });
                 raised = true;
             };
-            inventory.Move(0, 1);
+            inventory.Move(origin, target);
 
             Assert.That(raised, Is.True, "OnMove event was not raised");
         }
