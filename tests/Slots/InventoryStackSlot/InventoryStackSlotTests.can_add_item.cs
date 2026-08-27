@@ -48,7 +48,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
             var items = this.itemFactory.CreateManyRandom(itemsAmount);
             var slot = this.slotFactory.WithItems(items, stackSize);
 
-            var item = this.itemFactory.CreateRandom();
+            var item = this.itemFactory.CreateRandomDifferentFrom(items[0]);
             var result = slot.CanAdd(item);
 
             Assert.That(result, Is.False);

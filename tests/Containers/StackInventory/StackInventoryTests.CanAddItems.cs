@@ -1,24 +1,28 @@
 using TheChest.Inventories.Tests.Containers.Extensions;
 using TheChest.Tests.Common.Extensions;
 
+using TheChest.Tests.Common.Attributes;
+
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
-        public void CanAddItems_NullItem_ThrowsArgumentNullException()
+        [IgnoreIfValueType]
+        public void CanAddItems_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
+
             Assert.That(
-                () => inventory.CanAdd(items: default!), 
+                () => inventory.CanAdd(items: default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
         }
 
         [Test]
-        public void CanAddItems_ArrayContainingNullItem_ThrowsArgumentNullException()
+        [IgnoreIfValueType]
+        public void CanAddItems_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -29,13 +33,23 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             items.Shuffle();
 
             Assert.That(
-                () => inventory.CanAdd(items), 
+                () => inventory.CanAdd(items),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
         }
 
         [Test]
-        public void CanAddItems_ArrayContainingDifferentItemType_ThrowsArgumentException()
+        [IgnoreIfReferenceType]
+        public void CanAddItems_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.CanAdd(null!), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void CanAddItems_DifferentItemTypes_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -46,33 +60,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             items.Shuffle();
 
             Assert.That(
-                () => inventory.CanAdd(items.ToArray()), 
+                () => inventory.CanAdd(items.ToArray()),
                 Throws.ArgumentException.With.Property("ParamName").EqualTo("items")
-            ); 
-        }
-
-
-        [Test]
-        public void CanAddItems_EmptyItemsArray_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
-            var canAdd = inventory.CanAdd(Array.Empty<T>());
-            
-            Assert.That(canAdd, Is.True);
-        }
-
-        [Test]
-        public void CanAddItems_EmptyInventory_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var items = this.itemFactory.CreateMany(stackSize);
-            var canAdd = inventory.CanAdd(items);
-
-            Assert.That(canAdd, Is.True);
+            );
         }
 
         [Test]
@@ -102,6 +92,42 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var randomAmount = this.random.Next(1, stackSize);
             var items = this.itemFactory.CreateMany(randomAmount);
+            var canAdd = inventory.CanAdd(items);
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        public void CanAddItems_FullInventory_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var item = this.itemFactory.CreateDefault();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
+            var items = this.itemFactory.CreateMany(size);
+            var canAdd = inventory.CanAdd(items);
+
+            Assert.That(canAdd, Is.False);
+        }
+
+        [Test]
+        public void CanAddItems_EmptyItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var canAdd = inventory.CanAdd(Array.Empty<T>());
+
+            Assert.That(canAdd, Is.True);
+        }
+
+        [Test]
+        public void CanAddItems_EmptyInventory_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var items = this.itemFactory.CreateMany(stackSize);
             var canAdd = inventory.CanAdd(items);
 
             Assert.That(canAdd, Is.True);
@@ -139,16 +165,14 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void CanAddItems_FullInventory_ReturnsFalse()
+        [IgnoreIfReferenceType]
+        public void CanAddItems_ValueType_ItemsContainingDefault_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
 
-            var items = this.itemFactory.CreateMany(size);
-            var canAdd = inventory.CanAdd(items);
-
-            Assert.That(canAdd, Is.False);
+            Assert.That(inventory.CanAdd(items), Is.True);
         }
     }
 }

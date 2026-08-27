@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TheChest.Inventories.Containers.Events.Stack;
+using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Extensions;
 
@@ -37,27 +38,42 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
+        /// <summary>
+        /// Gets items from the inventory at the specified <paramref name="index"/> and in the specified <paramref name="amount"/>.
+        /// </summary>
+        /// <param name="index">The zero-based index of the collection slot from which to retrieve items.</param>
+        /// <param name="amount">The number of items to retrieve from the specified slot. Default is 1.</param>
+        /// <returns>An array of items retrieved from the specified slot.</returns>
+        protected T[] GetItems(int index, int amount = 1)
+        {
+            var items = this.slots[index].Get(amount);
+
+            this.OnGet?.Invoke(this, (items, index));
+
+            return items;
+        }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when one item from <paramref name="index"/> are retrieved.
         /// </remarks>
         /// <exception cref="IndexOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When the slot at <paramref name="index"/> is empty</exception>
         public virtual T Get(int index)
         {
             if (index >= this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
+            if (this.slots[index].IsEmpty)
+                throw new InvalidOperationException(StackInventoryErrors.EmptySlot);
 
-            var item = this.slots[index].Get();
-            if (!EqualityComparer<T>.Default.Equals(item, default))
-                this.OnGet?.Invoke(this, (new[] { item }, index));
-
-            return item;
+            return this.GetItems(index)[0];
         }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="IStackInventory{T}.OnGet"/> when the first item from the inventory that is equal to <paramref name="item"/> is retrieved.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When <paramref name="item"/> is not found in the inventory</exception>
         public virtual T Get(T item)
         {
             if (item.IsNull())
@@ -65,16 +81,11 @@ namespace TheChest.Inventories.Containers
 
             for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[index];
-                if (slot.Contains(item))
-                {
-                    var result = slot.Get();
-                    if (!EqualityComparer<T>.Default.Equals(item, default))
-                        this.OnGet?.Invoke(this, (new[] { result }, index));
-                    return result;
-                }
+                if (this.slots[index].Contains(item))
+                    return this.GetItems(index)[0];
             }
-            return default;
+
+            throw new InvalidOperationException(StackInventoryErrors.ItemNotFound);
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -122,11 +133,7 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            var items = this.slots[index].Get(amount);
-            if (items.Length > 0)
-                this.OnGet?.Invoke(this, (items, index));
-
-            return items;
+            return this.GetItems(index, amount);
         }
 
         /// <inheritdocs/>
@@ -139,11 +146,11 @@ namespace TheChest.Inventories.Containers
         {
             if (index > this.Size || index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
+            if (this.slots[index].IsEmpty)
+                return Array.Empty<T>();
 
             var items = this.slots[index].GetAll();
-            if (items.Length > 0)
-                this.OnGet?.Invoke(this, (items, index));
-
+            this.OnGet?.Invoke(this, (items, index));
             return items;
         }
         /// <inheritdoc/>

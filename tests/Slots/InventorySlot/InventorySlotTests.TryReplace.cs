@@ -32,7 +32,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
         }
 
         [Test]
-        public void TryReplace_EmptySlot_DoesntAddItem()
+        public void TryReplace_EmptySlot_DoesNotAddItem()
         {
             var slot = this.slotFactory.Empty();
 
@@ -67,7 +67,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
         [Test]
         [IgnoreIfReferenceType]
-        public void TryReplace_EmptySlot_DefaultItem_DoesntAddItem()
+        public void TryReplace_EmptySlot_DefaultItem_DoesNotAddItem()
         {
             var slot = this.slotFactory.Empty();
 

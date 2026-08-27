@@ -10,15 +10,8 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T> OnMove;
 
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
-        public virtual bool CanMove(int origin, int target)
+        protected bool CanMoveItems(int origin, int target)
         {
-            if (origin < 0 || origin >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(origin));
-            if (target < 0 || target >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(target));
-
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
 
@@ -34,22 +27,20 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
-        public virtual bool TryMove(int origin, int target)
+        public virtual bool CanMove(int origin, int target)
         {
             if (origin < 0 || origin >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(origin));
             if (target < 0 || target >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(target));
 
+            return this.CanMoveItems(origin, target);
+        }
+
+        protected void MoveItems(int origin, int target)
+        {
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
-
-            if (origin == target)
-                return false;
-            if (slotOrigin.IsEmpty && slotTarget.IsEmpty)
-                return false;
-            if (slotOrigin.MaxAmount != slotTarget.MaxAmount)
-                return false;
 
             var originItems = slotOrigin.GetAll();
             var targetItems = slotTarget.GetAll();
@@ -71,6 +62,21 @@ namespace TheChest.Inventories.Containers
 
             if (events.Count > 0)
                 this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="origin"/> or <paramref name="target"/> are bigger than Slot or smaller than zero</exception>
+        public virtual bool TryMove(int origin, int target)
+        {
+            if (origin < 0 || origin >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(origin));
+            if (target < 0 || target >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(target));
+
+            if(!this.CanMoveItems(origin, target))
+                return false;
+
+            this.MoveItems(origin, target);
 
             return true;
         }
@@ -96,26 +102,7 @@ namespace TheChest.Inventories.Containers
             if (slotOrigin.MaxAmount != slotTarget.MaxAmount)
                 throw new InvalidOperationException(StackInventoryErrors.CannotMoveToDifferentMaxStackSize);
 
-            var originItems = slotOrigin.GetAll();
-            var targetItems = slotTarget.GetAll();
-
-            var events = new List<StackInventoryMoveItemEventData<T>>();
-
-            if (originItems.Length > 0)
-            {
-                // maybe improve performance by using AddItems and making it internal?
-                slotTarget.Add(originItems);
-                events.Add(new StackInventoryMoveItemEventData<T>(originItems, origin, target));
-            }
-
-            if (targetItems.Length > 0)
-            {
-                slotOrigin.Add(targetItems);
-                events.Add(new StackInventoryMoveItemEventData<T>(targetItems, target, origin));
-            }
-
-            if (events.Count > 0)
-                this.OnMove?.Invoke(this, new StackInventoryMoveEventArgs<T>(events.ToArray()));
+            this.MoveItems(origin, target);
         }
     }
 }

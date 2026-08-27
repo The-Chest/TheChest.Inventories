@@ -1,4 +1,6 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
+
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
@@ -6,32 +8,42 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     {
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void GetFrom_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
+        public void GetByIndex_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.Get(index), 
+                () => inventory.Get(index),
                 Throws.InstanceOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
 
         [Test]
-        [Ignore("For now")]
-        public void GetFrom_EmptySlot_DoesNotCallOnGetEvent()
+        public void GetByIndex_EmptySlot_ThrowsInvalidOperationException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
-
             var index = this.random.Next(0, size);
-            inventory.Get(index);
+
+            Assert.That(() => inventory.Get(index), Throws.InvalidOperationException);
         }
 
         [Test]
-        public void GetFrom_SlotWithItems_RemovesItemFromSlot()
+        public void GetByIndex_EmptySlot_DoesNotCallOnGetEvent()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var index = this.random.Next(0, size);
+            inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
+
+            Assert.That(() => inventory.Get(index), Throws.InvalidOperationException);
+        }
+
+        [Test]
+        public void GetByIndex_SlotWithItems_RemovesItemFromSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
@@ -44,7 +56,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetFrom_SlotWithItems_CallsOnGetEvent()
+        public void GetByIndex_SlotWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();
@@ -70,22 +82,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(raised, Is.True, "OnGet event was not raised");
         }
 
-
         [Test]
-        [Ignore("For now")]
-        public void GetFrom_EmptySlot_ReturnsNull()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            
-            var index = this.random.Next(0, size);
-            var item = inventory.Get(index);
-            
-            Assert.That(item, Is.Null);
-        }
-
-        [Test]
-        public void GetFrom_SlotWithItems_ReturnsItem()
+        public void GetByIndex_SlotWithItems_ReturnsItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateRandom();

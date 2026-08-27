@@ -1,32 +1,36 @@
-﻿using TheChest.Tests.Common.Extensions.Containers;
+using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
+
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
-        public void GetItems_WhenAmountIsZeroOrSmaller_ThrowsArgumentOutOfRangeException()
+        [IgnoreIfValueType]
+        public void GetItems_NullItem_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(
+                () => inventory.Get(default(T)!, 1),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void GetItems_NonPositiveAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             var item = this.itemFactory.CreateDefault();
 
             Assert.That(
-                () => inventory.Get(item, 0), 
+                () => inventory.Get(item, amount),
                 Throws.TypeOf(typeof(ArgumentOutOfRangeException)).With.Property("ParamName").EqualTo("amount")
-            );
-        }
-
-        [Test]
-        public void GetItems_InvalidItem_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(
-                () => inventory.Get(default(T)!, 1), 
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
 
@@ -38,7 +42,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var item = this.itemFactory.CreateDefault();
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when no item is found");
-            
+
             inventory.Get(item, 1);
         }
 
@@ -85,7 +89,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetItems_AmoutBiggerThanItemsInInventory_CallsOnGetEvent()
+        public void GetItems_AmountExceedsAvailableItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -105,9 +109,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.Get(item, 100);
         }
 
-
         [Test]
-        public void GetItems_ItemNotFound_ReturnsEmptyArray()
+        public void GetItems_ItemNotFound_ReturnsEmptyItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -139,7 +142,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void GetItems_AmoutBiggerThanItemsInInventory_ReturnsAllItemsFound()
+        public void GetItems_AmountExceedsAvailableItems_ReturnsAllItemsFound()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -152,6 +155,20 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(result, Has.Length.EqualTo(stackSize));
             Assert.That(result, Has.All.EqualTo(item));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void GetItems_ValueType_DefaultItem_ReturnsDefaultItems()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize);
+
+            var amount = this.random.Next(1, stackSize);
+            var result = inventory.Get((T)default!, amount);
+
+            Assert.That(result, Has.Length.EqualTo(amount));
+            Assert.That(result, Has.All.EqualTo((T)default!));
         }
     }
 }

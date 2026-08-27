@@ -46,7 +46,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_FullSlot_DoesntAddItems()
+        public void TryAdd_FullSlot_DoesNotAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var slotItems = this.itemFactory.CreateMany(stackSize);
@@ -75,7 +75,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_SlotWithLimitedSpace_DoesntAddItems()
+        public void TryAdd_SlotWithLimitedSpace_DoesNotAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var currentAmount = this.random.Next(1, stackSize - 1);
@@ -129,7 +129,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_SlotWithDifferentItems_DoesntAddItems()
+        public void TryAdd_SlotWithDifferentItems_DoesNotAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var currentAmount = this.random.Next(1, stackSize - 1);
@@ -173,7 +173,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
         }
 
         [Test]
-        public void TryAdd_ItemsContainingDifferentValues_DoesntAddItems()
+        public void TryAdd_ItemsContainingDifferentValues_DoesNotAddItems()
         {
             var stackSize = this.GetRandomStackSize();
             var slot = this.slotFactory.Empty(stackSize);

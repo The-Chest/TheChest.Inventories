@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events;
+using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Extensions;
-using TheChest.Inventories.Slots.Exceptions;
 
 namespace TheChest.Inventories.Containers
 {
@@ -67,6 +67,18 @@ namespace TheChest.Inventories.Containers
             return items.ToArray();
         }
 
+        /// <summary>
+        /// Gets the item from the slot at <paramref name="index"/> and fires the <see cref="OnGet"/> event.
+        /// </summary>
+        /// <param name="index">The index of the slot to get the item from.</param>
+        /// <returns>The item from the slot at <paramref name="index"/>.</returns>
+        protected T GetItem(int index)
+        {
+            var item = this.slots[index].Get();
+            this.OnGet?.Invoke(this, (item, index));
+            return item;
+        }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
@@ -78,14 +90,9 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (this.slots[index].IsEmpty)
-                throw new InvalidOperationException(InventorySlotErrors.EmptySlot);
+                throw new InvalidOperationException(InventoryErrors.EmptySlot);
 
-            var item = this.slots[index].Get();
-
-            if (!item.IsNull())
-                this.OnGet?.Invoke(this, (item, index));
-
-            return item;
+            return this.GetItem(index);
         }
         
         /// <inheritdoc/>
@@ -99,16 +106,15 @@ namespace TheChest.Inventories.Containers
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
-            for (int i = 0; i < this.Size; i++)
+            for (int index = 0; index < this.Size; index++)
             {
-                if (this.slots[i].Contains(item))
+                if (this.slots[index].Contains(item))
                 {
-                    this.OnGet?.Invoke(this, (item, i));
-                    return this.slots[i].Get();
+                    return this.GetItem(index);
                 }
             }
 
-            throw new InvalidOperationException(InventorySlotErrors.ItemNotFound);
+            throw new InvalidOperationException(InventoryErrors.ItemNotFound);
         }
         
         /// <inheritdoc/>
@@ -124,7 +130,7 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            var items = new List<T>();
+            var items = new List<T>(amount);
             var indexes = new List<int>();
             for (int i = 0; i < this.Size; i++)
             {

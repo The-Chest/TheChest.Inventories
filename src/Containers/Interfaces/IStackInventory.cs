@@ -24,12 +24,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
         /// <returns>Returns the item inside <paramref name="index"/> Slot</returns>
+        [Obsolete("Use Get(int index, int amount) instead. This method will be removed in future versions.")]
         T Get(int index);
         /// <summary>
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
         /// <returns>Returns the first item found</returns>
+        [Obsolete("Use Get(T item, int amount) instead. This method will be removed in future versions.")]
         T Get(T item);
 
         /// <summary>
@@ -67,13 +69,12 @@ namespace TheChest.Inventories.Containers.Interfaces
         event StackInventoryAddEventHandler<T> OnAdd;
 
         #region Add
-        #warning These methods are going to be removed in future versions.
         /// <summary>
         /// Checks if <paramref name="item"/> can be added to any slot on inventory.
         /// </summary>
         /// <param name="item">The item to evaluate to add to the inventory.</param>
         /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
-        [Obsolete("Use CanAddAt(params T[]) instead. This method will be removed in future versions.")]
+        [Obsolete("Use CanAdd(params T[]) instead. This method will be removed in future versions.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot on inventory.
@@ -111,6 +112,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">The item to evaluate for insertion at the specified index.</param>
         /// <param name="index">The zero-based index at which to check if the item can be added.</param>
         /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
+        [Obsolete("Use CanAddAt(T[], int) instead. This method will be removed in future versions.")]
         bool CanAddAt(T item, int index);
         /// <summary>
         /// Determines whether the specified items can be added at the given index.
@@ -134,6 +136,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
+        [Obsolete("Use AddAt(T[], int) instead. This method will be removed in future versions.")]
         bool AddAt(T item, int index);
         /// <summary>
         /// Adds an array of items inside the inventory
@@ -183,14 +186,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="origin">The zero-based index representing the items current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
-        /// <returns><see langword="true"/> if the item can be moved to the target index; otherwise, <see langword="false"/>.</returns>
+        /// <returns><see langword="true"/> if the item can be moved from <paramref name="origin"/> to <paramref name="target"/> index; otherwise, <see langword="false"/>.</returns>
         bool CanMove(int origin, int target);
         /// <summary>
         /// Tries to move all items from the <paramref name="origin"/> index to the <paramref name="target"/> index.
         /// </summary>
         /// <param name="origin">The zero-based index representing the items current position.</param>
         /// <param name="target">The zero-based index representing the desired target position.</param>
-        /// <returns><see langword="true"/> if the item can be moved to the target index; otherwise, <see langword="false"/>.</returns>
+        /// <returns><see langword="true"/> if the item can be moved from <paramref name="origin"/> to <paramref name="target"/> index; otherwise, <see langword="false"/>.</returns>
         bool TryMove(int origin, int target);
         /// <summary>
         /// Moves an item from one index to another in the inventory

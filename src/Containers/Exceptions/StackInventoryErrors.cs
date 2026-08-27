@@ -10,6 +10,12 @@
         internal const string ItemArrayContainsNull = "One of the items to add is null";
         #endregion
 
+        #region Get Items
+        internal const string EmptySlot = "The slot is empty.";
+        internal const string FullSlot = "The slot is already full.";
+        internal const string ItemNotFound = "The item was not found in the inventory.";
+        #endregion
+
         #region Add Items
         internal const string CannotAddEmptyArray = "Cannot add using an empty item array";
         internal const string InventoryIsFull = "The inventory is full";

@@ -14,6 +14,12 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryAddEventHandler<T> OnAdd;
 
         #region AddAt
+        protected void AddItemsAt(T[] items, int index)
+        {
+            this.slots[index].Add(items);
+            this.OnAdd?.Invoke(this, (items, index));
+        }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>"
@@ -35,10 +41,10 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
                 return true;
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             return this.slots[index].CanAdd(items);
         }
@@ -80,11 +86,10 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var added = this.slots[index].Add(item);
-            if (added)
-                this.OnAdd?.Invoke(this, (new[] { item }, index));
+            //TODO: maybe here the inventory need to check the state of slot (?)
+            this.AddItemsAt(new T[1]{ item },index);
 
-            return added;
+            return true;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -107,11 +112,11 @@ namespace TheChest.Inventories.Containers
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
-            var notAddedItems = this.slots[index].Add(items);
-            if (notAddedItems.Length != items.Length)
-                this.OnAdd?.Invoke(this, (items.Skip(notAddedItems.Length).ToArray(), index));
+            //TODO: maybe here the inventory need to check the state of slot (?)
 
-            return notAddedItems;
+            this.AddItemsAt(items, index);
+
+            return Array.Empty<T>();
         }
         #endregion
 
@@ -198,30 +203,7 @@ namespace TheChest.Inventories.Containers
             if (!this.CanAddItems(items))
                 return false;
 
-            var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
-            var addedAmount = 0;
-
-            for (var index = 0; index < this.Size; index++)
-            {
-                var slot = this.slots[index];
-                var itemsToAdd = items.Take(slot.AvailableAmount).ToArray();
-                if (slot.TryAdd(itemsToAdd))
-                {
-                    events.Add(
-                        new StackInventoryAddItemEventData<T>(
-                            items.Take(itemsToAdd.Length).ToArray(),
-                            index
-                        )
-                    );
-                    addedAmount++;
-
-                    if (addedAmount >= items.Length)
-                        break;
-                }
-            }
-
-            if (events.Count > 0)
-                this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
+            this.AddItems(items);
 
             return true;
         }

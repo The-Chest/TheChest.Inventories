@@ -3,6 +3,9 @@
 ## What's Added
 * Value Type for all of Inventory and Slot classes
   * *It is using `System.Reflection` in the `Inventory` class for value type checking so performance might be an issue* 
+* `Inventory<T>` and `StackInventory<T>` now has the protected method `GetItem`
+    * It returns the item from the inventory with no validation, it is used internally by the `Get`
+    * It also fires the `OnGet` event when the item is successfully retrieved from the inventory
 
 ## What's Changed
 * Project is now using `TheChest.Core` v0.18.1
@@ -32,7 +35,17 @@
 
 ### Stack
 * `StackInventory`
-  * 
+  * Removed validations for event trigger and return
+  * `Get(int index)`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(int index, int amount)` instead
+  * `Get(T item)`
+    * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(T item, int amount)` instead
+  * `CanAddAt(T item, int index)`
+    * It is marked as `Obsolete` and will be removed in the future, use `CanAddAt(T[] items, int index)` instead 
+  * `AddAt(T item, int index)`
+    * It is marked as `Obsolete` and will be removed in the future, use `AddAt(T[] items, int index)` instead 
 * `InventoryStackSlot` 
   * `Get()`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T[]`
@@ -47,7 +60,7 @@
   * 
 
 ## What's Removed
-* `CanAdd` method call on protected `InventoryStackSlot<T>`.`ReplaceItems` method
+* `Add` method call on protected `InventoryStackSlot<T>.ReplaceItems` method
 
 ## What's Fixed
 * Typos in `LazyStackInventory.Add` return method XML docs
@@ -75,10 +88,11 @@
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
 * Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
-* No nullable support for value types yet, it might be added in the future
+* Some validations are duplicated through slots and inventories classes
+    * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
 
 ## What's Next
-* [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
+* A refactor in multiple slots and inventories methods to make them more simple and easier to understand and removing the Obsolete methods
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 * [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 

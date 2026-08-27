@@ -1,13 +1,13 @@
-﻿using System.Linq;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Extensions.Slots;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void TryAddItems_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -20,18 +20,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_EmptyArray_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var result = inventory.TryAdd(Array.Empty<T>());
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
-        public void TryAddItems_ItemsContainsNull_ThrowsArgumentNullException()
+        [IgnoreIfValueType]
+        public void TryAddItems_ItemsContainingNull_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -48,7 +38,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void TryAddItems_ItemsAreNotAllEqual_ThrowsArgumentException()
+        [IgnoreIfReferenceType]
+        public void TryAddItems_ValueType_NullItems_ThrowsArgumentNullException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            Assert.That(() => inventory.TryAdd(null!), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void TryAddItems_DifferentItems_ThrowsArgumentException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -103,6 +103,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void TryAddItems_EmptyItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var result = inventory.TryAdd(Array.Empty<T>());
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
         public void TryAddItems_ItemsFit_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -112,6 +123,17 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var result = inventory.TryAdd(items);
 
             Assert.That(result, Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryAddItems_ValueType_ItemsContainingDefault_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new T[] { default!, default! };
+
+            Assert.That(inventory.TryAdd(items), Is.True);
         }
     }
 }

@@ -32,16 +32,6 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
 
         [Test]
         [IgnoreIfReferenceType]
-        public void AddAt_NullItem_ThrowsArgumentNothing()
-        {
-            var size = this.GenerateRandomSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-            
-            Assert.That(() => inventory.AddAt(default!, 0), Throws.Nothing);
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
         public void AddAt_DefaultValue_EmptySlot_AddsItem()
         {
             var size = this.GenerateRandomSize();

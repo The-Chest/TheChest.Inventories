@@ -74,10 +74,10 @@ Use these examples together with the naming convention in `../SKILL.md`.
 
 | Test name | Expected result |
 | --- | --- |
-| `Add_SlotCannotAdd_DoesntAddToSlot` | `DoesntAddToSlot` |
-| `Add_SlotCannotAdd_DoesntCallOnAdd` | `DoesntCallOnAdd` |
-| `Get_FoundItem_DoesntCallOnGetEvent` | `DoesntCallOnGetEvent` |
-| `Move_InvalidOrigin_DoesntChangeSlots` | `DoesntChangeSlots` |
+| `Add_SlotCannotAdd_DoesNotAddToSlot` | `DoesNotAddToSlot` |
+| `Add_SlotCannotAdd_DoesNotCallOnAdd` | `DoesNotCallOnAdd` |
+| `Get_FoundItem_DoesNotCallOnGetEvent` | `DoesNotCallOnGetEvent` |
+| `Move_InvalidOrigin_DoesNotChangeSlots` | `DoesNotChangeSlots` |
 
 ## Combining Context and State
 

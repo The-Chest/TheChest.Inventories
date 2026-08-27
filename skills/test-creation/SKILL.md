@@ -52,7 +52,10 @@ Every test in this repository should:
   * `TestItem`
   * `TestEnumItem`
   * `TestStructItem`
-* If the test throws `InvalidOperationException`, it must test that the item was not added to the slot and that the `OnAdd` event was not called, since this exception represents a state-based failure where nothing should have changed. Other exceptions only need to test that the exception was thrown.
+* If the test throws `InvalidOperationException`, it must test that the item was not added to the slot and that the `OnAdd` event was not called, since this exception represents a state-based failure where nothing should have changed. 
+  * Other exceptions only need to test that the exception was thrown.
+* Use `[IgnoreIfReferenceType]` for tests that only apply to reference types, and `[IgnoreIfValueType]` for tests that only apply to value types. 
+  * This ensures that the test suite runs cleanly across all three types of `T`.
 
 ## Class organization
 * Test classes are organized by methods in partial classes.

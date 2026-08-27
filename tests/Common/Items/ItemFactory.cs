@@ -26,6 +26,15 @@ namespace TheChest.Tests.Common.Items
 
             return (T)instance;
         }
+        /// <summary>
+        /// Creates multiple instances of type <typeparamref name="T"/> with default values.
+        /// </summary>
+        /// <param name="amount">The number of instances to create.</param>
+        /// <returns>An array of instances, each initialized with default values.</returns>
+        public T[] CreateMany(int amount)
+        {
+            return Enumerable.Repeat(CreateDefault(), amount).ToArray();
+        }
 
         /// <summary>
         /// Creates a new instance of type <typeparamref name="T"/> with random values.
@@ -60,15 +69,30 @@ namespace TheChest.Tests.Common.Items
             }
             return (T)instance;
         }
-
         /// <summary>
-        /// Creates multiple instances of type <typeparamref name="T"/> with default values.
+        /// Creates a new instance of type <typeparamref name="T"/> with random values, ensuring that the generated instance is different from the provided <paramref name="item"/>.
         /// </summary>
-        /// <param name="amount">The number of instances to create.</param>
-        /// <returns>An array of instances, each initialized with default values.</returns>
-        public T[] CreateMany(int amount)
+        /// <param name="item">The instance to compare against.</param>
+        /// <returns>A new instance of type <typeparamref name="T"/> with random values, distinct from the provided <paramref name="item"/>.</returns>
+        /// <exception cref="InvalidOperationException">When a distinct instance cannot be created after multiple attempts.</exception>
+        public T CreateRandomDifferentFrom(T item)
         {
-            return Enumerable.Repeat(CreateDefault(), amount).ToArray();
+            for (var attempt = 0; attempt < 20; attempt++)
+            {
+                var second = this.CreateRandom();
+                if (!object.Equals(item, second))
+                    return second;
+            }
+
+            throw new InvalidOperationException($"Could not create distinct items for {typeof(T).FullName}.");
+        }
+
+        public (T item1, T item2) CreateRandomDistinctPair()
+        {
+            var item1 = this.CreateRandom();
+            var item2 = this.CreateRandomDifferentFrom(item1);
+
+            return (item1, item2);
         }
 
         /// <summary>
@@ -78,7 +102,28 @@ namespace TheChest.Tests.Common.Items
         /// <returns>An array of instances, each initialized with random values.</returns>
         public T[] CreateManyRandom(int amount)
         {
-            return Enumerable.Repeat(CreateRandom(), amount).ToArray();
+            var randomItem = this.CreateRandom();
+            return Enumerable.Repeat(randomItem, amount).ToArray();
+        }
+        /// <summary>
+        /// Creates multiple instances of type <typeparamref name="T"/> with random values, ensuring that each generated instance is different from the provided <paramref name="item"/>.
+        /// </summary>
+        /// <param name="item">The instance to compare against.</param>
+        /// <param name="amount">The number of instances to create.</param>
+        /// <returns>An array of instances, each initialized with random values and distinct from the provided <paramref name="item"/>.</returns>
+        /// <exception cref="InvalidOperationException">When a distinct instance cannot be created after multiple attempts.</exception>
+        public T[] CreateManyRandomDifferentFrom(T item, int amount)
+        {
+            var randomItem = this.CreateRandomDifferentFrom(item);
+            return Enumerable.Repeat(randomItem, amount).ToArray();
+        }
+
+        public (T[] items1, T[] items2) CreateManyRandomDistinctPairs(int amount)
+        {
+            var items1 = this.CreateManyRandom(amount);
+            var items2 = this.CreateManyRandomDifferentFrom(items1[0], amount);
+
+            return (items1, items2);
         }
     }
 }
