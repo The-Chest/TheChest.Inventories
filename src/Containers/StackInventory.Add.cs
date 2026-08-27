@@ -14,6 +14,12 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryAddEventHandler<T> OnAdd;
 
         #region AddAt
+        private void AddAtItems(T[] items, int index)
+        {
+            this.slots[index].Add(items);
+            this.OnAdd?.Invoke(this, (items, index));
+        }
+
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>"
@@ -80,8 +86,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            this.slots[index].Add(item);
-            this.OnAdd?.Invoke(this, (new[] { item }, index));
+            this.AddAtItems(new T[1]{ item },index);
 
             return true;
         }
@@ -106,8 +111,7 @@ namespace TheChest.Inventories.Containers
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
-            this.slots[index].Add(items);
-            this.OnAdd?.Invoke(this, (items, index));
+            this.AddAtItems(items, index);
 
             return Array.Empty<T>();
         }
