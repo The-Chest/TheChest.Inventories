@@ -86,6 +86,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
+            //TODO: maybe here the inventory need to check the state of slot (?)
             this.AddItemsAt(new T[1]{ item },index);
 
             return true;
@@ -110,6 +111,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
+
+            //TODO: maybe here the inventory need to check the state of slot (?)
 
             this.AddItemsAt(items, index);
 
