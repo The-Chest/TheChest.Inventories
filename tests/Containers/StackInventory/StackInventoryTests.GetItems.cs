@@ -20,15 +20,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             );
         }
 
-        [Test]
-        public void GetItems_NonPositiveAmount_ThrowsArgumentOutOfRangeException()
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void GetItems_NonPositiveAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             var item = this.itemFactory.CreateDefault();
 
             Assert.That(
-                () => inventory.Get(item, 0),
+                () => inventory.Get(item, amount),
                 Throws.TypeOf(typeof(ArgumentOutOfRangeException)).With.Property("ParamName").EqualTo("amount")
             );
         }
@@ -158,12 +159,16 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetItems_ValueType_DefaultItem_ReturnsEmptyItems()
+        public void GetItems_ValueType_DefaultItem_ReturnsDefaultItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize);
 
-            Assert.That(inventory.Get((T)default!, 1), Is.Empty);
+            var amount = this.random.Next(1, stackSize);
+            var result = inventory.Get((T)default!, amount);
+
+            Assert.That(result, Has.Length.EqualTo(amount));
+            Assert.That(result, Has.All.EqualTo((T)default!));
         }
     }
 }

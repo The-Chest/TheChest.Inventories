@@ -17,7 +17,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             Assert.That(
                 () => inventory.Add(null),
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+                Throws.ArgumentNullException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.Contains("Value cannot be null")
             );
         }
 
@@ -37,16 +39,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                     .With.Property("ParamName").EqualTo("items").And
                     .Message.Contains("One of the items to add is null")
             );
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void AddItems_ValueType_NullItems_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(() => inventory.Add(null!), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -84,7 +76,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var items = this.itemFactory.CreateMany(amount);
             inventory.Add(items);
 
-            Assert.That(inventory.GetItems(0).Where(x => x is not null), Is.EquivalentTo(items));
+            var foundItems = inventory.GetItems(0);
+            Assert.That(foundItems, Is.EquivalentTo(items));
         }
 
         [Test]
@@ -179,7 +172,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             inventory.Add(items);
 
-            Assert.That(inventory.GetCount(default!), Is.EqualTo(items.Length));
+            Assert.That(inventory.GetItems(0), Has.Exactly(2).EqualTo(default(T)));
         }
 
         [Test]

@@ -6,6 +6,7 @@
         {
             if (size <= 1)
                 throw new ArgumentOutOfRangeException(nameof(size), "Size must be greater than 1.");
+            
             var origin = random.Next(0, size);
 
             int target;

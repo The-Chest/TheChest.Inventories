@@ -1,10 +1,10 @@
+using TheChest.Inventories.Tests.Common.Extensions;
 using TheChest.Tests.Common.Extensions.Containers;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>
     {
-        #region Invalid Origin
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void TryMove_InvalidOriginIndex_ThrowsArgumentOutOfRangeException(int origin)
@@ -69,9 +69,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             var result = inventory.TryMove(originIndex, targetIndex);
 
             Assert.That(result, Is.False);
@@ -83,7 +81,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var originIndex = this.random.Next(0, size - 1);
+            var originIndex = this.random.Next(0, size);
             var targetIndex = originIndex;
 
             var result = inventory.TryMove(originIndex, targetIndex);
@@ -97,11 +95,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
             inventory.OnMove += (sender, args) => Assert.Fail("OnMove event should not be raised on exception.");
 
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.TryMove(originIndex, targetIndex);
         }
 
@@ -125,10 +121,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.GetAll(originIndex);
             var targetItems = inventory.GetItems(targetIndex);
 
@@ -150,8 +145,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.GetAll(targetIndex);
 
             var originItems = inventory.GetItems(originIndex);
@@ -172,9 +166,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.Get(originIndex, random.Next(1, stackSize - 1));
+            inventory.Get(targetIndex, random.Next(1, stackSize - 1));
+
             var originItems = inventory.GetItems(originIndex);
             var targetItems = inventory.GetItems(targetIndex);
 
@@ -197,10 +192,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var originItems = inventory.GetItems(originIndex);
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
 
-            var targetIndex = this.random.Next(0, originIndex - 1);
+            var originItems = inventory.GetItems(originIndex);
             var targetItems = inventory.GetItems(targetIndex);
 
             inventory.TryMove(originIndex, targetIndex);
@@ -218,10 +212,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.GetAll(originIndex);
             var targetItems = inventory.GetItems(targetIndex);
 
@@ -253,8 +246,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, randomItem);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.GetAll(targetIndex);
             var originItems = inventory.GetItems(originIndex);
 
@@ -286,9 +278,8 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.Get(originIndex, random.Next(1, stackSize - 1));
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
+            inventory.Get(originIndex, this.random.Next(1, stackSize - 1));
             var originItems = inventory.GetItems(originIndex).Where(x => x is not null);
             var targetItems = inventory.GetItems(targetIndex).Where(x => x is not null);
 
@@ -326,10 +317,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             var originItems = inventory.GetItems(originIndex);
             var targetItems = inventory.GetItems(targetIndex);
+
             inventory.OnMove += (o, e) =>
             {
                 Assert.That(o, Is.EqualTo(inventory));
@@ -357,11 +348,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var slotItem = this.itemFactory.CreateDefault();
-
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
+
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.GetAll(originIndex);
 
             var result = inventory.TryMove(originIndex, targetIndex);
@@ -378,8 +367,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventoryItems = slotItems.Concat(randomItems).ToArray();
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             inventory.GetAll(targetIndex);
 
             var result = inventory.TryMove(originIndex, targetIndex);
@@ -395,9 +383,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, slotItem);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-            inventory.Get(originIndex, random.Next(1, stackSize - 1));
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
+            inventory.Get(originIndex, random.Next(1, stackSize - 2));
+            inventory.Get(targetIndex, random.Next(1, stackSize - 2));
 
             var result = inventory.TryMove(originIndex, targetIndex);
 
@@ -414,13 +402,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems);
 
-            var originIndex = this.random.Next(size / 2, size - 1);
-            var targetIndex = this.random.Next(0, originIndex - 1);
-
+            var (originIndex, targetIndex) = this.random.GetRandomOriginAndTarget(size);
             var result = inventory.TryMove(originIndex, targetIndex);
 
             Assert.That(result, Is.True);
         }
-        #endregion
     }
 }

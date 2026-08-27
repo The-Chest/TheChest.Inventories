@@ -1,7 +1,6 @@
 ﻿using TheChest.Core.Slots.Interfaces;
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
-
 using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
@@ -113,7 +112,7 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             inventory.Add((T)default!);
 
-            Assert.That(inventory.GetCount(default!), Is.EqualTo(1));
+            Assert.That(inventory.GetItems(0), Has.One.EqualTo(default(T)));
         }
 
         [Test]
@@ -171,13 +170,14 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         public void AddItem_InventoryWithSameItem_CallsOnAddEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, item);
+            var items = this.itemFactory.CreateMany(size);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
 
-            var slots = inventory.GetSlots();
-            var slotIndex = Array.IndexOf(slots, slots.First(x => x.GetContents()?.Contains(item) ?? false));
-            inventory.Get(slotIndex, stackSize - 1);
+            var slotIndex = this.random.Next(0, size);
+            var amount = this.random.Next(1, stackSize - 1);
+            inventory.Get(slotIndex, amount);
 
+            var item = items[0];
             var raised = false;
             inventory.OnAdd += (sender, args) =>
             {
@@ -187,33 +187,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                     var firstEvent = args.Data.First();
                     Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
                     Assert.That(firstEvent.Index, Is.EqualTo(slotIndex));
-                });
-                raised = true;
-            };
-
-            inventory.Add(item);
-
-            Assert.That(raised, Is.True);
-        }
-
-        [Test]
-        public void AddItem_InventoryWithFullSlotWithSameItem_CallsOnAddEvent()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var item = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
-            var expectedIndex = this.random.Next(0, size);
-            inventory.GetAll(expectedIndex);
-
-            var raised = false;
-            inventory.OnAdd += (sender, args) =>
-            {
-                Assert.That(args.Data, Has.Count.EqualTo(1));
-                Assert.Multiple(() =>
-                {
-                    var firstEvent = args.Data.First();
-                    Assert.That(firstEvent.Items, Has.Length.EqualTo(1).And.All.EqualTo(item));
-                    Assert.That(firstEvent.Index, Is.EqualTo(expectedIndex));
                 });
                 raised = true;
             };

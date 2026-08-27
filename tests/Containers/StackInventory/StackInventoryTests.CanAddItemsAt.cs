@@ -5,16 +5,29 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void CanAddItemsAt_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
+            var index = this.random.Next(0, size);
             Assert.That(
-                () => inventory.CanAddAt(items: default!, 0),
+                () => inventory.CanAddAt(items: null!, index),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
+        }
+
+        [Test]
+        public void CanAddItemsAt_EmptyItems_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var items = Array.Empty<T>();
+            var index = this.random.Next(0, size);
+            var canAdd = inventory.CanAddAt(items, index);
+
+            Assert.That(canAdd, Is.True);
         }
 
         [Test]
@@ -26,21 +39,12 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var items = this.itemFactory.CreateMany(stackSize - 1).ToList();
             items.Add(default!);
+            var index = this.random.Next(0, size);
 
             Assert.That(
-                () => inventory.CanAddAt(items.ToArray(), 0),
+                () => inventory.CanAddAt(items.ToArray(), index),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void CanAddItemsAt_ValueType_NullItems_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(() => inventory.CanAddAt(null!, 0), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -50,8 +54,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
+            var items = this.itemFactory.CreateMany(stackSize);
             Assert.That(
-                () => inventory.CanAddAt(this.itemFactory.CreateMany(stackSize), index),
+                () => inventory.CanAddAt(items, index),
                 Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
@@ -141,7 +146,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             var items = new T[] { default!, default! };
 
-            Assert.That(inventory.CanAddAt(items, 0), Is.True);
+            var randomIndex = this.random.Next(0, size);
+            var canAdd = inventory.CanAddAt(items, randomIndex);
+
+            Assert.That(canAdd, Is.True);
         }
     }
 }

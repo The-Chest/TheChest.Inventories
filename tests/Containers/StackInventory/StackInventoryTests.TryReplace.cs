@@ -7,7 +7,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void TryReplace_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -17,16 +16,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 () => inventory.TryReplace(null!, 0, out _),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void TryReplace_ValueType_NullItems_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(() => inventory.TryReplace(null!, 0, out _), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -237,24 +226,12 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        [IgnoreIfReferenceType]
-        public void TryReplace_ValueType_ItemsContainingDefault_ReplacesItemsInSlot()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var items = new T[] { default!, default! };
-
-            inventory.TryReplace(items, 0, out _);
-
-            Assert.That(inventory.GetItems(0), Is.EqualTo(items));
-        }
-
-        [Test]
         public void TryReplace_SlotWithItems_CallsOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var initialItem = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, initialItem);
+
             var index = this.random.Next(0, size);
             var newItems = this.itemFactory.CreateManyRandom(stackSize);
             var calledWithExpectedData = false;
@@ -279,8 +256,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
             var index = this.random.Next(0, size);
             var newItems = this.itemFactory.CreateManyRandom(stackSize);
+            
             var calledWithExpectedData = false;
 
             inventory.OnReplace += (sender, args) =>
@@ -295,21 +274,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             inventory.TryReplace(newItems, index, out _);
 
             Assert.That(calledWithExpectedData, Is.True);
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void TryReplace_ValueType_ItemsContainingDefault_CallsOnReplaceEvent()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var items = new T[] { default!, default! };
-            var called = false;
-            inventory.OnReplace += (_, _) => called = true;
-
-            inventory.TryReplace(items, 0, out _);
-
-            Assert.That(called, Is.True);
         }
 
         [Test]
@@ -341,13 +305,50 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
         [Test]
         [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_ItemsContainingDefault_ReplacesItemsInSlot()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var amount = this.random.Next(1, stackSize);
+            var items = this.itemFactory.CreateMany(amount);
+
+            inventory.TryReplace(items, 0, out _);
+
+            Assert.That(inventory.GetItems(0), Is.EqualTo(items));
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
+        public void TryReplace_ValueType_ItemsContainingDefault_CallsOnReplaceEvent()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+
+            var amount = this.random.Next(1, stackSize);
+            var items = this.itemFactory.CreateMany(amount);
+
+            var called = false;
+            inventory.OnReplace += (_, _) => called = true;
+
+            inventory.TryReplace(items, 0, out _);
+
+            Assert.That(called, Is.True);
+        }
+
+        [Test]
+        [IgnoreIfReferenceType]
         public void TryReplace_ValueType_ItemsContainingDefault_ReturnsTrue()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var items = new T[] { default!, default! };
 
-            Assert.That(inventory.TryReplace(items, 0, out _), Is.True);
+            var amount = this.random.Next(1, stackSize);
+            var items = this.itemFactory.CreateMany(amount);
+
+            var replaced = inventory.TryReplace(items, 0, out _); 
+
+            Assert.That(replaced, Is.True);
         }
     }
 }

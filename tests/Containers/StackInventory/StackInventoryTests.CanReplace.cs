@@ -7,7 +7,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     public partial class StackInventoryTests<T>
     {
         [Test]
-        [IgnoreIfValueType]
         public void CanReplace_NullItems_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -20,16 +19,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                 () => inventory.CanReplace(null!, randomIndex),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
             );
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void CanReplace_ValueType_NullItems_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(() => inventory.CanReplace(null!, 0), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -102,9 +91,11 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var items = new T[] { default!, default! };
 
-            Assert.That(inventory.CanReplace(items, 0), Is.True);
+            var items = new T[] { default!, default! };
+            var canReplace = inventory.CanReplace(items, 0);
+
+            Assert.That(canReplace, Is.True);
         }
 
         [Test]

@@ -53,7 +53,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
             var randomIndex = this.random.Next(0, size);
-
             var canAdd = inventory.CanAddAt(item, randomIndex);
 
             Assert.That(canAdd, Is.False);
@@ -65,9 +64,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            var item = this.itemFactory.CreateDefault();
-
-            var canAdd = inventory.CanAddAt(item, 0);
+            var item = this.itemFactory.CreateRandom();
+            var index = this.random.Next(0, size);
+            var canAdd = inventory.CanAddAt(item, index);
 
             Assert.That(canAdd, Is.True);
         }
@@ -78,8 +77,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
+
             var randomIndex = this.random.Next(0, size);
-            inventory.Get(randomIndex, stackSize - 1);
+            inventory.Get(randomIndex, 1);
 
             var canAdd = inventory.CanAddAt(item, randomIndex);
 
@@ -93,7 +93,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(inventory.CanAddAt((T)default!, 0), Is.True);
+            var randomIndex = this.random.Next(0, size);
+            var canAdd = inventory.CanAddAt(item: default!, randomIndex);
+
+            Assert.That(canAdd, Is.True);
         }
     }
 }

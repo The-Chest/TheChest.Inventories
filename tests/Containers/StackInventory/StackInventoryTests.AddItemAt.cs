@@ -224,7 +224,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(inventory.AddAt((T)default!, 0), Is.True);
+            var added = inventory.AddAt((T)default!, 0);
+
+            Assert.That(added, Is.True);
         }
     }
 }

@@ -1,6 +1,5 @@
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
-
 using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
@@ -15,7 +14,9 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             Assert.That(
                 () => inventory.AddAt(null!, 0),
-                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("items")
+                Throws.ArgumentNullException
+                    .With.Property("ParamName").EqualTo("items").And
+                    .Message.Contains("Value cannot be null")
             );
         }
 
@@ -34,16 +35,6 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
                     .With.Property("ParamName").EqualTo("items").And
                     .Message.Contains("One of the items to add is null")
             );
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void AddItemsAt_ValueType_NullItems_ThrowsArgumentNullException()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            Assert.That(() => inventory.AddAt(null!, 0), Throws.ArgumentNullException);
         }
 
         [TestCase(-1)]
@@ -79,16 +70,21 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
-        public void AddItemsAt_SlotWithDifferentItem_ThrowsInvalidOperationException()
+        public void AddItemsAt_SlotWithDifferentItemFromSlot_ThrowsInvalidOperationException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventoryItem = this.itemFactory.CreateRandom();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, inventoryItem);
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, inventoryItem); 
 
-            var amount = stackSize;
-            var items = this.itemFactory.CreateMany(amount);
             var index = this.random.Next(0, size);
-            Assert.That(() => inventory.AddAt(items, index), Throws.InvalidOperationException);
+            var amount = this.random.Next(1, stackSize - 1);
+            inventory.Get(index, amount); 
+
+            var items = this.itemFactory.CreateManyRandomDifferentFrom(inventoryItem, amount);
+            Assert.That(
+                () => inventory.AddAt(items, index), 
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot add items that are different from the items already in the slot")
+            );
         }
 
         [Test]
@@ -100,7 +96,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var items = this.itemFactory.CreateMany(stackSize);
             var index = this.random.Next(0, size);
-            Assert.That(() => inventory.AddAt(items, index), Throws.InvalidOperationException);
+            Assert.That(
+                () => inventory.AddAt(items, index), 
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is full")
+            );
         }
 
         [Test]

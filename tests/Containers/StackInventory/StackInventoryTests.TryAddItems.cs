@@ -1,8 +1,5 @@
-using System.Linq;
 using TheChest.Core.Slots.Interfaces;
 using TheChest.Tests.Common.Extensions.Containers;
-using TheChest.Tests.Common.Extensions.Slots;
-
 using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
