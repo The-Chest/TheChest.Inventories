@@ -14,7 +14,7 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryAddEventHandler<T> OnAdd;
 
         #region AddAt
-        private void AddItemsAt(T[] items, int index)
+        protected void AddItemsAt(T[] items, int index)
         {
             this.slots[index].Add(items);
             this.OnAdd?.Invoke(this, (items, index));

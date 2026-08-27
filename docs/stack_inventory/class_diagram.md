@@ -41,7 +41,7 @@ direction TB
             + bool AddAt(T item, int index)
             + bool TryAddAt(T item, int index)
             + T[] Add(params T[] items)
-            + T[] AddItems(params T[] items)
+            - T[] AddItems(params T[] items)
             + T[] AddAt(T[] items, int index)
 
             + T[] Clear()
@@ -56,8 +56,11 @@ direction TB
 
             + int GetCount(T item)
 
+            ~ bool CanMoveItems(int origin, int target)
             + bool CanMove(int origin, int target)
             + bool TryMove(int origin, int target)
+
+            ~ void MoveItems(int origin, int target)
             + void Move(int origin, int target)
 
             + bool CanReplace(T[] items, int index)

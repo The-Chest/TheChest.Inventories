@@ -10,7 +10,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T> OnMove;
 
-        private bool CanMoveItems(int origin, int target)
+        protected bool CanMoveItems(int origin, int target)
         {
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
@@ -37,7 +37,7 @@ namespace TheChest.Inventories.Containers
             return this.CanMoveItems(origin, target);
         }
 
-        private void MoveItems(int origin, int target)
+        protected void MoveItems(int origin, int target)
         {
             var slotOrigin = this.slots[origin];
             var slotTarget = this.slots[target];
