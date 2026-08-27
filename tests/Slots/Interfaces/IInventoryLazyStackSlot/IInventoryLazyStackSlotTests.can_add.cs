@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Slots.Interfaces
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Slots.Interfaces
 {
     public partial class IInventoryLazyStackSlotTests<T>
     {
@@ -16,6 +18,7 @@
         }
 
         [Test]
+        [IgnoreIfValueType]
         public void CanAdd_NullItem_ThrowsArgumentNullException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);

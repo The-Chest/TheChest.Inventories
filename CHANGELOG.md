@@ -56,8 +56,8 @@
 ### LazyStack
 * `LazyStackInventory`
   * 
-* `InventoryLazyStackSlot` 
-  * 
+* `InventoryLazyStackSlot`
+  *
 
 ## What's Removed
 * `Add` method call on protected `InventoryStackSlot<T>.ReplaceItems` method
