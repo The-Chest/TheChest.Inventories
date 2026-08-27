@@ -14,7 +14,7 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryAddEventHandler<T> OnAdd;
 
         #region AddAt
-        private void AddAtItems(T[] items, int index)
+        private void AddItemsAt(T[] items, int index)
         {
             this.slots[index].Add(items);
             this.OnAdd?.Invoke(this, (items, index));
@@ -86,7 +86,7 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            this.AddAtItems(new T[1]{ item },index);
+            this.AddItemsAt(new T[1]{ item },index);
 
             return true;
         }
@@ -111,7 +111,7 @@ namespace TheChest.Inventories.Containers
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
-            this.AddAtItems(items, index);
+            this.AddItemsAt(items, index);
 
             return Array.Empty<T>();
         }
