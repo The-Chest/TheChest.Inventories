@@ -80,11 +80,10 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var added = this.slots[index].Add(item);
-            if (added)
-                this.OnAdd?.Invoke(this, (new[] { item }, index));
+            this.slots[index].Add(item);
+            this.OnAdd?.Invoke(this, (new[] { item }, index));
 
-            return added;
+            return true;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -107,11 +106,10 @@ namespace TheChest.Inventories.Containers
             if (!items.HasAllEqual())
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
-            var notAddedItems = this.slots[index].Add(items);
-            if (notAddedItems.Length != items.Length)
-                this.OnAdd?.Invoke(this, (items.Skip(notAddedItems.Length).ToArray(), index));
+            this.slots[index].Add(items);
+            this.OnAdd?.Invoke(this, (items, index));
 
-            return notAddedItems;
+            return Array.Empty<T>();
         }
         #endregion
 

@@ -35,22 +35,23 @@
 
 ### Stack
 * `StackInventory`
+  * Removed validations for event trigger and return
   * `Get(int index)`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
     * It is marked as `Obsolete` and will be removed in the future, use `Get(int index, int amount)` instead
   * `Get(T item)`
     * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
     * It is marked as `Obsolete` and will be removed in the future, use `Get(T item, int amount)` instead
+  * `CanAddAt(T item, int index)`
+    * It is marked as `Obsolete` and will be removed in the future, use `CanAddAt(T[] items, int index)` instead 
+  * `AddAt(T item, int index)`
+    * It is marked as `Obsolete` and will be removed in the future, use `AddAt(T[] items, int index)` instead 
 * `InventoryStackSlot` 
   * `Get()`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T[]`
     * It is marked as `Obsolete` and will be removed in the future, use `Get(int amount)` instead
   * `Get(int amount)`
     * Will soon have the default value of `amount` as 1, so it can be used as a replacement for the `Get()` method
-  * `CanAddAt(T item, int index)`
-    * It is marked as `Obsolete` and will be removed in the future, use `CanAddAt(T[] items, int index)` instead 
-  * `AddAt(T item, int index)`
-    * It is marked as `Obsolete` and will be removed in the future, use `AddAt(T[] items, int index)` instead 
 
 ### LazyStack
 * `LazyStackInventory`
