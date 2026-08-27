@@ -196,30 +196,7 @@ namespace TheChest.Inventories.Containers
             if (!this.CanAddItems(items))
                 return false;
 
-            var events = new List<StackInventoryAddItemEventData<T>>(items.Length);
-            var addedAmount = 0;
-
-            for (var index = 0; index < this.Size; index++)
-            {
-                var slot = this.slots[index];
-                var itemsToAdd = items.Take(slot.AvailableAmount).ToArray();
-                if (slot.TryAdd(itemsToAdd))
-                {
-                    events.Add(
-                        new StackInventoryAddItemEventData<T>(
-                            items.Take(itemsToAdd.Length).ToArray(),
-                            index
-                        )
-                    );
-                    addedAmount++;
-
-                    if (addedAmount >= items.Length)
-                        break;
-                }
-            }
-
-            if (events.Count > 0)
-                this.OnAdd?.Invoke(this, new StackInventoryAddEventArgs<T>(events.ToArray()));
+            this.AddItems(items);
 
             return true;
         }
