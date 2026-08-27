@@ -47,6 +47,10 @@
     * It is marked as `Obsolete` and will be removed in the future, use `Get(int amount)` instead
   * `Get(int amount)`
     * Will soon have the default value of `amount` as 1, so it can be used as a replacement for the `Get()` method
+  * `CanAddAt(T item, int index)`
+    * It is marked as `Obsolete` and will be removed in the future, use `CanAddAt(T[] items, int index)` instead 
+  * `AddAt(T item, int index)`
+    * It is marked as `Obsolete` and will be removed in the future, use `AddAt(T[] items, int index)` instead 
 
 ### LazyStack
 * `LazyStackInventory`

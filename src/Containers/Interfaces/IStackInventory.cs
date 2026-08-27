@@ -74,7 +74,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to evaluate to add to the inventory.</param>
         /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
-        [Obsolete("Use CanAddAt(params T[]) instead. This method will be removed in future versions.")]
+        [Obsolete("Use CanAdd(params T[]) instead. This method will be removed in future versions.")]
         bool CanAdd(T item);
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot on inventory.
@@ -112,6 +112,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">The item to evaluate for insertion at the specified index.</param>
         /// <param name="index">The zero-based index at which to check if the item can be added.</param>
         /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
+        [Obsolete("Use CanAddAt(T[], int) instead. This method will be removed in future versions.")]
         bool CanAddAt(T item, int index);
         /// <summary>
         /// Determines whether the specified items can be added at the given index.
@@ -135,6 +136,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
+        [Obsolete("Use AddAt(T[], int) instead. This method will be removed in future versions.")]
         bool AddAt(T item, int index);
         /// <summary>
         /// Adds an array of items inside the inventory
