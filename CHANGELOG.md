@@ -88,7 +88,6 @@
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
 * Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
-* No nullable support for value types yet, it might be added in the future
 * Some validations are duplicated through slots and inventories classes
     * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
 
