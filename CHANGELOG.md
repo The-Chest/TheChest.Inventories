@@ -84,9 +84,11 @@
 * No idea about how is the code performance...
 * Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project might need a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
 * No nullable support for value types yet, it might be added in the future
+* Some validations are duplicated through slots and inventories classes
+    * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
 
 ## What's Next
-* [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
+* A refactor in multiple slots and inventories methods to make them more simple and easier to understand and removing the Obsolete methods
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 * [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 
