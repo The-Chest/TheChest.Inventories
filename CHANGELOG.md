@@ -64,7 +64,7 @@
   * `GetAll(int index)`
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 * `InventoryLazyStackSlot` 
-  * 
+  * protected method `Clear` now checks using `System.Reflection` if the `contente` inside the slot is value-type
 
 ## What's Removed
 * `Add` method call on protected `InventoryStackSlot<T>.ReplaceItems` method
