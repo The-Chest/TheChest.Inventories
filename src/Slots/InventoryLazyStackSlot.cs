@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using TheChest.Core.Slots;
 using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Exceptions;
@@ -190,7 +191,19 @@ namespace TheChest.Inventories.Slots
         /// </summary>
         protected void Clear()
         {
-            this.Content = default;
+            if (!typeof(T).IsValueType)
+            {
+                this.Content = default;
+            }
+            else
+            {
+                var field = typeof(LazyStackSlot<T>).GetField(
+                    "content",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                field.SetValue(this, null);
+            }
+
             this.Amount = 0;
         }
         /// <summary>

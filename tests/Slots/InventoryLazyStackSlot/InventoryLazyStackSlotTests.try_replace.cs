@@ -1,10 +1,12 @@
-﻿using TheChest.Tests.Common.Extensions.Slots;
+﻿using TheChest.Tests.Common.Attributes;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
 {
     public partial class InventoryLazyStackSlotTests<T>
     {
         [Test]
+        [IgnoreIfValueType]
         public void TryReplace_NullItem_ThrowsArgumentNullException()
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
