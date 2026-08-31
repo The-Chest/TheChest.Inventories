@@ -4,7 +4,7 @@
     {
         [TestCase(-1, 1)]
         [TestCase(MAX_SIZE_TEST, 1)]
-        public void Get_ByIndexAndAmount_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
+        public void GetByIndexAndAmount_InvalidIndex_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -12,13 +12,13 @@
 
             Assert.That(
                 () => inventory.Get(index, amount),
-                Throws.TypeOf<ArgumentOutOfRangeException>().And.With.Message.Contains("index")
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
             );
         }
 
         [TestCase(1, 0)]
         [TestCase(0, -1)]
-        public void Get_ByIndexAndAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int index, int amount)
+        public void GetByIndexAndAmount_NonPositiveAmount_ThrowsArgumentOutOfRangeException(int index, int amount)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -26,12 +26,26 @@
 
             Assert.That(
                 () => inventory.Get(index, amount),
-                Throws.TypeOf<ArgumentOutOfRangeException>().And.With.Message.Contains("amount")
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
             );
         }
 
         [Test]
-        public void Get_ByIndexAndAmount_ValidIndexEmptySlot_DoesNotCallOnGetEvent()
+        public void GetByIndexAndAmount_EmptySlot_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var index = this.random.Next(0, size);
+            var amount = this.random.Next(1, stackSize);
+
+            Assert.That(
+                () => inventory.Get(index, amount),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
+            );
+        }
+
+        [Test]
+        public void GetByIndexAndAmount_EmptySlot_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -40,11 +54,14 @@
 
             var index = this.random.Next(0, size);
             var amount = this.random.Next(1, stackSize);
-            inventory.Get(index, amount);
+            Assert.That(
+                () => inventory.Get(index, amount),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
+            );
         }
 
         [Test]
-        public void Get_ByIndexAndAmount_ValidIndexAndAmount_CallsOnGetEvent()
+        public void GetByIndexAndAmount_SlotWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -71,7 +88,7 @@
         }
 
         [Test]
-        public void Get_ByIndexAndAmount_ValidIndexAndAmountBiggerThanSlotSize_CallsOnGetEvent()
+        public void GetByIndexAndAmount_AmountExceedsSlotItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -98,20 +115,7 @@
         }
 
         [Test]
-        public void Get_ByIndexAndAmount_ValidIndexEmptySlot_ReturnsEmptyArray()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var index = this.random.Next(0, size);
-            var amount = this.random.Next(1, stackSize);
-            var result = inventory.Get(index, amount);
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void Get_ByIndexAndAmount_ValidIndexAndAmount_ReturnsCorrectAmount()
+        public void GetByIndexAndAmount_SlotWithItems_ReturnsRequestedAmount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -126,7 +130,7 @@
         }
 
         [Test]
-        public void Get_ByIndexAndAmount_ValidIndexAndAmountBiggerThanSlotSize_ReturnsMaxAvailableAmount()
+        public void GetByIndexAndAmount_AmountExceedsSlotItems_ReturnsMaxAvailableAmount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
