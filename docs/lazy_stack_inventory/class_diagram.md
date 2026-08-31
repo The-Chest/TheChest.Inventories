@@ -57,8 +57,11 @@ namespace TheChest.Inventories.Containers {
 
         + int GetCount(T item)
 
+        ~ bool CanMoveItems(int origin, int target)
         + bool CanMove(int origin, int target)
         + bool TryMove(int origin, int target)
+        
+        ~ void MoveItems(int origin, int target)
         + void Move(int origin, int target)
 
         + bool CanReplace(T item, int index, int amount)
