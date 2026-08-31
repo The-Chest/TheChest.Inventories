@@ -1,6 +1,87 @@
-﻿namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
+﻿using TheChest.Tests.Common.Attributes;
+
+namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
 {
     public partial class InventoryLazyStackSlotTests<T>
     {
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void CanAdd_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
+            var item = this.itemFactory.CreateDefault();
+            Assert.That(
+                () => slot.CanAdd(item, amount),
+                Throws.Exception.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
+        }
+
+        [Test]
+        [IgnoreIfValueType]
+        public void CanAdd_NullItem_ThrowsArgumentNullException()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
+            Assert.That(
+                () => slot.CanAdd(item: default!, amount: 1),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
+        }
+
+        [Test]
+        public void CanAdd_FullSlot_ReturnsFalse()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.FullSlot(item, stackSize);
+
+            var result = slot.CanAdd(item, 1);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void CanAdd_EmptySlotAndValidItem_ReturnsTrue()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var slot = this.slotFactory.Empty(stackSize);
+
+            var item = this.itemFactory.CreateDefault();
+            var result = slot.CanAdd(item, 1);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void CanAdd_NotEmptySlotAndItemMatchesContent_ReturnsTrue()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var halfStackSize = stackSize / 2;
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.WithItem(item, halfStackSize, stackSize);
+
+            var secondItem = this.itemFactory.CreateDefault();
+            var result = slot.CanAdd(secondItem, halfStackSize);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void CanAdd_NotEmptySlotAndItemDoesNotMatchContent_ReturnsFalse()
+        {
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var halfStackSize = stackSize / 2;
+            var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.WithItem(item, halfStackSize, stackSize);
+
+            var secondItem = this.itemFactory.CreateRandom();
+
+            var result = slot.CanAdd(secondItem, halfStackSize);
+
+            Assert.That(result, Is.False);
+        }
+
     }
 }
