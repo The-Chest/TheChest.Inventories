@@ -3,7 +3,7 @@
 ## What's Added
 * Value Type for all of Inventory and Slot classes
   * *It is using `System.Reflection` in the `Inventory` class for value type checking so performance might be an issue* 
-* `Inventory<T>` and `StackInventory<T>` now has the protected method `GetItem`
+* `Inventory<T>` and `StackInventory<T>` now has the protected method `GetItem` and `GetItems`
     * It returns the item from the inventory with no validation, it is used internally by the `Get`
     * It also fires the `OnGet` event when the item is successfully retrieved from the inventory
 
@@ -55,7 +55,14 @@
 
 ### LazyStack
 * `LazyStackInventory`
-  * 
+  * `Get(int index)`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(int index, int amount)` instead
+  * `Get(T item)`
+    * Now it throws `InvalidOperationException` when the item is not found instead of returning the default value of `T`
+    * It is marked as `Obsolete` and will be removed in the future, use `Get(T item, int amount)` instead
+  * `GetAll(int index)`
+    * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 * `InventoryLazyStackSlot` 
   * 
 
