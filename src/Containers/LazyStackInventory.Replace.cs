@@ -1,6 +1,7 @@
 ﻿using System;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
+using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Extensions;
 
 namespace TheChest.Inventories.Containers
@@ -22,9 +23,17 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
+            var slot = this.slots[index];
+
+            if (slot.MaxAmount < amount)
+                return false;
+            if (slot.IsEmpty)
+                return false;
+
             return this.slots[index].CanReplace(item, amount);
         }
         /// <inheritdoc/>
+        /// <remarks>The method fires <see cref="OnReplace"/> event when <paramref name="item"/> is added to <paramref name="index"/> and the current item returned</remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         /// <exception cref="InvalidOperationException">When <paramref name="amount"/> exceeds the stack size of the slot on <paramref name="index"/>.</exception>
@@ -37,16 +46,19 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var replacedItems = this.slots[index].Replace(item, amount);
+            var slot = this.slots[index];
+            if (slot.MaxAmount < amount)
+                throw new ArgumentOutOfRangeException(nameof(amount), LazyStackInventoryErrors.MaxStackSizeSmallerThanItemsToReplace);
+            if (slot.IsEmpty)
+                throw new InvalidOperationException(LazyStackInventoryErrors.EmptySlot);
 
-            if (replacedItems.Length > 0)
-                this.OnReplace?.Invoke(this, (replacedItems[0], replacedItems.Length, item, amount, index));
-            else
-                this.OnReplace?.Invoke(this, (default, 0, item, amount, index));
+            var replacedItems = slot.Replace(item, amount);
+            this.OnReplace?.Invoke(this, (replacedItems[0], replacedItems.Length, item, amount, index));
 
             return replacedItems;
         }
         /// <inheritdoc/>
+        /// <remarks>The method fires <see cref="OnReplace"/> event if the method returns true.</remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
         /// <exception cref="InvalidOperationException">When <paramref name="amount"/> exceeds the stack size of the slot on <paramref name="index"/>.</exception>
@@ -59,11 +71,17 @@ namespace TheChest.Inventories.Containers
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var replaced = this.slots[index].TryReplace(item, amount, out oldItems);
-            if (replaced && oldItems.Length > 0)
+            oldItems = null;
+            
+            var slot = this.slots[index];
+            if (slot.MaxAmount < amount)
+                return false;
+            if (slot.IsEmpty)
+                return false;
+
+            var replaced = slot.TryReplace(item, amount, out oldItems);
+            if (replaced)
                 this.OnReplace?.Invoke(this, (oldItems[0], oldItems.Length, item, amount, index));
-            else if (replaced)
-                this.OnReplace?.Invoke(this, (default, 0, item, amount, index));
 
             return replaced;
         }

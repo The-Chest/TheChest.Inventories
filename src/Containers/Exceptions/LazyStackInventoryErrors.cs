@@ -12,6 +12,10 @@
         internal const string EmptySlot = "The slot is empty.";
         internal const string ItemNotFound = "The item was not found in the inventory.";
         #endregion
+        
+        #region Replacing Items
+        internal const string MaxStackSizeSmallerThanItemsToReplace = "The max stack size is smaller than the number of items to replace.";
+        #endregion
 
         #region Moving Items
         internal const string CannotMoveEmptySlots = "Cannot move empty slots.";
