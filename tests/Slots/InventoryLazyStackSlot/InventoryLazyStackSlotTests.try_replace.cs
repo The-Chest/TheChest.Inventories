@@ -34,7 +34,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         }
 
         [Test]
-        public void TryReplace_EmptySlot_SetsOldItemsToEmptyArray()
+        public void TryReplace_EmptySlot_SetsOldItemsToNull()
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
@@ -43,11 +43,11 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var amount = this.random.Next(1, maxAmount);
             slot.TryReplace(item, amount, out var oldItems);
 
-            Assert.That(oldItems, Is.Empty);
+            Assert.That(oldItems, Is.Null);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_SetsContent()
+        public void TryReplace_EmptySlot_RemainsEmpty()
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
@@ -56,11 +56,11 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var amount = this.random.Next(1, maxAmount);
             slot.TryReplace(item, amount, out _);
 
-            Assert.That(slot.GetContent(), Is.EqualTo(item));
+            Assert.That(slot.IsEmpty, Is.True);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_SetsAmount()
+        public void TryReplace_EmptySlot_DoesNotChangeAmount()
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
@@ -69,11 +69,11 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var amount = this.random.Next(1, maxAmount);
             slot.TryReplace(item, amount, out _);
 
-            Assert.That(slot.Amount, Is.EqualTo(amount));
+            Assert.That(slot.Amount, Is.Zero);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_ReturnsTrue()
+        public void TryReplace_EmptySlot_ReturnsFalse()
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(maxAmount);
@@ -82,7 +82,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var amount = this.random.Next(1, maxAmount);
             var result = slot.TryReplace(item, amount, out _);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         [Test]
