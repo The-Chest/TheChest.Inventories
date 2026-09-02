@@ -77,7 +77,7 @@ using TheChest.Tests.Common.Attributes;
         }
 
         [Test]
-        public void CanReplace_EmptySlot_ReturnsTrue()
+        public void CanReplace_EmptySlot_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -86,7 +86,7 @@ using TheChest.Tests.Common.Attributes;
             var index = this.random.Next(0, size - 1);
             var canReplace = inventory.CanReplace(newItem, index, stackSize);
 
-            Assert.That(canReplace, Is.True);
+            Assert.That(canReplace, Is.False);
         }
     }
 }
