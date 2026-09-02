@@ -10,9 +10,12 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         public void Replace_NullItem_ThrowsArgumentNullException()
         {
             var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.Empty(maxAmount);
+            var slot = this.slotFactory.WithItem(this.itemFactory.CreateDefault(), 1, maxAmount);
 
-            Assert.Throws<ArgumentNullException>(() => slot.Replace(default!, 1));
+            Assert.That(
+                () => slot.Replace(default!, 1),
+                Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
+            );
         }
 
         [TestCase(0)]
@@ -21,101 +24,89 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         public void Replace_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.Empty(stackSize);
             var item = this.itemFactory.CreateDefault();
+            var slot = this.slotFactory.WithItem(item, 1, stackSize);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => slot.Replace(item, amount));
+            Assert.That(
+                () => slot.Replace(item, amount),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
+            );
         }
 
         [Test]
-        public void Replace_EmptySlot_AddItems()
+        public void Replace_EmptySlot_ThrowsInvalidOperationException()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
             var item = this.itemFactory.CreateDefault();
 
-            int amount = this.random.Next(1, stackSize);
-            slot.Replace(item, amount);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(slot.IsEmpty, Is.False);
-                Assert.That(slot.Amount, Is.EqualTo(amount));
-                Assert.That(slot.GetContent(), Is.EqualTo(item));
-            });
+            Assert.That(
+                () => slot.Replace(item, 1),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot replace an empty slot")
+            );
         }
 
         [Test]
-        public void Replace_SlotWithDifferentItems_ReplacesContent()
+        public void Replace_EmptySlot_DoesNotAddItems()
         {
-            var initialItem = this.itemFactory.CreateDefault();
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var halfStackSize = stackSize / 2;
-            int initialAmount = this.random.Next(1, halfStackSize);
-            var slot = this.slotFactory.WithItem(initialItem, initialAmount, stackSize);
-
-            var newItem = this.itemFactory.CreateRandom();
-            int newAmount = this.random.Next(1, halfStackSize);
-            slot.Replace(newItem, newAmount);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(slot.Amount, Is.EqualTo(newAmount));
-                Assert.That(slot.GetContent(), Is.EqualTo(newItem));
-            });
-        }
-
-        [Test]
-        public void Replace_SlotWithSameItems_ReplacesContent()
-        {
-            var initialItem = this.itemFactory.CreateDefault();
-            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var halfStackSize = stackSize / 2;
-            int initialAmount = this.random.Next(1, halfStackSize);
-            var slot = this.slotFactory.WithItem(initialItem, initialAmount, stackSize);
-
-            var newItem = this.itemFactory.CreateDefault();
-            int newAmount = this.random.Next(1, halfStackSize);
-            slot.Replace(newItem, newAmount);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(slot.Amount, Is.EqualTo(newAmount));
-                Assert.That(slot.GetContent(), Is.EqualTo(newItem));
-            });
-        }
-
-        [Test]
-        public void Replace_EmptySlot_ReturnsEmptyArray()
-        {
-            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            var slot = this.slotFactory.Empty(maxAmount);
-
+            var slot = this.slotFactory.Empty(stackSize);
             var item = this.itemFactory.CreateDefault();
-            int amount = this.random.Next(1, maxAmount);
-            var result = slot.Replace(item, amount);
 
-            Assert.That(result, Is.Empty);
+            Assert.That(
+                () => slot.Replace(item, 1),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot replace an empty slot")
+            );
+
+            Assert.That(slot.IsEmpty, Is.True);
         }
 
         [Test]
-        public void Replace_SlotWithItems_ReturnsItemFromSlot()
+        public void Replace_SlotWithDifferentItem_ReplacesItems()
         {
             var initialItem = this.itemFactory.CreateDefault();
-            var maxAmount = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
-            int initialAmount = this.random.Next(1, maxAmount - 1);
-            var slot = this.slotFactory.WithItem(initialItem, initialAmount, maxAmount);
-
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var initialAmount = this.random.Next(1, stackSize + 1);
+            var slot = this.slotFactory.WithItem(initialItem, initialAmount, stackSize);
             var newItem = this.itemFactory.CreateRandom();
-            int newAmount = this.random.Next(1, maxAmount);
+            var newAmount = this.random.Next(1, stackSize + 1);
+
+            slot.Replace(newItem, newAmount);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(slot.GetContent(), Is.EqualTo(newItem));
+                Assert.That(slot.Amount, Is.EqualTo(newAmount));
+            });
+        }
+
+        [Test]
+        public void Replace_SlotWithSameItem_ReplacesAmount()
+        {
+            var item = this.itemFactory.CreateDefault();
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var initialAmount = this.random.Next(1, stackSize + 1);
+            var slot = this.slotFactory.WithItem(item, initialAmount, stackSize);
+            var newAmount = initialAmount == stackSize ? initialAmount - 1 : initialAmount + 1;
+
+            slot.Replace(item, newAmount);
+
+            Assert.That(slot.Amount, Is.EqualTo(newAmount));
+        }
+
+        [Test]
+        public void Replace_SlotWithItems_ReturnsPreviousItems()
+        {
+            var initialItem = this.itemFactory.CreateDefault();
+            var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
+            var initialAmount = this.random.Next(1, stackSize + 1);
+            var slot = this.slotFactory.WithItem(initialItem, initialAmount, stackSize);
+            var newItem = this.itemFactory.CreateRandom();
+            var newAmount = this.random.Next(1, stackSize + 1);
+
             var result = slot.Replace(newItem, newAmount);
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(result, Has.Length.EqualTo(initialAmount));
-                Assert.That(result, Has.All.EqualTo(initialItem));
-            });
+            Assert.That(result, Has.Length.EqualTo(initialAmount).And.All.EqualTo(initialItem));
         }
-
     }
 }
