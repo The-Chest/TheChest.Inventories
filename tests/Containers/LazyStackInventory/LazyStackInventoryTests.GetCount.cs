@@ -28,7 +28,7 @@
         }
 
         [Test]
-        public void GetCount_ExistingItem_ReturnsCorrectCount()
+        public void GetCount_ExistingItem_ReturnsItemCount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();

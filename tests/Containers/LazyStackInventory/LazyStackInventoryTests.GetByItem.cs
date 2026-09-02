@@ -4,7 +4,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        public void Get_ByItem_NullItem_ThrowsArgumentNullException()
+        public void GetItem_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -16,7 +16,34 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByItem_ExistingItem_RemovesOneFromFirstFoundSlot()
+        public void GetItem_EmptyInventory_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+
+            Assert.That(
+                () => inventory.Get(item),
+                Throws.InvalidOperationException.With.Message.EqualTo("The item was not found in the inventory.")
+            );
+        }
+
+        [Test]
+        public void GetItem_NotFoundItem_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventoryItem = this.itemFactory.CreateRandom();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, inventoryItem);
+            var item = this.itemFactory.CreateDefault();
+
+            Assert.That(
+                () => inventory.Get(item),
+                Throws.InvalidOperationException.With.Message.EqualTo("The item was not found in the inventory.")
+            );
+        }
+
+        [Test]
+        public void GetItem_ExistingItem_RemovesOneFromFirstFoundSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateDefault();
@@ -29,7 +56,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByItem_ExistingItem_CallsOnGetEvent()
+        public void GetItem_ExistingItem_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateDefault();
@@ -55,7 +82,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByItem_NotFoundItem_DoesNotCallOnGetEvent()
+        public void GetItem_NotFoundItem_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateDefault();
@@ -64,11 +91,14 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called when an item that is not found.");
             
             var item = this.itemFactory.CreateRandom();
-            inventory.Get(item);
+            Assert.That(
+                () => inventory.Get(item),
+                Throws.InvalidOperationException.With.Message.EqualTo("The item was not found in the inventory.")
+            );
         }
 
         [Test]
-        public void Get_ByItem_ExistingItem_ReturnsItem()
+        public void GetItem_ExistingItem_ReturnsItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var items = this.itemFactory.CreateDefault();
@@ -80,17 +110,5 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             Assert.That(result, Is.EqualTo(expectedItem));
         }
 
-        [Test]
-        public void Get_ByItem_NotFoundItem_ReturnsNull()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var items = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, items);
-
-            var item = this.itemFactory.CreateRandom();
-            var result = inventory.Get(item);
-
-            Assert.That(result, Is.Null);
-        }
     }
 }

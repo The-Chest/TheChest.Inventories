@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
+using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Extensions;
 
 namespace TheChest.Inventories.Containers
@@ -18,7 +19,7 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         public virtual T[] Clear()
         {
-            var events = new List<LazyStackInventoryGetItemEventData<T>>(this.Size / 4);
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
             var items = new List<T>();
             for (int index = 0; index < this.Size; index++)
             {
@@ -37,28 +38,45 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+        /// <summary>
+        /// Gets an amount of items from an specific slot the inventory
+        /// </summary>
+        /// <remarks>
+        /// The method fires <see cref="OnGet"/> event when any amount of item is returned from <paramref name="index"/> of the inventory.
+        /// </remarks>
+        /// <remarks>
+        /// This method doesn't do any checking in the slot's state
+        /// </remarks>
+        /// <returns>The <paramref name="amount"/> of items in <paramref name="index"/> or the max available from it</returns>
+        protected T[] GetItems(int index, int amount)
+        {
+            var items = this.slots[index].Get(amount);
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+            return items;
+        }
 
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When the slot in <paramref name="index"/> is empty</exception>
         public virtual T Get(int index)
         {
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
+            if(this.slots[index].IsEmpty)
+                throw new InvalidOperationException(LazyStackInventoryErrors.EmptySlot);
 
-            var item = this.slots[index].Get().FirstOrDefault();
-            if (!EqualityComparer<T>.Default.Equals(item, default))
-                this.OnGet?.Invoke(this, (item, index, 1));
-
-            return item;
+            return this.GetItems(index, 1).FirstOrDefault();
         }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when <paramref name="item"/> is returned from the inventory.
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="InvalidOperationException">When <paramref name="item"/> is not found in any slot</exception>
         public virtual T Get(T item)
         {
             if (item.IsNull())
@@ -66,18 +84,13 @@ namespace TheChest.Inventories.Containers
 
             for (int index = 0; index < this.Size; index++)
             {
-                var slot = this.slots[index];
-                if (slot.Contains(item))
+                if (this.slots[index].Contains(item))
                 {
-                    var foundItem = slot.Get().FirstOrDefault();
-                    if (!EqualityComparer<T>.Default.Equals(foundItem, default))
-                        this.OnGet?.Invoke(this, (foundItem, index, 1));
-
-                    return foundItem;
+                    return this.GetItems(index, 1).FirstOrDefault();
                 }
             }
 
-            return default;
+            throw new InvalidOperationException(LazyStackInventoryErrors.ItemNotFound);
         }
         /// <summary>
         /// Gets an amount of items from the inventory
@@ -105,8 +118,7 @@ namespace TheChest.Inventories.Containers
                 if (slot.Contains(item))
                 {
                     var slotItems = slot.Get(amount);
-                    if (slotItems.Length > 0)
-                        events.Add(new LazyStackInventoryGetItemEventData<T>(slotItems[0], index, slotItems.Length));
+                    events.Add(new LazyStackInventoryGetItemEventData<T>(slotItems[0], index, slotItems.Length));
 
                     items.AddRange(slotItems);
                     amount -= slotItems.Length;
@@ -129,18 +141,17 @@ namespace TheChest.Inventories.Containers
         /// <param name="amount">Amount to be returned (or the max available)</param>
         /// <returns>An array of items</returns>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When the slot in <paramref name="index"/> is empty</exception>
         public virtual T[] Get(int index, int amount)
         {
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
+            if(this.slots[index].IsEmpty)
+                throw new InvalidOperationException(LazyStackInventoryErrors.EmptySlot);
 
-            var items = this.slots[index].Get(amount);
-            if (items.Length > 0)
-                this.OnGet?.Invoke(this, (items[0], index, items.Length));
-
-            return items;
+            return this.GetItems(index, amount);
         }
 
         /// <summary>
@@ -180,10 +191,13 @@ namespace TheChest.Inventories.Containers
         /// The method fires <see cref="OnGet"/> event when all items from <paramref name="index"/> is returned from the inventory.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        /// <exception cref="InvalidOperationException">When the slot in <paramref name="index"/> is empty</exception>
         public virtual T[] GetAll(int index)
         {
             if (index < 0 || index > this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
+            if(this.slots[index].IsEmpty)
+                throw new InvalidOperationException(LazyStackInventoryErrors.EmptySlot);
 
             var items = this.slots[index].GetAll();
             if (items.Length > 0)

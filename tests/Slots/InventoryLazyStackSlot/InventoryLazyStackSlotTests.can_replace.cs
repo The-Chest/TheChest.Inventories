@@ -43,7 +43,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
         }
 
         [Test]
-        public void CanReplace_EmptySlotValidItemAndAmount_ReturnsTrue()
+        public void CanReplace_EmptySlotValidItemAndAmount_ReturnsFalse()
         {
             var stackSize = this.random.Next(MIN_STACK_SIZE_TEST, MAX_STACK_SIZE_TEST);
             var slot = this.slotFactory.Empty(stackSize);
@@ -51,7 +51,7 @@ namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
             var item = this.itemFactory.CreateDefault();
             var result = slot.CanReplace(item, stackSize / 2);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         [Test]

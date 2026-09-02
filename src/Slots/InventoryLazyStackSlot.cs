@@ -130,13 +130,16 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <returns><see langword="true"/> if <paramref name="item"/> is not <see langword="null"/> and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
+        /// <returns><see langword="true"/> if <paramref name="item"/> is not <see langword="null"/>, <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/> and the current slot is not empty</returns>
         public virtual bool CanReplace(T item, int amount = 1)
         {
             if (item.IsNull())
                 return false;
 
             if (amount <= 0 || amount > this.MaxAmount)
+                return false;
+            
+            if(this.IsEmpty)
                 return false;
 
             return true;
@@ -151,17 +154,15 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0 || amount > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));
+
             if(amount > this.MaxAmount)
                 throw new InvalidOperationException(InventoryLazyStackSlotErrors.ReplaceMoreThanStackSize);
-
             if (this.IsEmpty)
-            {
-                var left = this.AddItems(item, amount);
-                return Enumerable.Repeat(item, left).ToArray();
-            }
+                throw new InvalidOperationException(InventoryLazyStackSlotErrors.ReplaceEmptySlot);
 
             var slotItems = this.GetContent(this.Amount);
-            this.SetContent(item,amount);
+            this.SetContent(item, amount);
+
             return slotItems;
         }
         /// <inheritdoc/>
@@ -173,14 +174,15 @@ namespace TheChest.Inventories.Slots
                 throw new ArgumentNullException(nameof(item));
             if (amount <= 0 || amount > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-            
+
             oldItems = null;
+            if (this.IsEmpty)
+                return false;
             
             if (amount > this.MaxAmount)
                 return false;
             
-            oldItems = this.IsEmpty ? Array.Empty<T>() : this.GetContent(this.Amount);
-
+            oldItems = this.GetContent(this.Amount);
             this.SetContent(item, amount);
 
             return true;

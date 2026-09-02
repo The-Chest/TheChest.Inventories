@@ -139,10 +139,7 @@ namespace TheChest.Inventories.Containers
         /// <param name="item">Item to be added to the inventory</param>
         /// <returns><see langword="true" /> if <paramref name="item"/> is possible to be added to the inventory</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        public virtual bool Add(T item)
-        {
-            return this.Add(item, 1) == 0;
-        }
+        public virtual bool Add(T item) => this.Add(item, 1) == 0;
         /// <summary>
         /// Adds an amount of items to the first available slot.
         /// </summary>

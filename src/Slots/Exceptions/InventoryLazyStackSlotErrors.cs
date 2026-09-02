@@ -9,6 +9,7 @@
         #endregion
 
         #region Replacing Items
+        internal const string ReplaceEmptySlot = "Cannot replace an empty slot";
         internal const string ReplaceMoreThanStackSize = "The amount of items to replace exceeds the stack size of the slot.";
         #endregion
     }

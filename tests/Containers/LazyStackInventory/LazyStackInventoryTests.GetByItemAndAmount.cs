@@ -3,7 +3,7 @@
     public partial class LazyStackInventoryTests<T>
     {
         [Test]
-        public void Get_ByItemAndAmount_Nulltem_ThrowsArgumentNullException()
+        public void GetItems_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -16,7 +16,7 @@
 
         [TestCase(-1)]
         [TestCase(0)]
-        public void Get_ByItemAndAmount_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
+        public void GetItems_NonPositiveAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -29,7 +29,7 @@
         }
 
         [Test]
-        public void Get_ByItemAndAmount_ExistingItemsAndAmountBiggerThanInventorySize_CallsOnGetEvent()
+        public void GetItems_AmountExceedsAvailableItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -53,7 +53,7 @@
         }
 
         [Test]
-        public void Get_ByItemAndAmount_ExistingItems_CallsOnGetEvent()
+        public void GetItems_ExistingItem_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -80,7 +80,7 @@
         }
 
         [Test]
-        public void Get_ByItemAndAmount_NotFoundItem_DoesNotCallOnGetEvent()
+        public void GetItems_NotFoundItem_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var randomItem = this.itemFactory.CreateRandom();
@@ -94,7 +94,7 @@
         }
 
         [Test]
-        public void Get_ByItemAndAmount_ExistingItemsAndAmountBiggerThanInventorySize_ReturnsMaxAvailableAmount()
+        public void GetItems_AmountExceedsAvailableItems_ReturnsMaxAvailableAmount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -108,7 +108,7 @@
         }
 
         [Test]
-        public void Get_ByItemAndAmount_ExistingItems_ReturnsCorrectAmountFromMultipleSlots()
+        public void GetItems_ExistingItem_ReturnsRequestedAmount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -121,7 +121,7 @@
         }
 
         [Test]
-        public void Get_ByItemAndAmount_NotFoundItem_ReturnsEmptyArray()
+        public void GetItems_NotFoundItem_ReturnsEmptyArray()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var randomItem = this.itemFactory.CreateRandom();

@@ -59,17 +59,16 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void TryReplace_MoreItemsThanStackSize_ThrowsArgumentOutOfRangeException()
+        public void TryReplace_MoreItemsThanStackSize_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             var index = this.random.Next(0, size);
-            Assert.That(
-                () => inventory.TryReplace(item, index, stackSize + 1, out _),
-                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("amount")
-            );
+            var result = inventory.TryReplace(item, index, stackSize + 1, out _);
+
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -145,7 +144,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void TryReplace_EmptySlot_ReplacesItemsInSlot()
+        public void TryReplace_EmptySlot_DoesNotAddItemsToSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -155,11 +154,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var amount = this.random.Next(1, stackSize + 1);
             inventory.TryReplace(newItem, index, amount, out _);
 
-            Assert.That(inventory.GetItems(index), Has.Length.EqualTo(amount).And.All.EqualTo(newItem));
+            Assert.That(inventory.GetItems(index), Is.Empty);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_SetsOldItemsToEmptyArray()
+        public void TryReplace_EmptySlot_SetsOldItemsToNull()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -169,11 +168,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var amount = this.random.Next(1, stackSize + 1);
             inventory.TryReplace(newItem, index, amount, out var oldItems);
 
-            Assert.That(oldItems, Is.Empty);
+            Assert.That(oldItems, Is.Null);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_CallsOnReplaceEvent()
+        public void TryReplace_EmptySlot_DoesNotCallOnReplaceEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -195,11 +194,11 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             };
             inventory.TryReplace(newItem, index, amount, out _);
 
-            Assert.That(calledWithExpectedData, Is.True);
+            Assert.That(calledWithExpectedData, Is.False);
         }
 
         [Test]
-        public void TryReplace_EmptySlot_ReturnsTrue()
+        public void TryReplace_EmptySlot_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
@@ -209,7 +208,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var amount = this.random.Next(1, stackSize + 1);
             var result = inventory.TryReplace(newItem, index, amount, out _);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
     }
 }

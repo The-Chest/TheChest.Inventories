@@ -6,17 +6,33 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
     {
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
-        public void Get_ByIndex_ShouldThrowArgumentOutOfRangeException_WhenIndexIsInvalid(int index)
+        public void GetByIndex_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
             var inventory = this.inventoryFactory.FullContainer(size, stackSize, item);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.Get(index));
+            Assert.That(
+                () => inventory.Get(index),
+                Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("index")
+            );
         }
 
         [Test]
-        public void Get_ByIndex_ValidIndex_RemovesItemFromSlot()
+        public void GetByIndex_EmptySlot_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var index = this.random.Next(0, size);
+
+            Assert.That(
+                () => inventory.Get(index),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
+            );
+        }
+
+        [Test]
+        public void GetByIndex_SlotWithItems_RemovesItemFromSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var expectedItem = this.itemFactory.CreateDefault();
@@ -29,7 +45,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByIndex_ValidIndex_CallsOnGetEvent()
+        public void GetByIndex_SlotWithItems_CallsOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var expectedItem = this.itemFactory.CreateDefault();
@@ -55,19 +71,23 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
-        public void Get_ByIndex_EmptySlot_DoesNotCallOnGetEvent()
+        public void GetByIndex_EmptySlot_DoesNotCallOnGetEvent()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             inventory.OnGet += (sender, args) => Assert.Fail("OnGet event should not be called for an empty slot.");
             
-            var index = this.random.Next(0, size - 1);
-            inventory.Get(index);
+            var index = this.random.Next(0, size);
+
+            Assert.That(
+                () => inventory.Get(index),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
+            );
         }
 
         [Test]
-        public void Get_ByIndex_ValidIndex_ReturnsItem()
+        public void GetByIndex_SlotWithItems_ReturnsItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var expectedItem = this.itemFactory.CreateDefault();
@@ -79,16 +99,5 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             Assert.That(result, Is.EqualTo(expectedItem));
         }
 
-        [Test]
-        public void Get_ByIndex_EmptySlot_ReturnsNull()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var randomIndex = this.random.Next(0, size - 1);
-            var result = inventory.Get(randomIndex);
-
-            Assert.That(result, Is.Null);
-        }
     }
 }
