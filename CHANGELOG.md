@@ -52,6 +52,10 @@
     * It is marked as `Obsolete` and will be removed in the future, use `Get(int amount)` instead
   * `Get(int amount)`
     * Will soon have the default value of `amount` as 1, so it can be used as a replacement for the `Get()` method
+  * `CanReplace`
+    * Now it checks if the current slot is empty, if it is empty it returns false
+  * `Replace`
+    * Now it throws `InvalidOperationException` when the slot is empty
 
 ### LazyStack
 * `LazyStackInventory`
@@ -65,6 +69,11 @@
     * Now it throws `InvalidOperationException` when the slot is empty instead of returning the default value of `T`
 * `InventoryLazyStackSlot` 
   * protected method `Clear` now checks using `System.Reflection` if the `contente` inside the slot is value-type
+  * `CanReplace`
+    * Now it checks if the current slot is empty, if it is empty it returns false
+    * It also checks if the amount replaced is bigger than the `MaxAmount`, if it is empty it returns false
+  * `Replace`
+    * Now it throws `InvalidOperationException` when the slot is empty or the amount exceeds `MaxAmount`
 
 ## What's Removed
 * `Add` method call on protected `InventoryStackSlot<T>.ReplaceItems` method
@@ -77,7 +86,7 @@
 * **The Current Architecture is not stable for the final version yet**
 * **Event system will need an improvement on creation/dispatch**
   * The new Event API is being planned
-* `Exception`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method or a custom attribute to validate the parameters
+* `Exception`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method
 * Project size is increasing and the library is not "lightweight" anymore 
   * The project might be separated into multiple packages in the future
   * Inventory classes have too many methods
