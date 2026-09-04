@@ -46,6 +46,20 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             );
         }
 
+        [Test]
+        public void AddAt_AmountBiggerThanSlotSize_DoesNotAddItem()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+            var index = this.random.Next(0, size);
+            var amount = stackSize + this.random.Next(1, 10);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => inventory.AddAt(item, index, amount));
+
+            Assert.That(inventory.GetSlot(index).IsEmpty, Is.True);
+        }
+
         [TestCase(-1)]
         [TestCase(MAX_SIZE_TEST)]
         public void AddAt_InvalidIndex_ThrowsArgumentOutOfRangeException(int index)
@@ -136,6 +150,23 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void AddAt_AmountOneBiggerThanAvailableAmount_ThrowsInvalidOperationException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+            var index = this.random.Next(0, size);
+            var initialAmount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, index, initialAmount);
+            var amount = inventory.GetSlot(index).AvailableAmount + 1;
+
+            Assert.That(
+                () => inventory.AddAt(item, index, amount),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot add more items than the available amount")
+            );
+        }
+
+        [Test]
         public void AddAt_AmountBiggerThanAvailableAmount_DoesNotAddItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -153,6 +184,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             Assert.That(
                 () => inventory.AddAt(item, randomIndex, amount),
                 Throws.Exception.TypeOf<InvalidOperationException>()
+                    .With.Message.EqualTo("Cannot add more items than the available amount")
             );
 
             Assert.Multiple(() =>
@@ -178,6 +210,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             Assert.That(
                 () => inventory.AddAt(item, randomIndex, amount),
                 Throws.Exception.TypeOf<InvalidOperationException>()
+                    .With.Message.EqualTo("Cannot add more items than the available amount")
             );
         }
 
