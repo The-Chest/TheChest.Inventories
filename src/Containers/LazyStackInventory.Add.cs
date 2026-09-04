@@ -4,6 +4,7 @@ using TheChest.Core.Containers;
 using TheChest.Inventories.Containers.Events.Stack.Lazy;
 using TheChest.Inventories.Containers.Exceptions;
 using TheChest.Inventories.Extensions;
+using TheChest.Inventories.Slots.Exceptions;
 using TheChest.Inventories.Slots.Extensions;
 
 namespace TheChest.Inventories.Containers
@@ -148,9 +149,10 @@ namespace TheChest.Inventories.Containers
         /// </remarks>
         /// <param name="item">Item to be added to the inventory</param>
         /// <param name="amount">Amount of <paramref name="item"/> to be added</param>
-        /// <returns>Empty array when is successfully added, otherwise it'll return an array with not added items</returns>
+        /// <returns>The number of items that could not be added.</returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        /// <exception cref="InvalidOperationException">When the inventory is full or does not have enough space across compatible slots for the requested amount.</exception>
         public virtual int Add(T item, int amount)
         {
             if (item.IsNull())
@@ -159,7 +161,8 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
             if (this.IsFull)
                 throw new InvalidOperationException(LazyStackInventoryErrors.InventoryIsFull);
-            //TODO: add check for available space and throw exception if there is not enough space to add the items
+            if (!this.CanAddItems(item, amount))
+                throw new InvalidOperationException(LazyStackInventoryErrors.NotEnoughSpace);
 
             return this.AddItem(item, amount);
         }
@@ -203,8 +206,9 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added to the <paramref name="index"/> .
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller or <paramref name="index"/> is bigger than <see cref="StackContainer{T}.Size"/> or smaller than zero</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller, is bigger than the slot's maximum amount, or <paramref name="index"/> is outside the inventory.</exception>
+        /// <exception cref="InvalidOperationException">When <paramref name="amount"/> is bigger than the available amount in the slot, or the slot cannot accept <paramref name="item"/>.</exception>
         public virtual int AddAt(T item, int index, int amount)
         {
             if (item.IsNull())
@@ -213,6 +217,12 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+            if (amount > slot.MaxAmount)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (amount > slot.AvailableAmount)
+                throw new InvalidOperationException(InventoryLazyStackSlotErrors.AddMoreThanAvailableAmount);
 
             return this.AddItemAt(item, index, amount);
         }
