@@ -26,8 +26,6 @@ TheChest.Inventories is a library for managing inventories and slots in generic 
 - [Additional Resources](#additional-resources)
 - [Future Plans](#future-plans)
 
-Use cases include game inventory systems, warehouse management, resource pools, and item storage systems.
-
 ## Key Features
 
 - **Generic inventory support**: Works with any generic item type for maximum flexibility
