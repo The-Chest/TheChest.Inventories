@@ -103,6 +103,27 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void AddItemsAt_ItemsExceedAvailableAmount_ThrowsInvalidOperationExceptionWithoutAddingItemsOrCallingOnAddEvent()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = this.itemFactory.CreateMany(stackSize + 1);
+            var index = this.random.Next(0, size);
+            var raised = false;
+            inventory.OnAdd += (sender, args) => raised = true;
+
+            Assert.That(
+                () => inventory.AddAt(items, index),
+                Throws.InvalidOperationException.With.Message.EqualTo("Cannot add more items than the available amount")
+            );
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetItems(index), Is.Empty);
+                Assert.That(raised, Is.False);
+            });
+        }
+
+        [Test]
         public void AddItemsAt_EmptyItems_DoesNotAddToSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
