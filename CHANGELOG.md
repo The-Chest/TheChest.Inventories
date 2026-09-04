@@ -50,7 +50,7 @@
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 * [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.0...v0.18.1
 
 # v0.18.0
 
