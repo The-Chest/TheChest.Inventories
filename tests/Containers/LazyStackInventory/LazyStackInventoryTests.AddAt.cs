@@ -182,6 +182,22 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void AddAt_AmountEqualToAvailableAmount_AddsItemsToSlot()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+            var index = this.random.Next(0, size);
+            var initialAmount = this.random.Next(1, stackSize);
+            inventory.AddAt(item, index, initialAmount);
+            var availableAmount = inventory.GetSlot(index).AvailableAmount;
+
+            inventory.AddAt(item, index, availableAmount);
+
+            Assert.That(inventory.GetSlot(index).Amount, Is.EqualTo(stackSize));
+        }
+
+        [Test]
         public void AddAt_AvailableSlot_AddsItemToSlot()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
