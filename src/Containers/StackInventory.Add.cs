@@ -87,7 +87,7 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             if (this.slots[index].IsFull)
-                throw new InvalidOperationException(Slots.Exceptions.InventoryStackSlotErrors.FullSlot);
+                throw new InvalidOperationException(StackInventoryErrors.SlotIsFull);
 
             this.AddItemsAt(new T[1]{ item },index);
 
@@ -115,9 +115,9 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentException(StackInventoryErrors.CannotAddArrayWithDifferentItems, nameof(items));
 
             if (this.slots[index].IsFull)
-                throw new InvalidOperationException(Slots.Exceptions.InventoryStackSlotErrors.FullSlot);
+                throw new InvalidOperationException(StackInventoryErrors.SlotIsFull);
             if (items.Length > this.slots[index].AvailableAmount)
-                throw new InvalidOperationException(Slots.Exceptions.InventoryStackSlotErrors.AddMoreThanAvailableAmount);
+                throw new InvalidOperationException(StackInventoryErrors.ItemsExceedSlotAvailableAmount);
 
             this.AddItemsAt(items, index);
 
