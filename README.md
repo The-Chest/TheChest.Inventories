@@ -289,10 +289,6 @@ Create fully custom implementations by implementing the interfaces:
 - [Implementing Custom Stack Inventory](docs/stack_inventory/implementing.md)
 - [Implementing Custom Lazy Stack Inventory](docs/lazy_stack_inventory/implementing.md)
 
-## Contributing
-
-Contributions are not welcome for now until the v1.0.0 is released. For major changes, please open an issue first to discuss what you would like to change.
-
 ## Additional Resources
 
 - [TheChest Core Library](https://github.com/The-Chest/TheChest.Core)
