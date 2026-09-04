@@ -56,6 +56,39 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void AddItems_InsufficientCompatibleSpace_ThrowsInvalidOperationExceptionWithoutAddingItemsOrCallingOnAddEvent()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = this.itemFactory.CreateMany(size * stackSize + 1);
+            var raised = false;
+            inventory.OnAdd += (sender, args) => raised = true;
+
+            Assert.That(
+                () => inventory.Add(items),
+                Throws.InvalidOperationException.With.Message.EqualTo("It is not possible to add all the items to the inventory.")
+            );
+            Assert.Multiple(() =>
+            {
+                Assert.That(inventory.GetSlots(), Has.All.Matches<IStackSlot<T>>(slot => slot.IsEmpty));
+                Assert.That(raised, Is.False);
+            });
+        }
+
+        [Test]
+        public void AddItems_DifferentItems_ThrowsArgumentException()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var items = new[] { this.itemFactory.CreateDefault(), this.itemFactory.CreateRandom() };
+
+            Assert.That(
+                () => inventory.Add(items),
+                Throws.ArgumentException.With.Property("ParamName").EqualTo("items")
+            );
+        }
+
+        [Test]
         public void AddItems_EmptyItems_DoesNotAddItems()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
