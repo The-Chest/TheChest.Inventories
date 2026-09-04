@@ -43,7 +43,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var index = this.random.Next(0, size);
             var item = this.itemFactory.CreateDefault();
 
-            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
+            Assert.That(
+                () => inventory.AddAt(item, index),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is full")
+            );
         }
 
         [Test]
@@ -56,7 +59,10 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var item = this.itemFactory.CreateDefault();
             var index = this.random.Next(0, size);
 
-            Assert.That(() => inventory.AddAt(item, index), Throws.InvalidOperationException);
+            Assert.That(
+                () => inventory.AddAt(item, index),
+                Throws.InvalidOperationException.With.Message.EqualTo("The slot is full")
+            );
         }
 
         [Test]
