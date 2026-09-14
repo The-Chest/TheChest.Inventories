@@ -42,7 +42,7 @@ namespace TheChest.Inventories.Slots
         protected void SetContent(T item, int amount)
         {
             this.Content = item;
-            this.amount = amount;
+            this.Amount = amount;
         }
         /// <summary>
         /// Adds an amount of items to the slot.

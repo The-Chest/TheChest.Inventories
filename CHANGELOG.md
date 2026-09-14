@@ -1,3 +1,42 @@
+# v0.19.0
+
+## What's Added
+* 
+
+## What's changed
+* Project is now using `TheChest.Core` [v0.19.0](https://github.com/The-Chest/TheChest.Core/releases/tag/v0.19.0)
+    * Since `Content` is an `IEnumerable<T>`, it is now assigned new values using `Append` and `Concat`.
+
+## What's Fixed
+*
+
+## Known Issues
+* **The Current Architecture is not stable for the final version yet**
+* **Event system will need an improvement on creation/dispatch**
+  * The new Event API is being planned
+* `Exception`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method
+* Project size is increasing and the library is not "lightweight" anymore 
+  * The project might be separated into multiple packages in the future
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
+* Interface unit tests will be removed soon and the implementation unit tests will be refactored to be more simple and easier to understand 
+* `Move` methods implementation are a bit unstable but it is working 
+    * It needs a rework
+* Slot removing methods using `System.Reflection` for value type checking and setting content to null
+  * Changes in `TheChest.Core` are needed to improve a way to set the content
+* No idea about how is the code performance...
+* Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project needs a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
+* Some validations are duplicated through slots and inventories classes
+    * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
+
+## What's Next
+* A refactor in multiple slots and inventories methods to make them more simple and easier to understand and removing the Obsolete methods
+* Changes in `Add` method contracts by changing the return type to `void`
+
 # v0.18.1
 
 ## What's changed
@@ -16,7 +55,6 @@
     * `AddAt(T item, int index, int amount)`
      * Throws `ArgumentOutOfRangeException` when `amount` is bigger than the `MaxAmount` of the slot at `index`
      * Throws `InvalidOperationException` if the slot at `index` is full or has no space for the specified `amount`
-    * 
 * All of `Add` methods in `StackInventory<T>` and `LazyStackInventory<T>` should return zero or true (The return value will be changed to void), otherwie, throw an exception (except the `TryAdd` ones) 
 
 ## What's Fixed
