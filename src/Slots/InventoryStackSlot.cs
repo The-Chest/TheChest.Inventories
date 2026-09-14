@@ -46,18 +46,7 @@ namespace TheChest.Inventories.Slots
         protected virtual void AddItems(ref T[] items)
         {
             var addAmount = items.Length > this.AvailableAmount ? this.AvailableAmount : items.Length;
-            var content = this.Content;
-
-            Array.Resize(ref content, content.Length + addAmount);
-
-            var startIndex = content.Length - addAmount;
-            var endIndex = content.Length;
-            for (int index = startIndex; index < endIndex; index++)
-            {
-                content[index] = items[index - startIndex];
-            }
-
-            this.Content = content;
+            this.Content = this.Content.Concat(items.Take(addAmount)).ToArray();
 
             items = items.Skip(addAmount).ToArray();
         }
@@ -67,12 +56,7 @@ namespace TheChest.Inventories.Slots
         /// <param name="item">item to be added to content</param>
         protected virtual void AddItem(ref T item)
         {
-            var content = this.Content;
-
-            Array.Resize(ref content, content.Length + 1);
-            content[content.Length - 1] = item;
-
-            this.Content = content;
+            this.Content = this.Content.Append(item).ToArray();
 
             item = default;
         }
