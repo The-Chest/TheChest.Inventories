@@ -5,6 +5,7 @@
 
 ## What's changed
 * Project is now using `TheChest.Core` [v0.19.0](https://github.com/The-Chest/TheChest.Core/releases/tag/v0.19.0)
+    * Since `Content` is an `IEnumerable<T>`, it is now assigned new values using `Append` and `Concat`.
 
 ## What's Fixed
 *
