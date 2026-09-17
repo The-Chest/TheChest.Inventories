@@ -97,7 +97,7 @@ jobs:
           path: "${{ env.RELEASE_OUTPUT_DIR }}"
 
       - name: Restore dependencies
-        run: dotnet restore src
+        run: dotnet restore ${{ env.SOURCE_DIR }}
       
       - name: Push library to Github Packages
         run: dotnet nuget push ${{ env.RELEASE_OUTPUT_DIR }}/${{ env.PROJECT_NAME }}.${{ steps.get-version.outputs.version }}.nupkg --source https://nuget.pkg.github.com/The-Chest/index.json --api-key "${{secrets.GH_NUGET_APIKEY}}"
