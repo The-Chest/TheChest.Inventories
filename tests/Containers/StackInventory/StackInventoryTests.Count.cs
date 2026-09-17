@@ -6,31 +6,31 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
     {
         [Test]
         [IgnoreIfValueType]
-        public void GetCount_NullItem_ThrowsArgumentNullException()
+        public void Count_NullItem_ThrowsArgumentNullException()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
             Assert.That(
-                () => inventory.GetCount(default!),
+                () => inventory.Count(default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
 
         [Test]
-        public void GetCount_EmptyInventory_ReturnsZero()
+        public void Count_EmptyInventory_ReturnsZero()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
             var item = this.itemFactory.CreateDefault();
 
-            var count = inventory.GetCount(item);
+            var count = inventory.Count(item);
 
             Assert.That(count, Is.Zero);
         }
 
         [Test]
-        public void GetCount_InventoryWithItems_ReturnsItemCount()
+        public void Count_InventoryWithItems_ReturnsItemCount()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var item = this.itemFactory.CreateDefault();
@@ -41,19 +41,19 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
 
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, inventoryItems.ToArray());
 
-            var count = inventory.GetCount(item);
+            var count = inventory.Count(item);
 
             Assert.That(count, Is.EqualTo(stackSize * 2));
         }
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetCount_ValueType_DefaultItem_ReturnsZero()
+        public void Count_ValueType_DefaultItem_ReturnsZero()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
             var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
 
-            Assert.That(inventory.GetCount(default!), Is.Zero);
+            Assert.That(inventory.Count(default!), Is.Zero);
         }
     }
 }

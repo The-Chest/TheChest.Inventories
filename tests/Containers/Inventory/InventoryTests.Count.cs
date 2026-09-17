@@ -7,72 +7,72 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
     {
         [Test]
         [IgnoreIfValueType]
-        public void GetCount_NullItem_ThrowsArgumentNullException()
+        public void Count_NullItem_ThrowsArgumentNullException()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
             Assert.That(
-                () => inventory.GetCount(default!), 
+                () => inventory.Count(default!),
                 Throws.ArgumentNullException.With.Property("ParamName").EqualTo("item")
             );
         }
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetCount_DefaultValue_EmptyContainer_ReturnsZero()
+        public void Count_DefaultValue_EmptyContainer_ReturnsZero()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.EmptyContainer(size);
 
-            var result = inventory.GetCount(default!);
+            var result = inventory.Count(default!);
 
             Assert.That(result, Is.Zero);
         }
 
         [Test]
         [IgnoreIfReferenceType]
-        public void GetCount_DefaultValue_FullContainer_ReturnsItemsAmount()
+        public void Count_DefaultValue_FullContainer_ReturnsItemsAmount()
         {
             var size = this.GenerateRandomSize();
             var inventory = this.inventoryFactory.FullContainer(size, default!);
 
-            var result = inventory.GetCount(default!);
+            var result = inventory.Count(default!);
 
             Assert.That(result, Is.EqualTo(size));
         }
 
         [Test]
-        public void GetCount_DoesNotRemoveItems()
+        public void Count_DoesNotRemoveItems()
         {
             var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
-            inventory.GetCount(items[0]);
+            inventory.Count(items[0]);
 
             Assert.That(inventory.GetItem(0), Is.EqualTo(items[0]));
         }
 
         [Test]
-        public void GetCount_NoItems_ReturnsZero()
+        public void Count_NoItems_ReturnsZero()
         {
             var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
-            var count = inventory.GetCount(this.itemFactory.CreateRandom());
+            var count = inventory.Count(this.itemFactory.CreateRandom());
 
             Assert.That(count, Is.Zero);
         }
 
         [Test]
-        public void GetCount_ReturnsItemCount()
+        public void Count_ReturnsItemCount()
         {
             var size = this.GenerateRandomSize();
             var items = this.itemFactory.CreateMany(size);
             var inventory = this.inventoryFactory.ShuffledItemsContainer(size, items);
 
-            var count = inventory.GetCount(items[0]);
+            var count = inventory.Count(items[0]);
 
             Assert.That(count, Is.EqualTo(size));
         }

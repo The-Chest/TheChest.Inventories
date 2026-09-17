@@ -6,6 +6,16 @@
 ## What's changed
 * Project is now using `TheChest.Core` [v0.19.0](https://github.com/The-Chest/TheChest.Core/releases/tag/v0.19.0)
     * Since `Content` is an `IEnumerable<T>`, it is now assigned new values using `Append` and `Concat`.
+* Inventory count methods
+  * `IInventory<T>` and `Inventory<T>`
+    * Count
+      * `Count(T item)` - Replaces `GetCount(T item)` and returns the amount of the item in the inventory
+  * `IStackInventory<T>` and `StackInventory<T>`
+    * Count
+      * `Count(T item)` - Replaces `GetCount(T item)` and returns the amount of the item in the inventory
+  * `ILazyStackInventory<T>` and `LazyStackInventory<T>`
+    * Count
+      * `Count(T item)` - Replaces `GetCount(T item)` and returns the amount of the item in the inventory
 
 ## What's Fixed
 *

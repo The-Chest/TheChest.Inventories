@@ -217,7 +217,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to de counted</param>
         /// <returns>The current amount of the item in the Inventory</returns>
-        int GetCount(T item);
+        int Count(T item);
         #endregion
     }
 }

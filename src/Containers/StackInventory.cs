@@ -57,7 +57,7 @@ namespace TheChest.Inventories.Containers
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        public virtual int GetCount(T item)
+        public virtual int Count(T item)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));

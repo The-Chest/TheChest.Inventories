@@ -144,7 +144,7 @@ inventory.Add("Shield");
 var item = inventory.Get(0);
 
 // Check inventory
-int count = inventory.GetCount("Sword");
+int count = inventory.Count("Sword");
 ```
 
 ### Working with Events

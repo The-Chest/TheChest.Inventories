@@ -48,7 +48,7 @@ direction TB
 			+ bool TryReplace(T item, int index, out T oldItem)
 	        + T Replace(T item, int index)
 
-	        + int GetCount(T item)
+	        + int Count(T item)
         }
         class IInventorySlot~T~ {
 	        + bool CanAdd(T item)
@@ -97,7 +97,7 @@ direction TB
 	        + T Get(T item)
 	        + T[] Get(T item, int amount)
 
-	        + int GetCount(T item)
+	        + int Count(T item)
 
 	        + bool CanReplace(T item, int index)
 			+ bool TryReplace(T item, int index, out T oldItem)
