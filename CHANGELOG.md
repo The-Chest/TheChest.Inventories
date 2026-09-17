@@ -19,9 +19,6 @@
     * Count
       * `Count(T item)` - Replaces `GetCount(T item)` and returns the amount of the item in the inventory
 
-## What's Fixed
-*
-
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
 * **Event system will need an improvement on creation/dispatch**
