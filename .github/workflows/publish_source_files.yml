@@ -1,14 +1,9 @@
-name: Publish Source Files Manually  
+name: Publish Source Files Manually
 
 on:
   pull_request:
     types: [opened, reopened]
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version/tag to export'
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -19,23 +14,44 @@ env:
   RELEASE_OUTPUT_DIR: "src/bin/Release/netstandard2.1"
 
 jobs:
-  publish-src-files:
-    name: "Publish Source Files"
+  list-tags:
+    name: "List Tags"
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    outputs:
+      tags: ${{ steps.get-tags.outputs.tags }}
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.version }}
+          fetch-depth: 0
+
+      - name: Get all tags
+        id: get-tags
+        run: |
+          TAGS=$(git tag --list | jq -R -s -c 'split("\n")[:-1] | map(ltrimstr("v"))')
+          echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
+
+  publish-src-files:
+    name: "Publish Source Files"
+    needs: list-tags
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJson(needs.list-tags.outputs.tags) }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ matrix.version }}
 
       - name: Zip Folder
-        run: zip -r "${{ env.PROJECT_NAME }}.${{ inputs.version }}.zip" src/ -i "*.cs"
-        
+        run: zip -r "${{ env.PROJECT_NAME }}.${{ matrix.version }}.zip" src/ -i "*.cs"
+
       - name: Upload Source Files to release
         uses: The-Chest/Actions/upload-release-artifacts@v1
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           path: "src"
-          name: "${{ env.PROJECT_NAME }}.${{ inputs.version }}.zip"
-          version: "$${{ inputs.version }}"
+          name: "${{ env.PROJECT_NAME }}.${{ matrix.version }}.zip"
+          version: "${{ matrix.version }}"
