@@ -1,6 +1,8 @@
 name: Publish Source Files Manually  
 
 on:
+  pull_request:
+    types: [opened, reopened]
   workflow_dispatch:
     inputs:
       version:
