@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ matrix.version }}
+          ref: v${{ matrix.version }}
 
       - name: Zip Folder
         run: zip -r "${{ env.PROJECT_NAME }}.${{ matrix.version }}.zip" src/ -i "*.cs"
