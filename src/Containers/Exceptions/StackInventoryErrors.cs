@@ -4,6 +4,7 @@
     {
         #region Constructor
         internal const string MaxStackSizeMustBeGreaterThanZero = "The max stack size must be greater than zero.";
+        internal const string ItemsBiggerThanInventorySize = "The number of item stacks exceeds the inventory size.";
         #endregion
 
         #region Parameters Validation

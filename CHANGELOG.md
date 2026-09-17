@@ -1,7 +1,9 @@
 # v0.19.0
 
 ## What's Added
-* 
+* Constructors
+  * `StackInventory<T>`
+    * `StackInventory(T[] items, int maxStackSize, int size)` - Creates an inventory with the provided items, maximum stack size, and number of slots
 
 ## What's changed
 * Project is now using `TheChest.Core` [v0.19.0](https://github.com/The-Chest/TheChest.Core/releases/tag/v0.19.0)

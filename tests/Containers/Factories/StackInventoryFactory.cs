@@ -1,4 +1,6 @@
 ﻿using TheChest.Inventories.Containers;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
@@ -67,6 +69,22 @@ namespace TheChest.Inventories.Tests.Containers.Factories
             var inventory = Activator.CreateInstance(inventoryType, slots);
 
             return (IStackInventory<Item>)inventory!;
+        }
+
+        public virtual IStackInventory<Item> WithItems(Item[] items, int stackSize, int size)
+        {
+            try
+            {
+                return (IStackInventory<Item>)Activator.CreateInstance(
+                    typeof(Inventory),
+                    new object[] { items, stackSize, size }
+                )!;
+            }
+            catch (TargetInvocationException exception) when (exception.InnerException != null)
+            {
+                ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                throw;
+            }
         }
     }
 }

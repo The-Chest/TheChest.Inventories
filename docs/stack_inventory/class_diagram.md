@@ -24,6 +24,7 @@ direction TB
             + StackInventory()
             + StackInventory(int size, int maxStackAmount)
             + StackInventory(T[] items, int maxStackAmount)
+            + StackInventory(T[] items, int maxStackSize, int size)
             + StackInventory(IInventoryStackSlot~T~[] slots)
 
 	        + ~~event~~ OnGet: StackInventoryGetEventHandler~T~ 
