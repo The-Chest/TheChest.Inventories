@@ -48,7 +48,7 @@ namespace TheChest.Inventories.Containers
         /// <param name="item">Item to be searched</param>
         /// <returns>The amount of the <paramref name="item"/> in the Inventory </returns>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        public virtual int GetCount(T item)
+        public virtual int Count(T item)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));

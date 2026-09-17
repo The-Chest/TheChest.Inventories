@@ -55,7 +55,7 @@ namespace TheChest.Inventories.Containers {
         + T[] GetAll(T item)
         + T[] GetAll(int index)
 
-        + int GetCount(T item)
+        + int Count(T item)
 
         ~ bool CanMoveItems(int origin, int target)
         + bool CanMove(int origin, int target)
@@ -98,7 +98,7 @@ namespace TheChest.Inventories.Containers.Interfaces {
         + T? Get(T item)
         + T[] Get(T item, int amount)
         + T[] GetAll(T item)
-        + int GetCount(T item)
+        + int Count(T item)
         
         + T[] Get(int index, int amount)
         + T[] GetAll(int index)

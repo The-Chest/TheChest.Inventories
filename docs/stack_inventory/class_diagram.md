@@ -54,7 +54,7 @@ direction TB
             + T[] GetAll(int index)
             + T[] GetAll(T item)
 
-            + int GetCount(T item)
+            + int Count(T item)
 
             ~ bool CanMoveItems(int origin, int target)
             + bool CanMove(int origin, int target)
@@ -113,7 +113,7 @@ direction TB
             + T[] GetAll(T item)
 	        ~ T[] GetItem(T item, int amount = 1)
             
-            + int GetCount(T item)
+            + int Count(T item)
 
             + T[] Clear()
 

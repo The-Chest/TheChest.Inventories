@@ -40,7 +40,7 @@ inventory.OnGet += (sender, args) =>
     }
 };
 
-//Any method except GetCount will fire the event
+//Any method except Count will fire the event
 var result = inventory.Get(0);
 Console.WriteLine($"{result.Length} amount of the Item {result} returned from index {0}");
 ```
@@ -85,7 +85,7 @@ inventory.OnAdd += (sender, args) =>
     }
 };
 
-//Any method except GetCount will fire the event
+//Any method except Count will fire the event
 var result = inventory.AddAt("item_10", 0);
 Console.WriteLine($"{result.Length} amount of the Item {result} added to the index {0}");
 ```

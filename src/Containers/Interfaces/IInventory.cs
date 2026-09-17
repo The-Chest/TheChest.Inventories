@@ -58,7 +58,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">Item to be search</param>
         /// <returns>The current amount of the <paramref name="item"/> in the Inventory</returns>
-        int GetCount(T item);
+        int Count(T item);
         #endregion
 
         /// <summary>
