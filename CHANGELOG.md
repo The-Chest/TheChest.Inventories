@@ -4,7 +4,9 @@
 
 - `IInventory<T>` and `Inventory<T>`
   - `CanAdd(T item)`
-- 
+- `IStackInventory<T>` and `StackInventory<T>`
+  - `CanAdd(T item)`
+  - `CanAddAt(T item, int index)`
 
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
