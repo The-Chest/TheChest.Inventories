@@ -21,18 +21,6 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>"
-        public virtual bool CanAddAt(T item, int index)
-        {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            return this.slots[index].CanAdd(item);
-        }
-        /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>"
         public virtual bool CanAddAt(T[] items, int index)

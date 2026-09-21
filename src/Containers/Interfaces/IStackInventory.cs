@@ -100,14 +100,6 @@ namespace TheChest.Inventories.Containers.Interfaces
 
         #region AddAt
         /// <summary>
-        /// Determines whether the specified item can be added at the given index.
-        /// </summary>
-        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
-        /// <param name="index">The zero-based index at which to check if the item can be added.</param>
-        /// <returns><see langword="true"/> if the item can be added at the specified index; otherwise, <see langword="false"/>.</returns>
-        [Obsolete("Use CanAddAt(T[], int) instead. This method will be removed in future versions.")]
-        bool CanAddAt(T item, int index);
-        /// <summary>
         /// Determines whether the specified items can be added at the given index.
         /// </summary>
         /// <param name="items">The array of items to evaluate for insertion</param>

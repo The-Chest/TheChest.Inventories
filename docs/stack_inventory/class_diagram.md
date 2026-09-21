@@ -33,7 +33,6 @@ direction TB
 	        + ~~event~~ OnReplace: StackInventoryReplaceEventHandler~T~ 
 
 	        + bool CanAdd(params T[] items)
-	        + bool CanAddAt(T item, int index)
 	        + bool CanAddAt(T[] items, int index)
 
             + bool Add(T item)
@@ -94,7 +93,6 @@ direction TB
 	        + ~~event~~ OnReplace: StackInventoryReplaceEventHandler~T~ 
 
 	        + bool CanAdd(params T[] items)
-	        + bool CanAddAt(T item, int index)
 	        + bool CanAddAt(T[] items, int index)
 
             + bool Add(T item)
