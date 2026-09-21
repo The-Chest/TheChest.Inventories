@@ -1,3 +1,41 @@
+# v0.20.0
+
+## What's Removed
+
+- `IInventory<T>` and `Inventory<T>`
+  - `CanAdd(T item)`
+- `IStackInventory<T>` and `StackInventory<T>`
+  - `CanAdd(T item)`
+  - `CanAddAt(T item, int index)`
+
+## Known Issues
+* **The Current Architecture is not stable for the final version yet**
+* **Event system will need an improvement on creation/dispatch**
+  * The new Event API is being planned
+* `Exception`s when an Array is null are being repeated in multiple methods, it might be good to have a validation method
+* Project size is increasing and the library is not "lightweight" anymore 
+  * The project might be separated into multiple packages in the future
+  * Inventory classes have too many methods
+    * Multiple interfaces for different use cases ([#67](https://github.com/The-Chest/TheChest.Inventories/issues/67)) will be created
+    * Some methods might be removed/moved to extension methods if they are not essential for the inventory's main features 
+    * The Container classes are separated files in partial classes temporarily, they'll go back to a one file class when the refactor is done
+  * Internal extension methods are increasing the complexity of the code and might need a refactor or be removed
+  * `StackInventory<T>` class is too complex and needs some refactors 
+* `Move` methods implementation are a bit unstable but it is working 
+    * It needs a rework
+* Slot removing methods using `System.Reflection` for value type checking and setting content to null
+  * Changes in `TheChest.Core` are needed to improve a way to set the content
+* No idea about how is the code performance...
+* Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project needs a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
+* Some validations are duplicated through slots and inventories classes
+    * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
+
+## What's Next
+* Add `TryGet`/`TryReplace` methods to avoid throwing exceptions in some cases
+* //TODO: add more details about the next version
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.19.0...v0.20.0
+
 # v0.19.0
 
 ## What's Added
@@ -45,6 +83,8 @@
 ## What's Next
 * A refactor in multiple slots and inventories methods to make them more simple and easier to understand and removing the Obsolete methods
 * Changes in `Add` method contracts by changing the return type to `void`
+
+* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.1...v0.19.0
 
 # v0.18.1
 
