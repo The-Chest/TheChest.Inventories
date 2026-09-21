@@ -6,9 +6,6 @@ namespace TheChest.Inventories.Containers.Interfaces
 {
     /// <summary>
     /// Interface with methods for interaction with the Inventory using stacks
-    /// <para>
-    /// This interface is still unstable. Some methods can be moved to a separated interface.
-    /// </para>
     /// </summary>
     /// <typeparam name="T">An item type</typeparam>
     public interface IStackInventory<T> : IStackContainer<T>
