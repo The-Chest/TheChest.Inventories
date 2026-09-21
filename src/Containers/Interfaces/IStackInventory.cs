@@ -70,13 +70,6 @@ namespace TheChest.Inventories.Containers.Interfaces
 
         #region Add
         /// <summary>
-        /// Checks if <paramref name="item"/> can be added to any slot on inventory.
-        /// </summary>
-        /// <param name="item">The item to evaluate to add to the inventory.</param>
-        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
-        [Obsolete("Use CanAdd(params T[]) instead. This method will be removed in future versions.")]
-        bool CanAdd(T item);
-        /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot on inventory.
         /// </summary>
         /// <param name="items">An array of items to evaluate for addition to the inventory.</param>

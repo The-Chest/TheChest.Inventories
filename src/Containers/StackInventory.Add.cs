@@ -158,23 +158,6 @@ namespace TheChest.Inventories.Containers
         }
 
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
-        public virtual bool CanAdd(T item)
-        {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (this.IsFull)
-                return false;
-
-            for (int i = 0; i < this.Size; i++)
-            {
-                if (this.slots[i].CanAdd(item))
-                    return true;
-            }
-
-            return false;
-        }
-        /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
         public virtual bool CanAdd(params T[] items)
         {
