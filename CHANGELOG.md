@@ -2,11 +2,11 @@
 
 ## What's Removed
 
-- `IInventory<T>` and `Inventory<T>`
-  - `CanAdd(T item)`
-- `IStackInventory<T>` and `StackInventory<T>`
-  - `CanAdd(T item)`
-  - `CanAddAt(T item, int index)`
+* `IInventory<T>` and `Inventory<T>`
+  * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
+* `IStackInventory<T>` and `StackInventory<T>`
+  * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
+  * `CanAddAt(T item, int index)` - Use `CanAddAt(T[] items, int index)` instead
 
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
