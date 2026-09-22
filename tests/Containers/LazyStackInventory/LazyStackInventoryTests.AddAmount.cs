@@ -194,18 +194,5 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.That(inventory.GetSlots().Take(2), Has.All.Property("Amount").EqualTo(stackSize));
         }
-
-        [Test]
-        public void Add_WithAmount_SuccessfullyAddedItems_ReturnsZero()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var item = this.itemFactory.CreateDefault();
-            var amount = this.random.Next(1, 5);
-
-            var result = inventory.Add(item, amount);
-
-            Assert.That(result, Is.Zero);
-        }
     }
 }
