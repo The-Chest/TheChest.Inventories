@@ -252,29 +252,5 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
-        [Test]
-        public void AddItemsAt_EmptyItems_ReturnsEmptyItems()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var randomIndex = this.random.Next(0, size);
-            var result = inventory.AddAt(Array.Empty<T>(), randomIndex);
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public void AddItemsAt_EmptySlot_ReturnsEmpty()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var items = this.itemFactory.CreateMany(stackSize);
-            var index = this.random.Next(0, size);
-            var result = inventory.AddAt(items, index);
-
-            Assert.That(result, Is.Empty);
-        }
     }
 }

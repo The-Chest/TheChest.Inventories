@@ -67,7 +67,7 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than the Inventory Size</exception>
         /// <exception cref="InvalidOperationException">When the inventory is full or when the item cannot be added to the slot on <paramref name="index"/></exception>
-        public virtual bool AddAt(T item, int index)
+        public virtual void AddAt(T item, int index)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
@@ -78,8 +78,6 @@ namespace TheChest.Inventories.Containers
                 throw new InvalidOperationException(StackInventoryErrors.SlotIsFull);
 
             this.AddItemsAt(new T[1]{ item },index);
-
-            return true;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -88,12 +86,12 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> added is bigger than Slot or smaller than zero</exception>
         /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">When the items cannot be added to the slot on <paramref name="index"/></exception>
-        public virtual T[] AddAt(T[] items, int index)
+        public virtual void AddAt(T[] items, int index)
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
-                return Array.Empty<T>();
+                return;
             if (index < 0 || index >= this.Size)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
@@ -108,8 +106,6 @@ namespace TheChest.Inventories.Containers
                 throw new InvalidOperationException(StackInventoryErrors.ItemsExceedSlotAvailableAmount);
 
             this.AddItemsAt(items, index);
-
-            return Array.Empty<T>();
         }
         #endregion
 
@@ -243,13 +239,12 @@ namespace TheChest.Inventories.Containers
         /// <exception cref="ArgumentNullException">When param <paramref name="items"/> is <see langword="null"/> or has one item <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">When the inventory is full or when there are not enough free slots to add all the items</exception>
         /// <exception cref="ArgumentException">When param <paramref name="items"/> length is zero</exception>
-        /// <returns>Items from params that were not added to the inventory</returns>
-        public virtual T[] Add(params T[] items)
+        public virtual void Add(params T[] items)
         {
             if (items is null)
                 throw new ArgumentNullException(nameof(items));
             if (items.Length == 0)
-                return Array.Empty<T>();
+                return;
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), StackInventoryErrors.ItemArrayContainsNull);
             if (!items.HasAllEqual())
@@ -260,7 +255,7 @@ namespace TheChest.Inventories.Containers
             if (!this.CanAddItems(items))
                 throw new InvalidOperationException(StackInventoryErrors.NotPossibleToAddAllItems);
 
-            return this.AddItems(items);
+            this.AddItems(items);
         }
         #endregion
     }
