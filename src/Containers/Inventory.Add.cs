@@ -40,8 +40,7 @@ namespace TheChest.Inventories.Containers
         public virtual bool CanAdd(params T[] items)
         {
             if (items is null)
-                throw new ArgumentNullException(nameof(items));
-            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+                throw new ArgumentNullException(nameof(items)); 
             if (items.ContainsNull())
                 throw new ArgumentNullException(nameof(items), InventoryErrors.ItemArrayContainsNull);
 
