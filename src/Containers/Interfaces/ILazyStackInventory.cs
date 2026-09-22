@@ -75,14 +75,13 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to add.</param>
         /// <param name="amount">The amount to add.</param>
-        /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added; otherwise, <see langword="false"/>.</returns>
-        bool TryAdd(T item, int amount);
+        void TryAdd(T item, int amount = 1);
         /// <summary>
         /// Adds items inside the inventory
         /// </summary>
         /// <param name="item">Array of item of the same type wich will be added to inventory</param>
         /// <param name="amount">Amount of the item to be returned</param>
-        void Add(T item, int amount);
+        void Add(T item, int amount = 1);
         #endregion
 
         #region AddAt
@@ -101,14 +100,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">The slot index where the item should be added.</param>
         /// <param name="amount">The amount to add.</param>
         /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added at <paramref name="index"/>; otherwise, <see langword="false"/>.</returns>
-        bool TryAddAt(T item, int index, int amount);
+        bool TryAddAt(T item, int index, int amount = 1);
         /// <summary>
         /// Adds an amount of item in a specific slot
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <param name="amount">amount of the item</param>
-        void AddAt(T item, int index, int amount);
+        void AddAt(T item, int index, int amount = 1);
         #endregion
 
         #region Move
