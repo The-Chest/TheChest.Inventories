@@ -10,21 +10,11 @@ namespace TheChest.Inventories.Slots.Interfaces
     public interface IInventoryStackSlot<T> : IStackSlot<T>
     {
         /// <summary>
-        /// Checks if is possible to add one item to the slot
-        /// </summary>
-        /// <param name="item">item to be checked to add</param>
-        /// <returns><see langword="true"/> if is possible to add the item</returns>
-        [Obsolete("Use CanAdd(T[]) instead. This method will be removed in future versions.")]
-        bool CanAdd(T item);
-        /// <summary>
         /// Checks if is possible to add an array of items to the slot
         /// </summary>
-        /// <remarks>
-        /// This method contract will change to have params instead of array in the future, but for now it will be an array for compatibility reasons.
-        /// </remarks>
         /// <param name="items">items to be checked to add</param>
         /// <returns><see langword="true"/> if is possible to add <paramref name="items"/></returns>
-        bool CanAdd(T[] items);
+        bool CanAdd(params T[] items);
         /// <summary>
         /// Adds an item to the slot
         /// </summary>
