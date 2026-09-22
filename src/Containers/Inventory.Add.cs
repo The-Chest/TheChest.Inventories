@@ -144,21 +144,6 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> is <see langword="null"/>.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the inventory has no available slot for <paramref name="item"/>.</exception>
-        public virtual bool Add(T item)
-        {
-            if (item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (this.IsFull)
-                throw new InvalidOperationException(InventoryErrors.InventoryIsFull);
-
-            return this.AddItems(item).Length == 0;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
         /// </remarks>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>

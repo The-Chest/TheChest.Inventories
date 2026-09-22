@@ -86,13 +86,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns>An array of items that couldn't be added to the inventory; otherwise, an empty array.</returns>
         T[] Add(params T[] items);
-        /// <summary>
-        /// Adds an item in a avaliable slot
-        /// </summary>
-        /// <param name="item">item to be added</param>
-        /// <returns><see langword="true"/> if is possible to add <paramref name="item"/></returns>
-        [Obsolete("Use Add(params T[]) instead. This method will be removed in future versions.")]
-        bool Add(T item);
         #endregion
 
         #region AddAt
