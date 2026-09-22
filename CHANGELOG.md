@@ -12,6 +12,9 @@
     * `Add(params T[] items)` - Returns `void` instead of `T[]` and throws an exception when all items cannot be added
     * `AddAt(T item, int index)` - Returns `void` instead of `bool` and throws an exception when the item cannot be added
     * `AddAt(T[] items, int index)` - Returns `void` instead of `T[]` and throws an exception when all items cannot be added
+  * `ILazyStackInventory<T>` and `LazyStackInventory<T>`
+    * `Add(T item, int amount)` - Returns `void` instead of `int` and throws an exception when all items cannot be added
+    * `AddAt(T item, int index, int amount)` - Returns `void` instead of `int` and throws an exception when all items cannot be added
 
 ## What's Removed
 

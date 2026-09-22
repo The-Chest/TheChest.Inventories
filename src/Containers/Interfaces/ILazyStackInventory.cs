@@ -82,8 +82,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">Array of item of the same type wich will be added to inventory</param>
         /// <param name="amount">Amount of the item to be returned</param>
-        /// <returns>Returns the amount of items that couldn't be added</returns>
-        int Add(T item, int amount);
+        void Add(T item, int amount);
         #endregion
 
         #region AddAt
@@ -109,8 +108,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
         /// <param name="amount">amount of the item</param>
-        /// <returns>Returns the amount of items that couldn't be added</returns>
-        int AddAt(T item, int index, int amount);
+        void AddAt(T item, int index, int amount);
         #endregion
 
         #region Move
