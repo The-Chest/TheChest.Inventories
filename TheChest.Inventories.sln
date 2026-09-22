@@ -38,7 +38,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3C358749-7C82-4444-8F8C-FE68D058170F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\publish_library.workflow.yml = .github\workflows\publish_library.workflow.yml
-		.github\workflows\publish_source_files.yml = .github\workflows\publish_source_files.yml
 		.github\workflows\sonarcloud.yml = .github\workflows\sonarcloud.yml
 		.github\workflows\tests.workflow.yml = .github\workflows\tests.workflow.yml
 	EndProjectSection
