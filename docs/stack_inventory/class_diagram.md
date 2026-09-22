@@ -69,8 +69,7 @@ direction TB
         class IInventoryStackSlot~T~ {
             + int AvailableAmount 
 
-            + bool CanAdd(T item)
-            + bool CanAdd(T[] items)
+            + bool CanAdd(params T[] items)
             + void Add(T item)
             + void Add(T[] items)
 
@@ -154,8 +153,7 @@ namespace TheChest.Core {
 
 namespace TheChest.Inventories {
     class IInventoryStackSlot~T~ {
-        + bool CanAdd(T item)
-        + bool CanAdd(T[] items)
+        + bool CanAdd(params T[] items)
         + void Add(T item)
         + void Add(T[] items)
 
@@ -180,8 +178,7 @@ namespace TheChest.Inventories {
         
         + void Add(T item)
         + void Add(T[] items)
-        + bool CanAdd(T item)
-        + bool CanAdd(T[] items)
+        + bool CanAdd(params T[] items)
         
         + T[] GetAll()
         + T[] Get(int amount)

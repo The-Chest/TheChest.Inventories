@@ -63,30 +63,13 @@ namespace TheChest.Inventories.Slots
 
         /// <inheritdoc/>
         /// <remarks>
-        /// This method checks whether the slot is full or already contains the specified item. 
-        /// </remarks>
-        public virtual bool CanAdd(T item)
-        {
-            if (item.IsNull())
-                return false;
-
-            if (this.IsFull)
-                return false;
-
-            if (!this.IsEmpty)
-                return this.Contains(item);
-
-            return true;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
         /// This method checks that the slot is not full, that the number of items does not
         /// exceed the available capacity, and that all items are non-null and equal to each other.  
         /// If the slot is not empty, the items must also match the type of items already contained.   
         /// The method does not modify <paramref name="items"/>.
         /// </remarks>
         /// <returns><see langword="true"/> if all items can be added to the slot; otherwise, <see langword="false"/>.</returns>
-        public virtual bool CanAdd(T[] items)
+        public virtual bool CanAdd(params T[] items)
         {
             if (items is null || items.Length == 0)
                 return false;
