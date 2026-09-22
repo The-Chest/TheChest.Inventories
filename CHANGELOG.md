@@ -5,6 +5,9 @@
 
 ## What's Changed
 * Add method return types
+  * `IInventory<T>` and `Inventory<T>`
+    * `Add(params T[] items)` - Returns `void` instead of `T[]` and throws an exception when all items cannot be added
+    * `AddAt(T item, int index)` - Returns `void` instead of `bool` and throws an exception when the item cannot be added
   * `IStackInventory<T>` and `StackInventory<T>`
     * `Add(params T[] items)` - Returns `void` instead of `T[]` and throws an exception when all items cannot be added
     * `AddAt(T item, int index)` - Returns `void` instead of `bool` and throws an exception when the item cannot be added
