@@ -1,3 +1,6 @@
+﻿using System.Linq;
+using NUnit.Framework;
+using System;
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {
     public partial class StackInventoryTests<T>

@@ -1,4 +1,5 @@
-﻿namespace TheChest.Tests.Common.Attributes
+﻿using System;
+namespace TheChest.Tests.Common.Attributes
 {
     /// <summary>
     /// Attribute to ignore test methods when the provided type is a reference type (class, interface, etc).

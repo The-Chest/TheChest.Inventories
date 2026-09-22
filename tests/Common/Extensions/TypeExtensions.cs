@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System;
+using System.Reflection;
 
 namespace TheChest.Tests.Common.Extensions
 {

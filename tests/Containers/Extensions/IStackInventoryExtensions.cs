@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers.Interfaces;
+﻿using System;
+using TheChest.Inventories.Containers.Interfaces;
 
 namespace TheChest.Inventories.Tests.Containers.Extensions
 {

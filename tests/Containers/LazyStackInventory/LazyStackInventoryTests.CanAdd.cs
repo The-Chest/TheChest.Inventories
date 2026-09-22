@@ -1,3 +1,6 @@
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
 using TheChest.Inventories.Tests.Containers.Extensions;
 ﻿
 namespace TheChest.Inventories.Tests.Containers.LazyStackInventory

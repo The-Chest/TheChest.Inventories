@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
+﻿using System;
+using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 using TheChest.Tests.Common;
 using TheChest.Tests.Common.DependencyInjection;
 using TheChest.Tests.Common.Items.Interfaces;

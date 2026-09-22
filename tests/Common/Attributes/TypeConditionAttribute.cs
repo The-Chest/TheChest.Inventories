@@ -1,4 +1,5 @@
-﻿using NUnit.Framework.Interfaces;
+﻿using System;
+using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
 namespace TheChest.Tests.Common.Attributes

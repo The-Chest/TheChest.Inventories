@@ -128,6 +128,7 @@ jobs:
           path: "${{ env.RELEASE_OUTPUT_DIR }}"
           name: "${{ env.PROJECT_NAME }}.${{ steps.get-version.outputs.version }}.dll"
           version: "${{ steps.get-version.outputs.version }}"
+  
   publish-src-files:
     name: "Publish Source Files"
     runs-on: ubuntu-latest

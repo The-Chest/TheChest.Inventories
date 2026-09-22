@@ -1,3 +1,6 @@
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
 using NUnit.Framework.Internal;
 using TheChest.Tests.Common.Attributes;
 
