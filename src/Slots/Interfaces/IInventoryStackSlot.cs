@@ -16,13 +16,6 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <returns><see langword="true"/> if is possible to add <paramref name="items"/></returns>
         bool CanAdd(params T[] items);
         /// <summary>
-        /// Adds an item to the slot
-        /// </summary>
-        /// <param name="item">The item to be added</param>
-        /// <returns><see langword="true"/> if the value is successful added</returns>
-        [Obsolete("Use Add(T[]) instead. This method will be removed in future versions.")]
-        bool Add(T item);
-        /// <summary>
         /// Adds an array of items to the slot.
         /// </summary>
         /// <remarks>

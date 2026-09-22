@@ -50,17 +50,6 @@ namespace TheChest.Inventories.Slots
 
             items = items.Skip(addAmount).ToArray();
         }
-        /// <summary>
-        /// Adds an item inside the Content with no previous validation.
-        /// </summary>
-        /// <param name="item">item to be added to content</param>
-        protected virtual void AddItem(ref T item)
-        {
-            this.Content = this.Content.Append(item).ToArray();
-
-            item = default;
-        }
-
         /// <inheritdoc/>
         /// <remarks>
         /// This method checks that the slot is not full, that the number of items does not
@@ -140,22 +129,6 @@ namespace TheChest.Inventories.Slots
             this.AddItems(ref items);
 
             return items;
-        }
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">when <paramref name="item"/> is <see langword="null"/></exception>
-        /// <exception cref="InvalidOperationException">When the slot is full or when trying to add an item that is different from the items already in the slot</exception>
-        public virtual bool Add(T item)
-        {
-            if(item.IsNull())
-                throw new ArgumentNullException(nameof(item));
-            if (this.IsFull)
-                throw new InvalidOperationException(InventoryStackSlotErrors.FullSlot);
-            if (!this.IsEmpty && !this.Contains(item))
-                throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
-
-            this.AddItem(ref item);
-            
-            return true;
         }
         #endregion
 
