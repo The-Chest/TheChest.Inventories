@@ -3,15 +3,15 @@
 ## What's Added
 - `.NET 6`, `.NET 7`, `.NET 8` and `.NET 9` to the officially tested runtime matrix.
 
+## What's Changed
+- `Add` methods now return `void` instead of `bool` or `T[]`, throwing an exception when the action can't be completed.
+
 ## What's Removed
 
 ### Inventories
 * `IInventory<T>` and `Inventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
   * `Add(T item)` - Use `Add(params T[] items)` instead
-  * Add methods now return `void` instead of `bool` or `T[]`, throwing an exception when the action can't be completed.
-    * `Add(params T[] items)` - Throws `InvalidOperationException` when the inventory is full or if there are not enough free slots to add all the items
-    * `AddAt(T item, int index)` - Throws `InvalidOperationException` if the slot at `index` is full.
 * `IStackInventory<T>` and `StackInventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
   * `CanAddAt(T item, int index)` - Use `CanAddAt(T[] items, int index)` instead
