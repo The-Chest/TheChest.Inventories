@@ -84,8 +84,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Adds and array of item in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <returns>An array of items that couldn't be added to the inventory; otherwise, an empty array.</returns>
-        T[] Add(params T[] items);
+        void Add(params T[] items);
         #endregion
 
         #region AddAt
@@ -110,16 +109,14 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <param name="index">slot where the item will be added</param>
-        /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         [Obsolete("Use AddAt(T[], int) instead. This method will be removed in future versions.")]
-        bool AddAt(T item, int index);
+        void AddAt(T item, int index);
         /// <summary>
         /// Adds an array of items inside the inventory
         /// </summary>
         /// <param name="items">Array of item of the same type wich will be added to inventory</param>
         /// <param name="index">Wich slot the items will be added</param>
-        /// <returns>An array of items or couldn't be added to the <paramref name="index"/></returns>
-        T[] AddAt(T[] items, int index);
+        void AddAt(T[] items, int index);
         #endregion
 
         #region Replace

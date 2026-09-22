@@ -197,45 +197,5 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
 
-        [Test]
-        public void AddItemAt_EmptySlot_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var item = this.itemFactory.CreateDefault();
-            var index = this.random.Next(0, size);
-            var result = inventory.AddAt(item, index);
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
-        public void AddItemAt_SlotWithSameItem_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventoryItem = this.itemFactory.CreateDefault();
-            var inventory = this.inventoryFactory.FullContainer(size, stackSize, inventoryItem);
-
-            var index = this.random.Next(0, size);
-            inventory.Get(index);
-
-            var item = this.itemFactory.CreateDefault();
-            var result = inventory.AddAt(item, index);
-
-            Assert.That(result, Is.True);
-        }
-
-        [Test]
-        [IgnoreIfReferenceType]
-        public void AddItemAt_ValueType_DefaultItem_ReturnsTrue()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-
-            var added = inventory.AddAt((T)default!, 0);
-
-            Assert.That(added, Is.True);
-        }
     }
 }
