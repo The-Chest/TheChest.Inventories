@@ -2,11 +2,14 @@
 
 ## What's Removed
 
+### Inventories
 * `IInventory<T>` and `Inventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
 * `IStackInventory<T>` and `StackInventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
   * `CanAddAt(T item, int index)` - Use `CanAddAt(T[] items, int index)` instead
+
+### Slots
 * `IInventoryStackSlot<T>` and `InventoryStackSlot<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
 
