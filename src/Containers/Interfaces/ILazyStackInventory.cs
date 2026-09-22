@@ -84,13 +84,6 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">Amount of the item to be returned</param>
         /// <returns>Returns the amount of items that couldn't be added</returns>
         int Add(T item, int amount);
-        /// <summary>
-        /// Adds an item in a avaliable slot
-        /// </summary>
-        /// <param name="item">item to be added</param>
-        /// <returns>returns true if the item could be added</returns>
-        [Obsolete("Use Add(T item, int amount) instead. This method will be removed in future versions.")]
-        bool Add(T item);
         #endregion
 
         #region AddAt

@@ -5,9 +5,13 @@
 ### Inventories
 * `IInventory<T>` and `Inventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
+  * `Add(T item)` - Use `Add(params T[] items)` instead
 * `IStackInventory<T>` and `StackInventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
   * `CanAddAt(T item, int index)` - Use `CanAddAt(T[] items, int index)` instead
+  * `Add(T item)` - Use `Add(params T[] items)` instead
+* `ILazyStackInventory<T>` and `LazyStackInventory<T>`
+  * `Add(T item)` - Use `Add(T item, int amount)` instead
 
 ### Slots
 * `IInventoryStackSlot<T>` and `InventoryStackSlot<T>`

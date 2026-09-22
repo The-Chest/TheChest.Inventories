@@ -29,8 +29,6 @@ direction TB
 
 	        + T[] Clear()
 
-	        + bool Add(T item)
-
 			+ bool TryAdd(params T[] items)
 	        + bool CanAdd(params T[] items)
 	        + T[] Add(params T[] items)
@@ -73,8 +71,6 @@ direction TB
 			+ Inventory(T[] items)
 			+ Inventory(T[] items, int size)
 			+ Inventory(IInventorySlot~T~[] slots)
-
-	        + bool Add(T item)
 
 			+ bool TryAdd(params T[] items)
 	        + bool CanAdd(params T[] items)
