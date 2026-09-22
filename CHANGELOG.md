@@ -16,6 +16,7 @@
 ### Slots
 * `IInventoryStackSlot<T>` and `InventoryStackSlot<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
+  * `Add(T item)` - Use `Add(T[] items)` instead
 
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
