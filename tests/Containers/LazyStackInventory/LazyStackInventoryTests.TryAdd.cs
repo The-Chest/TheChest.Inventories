@@ -35,6 +35,21 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
         }
 
         [Test]
+        public void TryAdd_NotEnoughSpace_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var randomItems = this.itemFactory.CreateManyRandom(size - 1);
+            var inventory = this.inventoryFactory.ShuffledItemsContainer(size, stackSize, randomItems);
+
+            var item = this.itemFactory.CreateDefault();
+            var amount = stackSize + this.random.Next(1, 5);
+
+            var result = inventory.TryAdd(item, amount);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
         public void TryAdd_NotEnoughSpace_DoesNotAddItem()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -65,6 +80,19 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when there is not enough space.");
 
             inventory.TryAdd(item, amount);
+        }
+
+        [Test]
+        public void TryAdd_EnoughSpace_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var item = this.itemFactory.CreateDefault();
+            var amount = this.random.Next(1, stackSize);
+
+            var result = inventory.TryAdd(item, amount);
+
+            Assert.That(result, Is.True);
         }
     }
 }

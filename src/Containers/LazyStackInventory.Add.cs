@@ -119,7 +119,7 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is less than or equal to zero.</exception>
-        public virtual void TryAdd(T item, int amount = 1)
+        public virtual bool TryAdd(T item, int amount = 1)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
@@ -127,9 +127,9 @@ namespace TheChest.Inventories.Containers
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             if (!this.CanAdd(item, amount))
-                return;
+                return false;
 
-            this.AddItem(item, amount);
+            return this.AddItem(item, amount) == 0;
         }
         /// <summary>
         /// Adds an amount of items to the first available slot.

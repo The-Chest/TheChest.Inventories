@@ -75,7 +75,8 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="item">The item to add.</param>
         /// <param name="amount">The amount to add.</param>
-        void TryAdd(T item, int amount = 1);
+        /// <returns><see langword="true"/> if the requested <paramref name="amount"/> was added; otherwise, <see langword="false"/>.</returns>
+        bool TryAdd(T item, int amount = 1);
         /// <summary>
         /// Adds items inside the inventory
         /// </summary>

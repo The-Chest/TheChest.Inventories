@@ -38,7 +38,7 @@ namespace TheChest.Inventories.Containers {
         + bool CanAddAt(T item, int index, int amount = 1)
 
         ~ int AddItem(T item, int amount)
-        + void TryAdd(T item, int amount = 1)
+        + bool TryAdd(T item, int amount = 1)
         + void Add(T item, int amount = 1)
 
         ~ int AddItemAt(T item, int index, int amount)
@@ -106,7 +106,7 @@ namespace TheChest.Inventories.Containers.Interfaces {
         + bool CanAdd(T item, int amount)
         + bool CanAddAt(T item, int index, int amount)
 
-        + void TryAdd(T item, int amount = 1)
+        + bool TryAdd(T item, int amount = 1)
         + void Add(T item, int amount = 1)
         + bool TryAddAt(T item, int index, int amount = 1)
         + void AddAt(T item, int index, int amount = 1)
