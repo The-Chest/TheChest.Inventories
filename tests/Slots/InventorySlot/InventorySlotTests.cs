@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Slots;
+﻿using NUnit.Framework;
+using TheChest.Inventories.Slots;
 using TheChest.Inventories.Tests.Slots.Factories;
 using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
 using TheChest.Tests.Common;

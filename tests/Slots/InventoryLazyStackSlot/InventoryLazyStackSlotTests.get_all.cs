@@ -1,4 +1,5 @@
-﻿using TheChest.Tests.Common.Extensions.Slots;
+﻿using NUnit.Framework;
+using TheChest.Tests.Common.Extensions.Slots;
 
 namespace TheChest.Inventories.Tests.Slots.InventoryLazyStackSlot
 {

@@ -1,4 +1,7 @@
-﻿using TheChest.Inventories.Tests.Common.Extensions;
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
+using TheChest.Inventories.Tests.Common.Extensions;
 
 namespace TheChest.Inventories.Tests.Containers.StackInventory
 {

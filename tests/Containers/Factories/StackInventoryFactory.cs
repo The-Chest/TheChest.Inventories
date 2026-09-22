@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers;
+﻿using System;
+using TheChest.Inventories.Containers;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using TheChest.Inventories.Containers.Interfaces;

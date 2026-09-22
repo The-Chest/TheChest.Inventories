@@ -1,4 +1,5 @@
-﻿namespace TheChest.Inventories.Tests.Common.Extensions
+﻿using System;
+namespace TheChest.Inventories.Tests.Common.Extensions
 {
     internal static class IndexExtensions
     {

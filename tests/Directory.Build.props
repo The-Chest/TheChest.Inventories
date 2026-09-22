@@ -1,6 +1,0 @@
-<Project>
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
-		<!-- The NUnit SDK-generated global using requires C# 10 on every target. -->
-		<LangVersion>10.0</LangVersion>
-	</PropertyGroup>
-</Project>

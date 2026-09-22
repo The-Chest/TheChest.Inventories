@@ -1,4 +1,7 @@
-﻿using TheChest.Core.Slots.Interfaces;
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
+using TheChest.Core.Slots.Interfaces;
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
 

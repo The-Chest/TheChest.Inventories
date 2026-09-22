@@ -1,3 +1,6 @@
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
 using TheChest.Inventories.Containers;
 using TheChest.Inventories.Slots;
 using TheChest.Tests.Common.Extensions.Containers;

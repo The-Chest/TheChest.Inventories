@@ -1,3 +1,4 @@
+﻿using NUnit.Framework;
 using TheChest.Inventories.Extensions;
 
 namespace TheChest.Inventories.Tests.Extensions

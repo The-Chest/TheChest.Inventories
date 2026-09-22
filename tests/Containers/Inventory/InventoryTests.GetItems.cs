@@ -1,3 +1,6 @@
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
 using TheChest.Tests.Common.Attributes;
 ﻿
 namespace TheChest.Inventories.Tests.Containers.Inventory

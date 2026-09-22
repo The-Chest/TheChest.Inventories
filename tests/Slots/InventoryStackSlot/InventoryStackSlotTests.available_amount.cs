@@ -1,4 +1,6 @@
-﻿using TheChest.Tests.Common.Attributes;
+﻿using NUnit.Framework;
+using System.Linq;
+using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Slots.InventoryStackSlot
 {
