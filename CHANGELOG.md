@@ -1,5 +1,8 @@
 # v0.20.0
 
+## What's Added
+- `.NET 6`, `.NET 7`, `.NET 8` and `.NET 9` to the officially tested runtime matrix.
+
 ## What's Removed
 
 ### Inventories
