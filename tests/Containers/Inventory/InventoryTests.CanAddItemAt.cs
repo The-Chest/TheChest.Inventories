@@ -1,4 +1,6 @@
-﻿using NUnit.Framework.Internal;
+﻿using NUnit.Framework;
+using System;
+using NUnit.Framework.Internal;
 using TheChest.Tests.Common.Attributes;
 
 namespace TheChest.Inventories.Tests.Containers.Inventory

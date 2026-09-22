@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers;
+﻿using System;
+using TheChest.Inventories.Containers;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Inventories.Tests.Containers.Interfaces.Factories;

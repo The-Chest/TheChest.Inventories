@@ -1,4 +1,6 @@
-﻿namespace TheChest.Inventories.Tests.Containers.Inventory
+﻿using NUnit.Framework;
+using System.Linq;
+namespace TheChest.Inventories.Tests.Containers.Inventory
 {
     public partial class InventoryTests<T>
     {

@@ -1,4 +1,7 @@
-﻿namespace TheChest.Tests.Common.Extensions
+﻿using System.Linq;
+using System.Collections.Generic;
+using System;
+namespace TheChest.Tests.Common.Extensions
 {
     /// <summary>
     /// Provides extension methods for working with arrays.

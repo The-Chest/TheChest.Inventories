@@ -1,4 +1,5 @@
-﻿using TheChest.Inventories.Containers;
+﻿using System;
+using TheChest.Inventories.Containers;
 using TheChest.Inventories.Containers.Interfaces;
 using TheChest.Inventories.Slots.Interfaces;
 using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
@@ -12,6 +13,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
     public class LazyStackInventoryFactory<Inventory, Item> : ILazyStackInventoryFactory<Item>
         where Inventory : LazyStackInventory<Item>
     {
+        private readonly Random random = new Random();
         private readonly IInventoryLazyStackSlotFactory<Item> slotFactory;
         public LazyStackInventoryFactory(IInventoryLazyStackSlotFactory<Item> slotFactory)
         {
@@ -63,7 +65,7 @@ namespace TheChest.Inventories.Tests.Containers.Factories
                         index => index < items.Length
                             ? slotFactory.WithItem(
                                 item: items[index],
-                                amount: Random.Shared.Next(1, stackSize),
+                                amount: this.random.Next(1, stackSize),
                                 maxAmount: stackSize
                             )
                             : slotFactory.Empty(stackSize),

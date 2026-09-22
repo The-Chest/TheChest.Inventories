@@ -1,4 +1,7 @@
-﻿namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
+﻿using NUnit.Framework;
+using System.Linq;
+using System;
+namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 {
     public partial class LazyStackInventoryTests<T>
     {
