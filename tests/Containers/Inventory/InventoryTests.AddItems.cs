@@ -182,18 +182,5 @@ namespace TheChest.Inventories.Tests.Containers.Inventory
             };
             inventory.Add(items);
         }
-
-        [Test]
-        public void AddItems_SuccessAdding_ReturnsEmptyArray()
-        {
-            var size = this.GenerateRandomSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size);
-
-            var randomSize = this.random.Next(1, size);
-            var items = this.itemFactory.CreateMany(randomSize);
-            var result = inventory.Add(items);
-
-            Assert.That(result, Is.Empty);
-        }
     }
 }

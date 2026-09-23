@@ -61,11 +61,11 @@ namespace TheChest.Inventories.Containers.Interfaces
         int Count(T item);
         #endregion
 
+        #region Add
         /// <summary>
         /// Raised when an amount of item is added to an index
         /// </summary>
         event InventoryAddEventHandler<T> OnAdd;
-        #region Add
         /// <summary>
         /// Checks if <paramref name="items"/> can be added to any slot.
         /// </summary>
@@ -85,7 +85,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns>The items from param that were not possible to add</returns>
-        T[] Add(params T[] items);
+        void Add(params T[] items);
         #endregion
 
         #region AddAt
@@ -117,7 +117,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
-        bool AddAt(T item, int index);
+        void AddAt(T item, int index);
         #endregion
 
         #region Replace

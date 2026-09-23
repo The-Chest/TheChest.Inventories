@@ -77,7 +77,7 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
             var item = this.itemFactory.CreateDefault();
             var amount = stackSize + this.random.Next(1, 5);
 
-            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when TryAdd returns false.");
+            inventory.OnAdd += (sender, args) => Assert.Fail("OnAdd should not be called when there is not enough space.");
 
             inventory.TryAdd(item, amount);
         }

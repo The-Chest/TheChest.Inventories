@@ -277,17 +277,5 @@ namespace TheChest.Inventories.Tests.Containers.LazyStackInventory
 
             Assert.That(raised, Is.True, "OnAdd event was not raised");
         }
-
-        [Test]
-        public void AddAt_AllItemsSuccessfullyAdded_ReturnsZero()
-        {
-            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
-            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
-            var item = this.itemFactory.CreateDefault();
-
-            var notAddedCount = inventory.AddAt(item, 0, stackSize);
-            
-            Assert.That(notAddedCount, Is.Zero);
-        }
     }
 }

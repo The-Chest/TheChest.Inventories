@@ -31,11 +31,11 @@ direction TB
 
 			+ bool TryAdd(params T[] items)
 	        + bool CanAdd(params T[] items)
-	        + T[] Add(params T[] items)
+	        + void Add(params T[] items)
 
 			+ bool TryAddAt(T item, int index)
 	        + bool CanAddAt(T item, int index)
-	        + bool AddAt(T item, int index)
+	        + void AddAt(T item, int index)
 
 	        + bool CanMove(int origin, int target)
 	        + bool TryMove(int origin, int target)
@@ -71,17 +71,16 @@ direction TB
 			+ Inventory(T[] items)
 			+ Inventory(T[] items, int size)
 			+ Inventory(IInventorySlot~T~[] slots)
-
+			
+            # bool CanAddItems(T[] items)
+			# bool AddItems(T[] items)
 			+ bool TryAdd(params T[] items)
 	        + bool CanAdd(params T[] items)
-	        + T[] Add(params T[] items)
+	        + void Add(params T[] items)
 
 			+ bool TryAddAt(T item, int index)
 	        + bool CanAddAt(T item, int index)
-	        + bool AddAt(T item, int index)
-
-            # bool CanAddItems(T[] items)
-			# bool AddItems(T[] items)
+	        + void AddAt(T item, int index)
 
 	        + T[] Clear()
 
