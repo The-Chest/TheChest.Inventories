@@ -206,9 +206,6 @@ namespace TheChest.Inventories.Containers
                 slot.Add(itemsToAdd);
                 var addedItemsCount = itemsToAdd.Length;
 
-                if (addedItemsCount <= 0)
-                    continue;
-
                 events.Add(
                     new StackInventoryAddItemEventData<T>(
                         items.Take(addedItemsCount).ToArray(),

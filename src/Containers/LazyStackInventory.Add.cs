@@ -100,9 +100,6 @@ namespace TheChest.Inventories.Containers
                 slot.Add(item, toAddAmount);
                 var addedItemsCount = toAddAmount;
 
-                if (addedItemsCount <= 0)
-                    continue;
-
                 events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedItemsCount));
 
                 amount -= addedItemsCount;
