@@ -67,7 +67,9 @@
 
 ## What's Next
 * Add `TryGet`/`TryReplace` methods to avoid throwing exceptions in some cases
-* //TODO: add more details about the next version
+* Remove obsolete `Get` methods
+* Event Handling Improvements
+
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.19.0...v0.20.0
 
@@ -118,6 +120,7 @@
 ## What's Next
 * A refactor in multiple slots and inventories methods to make them more simple and easier to understand and removing the Obsolete methods
 * Changes in `Add` method contracts by changing the return type to `void`
+
 
 * **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.1...v0.19.0
 
