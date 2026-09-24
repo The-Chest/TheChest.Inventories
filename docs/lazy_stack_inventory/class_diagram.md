@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Containers {
         + bool TryAdd(T item, int amount = 1)
         + void Add(T item, int amount = 1)
 
-        ~ int AddItemAt(T item, int index, int amount)
+        ~ void AddItemAt(T item, int index, int amount)
         + bool TryAddAt(T item, int index, int amount = 1)
         + void AddAt(T item, int index, int amount = 1)
 
@@ -74,7 +74,7 @@ namespace TheChest.Inventories.Slots.Interfaces {
         + bool Contains(T item)
         
         + bool CanAdd(T item, int amount = 1)
-        + int Add(T item, int amount = 1)
+        + void Add(T item, int amount = 1)
 
         + bool CanReplace(T item, int amount = 1)
         + bool TryReplace(T item, int amount, out T[] oldItems)
@@ -152,7 +152,7 @@ namespace TheChest.Core {
 namespace TheChest.Inventories {
     class IInventoryLazyStackSlot~T~ {
         + bool CanAdd(T item, int amount = 1)
-        + int Add(T item, int amount = 1)
+        + void Add(T item, int amount = 1)
 
         + bool CanReplace(T item, int amount = 1)
         + bool TryReplace(T item, int amount, out T[] oldItems)
@@ -173,7 +173,7 @@ namespace TheChest.Inventories {
         ~ int AddItems(T item, int amount = 1)
         + bool CanAdd(T item, int amount = 1)
         + bool TryAdd(T item, int amount = 1)
-        + int Add(T item, int amount = 1)
+        + void Add(T item, int amount = 1)
         
         + bool CanReplace(T item, int amount = 1)
         + bool TryReplace(T item, int amount, out T[] oldItems)

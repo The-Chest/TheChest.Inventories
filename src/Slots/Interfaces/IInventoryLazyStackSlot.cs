@@ -31,8 +31,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <param name="item">The item to be added </param>
         /// <param name="amount">The amount of items added</param>
-        /// <returns>Return 0 if all items are fully added to slot, else will return the amount left</returns>
-        int Add(T item, int amount = 1);
+        void Add(T item, int amount = 1);
         #endregion
 
         #region Replace
