@@ -18,8 +18,7 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// Adds the item in the current Slot if <see cref="ISlot{T}.IsFull"/> is <see langword="false"/>
         /// </summary>
         /// <param name="item">The item to be added</param>
-        /// <returns><see langword="true"/> if the value is successful added</returns>
-        bool Add(T item);
+        void Add(T item);
         /// <summary>
         /// Attempts to add the specified item to the collection.
         /// </summary>

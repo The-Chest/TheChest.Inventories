@@ -17,6 +17,13 @@
     * `Add(T item, int amount = 1)` - Returns `void` instead of `int` and throws an exception when all items cannot be added
     * `TryAddAt(T item, int index, int amount = 1)` - Makes `amount` optional with a default value of `1`
     * `AddAt(T item, int index, int amount = 1)` - Returns `void` instead of `int`, makes `amount` optional with a default value of `1`, and throws an exception when all items cannot be added
+* Slot Add method return types
+  * `IInventorySlot<T>` and `InventorySlot<T>`
+    * `Add(T item)` - Returns `void` instead of `bool` and throws an exception when the item cannot be added
+  * `IInventoryStackSlot<T>` and `InventoryStackSlot<T>`
+    * `Add(T[] items)` - Returns `void` instead of `T[]` and throws an exception when all items cannot be added
+  * `IInventoryLazyStackSlot<T>` and `InventoryLazyStackSlot<T>`
+    * `Add(T item, int amount = 1)` - Returns `void` instead of `int` and throws an exception when all items cannot be added
 
 ## What's Removed
 

@@ -49,7 +49,7 @@ direction TB
         }
         class IInventorySlot~T~ {
 	        + bool CanAdd(T item)
-	        + bool Add(T item)
+	        + void Add(T item)
 
 			+ bool CanReplace(T item)
 	        + T Replace(T item)
@@ -143,7 +143,7 @@ namespace TheChest.Inventories {
         + bool Contains(T item)
 
         + bool CanAdd(T item)
-        + bool Add(T item)
+        + void Add(T item)
 
         + T Get()
 
@@ -158,7 +158,7 @@ namespace TheChest.Inventories {
         + bool Contains(T item)
 
         + bool CanAdd(T item)
-        + bool Add(T item)
+        + void Add(T item)
 
         + T Get()
 
