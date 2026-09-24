@@ -97,8 +97,8 @@ namespace TheChest.Inventories.Containers
                 if (toAddAmount <= 0)
                     continue;
 
-                var notAddedAmount = slot.Add(item, toAddAmount);
-                var addedItemsCount = toAddAmount - notAddedAmount;
+                slot.Add(item, toAddAmount);
+                var addedItemsCount = toAddAmount;
 
                 if (addedItemsCount <= 0)
                     continue;
@@ -162,14 +162,10 @@ namespace TheChest.Inventories.Containers
         /// <param name="item">Item to be added to the slot.</param>
         /// <param name="index">Index of the slot that will receive the item.</param>
         /// <param name="amount">Amount of the item to add.</param>
-        /// <returns>Returns the amount of items that could not be added to the slot.</returns>
-        protected int AddItemAt(T item, int index, int amount)
+        protected void AddItemAt(T item, int index, int amount)
         {
-            var notAdded = this.slots[index].Add(item, amount);
-            if (notAdded < amount)
-                this.OnAdd?.Invoke(this, (item, index, amount - notAdded));
-
-            return notAdded;
+            this.slots[index].Add(item, amount);
+            this.OnAdd?.Invoke(this, (item, index, amount));
         }
 
         /// <inheritdoc/>

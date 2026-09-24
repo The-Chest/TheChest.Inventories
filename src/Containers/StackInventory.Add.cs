@@ -203,8 +203,8 @@ namespace TheChest.Inventories.Containers
                 var slot = this.slots[index];
 
                 var itemsToAdd = items.Take(slot.AvailableAmount).ToArray();
-                var notAddedItems = slot.Add(itemsToAdd);
-                var addedItemsCount = itemsToAdd.Length - notAddedItems.Length;
+                slot.Add(itemsToAdd);
+                var addedItemsCount = itemsToAdd.Length;
 
                 if (addedItemsCount <= 0)
                     continue;

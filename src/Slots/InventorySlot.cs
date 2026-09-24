@@ -83,7 +83,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="InvalidOperationException">When the slot is full</exception>
-        public virtual bool Add(T item)
+        public virtual void Add(T item)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
@@ -92,8 +92,6 @@ namespace TheChest.Inventories.Slots
                 throw new InvalidOperationException(InventorySlotErrors.FullSlot);
 
             this.Content = item;
-            
-            return true;
         }
 
         /// <inheritdoc />

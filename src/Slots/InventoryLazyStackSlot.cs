@@ -112,7 +112,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
-        public virtual int Add(T item, int amount = 1)
+        public virtual void Add(T item, int amount = 1)
         {
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
@@ -126,7 +126,7 @@ namespace TheChest.Inventories.Slots
             if (!this.IsEmpty && !this.Content.Equals(item))
                 throw new InvalidOperationException(InventoryLazyStackSlotErrors.AddDifferentItemsFromSlot);
 
-            return this.AddItems(item, amount);
+            this.AddItems(item, amount);
         }
 
         /// <inheritdoc/>

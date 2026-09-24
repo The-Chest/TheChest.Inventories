@@ -110,7 +110,7 @@ namespace TheChest.Inventories.Slots
         /// <exception cref="ArgumentException">When any of the items in <paramref name="items"/> is invalid or when the items are different from the items already in the slot</exception>
         /// <exception cref="InvalidOperationException">When the slot is full or when trying to add items that are different from the items already in the slot</exception>
         /// <exception cref="ArgumentNullException">When any of the items in <paramref name="items"/> is <see langword="null"/></exception>"
-        public virtual T[] Add(T[] items)
+        public virtual void Add(T[] items)
         {
             if (items.Length == 0)
                 throw new ArgumentException(InventoryStackSlotErrors.AddEmptyItems, nameof(items));
@@ -127,8 +127,6 @@ namespace TheChest.Inventories.Slots
                 throw new InvalidOperationException(InventoryStackSlotErrors.AddDifferentItemsFromSlot);
 
             this.AddItems(ref items);
-
-            return items;
         }
         #endregion
 
