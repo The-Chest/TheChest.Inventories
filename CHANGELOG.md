@@ -26,7 +26,6 @@
     * `Add(T item, int amount = 1)` - Returns `void` instead of `int` and throws an exception when all items cannot be added
 
 ## What's Removed
-
 ### Inventories
 * `IInventory<T>` and `Inventory<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
@@ -37,12 +36,10 @@
   * `Add(T item)` - Use `Add(params T[] items)` instead
 * `ILazyStackInventory<T>` and `LazyStackInventory<T>`
   * `Add(T item)` - Use `Add(T item, int amount)` instead
-
 ### Slots
 * `IInventoryStackSlot<T>` and `InventoryStackSlot<T>`
   * `CanAdd(T item)` - Use `CanAdd(params T[] items)` instead
   * `Add(T item)` - Use `Add(T[] items)` instead
-
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
 * **Event system will need an improvement on creation/dispatch**
@@ -70,9 +67,9 @@
 * Remove obsolete `Get` methods
 * Event Handling Improvements
 
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.19.0...v0.20.0
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.19.0...v0.20.0
-
+---
 # v0.19.0
 
 ## What's Added
@@ -121,9 +118,9 @@
 * A refactor in multiple slots and inventories methods to make them more simple and easier to understand and removing the Obsolete methods
 * Changes in `Add` method contracts by changing the return type to `void`
 
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.1...v0.19.0
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.1...v0.19.0
-
+---
 # v0.18.1
 
 ## What's changed
@@ -175,8 +172,9 @@
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 * [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.0...v0.18.1
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.18.0...v0.18.1
 
+---
 # v0.18.0
 
 ## What's Added
@@ -291,7 +289,7 @@
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 * [#294](https://github.com/The-Chest/TheChest.Inventories/issues/294) - Update to Use `TheChest.Core v0.19.0`
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.17.0...v0.18.0
 
 ---
 # v0.17.0
@@ -363,7 +361,7 @@
 * [#252](https://github.com/The-Chest/TheChest.Inventories/issues/252) - Changes in Add method contracts
 * [#253](https://github.com/The-Chest/TheChest.Inventories/issues/253) | [#262](https://github.com/The-Chest/TheChest.Inventories/issues/262) - Remove `CanAdd(T item)` and `Add(T item)` from Inventories
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.16.0...v0.17.0
 
 ---
 # v0.16.0
@@ -482,7 +480,7 @@
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
 * [#250](https://github.com/The-Chest/TheChest.Inventories/issues/250) - Support for Struct and Value Types
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.15.0...v0.16.0
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.15.0...v0.16.0
 
 ---
 # v0.15.0
@@ -533,7 +531,7 @@
 * [#163](https://github.com/The-Chest/TheChest.Inventories/issues/163) | [#164](https://github.com/The-Chest/TheChest.Inventories/issues/164) | [#153](https://github.com/The-Chest/TheChest.Inventories/issues/153) | - Changes in methods on inventories to throw InvalidOperationException
 * [#169](https://github.com/The-Chest/TheChest.Inventories/issues/169) | [#241](https://github.com/The-Chest/TheChest.Inventories/issues/241) | [#242](https://github.com/The-Chest/TheChest.Inventories/issues/242) - Try methods to avoid throwing exceptions in some cases
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.14.0...v0.15.0
 
 ---
 # v0.14.0
@@ -603,7 +601,7 @@
 * [#147](https://github.com/The-Chest/TheChest.Inventories/issues/147) - Improve Repository's docs 
 * [#174](https://github.com/The-Chest/TheChest.Inventories/issues/174) - Update to use `TheChest.Core v0.15.2`
 
-* **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
+**Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.13.0...v0.14.0
 
 ---
 # v0.13.0
