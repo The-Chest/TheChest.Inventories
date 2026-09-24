@@ -92,17 +92,16 @@ namespace TheChest.Inventories.Containers
             {
                 var slot = this.slots[index];
 
-                var toAddAmount = Math.Min(amount, slot.AvailableAmount);
+                var amountToAdd = Math.Min(amount, slot.AvailableAmount);
 
-                if (toAddAmount <= 0)
+                if (amountToAdd <= 0)
                     continue;
 
-                slot.Add(item, toAddAmount);
-                var addedItemsCount = toAddAmount;
+                slot.Add(item, amountToAdd);
 
-                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, addedItemsCount));
+                events.Add(new LazyStackInventoryAddItemEventData<T>(item, index, amountToAdd));
 
-                amount -= addedItemsCount;
+                amount -= amountToAdd;
                 if (amount == 0)
                     break;
             }
