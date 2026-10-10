@@ -40,6 +40,7 @@ jobs:
           artifact-folder: "${{ env.RELEASE_OUTPUT_DIR }}"
   
   publish-nuget:
+    if: false
     name: "Publish on NuGet"
     runs-on: ubuntu-latest
     needs: build
@@ -78,6 +79,7 @@ jobs:
           version: "${{ steps.get-version.outputs.version }}"
 
   publish-gh-pack:
+    if: false
     name: "Publish on Github Packages"
     runs-on: ubuntu-latest
     needs: build
@@ -126,7 +128,7 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           path: "${{ env.RELEASE_OUTPUT_DIR }}"
-          name: "${{ env.PROJECT_NAME }}.${{ steps.get-version.outputs.version }}.dll"
+          name: "${{ env.PROJECT_NAME }}.dll"
           version: "${{ steps.get-version.outputs.version }}"
   
   publish-src-files:
