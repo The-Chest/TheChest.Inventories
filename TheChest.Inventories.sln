@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12224.181 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}"
 EndProject
@@ -37,44 +37,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lazy_stack_inventory", "laz
 		docs\lazy_stack_inventory\implementing.md = docs\lazy_stack_inventory\implementing.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{3C358749-7C82-4444-8F8C-FE68D058170F}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\publish_library.workflow.yml = .github\workflows\publish_library.workflow.yml
-		.github\workflows\sonarcloud.yml = .github\workflows\sonarcloud.yml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories", "src\TheChest.Inventories.csproj", "{304F1F23-00A3-6AAD-9BD4-326221B7F39D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheChest.Inventories.Tests", "tests\TheChest.Inventories.Tests.csproj", "{5737827E-E8E2-CBC2-5282-862F0276D8EB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ai", "ai", "{4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA}"
-	ProjectSection(SolutionItems) = preProject
-		AGENTS.md = AGENTS.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skills", "skills", "{D4C4483F-797C-4877-9281-92C70D529986}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test-creation", "test-creation", "{FF04AD41-6658-429F-B530-FE09B7EF7E44}"
-	ProjectSection(SolutionItems) = preProject
-		skills\test-creation\SKILL.md = skills\test-creation\SKILL.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "changelog-write", "changelog-write", "{191BB0D7-AD03-4A8B-8CF2-388419C8674B}"
-	ProjectSection(SolutionItems) = preProject
-		skills\changelog-write\SKILL.md = skills\changelog-write\SKILL.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test-naming", "test-naming", "{0370FED6-F09A-45DF-A4A5-8BB2D6D0C346}"
-	ProjectSection(SolutionItems) = preProject
-		skills\test-naming\SKILL.md = skills\test-naming\SKILL.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "references", "references", "{3CDDB48A-73D8-4B86-828B-9CB1F65486EB}"
-	ProjectSection(SolutionItems) = preProject
-		skills\test-naming\references\examples.md = skills\test-naming\references\examples.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,15 +63,8 @@ Global
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{6E4E9365-6329-4D99-A987-3975D1D27AF4} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
 		{F23C1317-F2B9-4C47-B2A0-1C9C0B57C495} = {380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}
-		{3C358749-7C82-4444-8F8C-FE68D058170F} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
 		{304F1F23-00A3-6AAD-9BD4-326221B7F39D} = {F2C73DF4-9769-49EC-94F0-DCF91CC5C7C2}
 		{5737827E-E8E2-CBC2-5282-862F0276D8EB} = {7C06F316-5168-46BC-9A49-54ADAE23B173}
-		{4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA} = {BB4B9E4B-06BF-47E7-B966-47BA7D3C26B9}
-		{D4C4483F-797C-4877-9281-92C70D529986} = {4FB574CE-4142-4DD8-B1F6-3C2FF7B76AEA}
-		{FF04AD41-6658-429F-B530-FE09B7EF7E44} = {D4C4483F-797C-4877-9281-92C70D529986}
-		{191BB0D7-AD03-4A8B-8CF2-388419C8674B} = {D4C4483F-797C-4877-9281-92C70D529986}
-		{0370FED6-F09A-45DF-A4A5-8BB2D6D0C346} = {D4C4483F-797C-4877-9281-92C70D529986}
-		{3CDDB48A-73D8-4B86-828B-9CB1F65486EB} = {0370FED6-F09A-45DF-A4A5-8BB2D6D0C346}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF9A167E-B926-4A99-B692-8A3566AB0996}
