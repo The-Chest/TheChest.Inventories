@@ -7,7 +7,6 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 {
     public partial class InventorySlotTests<T>
     {
-        #region Empty
         [Test]
         public void Get_EmptySlot_ThrowsInvalidOperationException()
         {
@@ -18,9 +17,7 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
                 Throws.InvalidOperationException.With.Message.EqualTo("The slot is empty.")
             );
         }
-        #endregion
 
-        #region Full
         [Test]
         public void Get_FullSlot_ReturnsItem()
         {
@@ -75,6 +72,5 @@ namespace TheChest.Inventories.Tests.Slots.InventorySlot
 
             Assert.That(result, Is.EqualTo(item));
         }
-        #endregion
     }
 }
