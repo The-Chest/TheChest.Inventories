@@ -50,11 +50,16 @@ direction TB
         class IInventorySlot~T~ {
 	        + bool CanAdd(T item)
 	        + void Add(T item)
+			+ bool TryAdd(T item)
 
 			+ bool CanReplace(T item)
 	        + T Replace(T item)
+			+ bool TryReplace(T item, out T oldItem)
 
+			+ bool CanGet()
 	        + T Get()
+			+ bool TryGet(out T item)
+
 	        + bool Contains(T item)
         }
         class Inventory~T~ {
@@ -140,31 +145,37 @@ namespace TheChest.Core {
 
 namespace TheChest.Inventories {
     class IInventorySlot~T~ {
-        + bool Contains(T item)
+	    + bool CanAdd(T item)
+	    + void Add(T item)
+		+ bool TryAdd(T item)
 
-        + bool CanAdd(T item)
-        + void Add(T item)
-
-        + T Get()
-
-        + bool CanReplace(T item)
+		+ bool CanReplace(T item)
+	    + T Replace(T item)
 		+ bool TryReplace(T item, out T oldItem)
-        + T Replace(T item)
+
+		+ bool CanGet()
+	    + T Get()
+		+ bool TryGet(out T item)
+
+	    + bool Contains(T item)
     }
     class InventorySlot~T~ {
         + InventorySlot()
         + InventorySlot(T currentItem)
 
-        + bool Contains(T item)
+	    + bool CanAdd(T item)
+	    + void Add(T item)
+		+ bool TryAdd(T item)
 
-        + bool CanAdd(T item)
-        + void Add(T item)
-
-        + T Get()
-
-        + bool CanReplace(T item)
+		+ bool CanReplace(T item)
+	    + T Replace(T item)
 		+ bool TryReplace(T item, out T oldItem)
-        + T Replace(T item)
+
+		+ bool CanGet()
+	    + T Get()
+		+ bool TryGet(out T item)
+
+	    + bool Contains(T item)
     }
 }
 
