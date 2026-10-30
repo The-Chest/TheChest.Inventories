@@ -8,7 +8,7 @@ using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 using TheChest.Tests.Common.Extensions;
 using TheChest.Tests.Common.Extensions.Containers;
 using TheChest.Tests.Common.Extensions.Slots;
-using TheChest.Inventories.Tests.Slots.Factories.Interfaces;
+using TheChest.Inventories.Tests.Slots.Factories.Interfaces.Factories;
 
 namespace TheChest.Inventories.Tests.Containers.Factories
 {
