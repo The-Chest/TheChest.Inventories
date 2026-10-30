@@ -57,8 +57,26 @@ namespace TheChest.Inventories.Slots
             this.Clear();
             return content;
         }
+        /// <inheritdoc />
+        public bool CanGet()
+        {
+            return !this.IsEmpty;
+        }
+        /// <inheritdoc />
+        public bool TryGet(out T item)
+        {
+            if (this.CanGet())
+            {
+                item = this.Get();
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>"
         public virtual bool CanAdd(T item)
         {
             if (item.IsNull())
@@ -99,7 +117,6 @@ namespace TheChest.Inventories.Slots
         {
             return !this.IsEmpty && !item.IsNull();
         }
-
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual bool TryReplace(T item, out T oldItem)

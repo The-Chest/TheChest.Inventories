@@ -47,6 +47,17 @@ namespace TheChest.Inventories.Slots.Interfaces
         T Replace(T item);
 
         /// <summary>
+        /// Checks whether the slot has an item to get
+        /// </summary>
+        /// <returns><see langword="true"/> if the slot has an item to get; otherwise, <see langword="false"/>.</returns>
+        bool CanGet();
+        /// <summary>
+        /// Attempts to get the item from the slot
+        /// </summary>
+        /// <param name="item">When this method returns <see langword="true"/>, contains the item that was retrieved, if the retrieval was successful; otherwise, the default value for the type of the item.</param>
+        /// <returns><see langword="true"/> if the item was successfully retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(out T item);
+        /// <summary>
         /// Returns an item from slot
         /// </summary>
         /// <returns>Returns an item of the slot</returns>
