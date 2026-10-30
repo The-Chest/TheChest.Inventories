@@ -1,7 +1,7 @@
 ﻿using System;
 using TheChest.Inventories.Slots.Interfaces;
 
-namespace TheChest.Inventories.Tests.Slots.Interfaces.Factories
+namespace TheChest.Inventories.Tests.Slots.Factories.Interfaces
 {
     /// <summary>
     /// Factory interface to instantiate any <see cref="IInventoryStackSlot{T}"/>

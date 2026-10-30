@@ -4,7 +4,7 @@ using TheChest.Inventories.Slots;
 using TheChest.Inventories.Tests.Containers.Factories;
 using TheChest.Inventories.Tests.Containers.Interfaces.Factories;
 using TheChest.Inventories.Tests.Slots.Factories;
-using TheChest.Inventories.Tests.Slots.Interfaces.Factories;
+using TheChest.Inventories.Tests.Slots.Factories.Interfaces;
 using TheChest.Tests.Common;
 using TheChest.Tests.Common.Items.Interfaces;
 using TheChest.Tests.Common.Items.ReferenceType;
