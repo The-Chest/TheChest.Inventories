@@ -10,6 +10,12 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event StackInventoryMoveEventHandler<T> OnMove;
 
+        /// <summary>
+        /// Checks if items can be moved between the slots at the specified origin and target indices.
+        /// </summary>
+        /// <param name="origin">The index of the slot from which items will be moved.</param>
+        /// <param name="target">The index of the slot to which items will be moved.</param>
+        /// <returns><see langword="true"/> if the item can be moved from <paramref name="origin"/> to <paramref name="target"/> index; otherwise, <see langword="false"/>.</returns>
         protected bool CanMoveItems(int origin, int target)
         {
             var slotOrigin = this.slots[origin];
@@ -37,6 +43,11 @@ namespace TheChest.Inventories.Containers
             return this.CanMoveItems(origin, target);
         }
 
+        /// <summary>
+        /// Moves items between the slots at the specified origin and target indices.
+        /// </summary>
+        /// <param name="origin">The index of the slot from which items will be moved.</param>
+        /// <param name="target">The index of the slot to which items will be moved.</param>
         protected void MoveItems(int origin, int target)
         {
             var slotOrigin = this.slots[origin];
