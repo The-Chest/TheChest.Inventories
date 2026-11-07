@@ -58,12 +58,12 @@ namespace TheChest.Inventories.Slots
             return content;
         }
         /// <inheritdoc />
-        public bool CanGet()
+        public virtual bool CanGet()
         {
             return !this.IsEmpty;
         }
         /// <inheritdoc />
-        public bool TryGet(out T item)
+        public virtual bool TryGet(out T item)
         {
             if (this.CanGet())
             {
