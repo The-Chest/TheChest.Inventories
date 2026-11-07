@@ -1,10 +1,10 @@
 # v0.21.0
 
 ## What's Added
-*
+* 
 
 ## What's Changed
-* Project is now using `TheChest.Core` [v0.21.0](https://github.com/The-Chest/TheChest.Core/releases/tag/v0.21.0)
+* 
 
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
@@ -29,6 +29,8 @@
     * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
 
 ## What's Next
+* Add `TryGet`/`TryReplace` methods to avoid throwing exceptions in some cases
+* Remove obsolete `Get` methods
 * Event Handling Improvements
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.20.0...v0.21.0
