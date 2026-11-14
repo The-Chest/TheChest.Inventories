@@ -26,6 +26,10 @@ direction TB
 	        + T Get(int index)
 	        + T Get(T item)
 	        + T[] Get(T item, int amount)
+			+ bool TryGet(int index, out T item)
+			+ bool TryGet(T item, int amount, out T[] items)
+			+ bool CanGet(int index)
+			+ bool CanGet(T item, int amount)
 
 	        + T[] Clear()
 
@@ -50,11 +54,16 @@ direction TB
         class IInventorySlot~T~ {
 	        + bool CanAdd(T item)
 	        + void Add(T item)
+			+ bool TryAdd(T item)
 
 			+ bool CanReplace(T item)
 	        + T Replace(T item)
+			+ bool TryReplace(T item, out T oldItem)
 
+			+ bool CanGet()
 	        + T Get()
+			+ bool TryGet(out T item)
+
 	        + bool Contains(T item)
         }
         class Inventory~T~ {
@@ -89,6 +98,10 @@ direction TB
 	        + T Get(int index)
 	        + T Get(T item)
 	        + T[] Get(T item, int amount)
+			+ bool TryGet(int index, out T item)
+			+ bool TryGet(T item, int amount, out T[] items)
+			+ bool CanGet(int index)
+			+ bool CanGet(T item, int amount)
 
 	        + int Count(T item)
 
@@ -140,31 +153,37 @@ namespace TheChest.Core {
 
 namespace TheChest.Inventories {
     class IInventorySlot~T~ {
-        + bool Contains(T item)
+	    + bool CanAdd(T item)
+	    + void Add(T item)
+		+ bool TryAdd(T item)
 
-        + bool CanAdd(T item)
-        + void Add(T item)
-
-        + T Get()
-
-        + bool CanReplace(T item)
+		+ bool CanReplace(T item)
+	    + T Replace(T item)
 		+ bool TryReplace(T item, out T oldItem)
-        + T Replace(T item)
+
+		+ bool CanGet()
+	    + T Get()
+		+ bool TryGet(out T item)
+
+	    + bool Contains(T item)
     }
     class InventorySlot~T~ {
         + InventorySlot()
         + InventorySlot(T currentItem)
 
-        + bool Contains(T item)
+	    + bool CanAdd(T item)
+	    + void Add(T item)
+		+ bool TryAdd(T item)
 
-        + bool CanAdd(T item)
-        + void Add(T item)
-
-        + T Get()
-
-        + bool CanReplace(T item)
+		+ bool CanReplace(T item)
+	    + T Replace(T item)
 		+ bool TryReplace(T item, out T oldItem)
-        + T Replace(T item)
+
+		+ bool CanGet()
+	    + T Get()
+		+ bool TryGet(out T item)
+
+	    + bool Contains(T item)
     }
 }
 

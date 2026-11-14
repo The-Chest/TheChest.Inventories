@@ -14,6 +14,14 @@ namespace TheChest.Inventories.Containers
         public event StackInventoryAddEventHandler<T> OnAdd;
 
         #region AddAt
+        /// <summary>
+        /// Adds the specified items to the slot at the given index in the inventory.
+        /// </summary>
+        /// <remarks>
+        /// This method invokes the <see cref="OnAdd"/> event after successfully adding the items to the specified slot.
+        /// </remarks>
+        /// <param name="items">The items to be added to the slot.</param>
+        /// <param name="index">The index of the slot to which the items will be added.</param>
         protected void AddItemsAt(T[] items, int index)
         {
             this.slots[index].Add(items);

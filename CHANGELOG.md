@@ -1,10 +1,12 @@
 # v0.21.0
 
 ## What's Added
-*
+* `IInventory<T>` and `Inventory<T>`
+  * `TryGet(int index, out T item)` and `TryGet(T item, int amount, out T[] items)` to retrieve items without throwing when the requested item is unavailable
+  * `CanGet(int index)` and `CanGet(T item, int amount)` to check whether items can be retrieved
 
 ## What's Changed
-* Project is now using `TheChest.Core` [v0.21.0](https://github.com/The-Chest/TheChest.Core/releases/tag/v0.21.0)
+* Improve `Inventory<T>` retrieval methods to consider only matching, retrievable slots and centralize retrieval processing
 
 ## Known Issues
 * **The Current Architecture is not stable for the final version yet**
@@ -24,11 +26,13 @@
 * Slot removing methods using `System.Reflection` for value type checking and setting content to null
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
-* Now that Get/Replace Methods can throw `InvalidOperationException` when the slot is empty, the project needs a `TryGet`/`TryReplace` method to avoid throwing exceptions in some cases 
+* Replace methods can throw `InvalidOperationException` when the slot is empty; the project needs a `TryReplace` method to avoid throwing exceptions in some cases
 * Some validations are duplicated through slots and inventories classes
     * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
 
 ## What's Next
+* Add `TryReplace` methods to avoid throwing exceptions in some cases
+* Remove obsolete `Get` methods
 * Event Handling Improvements
 
 **Full Changelog**: https://github.com/The-Chest/TheChest.Inventories/compare/v0.20.0...v0.21.0

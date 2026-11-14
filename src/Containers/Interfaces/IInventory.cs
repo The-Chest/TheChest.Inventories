@@ -20,6 +20,36 @@ namespace TheChest.Inventories.Containers.Interfaces
         event InventoryGetEventHandler<T> OnGet;
 
         /// <summary>
+        /// Attempts to retrieve the item from the specified slot.
+        /// </summary>
+        /// <param name="index">The zero-based index of the slot to retrieve the item from.</param>
+        /// <param name="item">When this method returns <see langword="true"/>, contains the retrieved item; otherwise, the default value for <typeparamref name="T"/>.</param>
+        /// <returns><see langword="true"/> if an item was retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(int index, out T item);
+        /// <summary>
+        /// Attempts to retrieve the specified amount of matching items from the inventory.
+        /// </summary>
+        /// <param name="item">The item to retrieve.</param>
+        /// <param name="amount">The number of matching items to retrieve.</param>
+        /// <param name="items">When this method returns <see langword="true"/>, contains the retrieved items; otherwise, the default value for the type.</param>
+        /// <returns><see langword="true"/> if the requested items were retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(T item, int amount, out T[] items);
+
+        /// <summary>
+        /// Checks whether an item can be retrieved from the specified slot.
+        /// </summary>
+        /// <param name="index">The zero-based index of the slot to check.</param>
+        /// <returns><see langword="true"/> if an item can be retrieved from the slot; otherwise, <see langword="false"/>.</returns>
+        bool CanGet(int index);
+        /// <summary>
+        /// Checks whether the specified amount of the item can be retrieved from the inventory at the specified index.
+        /// </summary>
+        /// <param name="item">The item to retrieve.</param>
+        /// <param name="amount">The number of matching items to retrieve.</param>
+        /// <returns><see langword="true"/> if the requested items can be retrieved; otherwise, <see langword="false"/>.</returns>
+        bool CanGet(T item, int amount);
+
+        /// <summary>
         /// Gets an item inside a slot
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>
