@@ -12,6 +12,39 @@ namespace TheChest.Inventories.Containers
         /// <inheritdoc/>
         public event InventoryGetEventHandler<T> OnGet;
 
+        /// <summary>
+        /// Gets the item from the slot at <paramref name="index"/> and fires the <see cref="OnGet"/> event.
+        /// </summary>
+        /// <param name="index">The index of the slot to get the item from.</param>
+        /// <returns>The item from the slot at <paramref name="index"/>.</returns>
+        protected T GetItem(int index)
+        {
+            var item = this.slots[index].Get();
+            this.OnGet?.Invoke(this, (item, index));
+            return item;
+        }
+
+        /// <summary>
+        /// Gets the items from the slots at <paramref name="indexes"/> and fires the <see cref="OnGet"/> event.
+        /// </summary>
+        /// <param name="indexes">The indexes of the slots to get the items from.</param>
+        /// <returns>The items from the slots at <paramref name="indexes"/>.</returns>
+        protected T[] GetItems(int[] indexes)
+        {
+            var items = new List<T>();
+
+            for (int i = 0; i < indexes.Length; i++)
+            {
+                var index = indexes[i];
+                items.Add(this.slots[index].Get());
+            }
+
+            if (items.Count > 0)
+                this.OnGet?.Invoke(this, (items.ToArray(), indexes));
+
+            return items.ToArray();
+        }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event with every item returned from it.
@@ -50,35 +83,18 @@ namespace TheChest.Inventories.Containers
             if (item.IsNull())
                 throw new ArgumentNullException(nameof(item));
 
-            var items = new List<T>();
             var indexes = new List<int>();
             for (int i = 0; i < this.Size; i++)
             {
                 if (this.slots[i].Contains(item))
                 {
                     indexes.Add(i);
-                    items.Add(this.slots[i].Get());
                 }
             }
-
-            if (items.Count > 0)
-                this.OnGet?.Invoke(this, (items.ToArray(), indexes.ToArray()));
-
-            return items.ToArray();
+            return this.GetItems(indexes.ToArray());
         }
 
-        /// <summary>
-        /// Gets the item from the slot at <paramref name="index"/> and fires the <see cref="OnGet"/> event.
-        /// </summary>
-        /// <param name="index">The index of the slot to get the item from.</param>
-        /// <returns>The item from the slot at <paramref name="index"/>.</returns>
-        protected T GetItem(int index)
-        {
-            var item = this.slots[index].Get();
-            this.OnGet?.Invoke(this, (item, index));
-            return item;
-        }
-
+        #region Get
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
@@ -94,7 +110,6 @@ namespace TheChest.Inventories.Containers
 
             return this.GetItem(index);
         }
-        
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when <paramref name="item"/> is found.
@@ -116,7 +131,6 @@ namespace TheChest.Inventories.Containers
 
             throw new InvalidOperationException(InventoryErrors.ItemNotFound);
         }
-        
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when the maximum possible <paramref name="amount"/> of <paramref name="item"/> is found.
@@ -130,29 +144,23 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            var items = new List<T>(amount);
             var indexes = new List<int>();
             for (int i = 0; i < this.Size; i++)
             {
-                if (!this.slots[i].Contains(item))
+                if (!this.slots[i].Contains(item) || !this.slots[i].CanGet())
                     continue;
 
-                var slotItem = this.slots[i].Get();
-                if (slotItem.IsNull())
-                    continue;
-
-                items.Add(slotItem);
                 indexes.Add(i);
 
-                if (items.Count == amount)
+                if (indexes.Count == amount)
                     break;
             }
-            if (items.Count > 0)
-                this.OnGet?.Invoke(this, (items.ToArray(), indexes.ToArray()));
 
-            return items.ToArray();
+            return this.GetItems(indexes.ToArray());
         }
+        #endregion
 
+        #region TryGet
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual bool TryGet(int index, out T item)
@@ -169,7 +177,6 @@ namespace TheChest.Inventories.Containers
             item = this.GetItem(index);
             return true;
         }
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
@@ -180,28 +187,24 @@ namespace TheChest.Inventories.Containers
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            items = new T[amount];
-            var index = 0;
             var indexes = new List<int>();
-
             for (int i = 0; i < this.Size; i++)
             {
-                if (!this.slots[i].Contains(item))
+                if (!this.slots[i].Contains(item) || !this.slots[i].CanGet())
                     continue;
 
-                items[index] = this.slots[i].Get();
                 indexes.Add(i);
-                index++;
 
-                if (index == amount)
+                if (indexes.Count == amount)
                     break;
             }
-            if (items.Length > 0)
-                this.OnGet?.Invoke(this, (items, indexes.ToArray()));
+            items = this.GetItems(indexes.ToArray());
 
-            return index == amount;
+            return items.Length == amount;
         }
+        #endregion
 
+        #region CanGet
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
         public virtual bool CanGet(int index)
@@ -211,7 +214,6 @@ namespace TheChest.Inventories.Containers
 
             return this.slots[index].CanGet();
         }
-
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
@@ -236,5 +238,6 @@ namespace TheChest.Inventories.Containers
 
             return false;
         }
+        #endregion
     }
 }
