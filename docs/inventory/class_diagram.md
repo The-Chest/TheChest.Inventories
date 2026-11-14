@@ -26,6 +26,10 @@ direction TB
 	        + T Get(int index)
 	        + T Get(T item)
 	        + T[] Get(T item, int amount)
+			+ bool TryGet(int index, out T item)
+			+ bool TryGet(T item, int amount, out T[] items)
+			+ bool CanGet(int index)
+			+ bool CanGet(T item, int amount)
 
 	        + T[] Clear()
 
@@ -94,6 +98,10 @@ direction TB
 	        + T Get(int index)
 	        + T Get(T item)
 	        + T[] Get(T item, int amount)
+			+ bool TryGet(int index, out T item)
+			+ bool TryGet(T item, int amount, out T[] items)
+			+ bool CanGet(int index)
+			+ bool CanGet(T item, int amount)
 
 	        + int Count(T item)
 
