@@ -152,5 +152,89 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        public virtual bool TryGet(int index, out T item)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (!this.slots[index].CanGet())
+            {
+                item = default;
+                return false;
+            }
+
+            item = this.GetItem(index);
+            return true;
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
+        public virtual bool TryGet(T item, int amount, out T[] items)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            items = new T[amount];
+            var index = 0;
+            var indexes = new List<int>();
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                if (!this.slots[i].Contains(item))
+                    continue;
+
+                items[index] = this.slots[i].Get();
+                indexes.Add(i);
+                index++;
+
+                if (index == amount)
+                    break;
+            }
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items, indexes.ToArray()));
+
+            return index == amount;
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        public virtual bool CanGet(int index)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanGet();
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
+        public virtual bool CanGet(T item, int amount)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            var count = 0;
+
+            for (int i = 0; i < this.Size; i++)
+            {
+                if (this.slots[i].Contains(item))
+                {
+                    count++;
+                    if (count == amount)
+                        return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
