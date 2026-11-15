@@ -93,5 +93,11 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <returns>an array with all items from slot</returns>
         T[] GetAll();
+        /// <summary>
+        /// Attempts to get and remove all items from the slot.
+        /// </summary>
+        /// <param name="items">When this method returns <see langword="true"/>, contains all items retrieved; otherwise, an empty array.</param>
+        /// <returns><see langword="true"/> if the items were retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(out T[] items);
     }
 }

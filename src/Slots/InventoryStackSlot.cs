@@ -164,6 +164,19 @@ namespace TheChest.Inventories.Slots
 
             return this.GetItems(this.Amount);
         }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(out T[] items)
+        {
+            if (this.IsEmpty)
+            {
+                items = Array.Empty<T>();
+                return false;
+            }
+
+            items = this.GetAll();
+            return true;
+        }
         /// <summary>
         /// Gets and removes amount of items from slot.
         /// If is bigger than <see cref="IStackSlot{T}.Amount"/> it returns the maximum amount possible.
