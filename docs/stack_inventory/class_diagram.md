@@ -80,6 +80,8 @@ direction TB
             + T Get()
             + T[] Get(int amount)
             + T[] GetAll()
+            + bool CanGet(int amount)
+            + bool TryGet(out T[] items)
 
             + bool Contains(T item)
         }
@@ -162,6 +164,8 @@ namespace TheChest.Inventories {
         + T? Get()
         + T[] Get(int amount)
         + T[] GetAll()
+        + bool CanGet(int amount)
+        + bool TryGet(out T[] items)
 
         + bool Contains(T item)
     }
@@ -178,6 +182,8 @@ namespace TheChest.Inventories {
         + T[] GetAll()
         + T[] Get(int amount)
         + T? Get()
+        + bool CanGet(int amount)
+        + bool TryGet(out T[] items)
         
         + bool CanReplace(T item)
         + bool CanReplace(T[] items)
