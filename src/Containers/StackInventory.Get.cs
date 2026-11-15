@@ -180,5 +180,28 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or greater than or equal to the inventory size.</exception>
+        public virtual bool CanGet(int index)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanGet(1);
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or greater than or equal to the inventory size.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        public virtual bool CanGet(int index, int amount)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            return this.slots[index].CanGet(amount);
+        }
     }
 }
