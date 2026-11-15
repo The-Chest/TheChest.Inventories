@@ -180,5 +180,87 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or greater than or equal to the inventory size.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        public virtual bool CanGet(int index, int amount = 1)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            return this.slots[index].CanGet(amount);
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(int index, out T[] items)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (!this.slots[index].TryGet(out items))
+            {
+                items = Array.Empty<T>();
+                return false;
+            }
+
+            this.OnGet?.Invoke(this, (items, index));
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(int index, int amount, out T[] items)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            if (!this.slots[index].CanGet(amount))
+            {
+                items = Array.Empty<T>();
+                return false;
+            }
+
+            items = this.GetItems(index, amount);
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(T item, int amount, out T[] items)
+        {
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+
+            if (this.Count(item) < amount)
+            {
+                items = Array.Empty<T>();
+                return false;
+            }
+
+            var retrievedItems = new List<T>();
+            var events = new List<StackInventoryGetItemEventData<T>>();
+            var remainingAmount = amount;
+
+            for (int index = 0; index < this.Size && remainingAmount > 0; index++)
+            {
+                var slot = this.slots[index];
+                if (!slot.Contains(item))
+                    continue;
+
+                var slotItems = slot.Get(remainingAmount);
+                retrievedItems.AddRange(slotItems);
+                events.Add(new StackInventoryGetItemEventData<T>(slotItems, index));
+                remainingAmount -= slotItems.Length;
+            }
+
+            items = retrievedItems.ToArray();
+            this.OnGet?.Invoke(this, new StackInventoryGetEventArgs<T>(events));
+            return true;
+        }
     }
 }

@@ -164,6 +164,29 @@ namespace TheChest.Inventories.Slots
 
             return this.GetItems(this.Amount);
         }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(out T[] items)
+        {
+            if (this.IsEmpty)
+            {
+                items = Array.Empty<T>();
+                return false;
+            }
+
+            items = this.GetAll();
+            return true;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        public virtual bool CanGet(int amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            return this.Amount >= amount;
+        }
+
         /// <summary>
         /// Gets and removes amount of items from slot.
         /// If is bigger than <see cref="IStackSlot{T}.Amount"/> it returns the maximum amount possible.
@@ -175,7 +198,7 @@ namespace TheChest.Inventories.Slots
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
-            
+
             if (amount >= this.Amount)
                 return this.GetAll();
 

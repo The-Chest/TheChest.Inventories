@@ -83,9 +83,21 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <returns>an array with the size of the param <paramref name="amount"/></returns>
         T[] Get(int amount);
         /// <summary>
+        /// Checks whether the slot contains enough items to retrieve the specified amount.
+        /// </summary>
+        /// <param name="amount">The amount of items to retrieve.</param>
+        /// <returns><see langword="true"/> if the slot contains at least <paramref name="amount"/> items; otherwise, <see langword="false"/>.</returns>
+        bool CanGet(int amount);
+        /// <summary>
         /// Gets all items from inside the Slot. 
         /// </summary>
         /// <returns>an array with all items from slot</returns>
         T[] GetAll();
+        /// <summary>
+        /// Attempts to get and remove all items from the slot.
+        /// </summary>
+        /// <param name="items">When this method returns <see langword="true"/>, contains all items retrieved; otherwise, an empty array.</param>
+        /// <returns><see langword="true"/> if the items were retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(out T[] items);
     }
 }
