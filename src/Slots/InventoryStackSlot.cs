@@ -181,6 +181,15 @@ namespace TheChest.Inventories.Slots
 
             return this.GetItems(amount);
         }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        public virtual bool CanGet(int amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            return this.Amount >= amount;
+        }
         /// <summary>
         /// Gets a single item from inside the slot
         /// </summary>
