@@ -66,6 +66,32 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="amount">The amount of items to check for retrieval. Defaults to 1.</param>
         /// <returns><see langword="true"/> if the slot contains at least the specified amount; otherwise, <see langword="false"/>.</returns>
         bool CanGet(int index, int amount = 1);
+
+        /// <summary>
+        /// Attempts to retrieve items from the slot at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the slot to retrieve items from.</param>
+        /// <param name="items">When this method returns, contains an array of items retrieved from the specified slot, or an empty array if the retrieval fails.</param>
+        /// <returns><see langword="true"/> if items were successfully retrieved from the slot; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(int index, out T[] items);
+
+        /// <summary>
+        /// Attempts to retrieve a specific amount of items from the slot at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the slot to retrieve items from.</param>
+        /// <param name="amount">The amount of items to attempt to retrieve. Must be greater than zero.</param>
+        /// <param name="items">When this method returns, contains an array of items retrieved from the specified slot, or an empty array if the retrieval fails or no items are available.</param>
+        /// <returns><see langword="true"/> if the specified amount of items were successfully retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(int index, int amount, out T[] items);
+
+        /// <summary>
+        /// Attempts to retrieve a specific amount of items matching the specified item type from the inventory.
+        /// </summary>
+        /// <param name="item">The item type to search for in the inventory.</param>
+        /// <param name="amount">The amount of items to attempt to retrieve. Must be greater than zero.</param>
+        /// <param name="items">When this method returns, contains an array of items matching the specified type, or an empty array if the retrieval fails or not enough items are available.</param>
+        /// <returns><see langword="true"/> if the specified amount of matching items were successfully retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(T item, int amount, out T[] items);
         #endregion
 
         /// <summary>
