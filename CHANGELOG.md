@@ -5,7 +5,7 @@
   * `TryGet(int index, out T item)` and `TryGet(T item, int amount, out T[] items)` to retrieve items without throwing when the requested item is unavailable
   * `CanGet(int index)` and `CanGet(T item, int amount)` to check whether items can be retrieved
 * `IStackInventory<T>` and `StackInventory<T>`
-  * `CanGet(int index)` and `CanGet(int index, int amount)` to check whether items can be retrieved from a stack
+  * `CanGet(int index, int amount = 1)` to check whether items can be retrieved from a stack; `amount` defaults to 1
 * `IInventorySlot<T>` and `InventorySlot<T>`
   * `TryGet(out T item)` to retrieve the item without throwing when the slot is empty
   * `CanGet()` to check whether the slot has an item to retrieve

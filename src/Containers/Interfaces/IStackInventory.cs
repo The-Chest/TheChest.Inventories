@@ -60,18 +60,12 @@ namespace TheChest.Inventories.Containers.Interfaces
         T[] GetAll(T item);
 
         /// <summary>
-        /// Determines whether an item can be retrieved from the slot at the specified index.
-        /// </summary>
-        /// <param name="index">The zero-based index of the slot to check.</param>
-        /// <returns><see langword="true"/> if the slot contains an item; otherwise, <see langword="false"/>.</returns>
-        bool CanGet(int index);
-        /// <summary>
         /// Determines whether the specified amount of items can be retrieved from the slot at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the slot to check.</param>
-        /// <param name="amount">The amount of items to check for retrieval.</param>
+        /// <param name="amount">The amount of items to check for retrieval. Defaults to 1.</param>
         /// <returns><see langword="true"/> if the slot contains at least the specified amount; otherwise, <see langword="false"/>.</returns>
-        bool CanGet(int index, int amount);
+        bool CanGet(int index, int amount = 1);
         #endregion
 
         /// <summary>

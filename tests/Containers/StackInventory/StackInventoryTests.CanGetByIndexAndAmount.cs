@@ -44,6 +44,18 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
         }
 
         [Test]
+        public void CanGetByIndexAndAmount_EmptySlot_DefaultAmount_ReturnsFalse()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.EmptyContainer(size, stackSize);
+            var index = this.random.Next(0, size);
+
+            var result = inventory.CanGet(index);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
         public void CanGetByIndexAndAmount_InsufficientItems_ReturnsFalse()
         {
             var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
@@ -64,6 +76,18 @@ namespace TheChest.Inventories.Tests.Containers.StackInventory
             var amount = this.random.Next(1, stackSize + 1);
 
             var result = inventory.CanGet(index, amount);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void CanGetByIndexAndAmount_FullSlot_DefaultAmount_ReturnsTrue()
+        {
+            var (size, stackSize) = this.GenerateRandomSizeAndStackSize();
+            var inventory = this.inventoryFactory.FullContainer(size, stackSize, this.itemFactory.CreateDefault());
+            var index = this.random.Next(0, size);
+
+            var result = inventory.CanGet(index);
 
             Assert.That(result, Is.True);
         }
