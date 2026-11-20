@@ -7,6 +7,8 @@
 * `IInventoryLazyStackSlot<T>` and `InventoryLazyStackSlot<T>`
   * `TryGet(out T[] items)` to retrieve all items without throwing when the slot is empty
   * `TryGet(int amount, out T[] items)` to retrieve an amount of items without throwing when the slot contains fewer items than requested
+* `ILazyStackInventory<T>` and `LazyStackInventory<T>`
+  * `TryGet(int index, out T[] items)`, `TryGet(int index, int amount, out T[] items)` and `TryGet(T item, int amount, out T[] items)` to retrieve items without throwing when the requested items are unavailable
 
 ## What's Changed
 * Improve `Inventory<T>` retrieval methods to consider only matching, retrievable slots and centralize retrieval processing

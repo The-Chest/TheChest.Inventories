@@ -53,6 +53,9 @@ namespace TheChest.Inventories.Containers {
         + T[] Get(int index, int amount)
         + T[] GetAll(T item)
         + T[] GetAll(int index)
+        + bool TryGet(int index, out T[] items)
+        + bool TryGet(int index, int amount, out T[] items)
+        + bool TryGet(T item, int amount, out T[] items)
 
         + int Count(T item)
 
@@ -100,6 +103,9 @@ namespace TheChest.Inventories.Containers.Interfaces {
         + T[] Get(T item, int amount)
         + T[] GetAll(T item)
         + int Count(T item)
+        + bool TryGet(int index, out T[] items)
+        + bool TryGet(int index, int amount, out T[] items)
+        + bool TryGet(T item, int amount, out T[] items)
         
         + T[] Get(int index, int amount)
         + T[] GetAll(int index)
