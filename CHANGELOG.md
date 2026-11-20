@@ -4,6 +4,8 @@
 * `IInventory<T>` and `Inventory<T>`
   * `TryGet(int index, out T item)` and `TryGet(T item, int amount, out T[] items)` to retrieve items without throwing when the requested item is unavailable
   * `CanGet(int index)` and `CanGet(T item, int amount)` to check whether items can be retrieved
+* `IInventoryLazyStackSlot<T>` and `InventoryLazyStackSlot<T>`
+  * `TryGet(out T[] items)` to retrieve all items without throwing when the slot is empty
 
 ## What's Changed
 * Improve `Inventory<T>` retrieval methods to consider only matching, retrievable slots and centralize retrieval processing

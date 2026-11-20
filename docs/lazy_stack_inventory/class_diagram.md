@@ -82,6 +82,7 @@ namespace TheChest.Inventories.Slots.Interfaces {
         
         + T[] Get(int amount = 1)
         + T[] GetAll()
+        + bool TryGet(out T[] items)
     }
 }
 <<interface>> IInventoryLazyStackSlot
@@ -160,6 +161,7 @@ namespace TheChest.Inventories {
 
         + T[] Get(int amount = 1)
         + T[] GetAll()
+        + bool TryGet(out T[] items)
         + bool Contains(T item)
     }
     class InventoryLazyStackSlot~T~ {
@@ -183,6 +185,7 @@ namespace TheChest.Inventories {
         ~ T[] GetContent(int requestedAmount)
         + T[] Get(int amount = 1)
         + T[] GetAll()
+        + bool TryGet(out T[] items)
     }
 }
 <<interface>> IInventoryLazyStackSlot
