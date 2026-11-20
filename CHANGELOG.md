@@ -6,6 +6,7 @@
   * `CanGet(int index)` and `CanGet(T item, int amount)` to check whether items can be retrieved
 * `IInventoryLazyStackSlot<T>` and `InventoryLazyStackSlot<T>`
   * `TryGet(out T[] items)` to retrieve all items without throwing when the slot is empty
+  * `TryGet(int amount, out T[] items)` to retrieve an amount of items without throwing when the slot contains fewer items than requested
 
 ## What's Changed
 * Improve `Inventory<T>` retrieval methods to consider only matching, retrievable slots and centralize retrieval processing
@@ -28,6 +29,7 @@
 * Slot removing methods using `System.Reflection` for value type checking and setting content to null
   * Changes in `TheChest.Core` are needed to improve a way to set the content
 * No idea about how is the code performance...
+* TryGet for `StackInventory` and `LazyStackInventory` seems not be necessary due to the fact that the methods `Get` returns an empty array when the slot is empty, but it might be good to have a `CanGet` method to check whether items can be retrieved
 * Replace methods can throw `InvalidOperationException` when the slot is empty; the project needs a `TryReplace` method to avoid throwing exceptions in some cases
 * Some validations are duplicated through slots and inventories classes
     * The public methods from slots will still have the validations while new methods with no validations will be added (internal only)
