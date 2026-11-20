@@ -16,6 +16,29 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// </summary>
         event LazyStackInventoryGetEventHandler<T> OnGet;
         /// <summary>
+        /// Attempts to retrieve all items from the specified slot.
+        /// </summary>
+        /// <param name="index">The zero-based index of the slot.</param>
+        /// <param name="items">When this method returns, contains the items retrieved from the slot.</param>
+        /// <returns><see langword="true"/> if the slot contained items; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(int index, out T[] items);
+        /// <summary>
+        /// Attempts to retrieve the requested amount of items from the specified slot.
+        /// </summary>
+        /// <param name="index">The zero-based index of the slot.</param>
+        /// <param name="amount">The desired number of items.</param>
+        /// <param name="items">When this method returns, contains the items retrieved from the slot.</param>
+        /// <returns><see langword="true"/> if the requested amount was retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(int index, int amount, out T[] items);
+        /// <summary>
+        /// Attempts to retrieve the requested amount of matching items from the inventory.
+        /// </summary>
+        /// <param name="item">The item to retrieve.</param>
+        /// <param name="amount">The desired number of matching items.</param>
+        /// <param name="items">When this method returns, contains the matching items retrieved from the inventory.</param>
+        /// <returns><see langword="true"/> if the requested amount was retrieved; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(T item, int amount, out T[] items);
+        /// <summary>
         /// Gets an item from inside a slot
         /// </summary>
         /// <param name="index">Slot's inventory to be searched</param>

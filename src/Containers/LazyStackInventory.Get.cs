@@ -56,6 +56,67 @@ namespace TheChest.Inventories.Containers
             return items;
         }
 
+        #region TryGet
+        /// <inheritdoc/>
+        public virtual bool TryGet(int index, out T[] items)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var result = this.slots[index].TryGet(out items);
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(int index, int amount, out T[] items)
+        {
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            var result = this.slots[index].TryGet(amount, out items);
+            if (items.Length > 0)
+                this.OnGet?.Invoke(this, (items[0], index, items.Length));
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGet(T item, int amount, out T[] items)
+        {
+            if (item.IsNull())
+                throw new ArgumentNullException(nameof(item));
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            var retrievedItems = new List<T>();
+            var events = new List<LazyStackInventoryGetItemEventData<T>>();
+            for (int index = 0; index < this.Size && retrievedItems.Count < amount; index++)
+            {
+                var slot = this.slots[index];
+                if (!slot.Contains(item))
+                    continue;
+
+                slot.TryGet(amount - retrievedItems.Count, out var slotItems);
+                if (slotItems.Length == 0)
+                    continue;
+
+                retrievedItems.AddRange(slotItems);
+                events.Add(new LazyStackInventoryGetItemEventData<T>(slotItems[0], index, slotItems.Length));
+            }
+
+            items = retrievedItems.ToArray();
+            if (events.Count > 0)
+                this.OnGet?.Invoke(this, new LazyStackInventoryGetEventArgs<T>(events));
+
+            return items.Length == amount;
+        }
+        #endregion
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnGet"/> event when an item is returned from <paramref name="index"/>.
