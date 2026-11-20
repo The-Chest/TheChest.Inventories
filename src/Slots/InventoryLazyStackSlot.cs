@@ -248,5 +248,17 @@ namespace TheChest.Inventories.Slots
         {
             return this.GetContent(this.Amount);
         }
+        /// <inheritdoc/>
+        public virtual bool TryGet(out T[] items)
+        {
+            if (this.IsEmpty)
+            {
+                items = Array.Empty<T>();
+                return false;
+            }
+
+            items = this.GetAll();
+            return true;
+        }
     }
 }

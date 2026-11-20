@@ -72,6 +72,12 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <returns>An array with all items from slot</returns>
         T[] GetAll();
+        /// <summary>
+        /// Tries to get all items from the slot.
+        /// </summary>
+        /// <param name="items">When this method returns <see langword="true"/>, contains all items from the slot; otherwise, an empty array.</param>
+        /// <returns><see langword="true"/> if the slot contains items; otherwise, <see langword="false"/>.</returns>
+        bool TryGet(out T[] items);
         #endregion
     }
 }
