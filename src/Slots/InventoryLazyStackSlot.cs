@@ -260,5 +260,15 @@ namespace TheChest.Inventories.Slots
             items = this.GetAll();
             return true;
         }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        public virtual bool TryGet(int amount, out T[] items)
+        {
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            items = this.Get(amount);
+            return items.Length == amount;
+        }
     }
 }

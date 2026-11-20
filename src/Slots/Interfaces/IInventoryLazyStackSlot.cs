@@ -78,6 +78,14 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <param name="items">When this method returns <see langword="true"/>, contains all items from the slot; otherwise, an empty array.</param>
         /// <returns><see langword="true"/> if the slot contains items; otherwise, <see langword="false"/>.</returns>
         bool TryGet(out T[] items);
+        /// <summary>
+        /// Tries to get the requested amount of items from the slot.
+        /// </summary>
+        /// <param name="amount">The desired amount of items to retrieve.</param>
+        /// <param name="items">When this method returns, contains the items retrieved from the slot.</param>
+        /// <returns><see langword="true"/> if the requested amount was retrieved; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller.</exception>
+        bool TryGet(int amount, out T[] items);
         #endregion
     }
 }
